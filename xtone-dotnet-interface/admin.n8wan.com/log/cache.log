@@ -1,0 +1,7 @@
+16:06:10,2016/2/16 16:06:10:threadId:46 tbl_phone_locateItem cache elesped 1414ms
+16:30:19,threadId:18 tbl_phone_locateItem cache Elapsed 285ms
+16:32:54,threadId:13 tbl_phone_locateItem cache Elapsed 235ms ,count 2000
+16:33:45,threadId:11 tbl_phone_locateItem cache Elapsed 197ms ,count 316609
+16:35:35,threadId:8 tbl_phone_locateItem cache Elapsed 36473ms ,count 316609
+16:37:02,threadId:5 tbl_phone_locateItem cache Elapsed 22134ms ,count 316609
+16:38:49,threadId:10 tbl_phone_locateItem cache Elapsed 21429ms ,count 316609

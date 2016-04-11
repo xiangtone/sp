@@ -1,0 +1,19 @@
+17:48:34.248 Request:{"apiExdata":"","apiOrderId":11,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","id":17606,"imei":"866568022922909","imsi":"460017071425455","ip":"113.99.100.71","isHidden":0,"lac":0,"mobile":"15517474628","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":302,"troneOrderId":1647}
+17:48:37.431 paycode 获取失败，请检查paycode是否有配置
+17:48:40.115 System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 jj11.GetSpCmd() 位置 e:\Website.git\xtone-dotnet-interface\api2sp.n8wan.com\API\jj11.ashx:行号 20
+   在 sdk_Request.Logical.APIRequestGet.BeginProcess() 位置 e:\Website.git\xtone-dotnet-interface\sdk_Request\Logical\APIRequestGet.cs:行号 61
+17:49:30.315 Request:{"apiExdata":"","apiOrderId":11,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","id":17606,"imei":"866568022922909","imsi":"460017071425455","ip":"113.99.100.71","isHidden":0,"lac":0,"mobile":"15517474628","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":302,"troneOrderId":1647}
+17:49:43.402 http://sms.ejamad.com/interfaceAction
+17:49:43.402 {"operation":"2","reqChannel":{"ipAddr":"192.168.1.90","appId":"1035","channelId":"10011","imei":"866568022922909","money":100,"imsi":"460017071425455","orderId":"api_100","mobile":"15517474628"},"version":"1.0.0"}
+17:49:43.587 +184ms {"resultMsg":"无通道","status":"01"}
+17:50:12.691 System.FormatException: 输入字符串的格式不正确。
+   在 System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   在 System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   在 System.Int32.Parse(String s)
+   在 jj11.GetSpCmd()
+   在 sdk_Request.Logical.APIRequestGet.BeginProcess() 位置 e:\Website.git\xtone-dotnet-interface\sdk_Request\Logical\APIRequestGet.cs:行号 61
+17:50:33.906 Request:{"apiExdata":"","apiOrderId":11,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","id":17606,"imei":"866568022922909","imsi":"460017071425455","ip":"113.99.100.71","isHidden":0,"lac":0,"mobile":"15517474628","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":302,"troneOrderId":1647}
+17:50:39.428 http://sms.ejamad.com/interfaceAction
+17:50:39.428 {"operation":"2","reqChannel":{"ipAddr":"192.168.1.90","appId":"1035","channelId":"10011","imei":"866568022922909","money":100,"imsi":"460017071425455","orderId":"api_100","mobile":"15517474628"},"version":"1.0.0"}
+17:50:39.505 +77ms {"resultMsg":"无通道","status":"01"}

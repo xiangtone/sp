@@ -1,0 +1,19 @@
+09:19:09.570 Request:{"apiExdata":"","apiOrderId":17,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","id":66367,"imei":"866568022922909","imsi":"460007743190142","ip":"183.14.110.246","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1077,"troneOrderId":1971}
+09:19:28.547 paycode 获取失败，请检查paycode是否有配置
+09:19:28.578 paycode 获取失败，请检查paycode是否有配置
+09:19:38.909 
+09:19:38.962 值不能为 null。
+参数名: requestUriString
+09:19:38.962 +52ms 
+09:20:01.505 Request:{"apiExdata":"","apiOrderId":17,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","id":66367,"imei":"866568022922909","imsi":"460007743190142","ip":"183.14.110.246","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1077,"troneOrderId":1971}
+09:20:28.092 http://120.55.251.51/payser/newpay.jsp?bizkey=eeeed28064148c7c771a34794869f455&imei=866568022922909&imsi=460007743190142&ua=Xiaomi3&location=sh&param=kdp10002466367
+09:20:28.280 +196ms {"status":"200","statusText":"OK","data":{"msgtxt":"mvwlan,9201121a75b487b277afb9eb444d1ef9,9881","param":"kdp10002466367","msgtxtenc":"bXZ3bGFuLDkyMDExMjFhNzViNDg3YjI3N2FmYjllYjQ0NGQxZWY5LDk4ODE\u003d","orderid":"20160408092030813765","msgto":"10658423"}}
+
+09:27:16.676 Request:{"apiExdata":"","apiOrderId":17,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","id":66367,"imei":"866568022922909","imsi":"460007743190142","ip":"183.14.110.246","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1077,"troneOrderId":1971}
+09:27:35.133 http://120.55.251.51/payser/newpay.jsp?bizkey=eeeed28064148c7c771a34794869f455&imei=866568022922909&imsi=460007743190142&ua=Xiaomi3&location=sh&param=kdp10002466367
+09:27:35.302 +169ms {"status":"200","statusText":"OK","data":{"msgtxt":"mvwlan,9201121a75b487b277afb9eb444d1ef9,2515","param":"kdp10002466367","msgtxtenc":"bXZ3bGFuLDkyMDExMjFhNzViNDg3YjI3N2FmYjllYjQ0NGQxZWY5LDI1MTU\u003d","orderid":"20160408092737266237","msgto":"10658423"}}
+
+09:27:57.820 Request:{"apiExdata":"","apiOrderId":17,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","id":66367,"imei":"866568022922909","imsi":"460007743190142","ip":"183.14.110.246","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1077,"troneOrderId":1971}
+09:28:19.371 http://120.55.251.51/payser/newpay.jsp?bizkey=eeeed28064148c7c771a34794869f455&imei=866568022922909&imsi=460007743190142&ua=Xiaomi3&location=sh&param=kdp10002466367
+09:28:19.520 +170ms {"status":"200","statusText":"OK","data":{"msgtxt":"mvwlan,9201121a75b487b277afb9eb444d1ef9,6260","param":"kdp10002466367","msgtxtenc":"bXZ3bGFuLDkyMDExMjFhNzViNDg3YjI3N2FmYjllYjQ0NGQxZWY5LDYyNjA\u003d","orderid":"20160408092822962059","msgto":"10658423"}}
+

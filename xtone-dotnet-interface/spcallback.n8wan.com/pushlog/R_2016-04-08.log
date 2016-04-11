@@ -1,0 +1,19 @@
+15:18:24,15:04:59 /sp/204/byyw.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(805ms(+805))OUT-LoadAPI
+	->(806ms(+1))1 in locked
+	->(808ms(+2))IN-StartPorcess
+	->(840ms(+32))IN-ItemNotExisted
+	->(963ms(+123))ValueCollected
+	->(1057ms(+94))TroneIdMatched
+	->(1140ms(+83))OUT-CoreProcessed
+	->(204981ms(+203841))+11.89ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1004)) limit 1
++8.42ms	select * from `tbl_trone_order`  where  `trone_id` = 1004 and `disable` = 0
++7.59ms	select * from `tbl_cp_push_url`  where  `id` = 30
++8.07ms	select * from `daily_log`.`tbl_day_month_limit`  where  `sp_trone_id` = 1004 and `cp_id` = 22 and `fee_date` = '2016/4/8 0:00:00'
++3724.16ms	insert into `daily_log`.`tbl_day_month_limit`(`fee_date`,`cp_id`,`sp_trone_id`,`cur_day_amount`) values(?fee_date,?cp_id,?sp_trone_id,?cur_day_amount)
++45.86ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
+总计：3805.9978ms
+	->(204981ms(+0))OUT-ALL done
+	->(204981ms(+0))Done

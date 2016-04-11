@@ -1,0 +1,37 @@
+14:45:56,14:03:56 /sp/tlkg_by.ashx 
+	->({0}ms(0))Begin
+	->(2ms(+2))Done
+14:45:56,14:03:54 /sp/tlkg_by.ashx 
+	->({0}ms(0))Begin
+	->(2223ms(+2223))Done
+14:49:42,14:03:42 /sp/tlkj_by.ashx 
+	->({0}ms(0))Begin
+	->(1ms(+1))Done
+14:49:42,14:03:40 /sp/tlkj_by.ashx 
+	->({0}ms(0))Begin
+	->(1565ms(+1565))Done
+14:50:23,14:03:52 /sp/tlkj_by.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(535ms(+535))OUT-LoadAPI
+	->(536ms(+1))0 in locked
+	->(31467ms(+30931))Done
+14:50:23,14:03:52 /sp/tlkj_by.ashx 
+	->({0}ms(0))Begin
+	->(31485ms(+31485))Done
+14:51:27,14:03:26 /sp/tlkj_by.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(0ms(+0))OUT-LoadAPI
+	->(0ms(+0))0 in locked
+	->(14411ms(+14411))IN-StartPorcess
+	->(59694ms(+45283))IN-ItemNotExisted
+	->(60276ms(+582))ValueCollected
+	->(60830ms(+554))TroneIdMatched
+	->(60965ms(+135))OUT-CoreProcessed
+	->(60966ms(+1))总计：0ms
+	->(60966ms(+0))OUT-ALL done
+	->(60966ms(+0))Done
+14:51:27,14:03:25 /sp/tlkj_by.ashx 
+	->({0}ms(0))Begin
+	->(61652ms(+61652))Done

@@ -1,0 +1,11 @@
+13:49:16,threadId:13 tbl_phone_locateItem cache Elapsed 92,061ms ,count 316609
+14:37:50,threadId:8 tbl_phone_locateItem cache Elapsed 179,741ms ,count 316609
+14:46:43,threadId:11 tbl_phone_locateItem cache Elapsed 119,634ms ,count 316609
+14:52:23,threadId:7 tbl_phone_locateItem cache Elapsed 289,097ms ,count 316609
+15:07:52,threadId:7 tbl_phone_locateItem cache Elapsed 710,266ms ,count 316609
+15:11:56,threadId:7 tbl_phone_locateItem cache Elapsed 207,556ms ,count 316609
+15:14:46,threadId:7 tbl_phone_locateItem cache Elapsed 90,961ms ,count 316609
+15:28:11,threadId:9 tbl_phone_locateItem cache Elapsed 61,866ms ,count 316609
+15:33:27,threadId:8 tbl_phone_locateItem cache Elapsed 51,915ms ,count 316609
+15:46:48,threadId:7 tbl_phone_locateItem cache Elapsed 51,061ms ,count 316609
+15:57:00,threadId:7 tbl_phone_locateItem cache Elapsed 81,005ms ,count 316609
