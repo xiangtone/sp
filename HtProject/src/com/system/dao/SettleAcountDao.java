@@ -58,14 +58,14 @@ public class SettleAcountDao
 	@SuppressWarnings("unchecked")
 	public List<SpFinanceShowModel> loadCpSettleAccountData(String startDate,String endDate)
 	{
-		String sql = " SELECT f.id,f.short_name,h.short_name sp_name,e.name_cn,d.name,sum(a.amount) amounts,g.jiesuanlv ";
+		String sql = " SELECT f.id,f.short_name,h.short_name sp_name,e.name_cn,d.name,sum(a.amount) amounts,g.rate jiesuanlv ";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a  ";
 		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id`";
 		sql += " Left join daily_config.tbl_trone c on b.trone_id = c.id ";
 		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_operator` e ON d.`operator` = e.`id` ";
 		sql += " left join daily_config.tbl_cp f on b.cp_id = f.id ";
-		sql += " left join daily_config.tbl_cp_jiesuan g on f.id = g.cp_id and d.id = g.sp_trone_id ";
+		sql += " left join daily_config.tbl_cp_trone_rate g on f.id = g.cp_id and d.id = g.sp_trone_id ";
 		sql += " left join daily_config.tbl_sp h on d.sp_id = h.id ";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' ";
 		sql += " group by f.id,d.id order by f.short_name,d.name";
@@ -140,14 +140,14 @@ public class SettleAcountDao
 	@SuppressWarnings("unchecked")
 	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate)
 	{
-		String sql = "SELECT c.`name`,d.`name_cn`,SUM(a.amount) total_amount,c.`jiesuanlv`";
+		String sql = "SELECT c.`name`,d.`name_cn`,SUM(a.amount) total_amount,c.rate jiesuanlv";
 			sql += " FROM daily_log.`tbl_cp_mr_summer` a";
 			sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
 			sql += " LEFT JOIN daily_config.tbl_trone e ON b.`trone_id` = e.`id`";
 			sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON e.`sp_trone_id` = c.`id`";
 			sql += " LEFT JOIN daily_config.`tbl_operator` d ON c.`operator` = d.`id`";
 			sql += " left join daily_config.tbl_cp g on b.cp_id = g.id";
-			sql += " left join daily_config.tbl_cp_jiesuan f on e.id = f.cp_id and c.id = f.sp_trone_id";
+			sql += " left join daily_config.tbl_cp_trone_rate f on e.id = f.cp_id and c.id = f.sp_trone_id";
 			sql += " where a.`cp_id` =  " + cpId;
 			sql += " and a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
 			sql += " group by c.id";

@@ -6,9 +6,11 @@ public class MrReportModel
 	private String title2;
 	private String joinId;
 	private int dataRows;
-	private float amount;
+	private double amount;
 	private int showDataRows;
-	private float showAmount;
+	private double showAmount;
+	private double spMoney;
+	private double cpMoney;
 	
 	public String getTitle1()
 	{
@@ -34,11 +36,11 @@ public class MrReportModel
 	{
 		this.dataRows = dataRows;
 	}
-	public float getAmount()
+	public double getAmount()
 	{
 		return amount;
 	}
-	public void setAmount(float amount)
+	public void setAmount(double amount)
 	{
 		this.amount = amount;
 	}
@@ -50,11 +52,11 @@ public class MrReportModel
 	{
 		this.showDataRows = showDataRows;
 	}
-	public float getShowAmount()
+	public double getShowAmount()
 	{
 		return showAmount;
 	}
-	public void setShowAmount(float showAmount)
+	public void setShowAmount(double showAmount)
 	{
 		this.showAmount = showAmount;
 	}
@@ -66,6 +68,21 @@ public class MrReportModel
 	{
 		this.joinId = joinId;
 	}
-		
+	public double getSpMoney()
+	{
+		return spMoney;
+	}
+	public void setSpMoney(double spMoney)
+	{
+		this.spMoney = spMoney;
+	}
+	public double getCpMoney()
+	{
+		return cpMoney;
+	}
+	public void setCpMoney(double cpMoney)
+	{
+		this.cpMoney = cpMoney;
+	}
 	
 }

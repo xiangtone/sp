@@ -67,10 +67,12 @@
 	int showDataRows = (Integer)map.get("showdatarows");
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
+	double spAmount = (Double)map.get("spamount");
+	double cpAmount = (Double)map.get("cpamount");
 	
 	System.out.println("amount:" + amount);
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务"};
+	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","商务人员"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -385,6 +387,9 @@
 							<!-- 暂时先隐藏 -->
 							<option value="8">省份</option>
 							<option value="9">城市</option>
+							<!-- <option value="11">按小时</option> -->
+							<option value="12">商务人员</option>
+							
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
@@ -405,6 +410,10 @@
 					<td>失败金额(元 )</td>
 					<td>推送金额(元)</td>
 					<td>失败率</td>
+					<td>预收入(元)</td>
+					<td>预结算(元)</td>
+					<td>利润(元)</td>
+					<td>利润率</td>
 				</tr>
 			</thead>
 			<tbody>		
@@ -423,6 +432,10 @@
 					<td><%= StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
 					<td><%= StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getCpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney() - model.getCpMoney()) %></td>
+					<td><%= StringUtil.getPercent(model.getSpMoney() - model.getCpMoney(), model.getAmount()) %></td>
 				</tr>
 						<%
 					}
@@ -438,6 +451,10 @@
 					<td>总失败金额(元 )：<%= StringUtil.getDecimalFormat(amount - showAmount) %></td>
 					<td>总推送金额(元)：<%= StringUtil.getDecimalFormat(showAmount) %></td>
 					<td>总失败率：<%= StringUtil.getPercent(dataRows - showDataRows, dataRows) %></td>
+					<td>总预收入(元):<%= StringUtil.getDecimalFormat(spAmount) %></td>
+					<td>总预结算(元):<%= StringUtil.getDecimalFormat(cpAmount) %></td>
+					<td>总预利润(元):<%= StringUtil.getDecimalFormat(spAmount-cpAmount) %></td>
+					<td>利润率:<%= StringUtil.getPercent(spAmount-cpAmount,amount) %></td>
 				</tr>
 			</tbody>
 		</table>

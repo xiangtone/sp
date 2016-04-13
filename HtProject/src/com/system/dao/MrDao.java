@@ -54,8 +54,8 @@ public class MrDao
 		String queryParams = result[0];
 		String joinId = result[1];
 		
-		String sql = "select a.show_title,aa,bb,cc,dd from (";
-		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) aa,sum(a.amount) bb";
+		String sql = "select a.show_title,aa,bb,cc,dd,sp_money,cp_money from (";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) aa,sum(a.amount) bb,sum(a.amount*h.jiesuanlv) sp_money";
 		sql += " from daily_log.tbl_mr_summer a";
 		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id ";
 		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
@@ -64,10 +64,11 @@ public class MrDao
 		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
-		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) cc,sum(a.amount) dd";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) cc,sum(a.amount) dd,sum(a.amount*i.rate) cp_money";
 		sql += " from daily_log.tbl_cp_mr_summer a ";
 		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
 		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
@@ -75,11 +76,12 @@ public class MrDao
 		sql += " left join daily_config.tbl_cp e on a.cp_id = e.id";
 		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
-		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
+		sql	+= " LEFT JOIN daily_config.tbl_cp_trone_rate i ON e.id = i.cp_id AND h.id = i.sp_trone_id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";
-		
 		
 		
 		JdbcControl control = new JdbcControl();
@@ -93,7 +95,7 @@ public class MrDao
 			{
 				List<MrReportModel> list = new ArrayList<MrReportModel>();
 				int dataRows=0,showDataRows = 0;
-				double amount=0,showAmount = 0;
+				double amount=0,showAmount = 0,spAmount=0,cpAmount=0;
 				while(rs.next())
 				{
 					MrReportModel model = new MrReportModel();
@@ -103,11 +105,15 @@ public class MrDao
 					model.setAmount(rs.getFloat(3));
 					model.setShowDataRows(rs.getInt(4));
 					model.setShowAmount(rs.getFloat(5));
+					model.setSpMoney(rs.getFloat("sp_money"));
+					model.setCpMoney(rs.getFloat("cp_money"));
 					
 					dataRows += model.getDataRows();
 					showDataRows += model.getShowDataRows();
 					amount += model.getAmount();
 					showAmount += model.getShowAmount();
+					spAmount += model.getSpMoney();
+					cpAmount += model.getCpMoney();
 					
 					list.add(model);
 				}
@@ -116,6 +122,8 @@ public class MrDao
 				datalist.add(showDataRows);
 				datalist.add(amount);
 				datalist.add(showAmount);
+				datalist.add(spAmount);
+				datalist.add(cpAmount);
 				
 				return list;
 			}
@@ -125,6 +133,8 @@ public class MrDao
 		map.put("showdatarows", datalist.get(1));
 		map.put("amount", datalist.get(2));
 		map.put("showamount", datalist.get(3));
+		map.put("spamount", datalist.get(4));
+		map.put("cpamount", datalist.get(5));
 		
 		return map;
 	}
@@ -599,6 +609,11 @@ public class MrDao
 			case 11:
 				queryParams = " DATE_FORMAT(a.create_date,'%Y-%m-%d-%H') ";
 				joinId = " DATE_FORMAT(a.create_date,'%Y-%u-%d-%H') ";
+				break;
+				
+			case 12:
+				queryParams = " j.nick_name ";
+				joinId = " j.id ";
 				break;
 				
 			default:
