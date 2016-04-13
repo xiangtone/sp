@@ -44,14 +44,14 @@ public class FinalcialSpCpDataDao
 		sql += " LEFT JOIN ";
 		sql += " (";
 		sql += " SELECT d.id sp_id,d.`short_name` sp_name,c.id sp_trone_id,c.`name` sp_trone_name,";
-		sql += " f.id cp_id,f.`short_name` cp_name,g.`jiesuanlv` cp_jie_suan_lv,SUM(a.data_rows) show_data_rows,SUM(a.amount) show_amounts";
+		sql += " f.id cp_id,f.`short_name` cp_name,g.`rate` cp_jie_suan_lv,SUM(a.data_rows) show_data_rows,SUM(a.amount) show_amounts";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a";
 		sql += " LEFT JOIN daily_config.`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
 		sql += " LEFT JOIN daily_config.tbl_trone b ON e.`trone_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.tbl_sp_trone c ON b.`sp_trone_id` = c.`id`";
 		sql += " LEFT JOIN daily_config.tbl_sp d ON c.`sp_id` = d.`id`";
 		sql += " LEFT JOIN daily_config.tbl_cp f ON e.`cp_id` = f.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_cp_jiesuan` g ON f.id = g.`cp_id` AND c.`id` = g.`sp_trone_id`";
+		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON f.id = g.`cp_id` AND c.`id` = g.`sp_trone_id`";
 		sql += " WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "'" + query;
 		sql += " GROUP BY d.id,c.id,f.id ORDER BY CONVERT(d.`short_name` USING gbk),CONVERT(c.`name` USING gbk),CONVERT(f.`short_name` USING gbk) ASC";
 		sql += " ) b";

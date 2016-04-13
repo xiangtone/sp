@@ -223,6 +223,18 @@ public class StringUtil
 		return df1.format((float)data1/(float)data2);
 	}
 	
+	public static String getPercent(float data1,float data2)
+	{
+		data2 = data2==0 ? 1 : data2;
+		return df1.format(data1/data2);
+	}
+	
+	public static String getPercent(double data1,double data2)
+	{
+		data2 = data2==0 ? 1 : data2;
+		return df1.format(data1/data2);
+	}
+	
 	public static String getDecimalFormat(float data)
 	{
 		return df2.format(data);

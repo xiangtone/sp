@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="com.system.server.CpServer"%>
 <%@page import="com.system.model.CpModel"%>
 <%@page import="com.system.server.SpServer"%>
@@ -14,10 +15,11 @@
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
+	int loadData = StringUtil.getInteger(request.getParameter("load"),-1);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
-	List<FinancialSpCpDataShowModel> list = new FinalcialSpCpDataServer().loadData(startDate, endDate,spId,cpId,dataType);
+	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(startDate, endDate,spId,cpId,dataType) : new ArrayList<FinancialSpCpDataShowModel>();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -59,7 +61,7 @@
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
 					</dd>
 					<dd class="dd01_me">SP</dd>
-					<dd class="dd03_me">
+					<dd class="dd04_me">
 						<select name="sp_id" id="sel_sp" title="选择SP">
 								<option value="-1">全部</option>
 								<%
@@ -73,7 +75,7 @@
 						</select>
 					</dd>
 					<dd class="dd01_me">CP</dd>
-					<dd class="dd03_me">
+					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp" title="选择CP">
 								<option value="-1">全部</option>
 								<%
