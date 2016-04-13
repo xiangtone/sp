@@ -1,3 +1,5 @@
+<%@page import="com.system.server.UserServer"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.system.server.SpTroneServer"%>
@@ -21,7 +23,6 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="com.system.util.PageUtil"%>
 <%@page import="java.util.Map"%>
-<%@page import="com.system.server.xy.UserServer"%>
 <%@page import="com.system.model.xy.XyUserModel"%>
 <%@page import="java.util.List"%>
 <%@page import="java.net.URLDecoder"%>
@@ -40,8 +41,14 @@
 	int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order"), -1);
 	int provinceId = StringUtil.getInteger(request.getParameter("province"), -1);
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
+	
+	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	
+	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
+	
+	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId, sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,commerceUserId,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -60,8 +67,10 @@
 	int showDataRows = (Integer)map.get("showdatarows");
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
+	double spAmount = (Double)map.get("spamount");
+	double cpAmount = (Double)map.get("cpamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时"};
+	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时","商务人员"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -197,6 +206,7 @@
 		$("#sel_province").change(provinceChange);
 		provinceChange();		
 		$("#sel_city").val(<%= cityId %>);
+		$("#sel_commerce_user").val(<%= commerceUserId %>);
 		
 	});
 	
@@ -334,6 +344,20 @@
 						</select>
 					</dd>
 					-->
+					<dd class="dd01_me">商务人员</dd>
+						<dd class="dd04_me">
+						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
+							<option value="-1">全部</option>
+							<%
+							for(UserModel commerceUser : userList)
+							{
+								%>
+							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
+								<%
+							}
+							%>
+						</select>
+					</dd>
 					<dd class="dd01_me">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式">
@@ -350,6 +374,7 @@
 							-->
 							<option value="8">省份</option>
 							<option value="9">城市</option>
+							<option value="12">商务人员</option>
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
@@ -371,6 +396,10 @@
 					<td>失败金额(元 )</td>
 					<td>推送金额(元)</td>
 					<td>失败率</td>
+					<td>预收入(元)</td>
+					<td>预结算(元)</td>
+					<td>利润(元)</td>
+					<td>利润率</td>
 				</tr>
 			</thead>
 			<tbody>		
@@ -390,6 +419,10 @@
 					<td><%= StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
 					<td><%= StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getCpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney() - model.getCpMoney()) %></td>
+					<td><%= StringUtil.getPercent(model.getSpMoney() - model.getCpMoney(), model.getAmount()) %></td>
 				</tr>
 						<%
 					}
@@ -405,6 +438,10 @@
 					<td>总失败金额(元 )：<%= StringUtil.getDecimalFormat(amount - showAmount) %></td>
 					<td>总推送金额(元)：<%= StringUtil.getDecimalFormat(showAmount) %></td>
 					<td>总失败率：<%= StringUtil.getPercent(dataRows - showDataRows, dataRows) %></td>
+					<td>总预收入(元):<%= StringUtil.getDecimalFormat(spAmount) %></td>
+					<td>总预结算(元):<%= StringUtil.getDecimalFormat(cpAmount) %></td>
+					<td>总预利润(元):<%= StringUtil.getDecimalFormat(spAmount-cpAmount) %></td>
+					<td>利润率:<%= StringUtil.getPercent(spAmount-cpAmount,amount) %></td>
 				</tr>
 			</tbody>
 		</table>

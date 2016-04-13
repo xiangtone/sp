@@ -17,7 +17,7 @@ public class MrDao
 {
 	public Map<String, Object> getMrAnalyData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, int sortType)
+			int cityId,int operatorId,int dataType, int commerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -49,6 +49,9 @@ public class MrDao
 		
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
+		
+		if(commerceUserId>0)
+			query += " and d.commerce_user_id = " + commerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -345,7 +348,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrTodayData(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId, int sortType)
+			int cityId,int commerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -372,12 +375,15 @@ public class MrDao
 		if(spTroneId>0)
 			query += " and h.id = " + spTroneId;
 		
+		if(commerceUserId>0)
+			query += " and j.id = " + commerceUserId;
+		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
 		String joinId = result[1];
 		
-		String sql = "select a.show_title,aa,bb,cc,dd,a.join_id from (";
-		sql += " select  " + joinId + " join_id," + queryParams + " show_title,count(*) aa,sum(c.price) bb";
+		String sql = "select a.show_title,aa,bb,cc,dd,sp_money,cp_money,a.join_id from (";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,count(*) aa,sum(c.price) bb,sum(c.price*h.jiesuanlv) sp_money";
 		sql += " from daily_log.tbl_mr_" + tableName + " a";
 		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id ";
 		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
@@ -386,10 +392,11 @@ public class MrDao
 		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
-		sql += " select  " + joinId + " join_id," + queryParams + " show_title,count(*) cc,sum(c.price) dd";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,count(*) cc,sum(c.price) dd,sum(c.price*i.rate) cp_money";
 		sql += " from daily_log.tbl_cp_mr_" + tableName + " a ";
 		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
 		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
@@ -398,6 +405,8 @@ public class MrDao
 		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql	+= " LEFT JOIN daily_config.tbl_cp_trone_rate i ON e.id = i.cp_id AND h.id = i.sp_trone_id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";		
@@ -414,7 +423,7 @@ public class MrDao
 			{
 				List<MrReportModel> list = new ArrayList<MrReportModel>();
 				int dataRows=0,showDataRows = 0;
-				double amount=0,showAmount = 0;
+				double amount=0,showAmount = 0,spAmount=0,cpAmount=0;
 				while(rs.next())
 				{
 					MrReportModel model = new MrReportModel();
@@ -425,11 +434,15 @@ public class MrDao
 					model.setAmount(rs.getFloat(3));
 					model.setShowDataRows(rs.getInt(4));
 					model.setShowAmount(rs.getFloat(5));
+					model.setSpMoney(rs.getFloat("sp_money"));
+					model.setCpMoney(rs.getFloat("cp_money"));
 					
 					dataRows += model.getDataRows();
 					showDataRows += model.getShowDataRows();
 					amount += model.getAmount();
 					showAmount += model.getShowAmount();
+					spAmount += model.getSpMoney();
+					cpAmount += model.getCpMoney();
 					
 					list.add(model);
 				}
@@ -438,6 +451,8 @@ public class MrDao
 				datalist.add(showDataRows);
 				datalist.add(amount);
 				datalist.add(showAmount);
+				datalist.add(spAmount);
+				datalist.add(cpAmount);
 				
 				return list;
 			}
@@ -447,6 +462,8 @@ public class MrDao
 		map.put("showdatarows", datalist.get(1));
 		map.put("amount", datalist.get(2));
 		map.put("showamount", datalist.get(3));
+		map.put("spamount", datalist.get(4));
+		map.put("cpamount", datalist.get(5));
 		
 		return map;
 	}
@@ -725,7 +742,7 @@ public class MrDao
 	
 	public static void main(String[] args)
 	{
-		Map<String, Object> map =new MrDao().getMrAnalyData("2015-09-27", "2015-09-27", 0, 0,0, 0, 0, 0, 0, -1,-1,1);
+		Map<String, Object> map =new MrDao().getMrAnalyData("2015-09-27", "2015-09-27", 0, 0,0, 0, 0, 0, 0, -1,-1,-1,1);
 		
 //		map.put("datarows", datalist.get(0));
 //		map.put("showdatarows", datalist.get(1));

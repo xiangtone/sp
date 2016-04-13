@@ -1,3 +1,6 @@
+<%@page import="com.system.server.UserServer"%>
+<%@page import="com.system.model.UserModel"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.system.server.SpTroneServer"%>
 <%@page import="com.system.model.SpTroneModel"%>
@@ -20,7 +23,6 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="com.system.util.PageUtil"%>
 <%@page import="java.util.Map"%>
-<%@page import="com.system.server.xy.UserServer"%>
 <%@page import="com.system.model.xy.XyUserModel"%>
 <%@page import="java.util.List"%>
 <%@page import="java.net.URLDecoder"%>
@@ -47,8 +49,13 @@
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
 	int operatorId = StringUtil.getInteger(request.getParameter("operator"), -1);
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
+	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	
+	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
+	
+	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,sortType);
+	Map<String, Object> map =  new MrServer().getMrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,commerceUserId,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -69,8 +76,6 @@
 	double showAmount = (Double)map.get("showamount");
 	double spAmount = (Double)map.get("spamount");
 	double cpAmount = (Double)map.get("cpamount");
-	
-	System.out.println("amount:" + amount);
 	
 	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","商务人员"};
 	
@@ -196,6 +201,7 @@
 		
 		$("#sel_operator").val(<%= operatorId %>);
 		$("#sel_data_type").val(<%= dataType %>);
+		$("#sel_commerce_user").val(<%= commerceUserId %>);
 		
 	});
 	
@@ -371,6 +377,20 @@
 							<option value="3">移动</option>
 							<option value="1">联通</option>
 							<option value="2">电信</option>
+						</select>
+					</dd>
+					<dd class="dd01_me">商务人员</dd>
+						<dd class="dd04_me">
+						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
+							<option value="-1">全部</option>
+							<%
+							for(UserModel commerceUser : userList)
+							{
+								%>
+							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
+								<%
+							}
+							%>
 						</select>
 					</dd>
 					<dd class="dd01_me">展示方式</dd>
