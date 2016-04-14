@@ -12,16 +12,19 @@ namespace sdk_Request.Model
     public class APIRquestModel
     {
         /// <summary>
-        /// 传给SP的透传内容
+        /// API平台，传递给SP使用的透传参数 (如果后台配置API匹配模式为透传参数时。此处存储的值和传递给SP的内容是一致)
         /// </summary>
         [DataMember]
         public String apiExdata;
 
         /// <summary>
-        /// tbl_sp_trone_api
+        /// 指求请求的API接口代码ID（不能修改）
         /// </summary>
         [DataMember(Name = "apiOrderId")]
         public String tbl_sp_trone_api_id;
+        /// <summary>
+        /// 用户的IP（渠道传入）
+        /// </summary>
         [DataMember]
         public int cid;
         /// <summary>
@@ -39,10 +42,19 @@ namespace sdk_Request.Model
         /// </summary>
         [DataMember]
         public String extrData;
+        /// <summary>
+        /// 对应tbl_api_order表的ID
+        /// </summary>
         [DataMember]
         public int id;
+        /// <summary>
+        /// 渠道传入
+        /// </summary>
         [DataMember]
         public String imei;
+        /// <summary>
+        /// 渠道传入
+        /// </summary>
         [DataMember]
         public String imsi;
         /// <summary>
@@ -55,8 +67,14 @@ namespace sdk_Request.Model
         /// </summary>
         [DataMember]
         public int isHidden;
+        /// <summary>
+        /// 渠道传入
+        /// </summary>
         [DataMember]
         public int lac;
+        /// <summary>
+        /// 渠道传入
+        /// </summary>
         [DataMember]
         public String mobile;
         /// <summary>
@@ -64,8 +82,14 @@ namespace sdk_Request.Model
         /// </summary>
         [DataMember]
         public String msg;
+        /// <summary>
+        /// 渠道传入
+        /// </summary>
         [DataMember]
         public String netType;
+        /// <summary>
+        /// 渠道传入
+        /// </summary>
         [DataMember]
         public String packageName;
         /// <summary>
@@ -76,15 +100,18 @@ namespace sdk_Request.Model
         [DataMember]
         public String sdkVersion;
         /// <summary>
-        /// 用户存储SP回应的其它二次数据
+        /// 用于存储SP回应结果的参数，用于关联同步的sp的订单号请存储到spLinkId字段
         /// </summary>
         [DataMember]
         public String spExField;
         /// <summary>
-        /// SP的订单号
+        /// 用于存储SP生成的订单号
         /// </summary>
         [DataMember]
         public String spLinkId;
+        /// <summary>
+        /// 相关联的SP通道ID
+        /// </summary>
         [DataMember]
         public int troneId;
         /// <summary>
@@ -92,6 +119,9 @@ namespace sdk_Request.Model
         /// </summary>
         [DataMember]
         public API_ERROR status;
+        /// <summary>
+        /// CP业务ID（等同于CP的Paycode）
+        /// </summary>
         [DataMember(Name = "troneOrderId")]
         public String tbl_trone_order_id;
         /// <summary>
@@ -99,6 +129,17 @@ namespace sdk_Request.Model
         /// </summary>
         [DataMember]
         public String extraParams;
+
+        /// <summary>
+        /// 渠道传入参数
+        /// </summary>
+        [DataMember]
+        public string iccid;
+        /// <summary>
+        /// 渠道传入参数
+        /// </summary>
+        [DataMember]
+        public string userAgent;
     }
 
 
