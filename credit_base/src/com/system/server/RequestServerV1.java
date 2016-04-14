@@ -154,6 +154,48 @@ public class RequestServerV1
 			}
 		}
 		
+		//用户的日月限
+		if (!StringUtil.isNullOrEmpty(
+				model.getImei() + model.getImsi() + model.getMobile())
+				&& (spTroneModel.getUserDayLimit() > 0
+						|| spTroneModel.getUserMonthLimit() > 0))
+		{
+			float[] limit = new MrServer().loadUserDayMonthLimit(
+					StringUtil.getMd5String(model.getImei() + "_"
+							+ model.getImsi() + "_" + model.getMobile(), 32),
+					curMonth, curDate, spTroneModel.getId());
+			
+			if(limit!=null)
+			{
+				float curUserSpTroneDayLimit = limit[0];
+				float curUserSpTroneMonthLimit = limit[1];
+				
+				if(spTroneModel.getUserDayLimit()>0)
+				{
+					if(curUserSpTroneDayLimit >= spTroneModel.getUserDayLimit())
+					{
+						model.setStatus(Constant.SP_TRONE_USER_DAY_OVER_LIMIT);
+						response.setStatus(Constant.SP_TRONE_USER_DAY_OVER_LIMIT);
+						saveRequest(model);
+						joresult.accumulate("description", "用户业务超日限");
+						return StringUtil.getJsonFormObject(response);
+					}
+				}
+				
+				if(spTroneModel.getUserMonthLimit()>0)
+				{
+					if(curUserSpTroneMonthLimit >= spTroneModel.getUserMonthLimit())
+					{
+						model.setStatus(Constant.SP_TRONE_USER_MONTH_OVER_LIMIT);
+						response.setStatus(Constant.SP_TRONE_USER_MONTH_OVER_LIMIT);
+						saveRequest(model);
+						joresult.accumulate("description", "用户业务超月限");
+						return StringUtil.getJsonFormObject(response);
+					}
+				}
+			}
+		}
+		
 		//先把基本数据写入数据库
 		saveRequest(model);
 		

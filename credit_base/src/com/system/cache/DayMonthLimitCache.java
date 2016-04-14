@@ -116,9 +116,14 @@ public class DayMonthLimitCache
 		
 		int i= 1;
 		
+		float totalMoney = 0F;
+		float money = 0F;
+		
 		for(String key : spTroneMonthLimit.keySet())
 		{
-			sb.append("<td>" +  key + ":" + spTroneMonthLimit.get(key) + "</td>");
+			money = spTroneMonthLimit.get(key);
+			
+			sb.append("<td>" +  key + ":" + money + "</td>");
 			
 			if(i%5==0)
 				sb.append("</tr><tr>");
@@ -126,7 +131,7 @@ public class DayMonthLimitCache
 			i++;
 		}
 		
-		sb.append("</tr><tr><td colspan='5'>SP业务当前日限</td></tr><tr>");
+		sb.append("<td>Total:" + totalMoney + "</td></tr><tr><td colspan='5'>SP业务当前日限</td></tr><tr>");
 		
 		i= 1;
 		

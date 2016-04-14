@@ -170,4 +170,20 @@ public class SpDataCache
 		return null;
 	}
 	
+	/**
+	 * 根据ID取得通道的数据
+	 * @param troneId
+	 * @return
+	 */
+	public static TroneModel getTroneById(int troneId)
+	{
+		for(TroneModel model : _troneList)
+		{
+			if(model.getId()==troneId)
+			{
+				return model;
+			}
+		}
+		return null;
+	}
 }
