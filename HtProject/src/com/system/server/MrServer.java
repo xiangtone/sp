@@ -16,6 +16,14 @@ public class MrServer
 				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,commerceUserId,sortType);
 	}
 	
+	public Map<String, Object> getMrLrData(String startDate, String endDate,
+			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
+			int cityId,int operatorId,int dataType,int commerceUserId,int sortType)
+	{
+		return new MrDao().getMrAnalyLrData(startDate, endDate, spId, spTroneId,troneId,
+				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,commerceUserId,sortType);
+	}
+	
 	public Map<String, Object> getMrDataQiBa(String startDate, String endDate,
 			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
 			int cityId, int sortType)
@@ -30,6 +38,15 @@ public class MrServer
 	{
 		String tableName = StringUtil.getMonthFormat(startDate);
 		return new MrDao().getMrTodayData(tableName, startDate, spId,spTroneId, troneId,
+				cpId, troneOrderId, provinceId, cityId,commerceUserId, sortType);
+	}
+	
+	public Map<String, Object> getMrTodayLrData(String startDate,
+			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
+			int cityId, int commerceUserId,int sortType)
+	{
+		String tableName = StringUtil.getMonthFormat(startDate);
+		return new MrDao().getMrTodayLrData(tableName, startDate, spId,spTroneId, troneId,
 				cpId, troneOrderId, provinceId, cityId,commerceUserId, sortType);
 	}
 	

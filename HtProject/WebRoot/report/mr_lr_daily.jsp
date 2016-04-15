@@ -48,7 +48,7 @@
 	
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,commerceUserId,sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayLrData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,commerceUserId,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -67,6 +67,8 @@
 	int showDataRows = (Integer)map.get("showdatarows");
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
+	double spAmount = (Double)map.get("spamount");
+	double cpAmount = (Double)map.get("cpamount");
 	
 	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时","商务人员"};
 	
@@ -265,7 +267,7 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="mr2.jsp"  method="get">
+			<form action="mr_lr_daily.jsp"  method="get">
 				<dl>
 					<dd class="dd01_me" onclick="openDetailData('aaa')">开始日期</dd>
 					<dd class="dd03_me">
@@ -378,7 +380,7 @@
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
-					<dd class="dd01_me"><a style="color:blue;" href="mr_lr_daily.jsp?<%= request.getQueryString() %>">查看利润</a></dd>
+					<dd class="dd01_me"><a style="color:blue;" href="mr2.jsp?<%= request.getQueryString() %>">返回</a></dd>
 				</dl>
 			</form>
 		</div>
@@ -394,6 +396,10 @@
 					<td>失败金额(元 )</td>
 					<td>推送金额(元)</td>
 					<td>失败率</td>
+					<td>预收入(元)</td>
+					<td>预结算(元)</td>
+					<td>利润(元)</td>
+					<td>利润率</td>
 				</tr>
 			</thead>
 			<tbody>		
@@ -413,6 +419,10 @@
 					<td><%= StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
 					<td><%= StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getCpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney() - model.getCpMoney()) %></td>
+					<td><%= StringUtil.getPercent(model.getSpMoney() - model.getCpMoney(), model.getAmount()) %></td>
 				</tr>
 						<%
 					}
@@ -428,6 +438,10 @@
 					<td>总失败金额(元 )：<%= StringUtil.getDecimalFormat(amount - showAmount) %></td>
 					<td>总推送金额(元)：<%= StringUtil.getDecimalFormat(showAmount) %></td>
 					<td>总失败率：<%= StringUtil.getPercent(dataRows - showDataRows, dataRows) %></td>
+					<td>总预收入(元):<%= StringUtil.getDecimalFormat(spAmount) %></td>
+					<td>总预结算(元):<%= StringUtil.getDecimalFormat(cpAmount) %></td>
+					<td>总预利润(元):<%= StringUtil.getDecimalFormat(spAmount-cpAmount) %></td>
+					<td>利润率:<%= StringUtil.getPercent(spAmount-cpAmount,amount) %></td>
 				</tr>
 			</tbody>
 		</table>

@@ -1,6 +1,6 @@
 <%@page import="com.system.server.UserServer"%>
-<%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.model.UserModel"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.system.server.SpTroneServer"%>
 <%@page import="com.system.model.SpTroneModel"%>
@@ -30,9 +30,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	String defaultStartDate = StringUtil.getMonthHeadDate();
+	String defaultEndDate = StringUtil.getMonthEndDate();
 	
-	String date = StringUtil.getString(request.getParameter("date"), StringUtil.getDefaultDate());
-	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 6);
+	String startDate = StringUtil
+			.getString(request.getParameter("startdate"), defaultStartDate);
+	String endDate = StringUtil
+			.getString(request.getParameter("enddate"), defaultEndDate);
+	
+	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 1);
 	
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
@@ -41,14 +47,15 @@
 	int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order"), -1);
 	int provinceId = StringUtil.getInteger(request.getParameter("province"), -1);
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
-	
+	int operatorId = StringUtil.getInteger(request.getParameter("operator"), -1);
+	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
 	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
 	
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
 	
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,commerceUserId,sortType);
+	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,commerceUserId,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -67,8 +74,10 @@
 	int showDataRows = (Integer)map.get("showdatarows");
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
+	double spAmount = (Double)map.get("spamount");
+	double cpAmount = (Double)map.get("cpamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时","商务人员"};
+	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","商务人员"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -115,6 +124,7 @@
 	function onCpDataSelect(joData)
 	{
 		$("#sel_cp").val(joData.id);
+		troneOrderChange();
 	}
 
 	function joCity(id,provinceId,name)
@@ -143,7 +153,7 @@
 		obj.troneOrderName = troneOrderName;
 		return obj;
 	}
-	
+
 	var cityList = new Array();
 	<%for(CityModel city : cityList){%>
 	cityList.push(new joCity(<%= city.getId() %>,<%= city.getProvinceId() %>,'<%= city.getName() %>'));<%}%>
@@ -165,22 +175,6 @@
 		<%
 	}
 	%>
-	
-	var npSpTroneArray = new Array();
-	
-	<%
-	for(SpTroneModel spTroneModel : spTroneList)
-	{
-		%>
-		npSpTroneArray.push(new joSelOption(<%= spTroneModel.getId() %>,<%=spTroneModel.getSpId() %>,'<%= spTroneModel.getSpTroneName() %>'));	
-		<%
-	}
-	%>
-	
-	function npSpTroneChange(jodata)
-	{
-		$("#sel_sp_trone").val(jodata.id);
-	}
 	
 	$(function()
 	{
@@ -204,9 +198,29 @@
 		$("#sel_province").change(provinceChange);
 		provinceChange();		
 		$("#sel_city").val(<%= cityId %>);
+		
+		$("#sel_operator").val(<%= operatorId %>);
+		$("#sel_data_type").val(<%= dataType %>);
 		$("#sel_commerce_user").val(<%= commerceUserId %>);
 		
 	});
+	
+	
+	var npSpTroneArray = new Array();
+	
+	<%
+	for(SpTroneModel spTroneModel : spTroneList)
+	{
+		%>
+		npSpTroneArray.push(new joSelOption(<%= spTroneModel.getId() %>,<%=spTroneModel.getSpId() %>,'<%= spTroneModel.getSpTroneName() %>'));	
+		<%
+	}
+	%>
+	
+	function npSpTroneChange(jodata)
+	{
+		$("#sel_sp_trone").val(jodata.id);
+	}
 	
 	function troneChange()
 	{
@@ -261,19 +275,26 @@
 		}
 	}
 	
+	
 </script>
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="mr2.jsp"  method="get">
+			<form action="mr_lr.jsp"  method="get" style="margin-top: 10px">
 				<dl>
-					<dd class="dd01_me" onclick="openDetailData('aaa')">开始日期</dd>
+					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
-						<input name="date"  type="text" value="<%=date%>" 
+						<input name="startdate"  type="text" value="<%=startDate%>" 
 							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
+					</dd>
+					<dd class="dd01_me">结束日期</dd>
+					<dd class="dd03_me">
+						<input name="enddate" type="text" value="<%=endDate%>" 
+							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
+					</dd>
 					<dd class="dd01_me">SP</dd>
 					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
+						<select name="sp_id" id="sel_sp" style="width: 110px;" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
 							<option value="-1">全部</option>
 							<%
 							for(SpModel sp : spList)
@@ -287,18 +308,25 @@
 					</dd>
 					<dd class="dd01_me">SP业务</dd>
 						<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
+						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;" onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
 					</dd>
-				</dl>
-				<br /><br /><br />
-				<dl>
+					<dd class="dd01_me">数据类型</dd>
+						<dd class="dd04_me">
+						<select name="data_type" id="sel_data_type" style="width: 100px;">
+							<option value="-1">全部</option>
+							<option value="0">普通</option>
+							<option value="1">包月</option>
+						</select>
+					</dd>
+					<br /><br /><br />
 					<dd class="dd01_me">SP通道</dd>
 						<dd class="dd04_me">
-						<select name="trone" id="sel_trone" title="请选择通道"></select>
+						<select name="trone" id="sel_trone" title="请选择通道" style="width: 110px;"></select>
 					</dd>
+					
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP" onclick="namePicker(this,cpList,onCpDataSelect)">
+						<select name="cp_id" id="sel_cp" title="选择CP" style="width: 110px;" onclick="namePicker(this,cpList,onCpDataSelect)">
 							<option value="-1">全部</option>
 							<%
 							for(CpModel cp : cpList)
@@ -310,15 +338,15 @@
 							%>
 						</select>
 					</dd>
-					<!--
+					<!--  
 					<dd>
-						<dd class="dd01_me">CP业务</dd>
+						<dd class="dd01_me">业务</dd>
 						<dd class="dd04_me">
-						<select name="trone_order" id="sel_trone_order" title="请选择业务"></select>
+						<select name="trone_order" id="sel_trone_order" title="请选择业务" style="width: 110px;"></select>
 					</dd>
 					-->
 					<!-- 暂时先隐藏 -->
-					<!-- 
+					<!--  
 					<dd>
 						<dd class="dd01_me">省份</dd>
 						<dd class="dd04_me">
@@ -342,6 +370,15 @@
 						</select>
 					</dd>
 					-->
+					<dd class="dd01_me">运营商</dd>
+						<dd class="dd04_me">
+						<select name="operator" id="sel_operator" style="width: 100px;">
+							<option value="-1">全部</option>
+							<option value="3">移动</option>
+							<option value="1">联通</option>
+							<option value="2">电信</option>
+						</select>
+					</dd>
 					<dd class="dd01_me">商务人员</dd>
 						<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
@@ -358,28 +395,28 @@
 					</dd>
 					<dd class="dd01_me">展示方式</dd>
 					<dd class="dd04_me">
-						<select name="sort_type" id="sel_sort_type" title="展示方式">
-							<option value="11">小时</option>
+						<select name="sort_type" id="sel_sort_type" title="展示方式" style="width: 110px;" >
+							<option value="1">日期</option>
+							<option value="2">周数</option>
+							<option value="3">月份</option>
 							<option value="4">SP</option>
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
 							<option value="5">CP</option>
 							<option value="7">CP业务</option>
 							<!-- 暂时先隐藏 -->
-							<!--
-							<option value="2">周数</option>
-							<option value="3">月份</option>
-							-->
 							<option value="8">省份</option>
 							<option value="9">城市</option>
+							<!-- <option value="11">按小时</option> -->
 							<option value="12">商务人员</option>
+							
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
-					<dd class="dd01_me"><a style="color:blue;" href="mr_lr_daily.jsp?<%= request.getQueryString() %>">查看利润</a></dd>
-				</dl>
+					<dd class="dd01_me"><a style="color:blue;" href="mr1.jsp?<%= request.getQueryString() %>">返回</a></dd>
+					</dl>
 			</form>
 		</div>
 		<table cellpadding="0" cellspacing="0">
@@ -394,6 +431,10 @@
 					<td>失败金额(元 )</td>
 					<td>推送金额(元)</td>
 					<td>失败率</td>
+					<td>预收入(元)</td>
+					<td>预结算(元)</td>
+					<td>利润(元)</td>
+					<td>利润率</td>
 				</tr>
 			</thead>
 			<tbody>		
@@ -404,8 +445,7 @@
 						%>
 				<tr>
 					<td><%= index++ %></td>
-					<td><a href="detail.jsp?date=<%= date %>&sp_id=<%= spId %>&cp_id=<%= cpId %>&sp_trone_id=<%= spTroneId %>&trone_id=<%= troneId %>&show_type=<%= sortType %>&joinid=<%= model.getJoinId() %>&title=<%= StringUtil.encodeUrl(model.getTitle1(),"UTF-8") %>" 
-					target="_blank"><%= model.getTitle1() %></a></td>
+					<td><%= model.getTitle1() %></td>
 					<td><%= model.getDataRows() %></td>
 					<td><%= model.getDataRows() - model.getShowDataRows()  %></td>
 					<td><%= model.getShowDataRows() %></td>
@@ -413,6 +453,10 @@
 					<td><%= StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
 					<td><%= StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getCpMoney()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getSpMoney() - model.getCpMoney()) %></td>
+					<td><%= StringUtil.getPercent(model.getSpMoney() - model.getCpMoney(), model.getAmount()) %></td>
 				</tr>
 						<%
 					}
@@ -428,6 +472,10 @@
 					<td>总失败金额(元 )：<%= StringUtil.getDecimalFormat(amount - showAmount) %></td>
 					<td>总推送金额(元)：<%= StringUtil.getDecimalFormat(showAmount) %></td>
 					<td>总失败率：<%= StringUtil.getPercent(dataRows - showDataRows, dataRows) %></td>
+					<td>总预收入(元):<%= StringUtil.getDecimalFormat(spAmount) %></td>
+					<td>总预结算(元):<%= StringUtil.getDecimalFormat(cpAmount) %></td>
+					<td>总预利润(元):<%= StringUtil.getDecimalFormat(spAmount-cpAmount) %></td>
+					<td>利润率:<%= StringUtil.getPercent(spAmount-cpAmount,amount) %></td>
 				</tr>
 			</tbody>
 		</table>
