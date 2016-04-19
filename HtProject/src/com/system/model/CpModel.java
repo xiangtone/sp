@@ -9,6 +9,7 @@ public class CpModel
 	private String shortName;
 	private String contactPerson;
 	private int commerceUserId;
+	private String commerceUserName;
 	private int synFlag;
 	private int defaultHoldPercent;
 	private String address;
@@ -137,6 +138,14 @@ public class CpModel
 	public void setUserName(String userName)
 	{
 		this.userName = userName;
+	}
+	public String getCommerceUserName()
+	{
+		return commerceUserName;
+	}
+	public void setCommerceUserName(String commerceUserName)
+	{
+		this.commerceUserName = commerceUserName;
 	}
 	
 	

@@ -11,10 +11,9 @@
 	pageEncoding="UTF-8"%>
 <%
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
-	String fullName = StringUtil.getString(request.getParameter("fullname"), "");
-	String shortName = StringUtil.getString(request.getParameter("shortname"), "");
+	String keyWord = StringUtil.getString(request.getParameter("keyword"), "");
 
-	Map<String, Object> map =  new CpServer().loadCp(pageIndex, fullName, shortName);
+	Map<String, Object> map =  new CpServer().loadCp(pageIndex,keyWord);
 		
 	List<CpModel> list = (List<CpModel>)map.get("list");
 	
@@ -22,8 +21,7 @@
 	
 	Map<String,String> params = new HashMap<String,String>();
 	
-	params.put("fullname", fullName);
-	params.put("shortname", shortName);
+	params.put("keyword", keyWord);
 	
 	String pageData = PageUtil.initPageQuery("cp.jsp",params,rowCount,pageIndex);
 	
@@ -56,13 +54,9 @@
 				<dd class="ddbtn" ><a href="cpadd.jsp">增  加</a></dd>
 				<form action="cp.jsp"  method="post" id="formid">
 				<dl>
-					<dd class="dd01_me">全称</dd>
+					<dd class="dd01_me">关键字</dd>
 					<dd class="dd03_me">
-						<input name="fullname" id="input_fullname" value="<%=fullName %>" type="text" style="width: 150px">
-					</dd>
-					<dd class="dd01_me">简称</dd>
-					<dd class="dd03_me">
-						<input name="shortname" id="input_shortname" value="<%=shortName %>" type="text" style="width: 150px">
+						<input name="keyword" id="input_keyword" value="<%= keyWord %>" type="text" style="width: 150px">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" >
@@ -82,8 +76,7 @@
 					<td>QQ</td>
 					<td>电话</td>
 					<td>邮箱</td>
-					<td>合同起始日</td>
-					<td>合同结束日</td>
+					<td>商务</td>
 					<td>登录名</td>
 					<td>操作</td>
 				</tr>
@@ -103,11 +96,10 @@
 					<td><%=model.getQq()%></td>
 					<td><%=model.getPhone() %></td>
 					<td><%=model.getMail() %></td>
-					<td><%=model.getContractStartDate() %></td>
-					<td><%=model.getContractEndDate() %></td>
+					<td><%= model.getCommerceUserName() %></td>
 					<td><%=model.getUserName() %></td>
 					<td>
-						<a href="cpedit.jsp?id=<%= model.getId() %>&pageindex=<%=pageIndex%>&fullname=<%=fullName%>&shortname=<%=shortName%>">修改</a>
+						<a href="cpedit.jsp?id=<%= model.getId() %>&query=<%= query %>">修改</a>
 						<a href="cpaccount.jsp?id=<%= model.getId() %>&query=<%= query %>">用户分配</a>
 					</td>
 				</tr>

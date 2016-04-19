@@ -1,3 +1,6 @@
+<%@page import="com.system.server.UserServer"%>
+<%@page import="com.system.model.UserModel"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="java.util.List"%>
 <%@page import="com.system.server.CpServer"%>
 <%@page import="com.system.model.CpModel"%>
@@ -6,6 +9,8 @@
 	pageEncoding="UTF-8"%>
 <%
 	List<CpModel> list = new CpServer().loadCp();
+	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
+	List<UserModel> userList = new UserServer().loadUserByGroupId(cpCommerceId);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -106,6 +111,25 @@
 					<dd class="dd03_me">
 						<input type="text" name="contract_person" id="input_contract_person"
 							style="width: 200px">
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">商务</dd>
+					<dd class="dd04_me">
+						<select name="commerce_user_id" id="sel_commerce_user_id">
+							<option value="-1">请选择</option>
+							<%
+							for(UserModel model : userList)
+							{
+								%>
+							<option value="<%= model.getId() %>"><%= model.getNickName() %></option>	
+								<%
+							}
+							%>
+						</select>
 					</dd>
 					
 					<br />

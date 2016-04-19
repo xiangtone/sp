@@ -23,9 +23,9 @@ public class CpServer
 		return new CpDao().loadCp(pageIndex);
 	}
 	
-	public Map<String, Object> loadCp(int pageIndex,String fullName,String shortName)
+	public Map<String, Object> loadCp(int pageIndex,String keyWord)
 	{
-		return new CpDao().loadCp(pageIndex, fullName, shortName);
+		return new CpDao().loadCp(pageIndex, keyWord);
 	}
 	
 	public CpModel loadCpById(int id)

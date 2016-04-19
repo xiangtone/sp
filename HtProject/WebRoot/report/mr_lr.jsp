@@ -49,13 +49,16 @@
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
 	int operatorId = StringUtil.getInteger(request.getParameter("operator"), -1);
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
-	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
 	
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
-	
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
+	
+	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
+	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,commerceUserId,sortType);
+	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -77,7 +80,7 @@
 	double spAmount = (Double)map.get("spamount");
 	double cpAmount = (Double)map.get("cpamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","商务人员"};
+	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","SP商务","CP商务"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -201,7 +204,8 @@
 		
 		$("#sel_operator").val(<%= operatorId %>);
 		$("#sel_data_type").val(<%= dataType %>);
-		$("#sel_commerce_user").val(<%= commerceUserId %>);
+		$("#sel_commerce_user").val(<%= spCommerceUserId %>);
+		$("#sel_cp_commerce_user").val(<%= cpCommerceUserId %>);
 		
 	});
 	
@@ -310,6 +314,10 @@
 						<dd class="dd04_me">
 						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;" onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
 					</dd>
+					<dd class="dd01_me">SP通道</dd>
+						<dd class="dd04_me">
+						<select name="trone" id="sel_trone" title="请选择通道" style="width: 110px;"></select>
+					</dd>
 					<dd class="dd01_me">数据类型</dd>
 						<dd class="dd04_me">
 						<select name="data_type" id="sel_data_type" style="width: 100px;">
@@ -319,11 +327,6 @@
 						</select>
 					</dd>
 					<br /><br /><br />
-					<dd class="dd01_me">SP通道</dd>
-						<dd class="dd04_me">
-						<select name="trone" id="sel_trone" title="请选择通道" style="width: 110px;"></select>
-					</dd>
-					
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp" title="选择CP" style="width: 110px;" onclick="namePicker(this,cpList,onCpDataSelect)">
@@ -379,12 +382,26 @@
 							<option value="2">电信</option>
 						</select>
 					</dd>
-					<dd class="dd01_me">商务人员</dd>
+					<dd class="dd01_me">SP商务</dd>
 						<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
 							<option value="-1">全部</option>
 							<%
 							for(UserModel commerceUser : userList)
+							{
+								%>
+							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
+								<%
+							}
+							%>
+						</select>
+					</dd>
+					<dd class="dd01_me">CP商务</dd>
+						<dd class="dd04_me">
+						<select name="cp_commerce_user" id="sel_cp_commerce_user" style="width: 100px;">
+							<option value="-1">全部</option>
+							<%
+							for(UserModel commerceUser : cpCommerceUserList)
 							{
 								%>
 							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
@@ -408,7 +425,8 @@
 							<option value="8">省份</option>
 							<option value="9">城市</option>
 							<!-- <option value="11">按小时</option> -->
-							<option value="12">商务人员</option>
+							<option value="12">SP商务</option>
+							<option value="13">CP商务</option>
 							
 						</select>
 					</dd>

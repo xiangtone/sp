@@ -1,3 +1,6 @@
+<%@page import="com.system.server.UserServer"%>
+<%@page import="com.system.model.UserModel"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="java.util.List"%>
 <%@page import="com.system.server.CpServer"%>
 <%@page import="com.system.model.CpModel"%>
@@ -5,9 +8,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
-	String fullName = StringUtil.getString(request.getParameter("fullname"), "");
-	String shortName = StringUtil.getString(request.getParameter("shortname"), "");
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
 	CpModel model = new CpServer().loadCpById(id);
 	if(model==null)
@@ -16,6 +16,9 @@
 		return;
 	}
 	List<CpModel> list = new CpServer().loadCp();
+	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
+	List<UserModel> userList = new UserServer().loadUserByGroupId(cpCommerceId);
+	String query = StringUtil.getString(request.getParameter("query"), "");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -61,6 +64,7 @@
 		$("#input_address").val("<%= model.getAddress() %>");
 		$("#input_contract_start_date").val("<%= model.getContractStartDate() %>");
 		$("#input_contract_end_date").val("<%= model.getContractEndDate() %>");
+		$("#sel_commerce_user_id").val("<%= model.getCommerceUserId() %>");ssssssssssssss
 	}
 	
 	function subForm() 
@@ -108,7 +112,7 @@
 			</dl>
 			<br />	<br />		
 			<dl>
-				<form action="action.jsp?pageindex=<%=pageIndex%>&fullname=<%=fullName%>&shortname=<%=shortName%>" method="post" id="addform">
+				<form action="action.jsp?query=<%= query %>" method="post" id="addform">
 					<input type="hidden" value="<%= model.getId() %>" name="id" />
 										
 					<dd class="dd00_me"></dd>
@@ -136,6 +140,25 @@
 					<dd class="dd03_me">
 						<input type="text" name="contract_person" id="input_contract_person"
 							style="width: 200px">
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">商务</dd>
+					<dd class="dd04_me">
+						<select name="commerce_user_id" id="sel_commerce_user_id">
+							<option value="-1">请选择</option>
+							<%
+							for(UserModel userModel : userList)
+							{
+								%>
+							<option value="<%= userModel.getId() %>"><%= userModel.getNickName() %></option>	
+								<%
+							}
+							%>
+						</select>
 					</dd>
 					
 					<br />

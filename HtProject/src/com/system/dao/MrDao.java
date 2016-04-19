@@ -17,7 +17,7 @@ public class MrDao
 {
 	public Map<String, Object> getMrAnalyData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, int commerceUserId,int sortType)
+			int cityId,int operatorId,int dataType, int spCommerceUserId,int cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -50,8 +50,11 @@ public class MrDao
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
 		
-		if(commerceUserId>0)
-			query += " and d.commerce_user_id = " + commerceUserId;
+		if(spCommerceUserId>0)
+			query += " and d.commerce_user_id = " + spCommerceUserId;
+		
+		if(cpCommerceUserId>0)
+			query += " and e.commerce_user_id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -68,6 +71,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
@@ -81,6 +85,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";
@@ -135,7 +140,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrAnalyLrData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, int commerceUserId,int sortType)
+			int cityId,int operatorId,int dataType, int spCommerceUserId,int cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -168,8 +173,11 @@ public class MrDao
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
 		
-		if(commerceUserId>0)
-			query += " and d.commerce_user_id = " + commerceUserId;
+		if(spCommerceUserId>0)
+			query += " and d.commerce_user_id = " + spCommerceUserId;
+		
+		if(cpCommerceUserId>0)
+			query += " and e.commerce_user_id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -186,6 +194,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
@@ -200,6 +209,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
 		sql	+= " LEFT JOIN daily_config.tbl_cp_trone_rate i ON e.id = i.cp_id AND h.id = i.sp_trone_id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";
@@ -466,7 +476,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrTodayLrData(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int commerceUserId,int sortType)
+			int cityId,int spCommerceUserId,int cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -493,8 +503,11 @@ public class MrDao
 		if(spTroneId>0)
 			query += " and h.id = " + spTroneId;
 		
-		if(commerceUserId>0)
-			query += " and j.id = " + commerceUserId;
+		if(spCommerceUserId>0)
+			query += " and j.id = " + spCommerceUserId;
+		
+		if(cpCommerceUserId>0)
+			query += " and k.id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -511,6 +524,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
@@ -525,6 +539,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql	+= " LEFT JOIN daily_config.tbl_cp_trone_rate i ON e.id = i.cp_id AND h.id = i.sp_trone_id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";		
@@ -588,7 +603,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrTodayData(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int commerceUserId,int sortType)
+			int cityId,int spCommerceUserId,int cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -615,8 +630,11 @@ public class MrDao
 		if(spTroneId>0)
 			query += " and h.id = " + spTroneId;
 		
-		if(commerceUserId>0)
-			query += " and j.id = " + commerceUserId;
+		if(spCommerceUserId>0)
+			query += " and j.id = " + spCommerceUserId;
+		
+		if(cpCommerceUserId>0)
+			query += " and k.id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -633,6 +651,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
@@ -646,6 +665,7 @@ public class MrDao
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";		
@@ -864,6 +884,11 @@ public class MrDao
 				joinId = " j.id ";
 				break;
 				
+			case 13:
+				queryParams = " k.nick_name ";
+				joinId = " k.id ";
+				break;
+				
 			default:
 					break;
 		}
@@ -973,7 +998,7 @@ public class MrDao
 	
 	public static void main(String[] args)
 	{
-		Map<String, Object> map =new MrDao().getMrAnalyData("2015-09-27", "2015-09-27", 0, 0,0, 0, 0, 0, 0, -1,-1,-1,1);
+		Map<String, Object> map =new MrDao().getMrAnalyData("2015-09-27", "2015-09-27", 0, 0,0, 0, 0, 0, 0, -1,-1,-1,-1,1);
 		
 //		map.put("datarows", datalist.get(0));
 //		map.put("showdatarows", datalist.get(1));

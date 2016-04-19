@@ -1,3 +1,4 @@
+<%@page import="com.system.util.Base64UTF"%>
 <%@page import="com.system.model.CpModel"%>
 <%@page import="com.system.server.CpServer"%>
 <%@page import="com.system.util.StringUtil"%>
@@ -8,13 +9,14 @@
 	String fullName = StringUtil.getString(request.getParameter("full_name"), "");
 	String shortName = StringUtil.getString(request.getParameter("short_name"), "");
 	String contractPerson = StringUtil.getString(request.getParameter("contract_person"), "");
+	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user_id"), 0);
 	String qq = StringUtil.getString(request.getParameter("qq"), "");
 	String email = StringUtil.getString(request.getParameter("email"), "");
 	String phone = StringUtil.getString(request.getParameter("phone"), "");
 	String address = StringUtil.getString(request.getParameter("address"), "");
 	String contractStartDate = StringUtil.getString(request.getParameter("contract_start_date"), StringUtil.getDefaultDate());
 	String contractEndDate = StringUtil.getString(request.getParameter("contract_end_date"), StringUtil.getDefaultDate());
-	String query = request.getQueryString();
+	String query = StringUtil.getString(request.getParameter("query"), "");
 	
 	
 	int accountType =StringUtil.getInteger(request.getParameter("accounttype"), -1);
@@ -38,8 +40,7 @@
 	model.setAddress(address);
 	model.setContractStartDate(contractStartDate);
 	model.setContractEndDate(contractEndDate);
-	
-	
+	model.setCommerceUserId(commerceUserId);
 	
 	
 	if(id>0)
@@ -51,6 +52,6 @@
 		new CpServer().addCp(model);
 	}
 	
-	response.sendRedirect("cp.jsp?"+query);
+	response.sendRedirect("cp.jsp?" + Base64UTF.decode(query));
 	
 %>
