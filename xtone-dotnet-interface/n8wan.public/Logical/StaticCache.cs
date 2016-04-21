@@ -201,7 +201,7 @@ namespace n8wan.Public.Logical
                 _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
 
             }
-            catch (System.Data.DataException ex)
+            catch (Exception ex)
             {
                 WriteLog(ex.Message);
                 _satus = Static_Cache_Staus.Idel;
