@@ -70,6 +70,7 @@ public class CpSpTroneRateDao
 					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
 					model.setDayLimit(rs.getFloat("day_limit"));
 					model.setMonthLimit(rs.getFloat("month_limit"));
+					model.setProsData(StringUtil.getString(rs.getString("province_hold_rate"), ""));
 					list.add(model);
 				}
 				
@@ -107,6 +108,7 @@ public class CpSpTroneRateDao
 					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
 					model.setDayLimit(rs.getFloat("day_limit"));
 					model.setMonthLimit(rs.getFloat("month_limit"));
+					model.setProsData(StringUtil.getString(rs.getString("province_hold_rate"), ""));
 					
 					return model;
 				}
@@ -142,13 +144,14 @@ public class CpSpTroneRateDao
 	
 	public void updateCpSpTroneLimit(CpSpTroneRateModel model)
 	{
-		String sql = "update daily_config.tbl_cp_trone_rate set day_limit = ? , month_limit = ? , rate = ? where id = ?";
+		String sql = "update daily_config.tbl_cp_trone_rate set day_limit = ? , month_limit = ? , rate = ?, province_hold_rate = ? where id = ?";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getDayLimit());
 		map.put(2, model.getMonthLimit());
 		map.put(3, model.getRate());
-		map.put(4, model.getId());
+		map.put(4, model.getProsData());
+		map.put(5, model.getId());
 		
 		new JdbcControl().execute(sql,map);
 	}

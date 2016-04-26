@@ -1,3 +1,4 @@
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.util.StringUtil"%>
 <%@page import="com.system.model.UserModel"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -14,6 +15,8 @@
  	String userName = user.getName();
  	String pwd = user.getPassword();
  	String urlType = StringUtil.getString(request.getParameter("url"), "/sp/tbl_sp_api_urlList.aspx"); 
+ 	
+ 	String postUrl = ConfigManager.getConfigData("TO_THIRD_MENU", "http://admin.n8wan.com/passport/login.ashx");
  %>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

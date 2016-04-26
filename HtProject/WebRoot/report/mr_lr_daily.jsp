@@ -32,7 +32,7 @@
 <%
 	
 	String date = StringUtil.getString(request.getParameter("date"), StringUtil.getDefaultDate());
-	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 6);
+	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 10);
 	
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
