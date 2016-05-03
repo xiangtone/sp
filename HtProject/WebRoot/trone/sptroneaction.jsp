@@ -16,6 +16,7 @@
 		return;
 	}
 
+	int serviceCodeId = StringUtil.getInteger(request.getParameter("service_code"), -1);
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
 	int spId = StringUtil.getInteger(request.getParameter("sp_id_1"), -1);
 	int operator = StringUtil.getInteger(request.getParameter("operator"), -1);	
@@ -54,6 +55,8 @@
 	model.setMonthLimit(monthLimit);
 	model.setUserDayLimit(userDayLimit);
 	model.setUserMonthLimit(userMonthLimit);
+	model.setServiceCodeId(serviceCodeId);
+	
 	
 	if(id==-1)
 		new SpTroneServer().addSpTrone(model); 

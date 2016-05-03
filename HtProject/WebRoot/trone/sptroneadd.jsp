@@ -1,3 +1,5 @@
+<%@page import="com.system.server.ServiceCodeServer"%>
+<%@page import="com.system.model.ServiceCodeModel"%>
 <%@page import="com.system.server.SpTroneApiServer"%>
 <%@page import="com.system.model.SpTroneApiModel"%>
 <%@page import="com.system.model.ProvinceModel"%>
@@ -17,6 +19,7 @@
 	List<SpModel> spList = new SpServer().loadSp();
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<SpTroneApiModel> spTroneApiList = new SpTroneApiServer().loadSpTroneApi();
+	List<List<ServiceCodeModel>> serviceCodeList = new ServiceCodeServer().loadServiceCode();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -67,9 +70,9 @@
 			return;
 		}
 		
-		if ($("#sel_operator").val() == "-1") {
-			alert("请选择运营商");
-			$("#sel_operator").focus();
+		if ($("#sel_service_code").val() == "-1") {
+			alert("请选择业务线");
+			$("#sel_service_code").focus();
 			return;
 		}
 		
@@ -211,14 +214,49 @@
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">运营商</dd>
+					<dd class="dd01_me">业务线</dd>
 					<dd class="dd04_me">
-						<select name="operator" id="sel_operator" title="选择运营商"
+						<select name="service_code" id="sel_service_code" 
 							style="width: 200px">
-							<option value="-1">请选择</option>
+							<option value="-1">请选择业务线</option>
+							<optgroup label="移动">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(0))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>
+							<optgroup label="联通">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(1))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>
+							<optgroup label="电信">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(2))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>
+														
+							
+							<!--  
 							<option value="1">联通</option>
 							<option value="2">电信</option>
 							<option value="3">移动</option>
+							-->
+							
 						</select>
 					</dd>
 
@@ -265,12 +303,12 @@
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">业务类型</dd>
+					<dd class="dd01_me">数据类型</dd>
 					<dd class="dd03_me">
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="0" checked="checked" >
-						<label style="font-size: 14px;float:left">普通</label>
+						<label style="font-size: 14px;float:left">实时</label>
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="1" >
-						<label style="font-size: 14px;float:left">包月</label>
+						<label style="font-size: 14px;float:left">隔天</label>
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="2" >
 						<label style="font-size: 14px;float:left">IVR</label>
 					</dd>

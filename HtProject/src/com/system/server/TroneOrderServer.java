@@ -89,4 +89,9 @@ public class TroneOrderServer
 	{
 		return new TroneOrderDao().loadCpSpTroneSynModelById(id);
 	}
+	
+	public void closeTroneOrderByTroneId(int troneId)
+	{
+		new TroneOrderDao().closeTroneOrderByTroneId(troneId);
+	}
 }

@@ -12,6 +12,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.TroneModel;
+import com.system.server.TroneOrderServer;
 import com.system.util.StringUtil;
 
 public class TroneDao
@@ -370,6 +371,10 @@ public class TroneDao
 		map.put(10, model.getStatus());
 		map.put(11, model.getId());
 		
+		//如果关闭通道，同时关闭通道对应的所有CP业务
+		if(model.getStatus()==0)
+			new TroneOrderServer().closeTroneOrderByTroneId(model.getId());
+		
 		return new JdbcControl().execute(sql, map);
 	}
 	
@@ -377,7 +382,6 @@ public class TroneDao
 	{
 		String sql = "delete from daily_config.tbl_trone where id = " + delId;
 		return new JdbcControl().execute(sql);
-		
 	}
 	
 }

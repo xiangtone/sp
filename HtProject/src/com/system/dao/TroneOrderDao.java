@@ -445,4 +445,10 @@ public class TroneOrderDao
 		
 	}
 	
+	public void closeTroneOrderByTroneId(int troneId)
+	{
+		String sql = "udpate daily_config.tbl_trone_order set disable = 1 where trone_id = " + troneId;
+		
+		new JdbcControl().execute(sql);
+	}
 }

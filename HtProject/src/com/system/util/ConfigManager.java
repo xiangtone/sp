@@ -69,6 +69,7 @@ public class ConfigManager
 		{
 			exce.printStackTrace();
 		}
+		
 		return result;
 	}
 

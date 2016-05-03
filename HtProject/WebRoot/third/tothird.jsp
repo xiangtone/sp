@@ -26,7 +26,7 @@
 <title></title>
 </head>
 <body>
-<form action="http://admin.n8wan.com/passport/login.ashx" method="post" style="display: none">
+<form action="<%= postUrl %>" method="post" style="display: none">
 	<input type="hidden" name="userName" value="<%= userName %>" />
 	<input type="hidden" name="password" value="<%= pwd %>" />
 	<input type="hidden" name="pType" value="md5" />
