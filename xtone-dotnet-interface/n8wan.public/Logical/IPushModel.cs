@@ -71,5 +71,10 @@ namespace n8wan.Public.Logical
 
         int syn_flag { get; }
 
+        int trone_id { get; }
+        int sp_trone_id { get; }
+
+        int province_id { get; }
+
     }
 }

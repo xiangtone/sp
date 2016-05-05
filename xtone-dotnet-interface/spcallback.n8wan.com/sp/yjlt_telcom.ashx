@@ -5,7 +5,7 @@ using System.Web;
 using System.Runtime.Serialization;
 
 
-public class yjlt_telcom : gzzyPublic.SPCallback.AutoMapCallback
+public class yjlt_telcom : n8wan.Public.Logical.BaseSPCallback
 {
     [DataContract]
     class reuslt

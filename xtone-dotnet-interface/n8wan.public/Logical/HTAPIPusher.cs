@@ -60,7 +60,15 @@ namespace n8wan.Public.Logical
             SetConfig(m);//找到对应的渠道上量(相当于执行 base.LoadCPAPI())
             if (PushObject is tbl_mrItem)
             {
-                ((tbl_mrItem)PushObject).api_order_id = _apiOrder.id;
+                var mr = ((tbl_mrItem)PushObject);
+                mr.api_order_id = _apiOrder.id;
+                mr.user_md10 = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(string.Format("{0}_{1}_{2}", _apiOrder.imsi, _apiOrder.imei, _apiOrder.mobile), "MD5");
+                if (string.IsNullOrEmpty(mr.mobile) && !string.IsNullOrEmpty(_apiOrder.mobile))
+                    mr.mobile = _apiOrder.mobile;
+                if (string.IsNullOrEmpty(mr.imsi) && !string.IsNullOrEmpty(_apiOrder.imsi))
+                    mr.imsi = _apiOrder.imsi;
+                if (mr.province_id == 32 && (!string.IsNullOrEmpty(mr.mobile) || !string.IsNullOrEmpty(mr.imsi)))
+                    BaseSPCallback.FillAreaInfo(dBase, mr);
             }
             //if (!LoadCPAPI())
             //    return false;

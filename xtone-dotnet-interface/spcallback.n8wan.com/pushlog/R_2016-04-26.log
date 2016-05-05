@@ -1,0 +1,246 @@
+16:17:33,16:04:57 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(1ms(+1))IN-LoadAPI
+	->(197ms(+196))OUT-LoadAPI
+	->(199ms(+2))0 in locked
+	->(201ms(+2))IN-StartPorcess
+	->(215ms(+14))IN-ItemNotExisted
+	->(673ms(+458))ValueCollected
+	->(783ms(+110))TroneIdMatched
+	->(1242ms(+459))OUT-CoreProcessed
+	->(95944ms(+94702))+7.39ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++7.52ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++1.20ms	select * from `tbl_cp_push_url`  where  `id` = 118
++27.15ms	select * from `daily_log`.`tbl_day_month_limit`  where  `sp_trone_id` = 1037 and `cp_id` = 43 and `fee_date` = '2016/4/26 0:00:00'
++36.83ms	insert into `daily_log`.`tbl_day_month_limit`(`fee_date`,`cp_id`,`sp_trone_id`,`cur_day_amount`) values(?fee_date,?cp_id,?sp_trone_id,?cur_day_amount)
++6.94ms	select * from `tbl_cp_trone_rate`  where  `cp_id` = 0 and `cp_id` = 216
++1.05ms	select * from `tbl_cp_trone_rate`  where  `cp_id` = 0 and `cp_id` = 216
++1.82ms	select * from `tbl_cp_trone_rate`  where  `cp_id` = 0 and `cp_id` = 216
++87.95ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
++50.50ms	insert into `daily_log`.`tbl_cp_mr_201604`(`imei`,`imsi`,`mobile`,`mcc`,`province_id`,`city_id`,`trone_order_id`,`ori_trone`,`ori_order`,`linkid`,`cp_param`,`service_code`,`price`,`ip`,`mr_date`,`ivr_time`,`mr_table`,`mr_id`,`trone_type`,`syn_status`) values(?imei,?imsi,?mobile,?mcc,?province_id,?city_id,?trone_order_id,?ori_trone,?ori_order,?linkid,?cp_param,?service_code,?price,?ip,?mr_date,?ivr_time,?mr_table,?mr_id,?trone_type,?syn_status)
++44.53ms	update `tbl_trone_order` set `lastDate`=?lastDate,`amount`=?amount,`push_count`=?push_count where `id`=?id
+总计：272.8788ms
+	->(95944ms(+0))OUT-ALL done
+	->(95944ms(+0))Done
+16:17:33,16:04:55 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(97614ms(+97614))Done
+16:19:22,16:04:47 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(1ms(+1))IN-LoadAPI
+	->(158ms(+157))OUT-LoadAPI
+	->(159ms(+1))0 in locked
+	->(163ms(+4))IN-StartPorcess
+	->(177ms(+14))IN-ItemNotExisted
+	->(370ms(+193))ValueCollected
+	->(507ms(+137))TroneIdMatched
+	->(637ms(+130))OUT-CoreProcessed
+	->(35524ms(+34887))+3.31ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++12.15ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++9.40ms	select * from `tbl_cp_push_url`  where  `id` = 118
++1.29ms	select * from `daily_log`.`tbl_day_month_limit`  where  `sp_trone_id` = 1037 and `cp_id` = 43 and `fee_date` = '2016/4/26 0:00:00'
++42.82ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++1.11ms	select * from `tbl_cp_trone_rate`  where  `cp_id` = 0 and `cp_id` = 216
++45.19ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
++55.72ms	insert into `daily_log`.`tbl_cp_mr_201604`(`imei`,`imsi`,`mobile`,`mcc`,`province_id`,`city_id`,`trone_order_id`,`ori_trone`,`ori_order`,`linkid`,`cp_param`,`service_code`,`price`,`ip`,`mr_date`,`ivr_time`,`mr_table`,`mr_id`,`trone_type`,`syn_status`) values(?imei,?imsi,?mobile,?mcc,?province_id,?city_id,?trone_order_id,?ori_trone,?ori_order,?linkid,?cp_param,?service_code,?price,?ip,?mr_date,?ivr_time,?mr_table,?mr_id,?trone_type,?syn_status)
++30.39ms	update `tbl_trone_order` set `push_count`=?push_count,`amount`=?amount where `id`=?id
+总计：201.3762ms
+	->(35524ms(+0))OUT-ALL done
+	->(35524ms(+0))Done
+16:19:22,16:04:45 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(37168ms(+37168))Done
+16:28:01,16:04:08 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(1ms(+1))IN-LoadAPI
+	->(165ms(+164))OUT-LoadAPI
+	->(166ms(+1))0 in locked
+	->(168ms(+2))IN-StartPorcess
+	->(181ms(+13))IN-ItemNotExisted
+	->(334ms(+153))ValueCollected
+	->(453ms(+119))TroneIdMatched
+	->(521ms(+68))OUT-CoreProcessed
+	->(233032ms(+232511))+2.81ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++4.83ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++1.19ms	select * from `tbl_cp_push_url`  where  `id` = 118
++0.74ms	select * from `daily_log`.`tbl_day_month_limit`  where  `sp_trone_id` = 1037 and `cp_id` = 43 and `fee_date` = '2016/4/26 0:00:00'
++45.39ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++2.21ms	select * from `tbl_cp_trone_rate`  where  `cp_id` = 43 and `sp_trone_id` = 216
++521.17ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
++47.50ms	insert into `daily_log`.`tbl_cp_mr_201604`(`imei`,`imsi`,`mobile`,`mcc`,`province_id`,`city_id`,`trone_order_id`,`ori_trone`,`ori_order`,`linkid`,`cp_param`,`service_code`,`price`,`ip`,`mr_date`,`ivr_time`,`mr_table`,`mr_id`,`trone_type`,`syn_status`) values(?imei,?imsi,?mobile,?mcc,?province_id,?city_id,?trone_order_id,?ori_trone,?ori_order,?linkid,?cp_param,?service_code,?price,?ip,?mr_date,?ivr_time,?mr_table,?mr_id,?trone_type,?syn_status)
++40.82ms	update `tbl_trone_order` set `push_count`=?push_count,`amount`=?amount where `id`=?id
+总计：666.6566ms
+	->(233032ms(+0))OUT-ALL done
+	->(233033ms(+1))Done
+16:28:01,16:04:06 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(234689ms(+234689))Done
+17:02:24,16:04:49 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(1ms(+1))IN-LoadAPI
+	->(164ms(+163))OUT-LoadAPI
+	->(165ms(+1))0 in locked
+	->(189ms(+24))IN-StartPorcess
+	->(201ms(+12))IN-ItemNotExisted
+	->(460ms(+259))ValueCollected
+	->(590ms(+130))TroneIdMatched
+	->(1186ms(+596))OUT-CoreProcessed
+	->(755044ms(+753858))+1.02ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++9.03ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++2.15ms	select * from `tbl_cp_push_url`  where  `id` = 118
++2.49ms	select * from `daily_log`.`tbl_day_month_limit`  where  `sp_trone_id` = 1037 and `cp_id` = 43 and `fee_date` = '2016/4/26 0:00:00'
++49.96ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++9.36ms	select * from `tbl_cp_trone_rate`  where  `cp_id` = 43 and `sp_trone_id` = 216
++31.82ms	select `id` from `tbl_mobile_white_list`   where  `mobile` = '13049212720'  
++62.32ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
+总计：168.1429ms
+	->(755044ms(+0))OUT-ALL done
+	->(755045ms(+1))Done
+17:02:24,16:04:48 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(756719ms(+756719))Done
+17:14:28,17:04:56 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(4ms(+4))IN-LoadAPI
+	->(226ms(+222))OUT-LoadAPI
+	->(230ms(+4))0 in locked
+	->(232ms(+2))IN-StartPorcess
+	->(252ms(+20))IN-ItemNotExisted
+	->(480ms(+228))ValueCollected
+	->(715ms(+235))TroneIdMatched
+	->(818ms(+103))OUT-CoreProcessed
+	->(32527ms(+31709))+2.70ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++8.68ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++1.70ms	select * from `tbl_cp_push_url`  where  `id` = 118
++2.47ms	select * from `daily_log`.`tbl_day_month_limit`  where  `sp_trone_id` = 1037 and `cp_id` = 43 and `fee_date` = '2016/4/26 0:00:00'
++66.24ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++2.94ms	select * from `tbl_cp_trone_rate`  where  `cp_id` = 43 and `sp_trone_id` = 216
++1.80ms	select `id` from `tbl_mobile_white_list`   where  `mobile` = '13049212720'  
++48.98ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
+总计：135.5163ms
+	->(32527ms(+0))OUT-ALL done
+	->(32528ms(+1))Done
+17:14:28,17:04:55 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(33487ms(+33487))Done
+17:15:57,17:04:22 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(0ms(+0))OUT-LoadAPI
+	->(0ms(+0))0 in locked
+	->(0ms(+0))IN-StartPorcess
+	->(9ms(+9))IN-ItemNotExisted
+	->(9ms(+0))ValueCollected
+	->(11ms(+2))TroneIdMatched
+	->(42ms(+31))OUT-CoreProcessed
+	->(35123ms(+35081))+1.73ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++5.96ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++0.97ms	select * from `tbl_cp_push_url`  where  `id` = 118
++59.61ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++1.07ms	select `id` from `tbl_mobile_white_list`   where  `mobile` = '13049212720'  
++552.30ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
+总计：621.6408ms
+	->(35123ms(+0))OUT-ALL done
+	->(35123ms(+0))Done
+17:15:57,17:04:22 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(35124ms(+35124))Done
+17:16:52,17:04:15 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(0ms(+0))OUT-LoadAPI
+	->(0ms(+0))0 in locked
+	->(0ms(+0))IN-StartPorcess
+	->(6ms(+6))IN-ItemNotExisted
+	->(6ms(+0))ValueCollected
+	->(7ms(+1))TroneIdMatched
+	->(65ms(+58))OUT-CoreProcessed
+	->(37632ms(+37567))+1.63ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++6.05ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++1.05ms	select * from `tbl_cp_push_url`  where  `id` = 118
++91.09ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++2.85ms	select `id` from `tbl_mobile_white_list`   where  `mobile` = '13049212720'  
++578.74ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
++84.10ms	insert into `daily_log`.`tbl_cp_mr_201604`(`imei`,`imsi`,`mobile`,`mcc`,`province_id`,`city_id`,`trone_order_id`,`ori_trone`,`ori_order`,`linkid`,`cp_param`,`service_code`,`price`,`ip`,`mr_date`,`ivr_time`,`mr_table`,`mr_id`,`trone_type`,`syn_status`) values(?imei,?imsi,?mobile,?mcc,?province_id,?city_id,?trone_order_id,?ori_trone,?ori_order,?linkid,?cp_param,?service_code,?price,?ip,?mr_date,?ivr_time,?mr_table,?mr_id,?trone_type,?syn_status)
++62.86ms	update `tbl_trone_order` set `push_count`=?push_count,`amount`=?amount where `id`=?id
+总计：828.3795ms
+	->(37632ms(+0))OUT-ALL done
+	->(37632ms(+0))Done
+17:16:52,17:04:15 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(37633ms(+37633))Done
+17:18:16,17:04:59 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(0ms(+0))OUT-LoadAPI
+	->(0ms(+0))0 in locked
+	->(0ms(+0))IN-StartPorcess
+	->(51ms(+51))IN-ItemNotExisted
+	->(51ms(+0))ValueCollected
+	->(52ms(+1))TroneIdMatched
+	->(94ms(+42))OUT-CoreProcessed
+	->(77584ms(+77490))+1.84ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++6.10ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++1.23ms	select * from `tbl_cp_push_url`  where  `id` = 118
++26.04ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++1.82ms	select `id` from `tbl_mobile_white_list`   where  `mobile` = '13049212720'  
++86.57ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
+总计：123.5971ms
+	->(77584ms(+0))OUT-ALL done
+	->(77584ms(+0))Done
+17:18:16,17:04:59 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(77585ms(+77585))Done
+17:19:51,17:04:51 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(0ms(+0))OUT-LoadAPI
+	->(0ms(+0))0 in locked
+	->(0ms(+0))IN-StartPorcess
+	->(55ms(+55))Done
+17:19:51,17:04:51 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(55ms(+55))Done
+17:20:39,17:04:57 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(0ms(+0))OUT-LoadAPI
+	->(0ms(+0))0 in locked
+	->(0ms(+0))IN-StartPorcess
+	->(9ms(+9))IN-ItemNotExisted
+	->(9ms(+0))ValueCollected
+	->(11ms(+2))TroneIdMatched
+	->(49ms(+38))OUT-CoreProcessed
+	->(41701ms(+41652))+1.70ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++6.26ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++1.13ms	select * from `tbl_cp_push_url`  where  `id` = 118
++26.11ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++2.59ms	select `id` from `tbl_mobile_white_list`   where  `mobile` = '13049212720'  
++34.65ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
+总计：72.4298ms
+	->(41701ms(+0))OUT-ALL done
+	->(41701ms(+0))Done
+17:20:39,17:04:57 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(41702ms(+41702))Done
+17:25:06,17:04:45 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(0ms(+0))IN-LoadAPI
+	->(0ms(+0))OUT-LoadAPI
+	->(0ms(+0))0 in locked
+	->(0ms(+0))IN-StartPorcess
+	->(52ms(+52))IN-ItemNotExisted
+	->(52ms(+0))ValueCollected
+	->(54ms(+2))TroneIdMatched
+	->(97ms(+43))OUT-CoreProcessed
+	->(261649ms(+261552))+1.92ms	select * from tbl_sp_trone_api where id in ( select trone_api_id from tbl_sp_trone where id in(select sp_trone_id from tbl_trone where id=1037)) limit 1
++4.33ms	select * from `tbl_trone_order`  where  `trone_id` = 1037 and `disable` = 0
++1.10ms	select * from `tbl_cp_push_url`  where  `id` = 118
++30.97ms	update `daily_log`.`tbl_day_month_limit` set `cur_day_amount`=?cur_day_amount where `id`=?id
++33.28ms	update `daily_log`.`tbl_mr_201604` set `syn_flag`=?syn_flag,`trone_order_id`=?trone_order_id,`cp_id`=?cp_id where `id`=?id
+总计：71.601ms
+	->(261649ms(+0))OUT-ALL done
+	->(261649ms(+0))Done
+17:25:06,17:04:45 /sp/bjxt_multi_sms_sync_unicom.ashx 
+	->({0}ms(0))Begin
+	->(261649ms(+261649))Done

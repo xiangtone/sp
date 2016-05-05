@@ -309,6 +309,7 @@ namespace sdk_Request.Logical
             var fi = new FileInfo(Request.MapPath(FileName));
             if (!fi.Directory.Exists)
                 fi.Directory.Create();
+            _sbLog.AppendLine();
             lock (logLocker)
             {
                 using (var stm = new StreamWriter(fi.FullName, true))
@@ -329,10 +330,26 @@ namespace sdk_Request.Logical
         }
 
 
-
         int Shotgun.Model.Logical.ILogical.lastUpdateCount { get { throw new NotImplementedException(); } }
 
-        Shotgun.Database.IBaseDataClass2 Shotgun.Model.Logical.ILogical.dBase { get { throw new NotImplementedException(); } set { throw new NotImplementedException(); } }
+        Shotgun.Database.IBaseDataClass2 Shotgun.Model.Logical.ILogical.dBase { get { return this.dBase; } set { throw new NotImplementedException(); } }
+
+        /// <summary>
+        /// 通过IMSI获取城市和省份信息
+        /// </summary>
+        /// <param name="imsi"></param>
+        /// <returns></returns>
+        public tbl_cityItem getCityByImsi(string imsi)
+        {
+            var phone = n8wan.Public.Library.GetPhoneByImsi(imsi);
+            if (string.IsNullOrEmpty(phone))
+                return null;
+            int p;
+            int.TryParse(phone, out p);
+            return tbl_phone_locateItem.GetRowByMobile(dBase, p);
+        }
+
+
         #endregion
 
         #region 远程HTML获取
@@ -346,7 +363,7 @@ namespace sdk_Request.Logical
         /// <returns></returns>
         protected string GetHTML(string url, int timeout, string encode)
         {
-            return DownloadHTML(url, null, timeout, encode,null);
+            return DownloadHTML(url, null, timeout, encode, null);
         }
 
         /// <summary>
@@ -358,7 +375,7 @@ namespace sdk_Request.Logical
         /// <returns></returns>
         protected string GetHTML(string url)
         {
-            return DownloadHTML(url, null, 0, null,null);
+            return DownloadHTML(url, null, 0, null, null);
         }
 
         /// <summary>
@@ -375,7 +392,7 @@ namespace sdk_Request.Logical
             {
                 return DownloadHTML(url, data ?? string.Empty, timeout, encode, "application/x-www-form-urlencoded");
             }
-            return DownloadHTML(url, data ?? string.Empty, timeout, encode, "application/x-www-form-urlencoded; charset="+ encode);
+            return DownloadHTML(url, data ?? string.Empty, timeout, encode, "application/x-www-form-urlencoded; charset=" + encode);
         }
 
 
@@ -396,7 +413,7 @@ namespace sdk_Request.Logical
         /// <param name="encode">可为空，默认为utf8</param>
         /// <param name="contentType">HTTP报文头，可为空</param>
         /// <returns></returns>
-        protected string DownloadHTML(string url, string postdata, int timeout, string encode,string contentType )
+        protected string DownloadHTML(string url, string postdata, int timeout, string encode, string contentType)
         {
             Stopwatch st = new Stopwatch();
             st.Start();

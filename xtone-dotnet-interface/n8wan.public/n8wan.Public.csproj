@@ -61,6 +61,7 @@
     <Compile Include="LightDataModel\tbl_countryItem.cs" />
     <Compile Include="LightDataModel\tbl_cpItem.cs" />
     <Compile Include="LightDataModel\tbl_cp_push_urlItem.cs" />
+    <Compile Include="LightDataModel\tbl_cp_trone_rateItem.cs" />
     <Compile Include="LightDataModel\tbl_currencyItem.cs" />
     <Compile Include="LightDataModel\tbl_day_month_limitItem.cs" />
     <Compile Include="LightDataModel\tbl_groupItem.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="LightDataModel\tbl_trone_paycodeItem.cs" />
     <Compile Include="LightDataModel\tbl_zyl_detailItem.cs" />
     <Compile Include="LightDataModel_manual\DynamicDataItem.cs" />
+    <Compile Include="LightDataModel_manual\ProvinceHoldConfg.cs" />
+    <Compile Include="LightDataModel_manual\ProvinceHoldData.cs" />
     <Compile Include="LightDataModel_manual\tbl_api_orderItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_api_orderItem_plus.cs" />
     <Compile Include="LightDataModel_manual\tbl_cityItem.cs" />
@@ -80,6 +83,7 @@
     <Compile Include="LightDataModel_manual\tbl_cp_mrItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_mrItem_plus.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_push_urlItem.cs" />
+    <Compile Include="LightDataModel_manual\tbl_cp_trone_rateItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_day_month_limitItem_plus.cs" />
     <Compile Include="LightDataModel_manual\tbl_moItem_plus.cs" />
     <Compile Include="LightDataModel_manual\DynamicTableList.cs" />
@@ -118,6 +122,7 @@
     <Compile Include="Logical\MiGopBaseSync.cs" />
     <Compile Include="Logical\MMBaseSync.cs" />
     <Compile Include="Logical\AgainPusher.cs" />
+    <Compile Include="Logical\MrTestHandler.cs" />
     <Compile Include="Logical\StaticCache.cs" />
     <Compile Include="Logical\old_sp_callback_map.cs" />
     <Compile Include="Logical\AppUserFixSync.cs" />

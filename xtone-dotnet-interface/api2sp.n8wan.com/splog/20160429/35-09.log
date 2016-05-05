@@ -1,0 +1,36 @@
+09:50:49.782 Request:{"apiExdata":"","apiOrderId":35,"cid":0,"clientIp":"192.168.1.90 ","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":346771,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1163,"troneOrderId":2137,"userAgent":""}
+09:50:50.202 value:szhaot010192.168.1.90 szhaot000034677120160429095050webhttp://baidu.com/szhaot0000346771866568022922909460007743190142ht0428,md5:9EB13EB50D8F0789317E2374B848ADD1
+09:50:53.266 http://123.56.91.64:8888/igameunpay/req.jsp
+09:50:53.266 merid=szhaot&goodsid=010&mobileid=&clientip=192.168.1.90+&orderid=szhaot0000346771&orderdate=20160429095050&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000346771&imei=866568022922909&imsi=460007743190142&sign=9EB13EB50D8F0789317E2374B848ADD1
+09:50:53.351 +77ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000346771","paytype":"Error","province":"","retCode":"3","retMsg":"sign not right!"}
+
+09:51:28.154 Request:{"apiExdata":"","apiOrderId":35,"cid":0,"clientIp":"192.168.1.90 ","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":346771,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1163,"troneOrderId":2137,"userAgent":""}
+09:51:28.555 value:szhaot010192.168.1.90 szhaot000034677120160429095128webhttp://baidu.com/szhaot0000346771866568022922909460007743190142ht0428,md5:61221F353BB68ABD80B421ACDFAB2E93
+09:51:28.555 http://123.56.91.64:8888/igameunpay/req.jsp
+09:51:28.555 merid=szhaot&goodsid=010&mobileid=&clientip=192.168.1.90+&orderid=szhaot0000346771&orderdate=20160429095128&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000346771&imei=866568022922909&imsi=460007743190142&sign=61221F353BB68ABD80B421ACDFAB2E93
+09:51:28.639 +89ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000346771","paytype":"Error","province":"","retCode":"3","retMsg":"sign not right!"}
+
+09:51:33.545 Request:{"apiExdata":"","apiOrderId":35,"cid":0,"clientIp":"192.168.1.90 ","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":346771,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1163,"troneOrderId":2137,"userAgent":""}
+09:51:33.645 value:szhaot010192.168.1.90 szhaot000034677120160429095133webhttp://baidu.com/szhaot0000346771866568022922909460007743190142ht0428,md5:6A8E34F273919216114B939C886DAD05
+09:51:33.645 http://123.56.91.64:8888/igameunpay/req.jsp
+09:51:33.645 merid=szhaot&goodsid=010&mobileid=&clientip=192.168.1.90+&orderid=szhaot0000346771&orderdate=20160429095133&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000346771&imei=866568022922909&imsi=460007743190142&sign=6A8E34F273919216114B939C886DAD05
+09:51:33.676 +41ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000346771","paytype":"Error","province":"","retCode":"3","retMsg":"sign not right!"}
+
+09:51:59.752 Request:{"apiExdata":"","apiOrderId":35,"cid":0,"clientIp":"192.168.1.90 ","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":346771,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1163,"troneOrderId":2137,"userAgent":""}
+09:52:00.137 value:szhaot010192.168.1.90 szhaot000034677120160429095200webhttp://baidu.com/szhaot0000346771866568022922909460007743190142ht0428,md5:E8ADEF2B608408967CF4401DAFC725B7
+09:52:00.137 http://123.56.91.64:8888/igameunpay/req.jsp
+09:52:00.137 merid=szhaot&goodsid=010&mobileid=&clientip=192.168.1.90+&orderid=szhaot0000346771&orderdate=20160429095200&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000346771&imei=866568022922909&imsi=460007743190142&sign=E8ADEF2B608408967CF4401DAFC725B7
+09:52:00.221 +84ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000346771","paytype":"Error","province":"","retCode":"3","retMsg":"sign not right!"}
+
+09:58:49.450 Request:{"apiExdata":"","apiOrderId":35,"cid":0,"clientIp":"192.168.1.90 ","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":346771,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1163,"troneOrderId":2137,"userAgent":""}
+09:59:30.841 value:szhaot010192.168.1.90 szhaot000034677120160429095930webhttp://baidu.com/szhaot0000346771866568022922909460007743190142ht0428,md5:BAF3CEA3155836CC8509BA5BE1D500A1
+09:59:30.841 http://123.56.91.64:8888/igameunpay/req.jsp
+09:59:30.841 merid=szhaot&goodsid=010&mobileid=&clientip=192.168.1.90+&orderid=szhaot0000346771&orderdate=20160429095930&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000346771&imei=866568022922909&imsi=460007743190142&sign=BAF3CEA3155836CC8509BA5BE1D500A1
+09:59:30.925 +89ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000346771","paytype":"Error","province":"","retCode":"3","retMsg":"sign not right!"}
+
+09:59:45.857 Request:{"apiExdata":"","apiOrderId":35,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":346771,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1163,"troneOrderId":2137,"userAgent":""}
+09:59:48.782 value:szhaot010192.168.1.90szhaot000034677120160429095948webhttp://baidu.com/szhaot0000346771866568022922909460007743190142ht0428,md5:F3F0227943032C77160E2AE31FCF4640
+09:59:48.782 http://123.56.91.64:8888/igameunpay/req.jsp
+09:59:48.782 merid=szhaot&goodsid=010&mobileid=&clientip=192.168.1.90&orderid=szhaot0000346771&orderdate=20160429095948&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000346771&imei=866568022922909&imsi=460007743190142&sign=F3F0227943032C77160E2AE31FCF4640
+09:59:48.829 +45ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000346771","paytype":"Error","province":"","retCode":"3","retMsg":"sign not right!"}
+

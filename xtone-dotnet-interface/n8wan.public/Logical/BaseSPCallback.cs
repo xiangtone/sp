@@ -1,6 +1,7 @@
 ﻿#if !DEBUG
 #define DB_LOG_RECORD
 #endif
+using Shotgun.Database;
 using Shotgun.Model.Logical;
 using System;
 using System.Collections.Generic;
@@ -384,11 +385,16 @@ namespace n8wan.Public.Logical
             }
         }
 
+        protected virtual void FillAreaInfo(LightDataModel.tbl_mrItem m)
+        {
+            FillAreaInfo(dBase, m);
+        }
+
         /// <summary>
         /// 填充手机号归属地信息
         /// </summary>
         /// <param name="m"></param>
-        protected virtual void FillAreaInfo(LightDataModel.tbl_mrItem m)
+        public static void FillAreaInfo(IBaseDataClass2 dBase, LightDataModel.tbl_mrItem m)
         {
             var num = m.mobile;
             m.city_id = 416;
@@ -757,9 +763,13 @@ namespace n8wan.Public.Logical
             m.trone_id = trone.id;
 
 
-            var sp_trone = LightDataModel.tbl_sp_troneItem.GetRowById(dBase, trone.sp_trone_id, new string[] { LightDataModel.tbl_sp_troneItem.Fields.trone_type });
+            var sp_trone = LightDataModel.tbl_sp_troneItem.GetRowById(dBase, trone.sp_trone_id, null);
             if (sp_trone == null)
                 return null;
+            if (m is LightDataModel.tbl_mrItem)
+            {
+                ((LightDataModel.tbl_mrItem)m).sp_trone_id = sp_trone.id;
+            }
             m.trone_type = sp_trone.trone_type;
             return trone;//没有匹配通道
         }

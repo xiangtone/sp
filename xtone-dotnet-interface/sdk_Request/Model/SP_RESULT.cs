@@ -79,7 +79,9 @@ namespace sdk_Request.Model
     /// </summary>
     public class SP_SMS_Feedback_Result : SP_SMS_Result
     {
+        [DataMember]
         public String FeedBack { get; set; }
+        [DataMember]
         public int Interval { get; set; }
     }
 
