@@ -5,7 +5,11 @@
 	<artifactId>HtProject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<build>
+		<finalName>${final.name}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
@@ -18,7 +22,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -26,16 +30,49 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
+				<version>2.2</version>
 				<configuration>
-					<warSourceDirectory>WebRoot</warSourceDirectory>
+					<warSourceDirectory>${basedir}/WebRoot</warSourceDirectory>
+					<version>3.0</version>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>${runtime.env}</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+						</resource>
+					</webResources>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>bj</id>
+			<properties>
+				<runtime.env>config\bj</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>sz</id>
+			<properties>
+				<runtime.env>config\sz</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>sh</id>
+			<properties>
+				<runtime.env>config\sh</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
-				<dependency>
+		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.8.0</version>
@@ -114,14 +151,13 @@
 			<version>2.2</version>
 		</dependency>
 
-		<!--  
+		<!-- 试一下打开看看能不能产生正常的WAR包 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
-		-->
 		
 		<dependency>
 			<groupId>com.sun.faces</groupId>

@@ -384,6 +384,7 @@ public class SpTroneDao
 					model.setStatus(rs.getInt("status"));
 					model.setTroneApiId(rs.getInt("trone_api_id"));
 					model.setTroneApiName(StringUtil.getString(rs.getString("trone_api_name"), ""));
+					model.setServiceCodeId(rs.getInt("product_id"));
 					model.setDayLimit(rs.getFloat("day_limit"));
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));

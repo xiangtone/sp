@@ -163,6 +163,9 @@
 		$("#input_sp_trone_name").val("<%= spTroneModel.getSpTroneName() %>");
 		$("#input_jiesuanlv").val("<%= spTroneModel.getJieSuanLv() %>");
 		$("#sel_sp_trone_api").val("<%= spTroneModel.getTroneApiId() %>");
+		
+		$("#sel_service_code").val("<%= spTroneModel.getServiceCodeId() %>");
+		
 		var provinceIds = "<%= spTroneModel.getProvinces() %>";
 		var provinces = provinceIds.split(",");
 		setRadioCheck("trone_type",<%= spTroneModel.getTroneType() %>);

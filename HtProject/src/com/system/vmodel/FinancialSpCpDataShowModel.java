@@ -11,7 +11,6 @@ public class FinancialSpCpDataShowModel
 	
 	public List<SpTroneModel> list = new ArrayList<FinancialSpCpDataShowModel.SpTroneModel>();
 
-	//这个是用于展示SP与CP之间的数据关系模型
 	public class SpTroneModel
 	{
 		public int spTroneId;

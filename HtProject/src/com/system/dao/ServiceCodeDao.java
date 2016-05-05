@@ -15,7 +15,7 @@ public class ServiceCodeDao
 	@SuppressWarnings("unchecked")
 	public List<ServiceCodeModel> loadServiceCode()
 	{
-		String sql = "SELECT c.`bj_flag`,b.id,CONCAT(c.name_cn,'-',b.`name`,'-',a.`name`) service_name";
+		String sql = "SELECT c.`bj_flag`,a.id,CONCAT(c.name_cn,'-',b.`name`,'-',a.`name`) service_name";
 		sql += " FROM  daily_config.`tbl_product_2` a";
 		sql += " LEFT JOIN daily_config.`tbl_product_1` b ON a.`product_1_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_operator` c ON b.`operator_id` = c.`flag`";

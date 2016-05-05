@@ -6,12 +6,14 @@
     
  <%
  	UserModel user = (UserModel)session.getAttribute("user");
+ 
  	if(user==null)
  	{
  		out.clear();
 		out.print("<script>window.location.href='login.jsp'</script>");
 		return;
  	}
+ 	
  	String userName = user.getName();
  	String pwd = user.getPassword();
  	String urlType = StringUtil.getString(request.getParameter("url"), "/sp/tbl_sp_api_urlList.aspx"); 
