@@ -14,11 +14,11 @@ public class SpDataCache
 {
 	private static Logger logger = Logger.getLogger(SpDataCache.class);
 	
-	private static List<SpTroneModel> _spTroneList = new ArrayList<>();
+	private static List<SpTroneModel> _spTroneList = new ArrayList<SpTroneModel>();
 	
-	private static List<TroneModel> _troneList = new ArrayList<>();
+	private static List<TroneModel> _troneList = new ArrayList<TroneModel>();
 	
-	private static List<SpTroneApiModel> _spTroneApiList = new ArrayList<>();
+	private static List<SpTroneApiModel> _spTroneApiList = new ArrayList<SpTroneApiModel>();
 	
 	protected static void setSpTroneList(List<SpTroneModel> spTroneList)
 	{
@@ -106,7 +106,7 @@ public class SpDataCache
 	 */
 	public static List<TroneModel> loadTroneBySpTroneId(int spTroneId)
 	{
-		List<TroneModel> list = new ArrayList<>();
+		List<TroneModel> list = new ArrayList<TroneModel>();
 		for(TroneModel model : _troneList)
 		{
 			if(model.getSpTroneId()==spTroneId 

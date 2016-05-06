@@ -21,7 +21,7 @@ public class MrDao
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
 			{
-				List<MrModel> list = new ArrayList<>();
+				List<MrModel> list = new ArrayList<MrModel>();
 				
 				while(rs.next())
 				{

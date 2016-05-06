@@ -23,7 +23,7 @@ public class DayMonthLimitDao
 		sql += " GROUP BY sp_trone_id,month_date";
 		sql += " ORDER BY sp_trone_id,month_date";
 		
-		final Map<String, Float> limitMap = new HashMap<>();
+		final Map<String, Float> limitMap = new HashMap<String, Float>();
 		
 		JdbcControl control = new JdbcControl();
 		
@@ -52,7 +52,7 @@ public class DayMonthLimitDao
 		sql += " GROUP BY sp_trone_id,fee_date";
 		sql += " ORDER BY sp_trone_id,fee_date";
 		
-		final Map<String, Float> limitMap = new HashMap<>();
+		final Map<String, Float> limitMap = new HashMap<String, Float>();
 		
 		JdbcControl control = new JdbcControl();
 		
@@ -81,7 +81,7 @@ public class DayMonthLimitDao
 		sql += " GROUP BY cp_id,sp_trone_id,month_date";
 		sql += " ORDER BY cp_id,sp_trone_id,month_date";
 		
-		final Map<String, Float> limitMap = new HashMap<>();
+		final Map<String, Float> limitMap = new HashMap<String, Float>();
 		
 		JdbcControl control = new JdbcControl();
 		
@@ -109,7 +109,7 @@ public class DayMonthLimitDao
 		sql += " WHERE fee_date >= '" + startDate + "'";
 		sql += " ORDER BY cp_id,sp_trone_id,fee_date";
 		
-		final Map<String, Float> limitMap = new HashMap<>();
+		final Map<String, Float> limitMap = new HashMap<String, Float>();
 		
 		JdbcControl control = new JdbcControl();
 		

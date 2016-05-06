@@ -110,7 +110,7 @@ public class SpDataDao
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
 			{
-				List<SpTroneApiModel> list = new ArrayList<>();
+				List<SpTroneApiModel> list = new ArrayList<SpTroneApiModel>();
 				while(rs.next())
 				{
 					SpTroneApiModel model = new SpTroneApiModel();
@@ -131,7 +131,7 @@ public class SpDataDao
 	
 	public static void main(String[] args)
 	{
-		Map<String,Float> map = new HashMap<>();
+		Map<String,Float> map = new HashMap<String, Float>();
 		
 		Float aa =  map.get("AAA");
 		

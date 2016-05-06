@@ -47,7 +47,7 @@ public class FileUtil
 	
 	public static ArrayList<String> getChildFilePathsFromPath(String path)
 	{
-		ArrayList<String> list = new ArrayList<>();
+		ArrayList<String> list = new ArrayList<String>();
 		try
 		{
 			File basePath = new File(path);
@@ -116,7 +116,7 @@ public class FileUtil
 	
 	public static void main(String[] args)
 	{
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 		
 		list.add("你好吗，顶你个肺");
 		

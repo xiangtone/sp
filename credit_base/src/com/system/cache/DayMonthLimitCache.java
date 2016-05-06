@@ -10,10 +10,10 @@ import java.util.Map;
  */
 public class DayMonthLimitCache
 {
-	private static Map<String, Float> spTroneDayLimit = new HashMap<>();
-	private static Map<String, Float> spTroneMonthLimit = new HashMap<>();
-	private static Map<String, Float> cpSpTroneDayLimit = new HashMap<>();
-	private static Map<String, Float> cpSpTroneMonthLimit = new HashMap<>();
+	private static Map<String, Float> spTroneDayLimit = new HashMap<String, Float>();
+	private static Map<String, Float> spTroneMonthLimit = new HashMap<String, Float>();
+	private static Map<String, Float> cpSpTroneDayLimit = new HashMap<String, Float>();
+	private static Map<String, Float> cpSpTroneMonthLimit = new HashMap<String, Float>();
 	
 	public static void setSpTroneDayLimit(Map<String, Float> limit)
 	{
@@ -122,6 +122,8 @@ public class DayMonthLimitCache
 		for(String key : spTroneMonthLimit.keySet())
 		{
 			money = spTroneMonthLimit.get(key);
+			
+			totalMoney += money;
 			
 			sb.append("<td>" +  key + ":" + money + "</td>");
 			

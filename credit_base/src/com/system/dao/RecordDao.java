@@ -35,7 +35,7 @@ public class RecordDao
 				+ "sp_linkid,sp_exField,cp_verifyCode,FirstDate,port,"
 				+ "msg,api_exdata,status,is_hidden,trone_id,extra_param,iccid,user_agent) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?)";
 		
-		Map<Integer, Object> params = new HashMap<>();
+		Map<Integer, Object> params = new HashMap<Integer, Object>();
 		
 		params.put(1, model.getTroneOrderId());
 		params.put(2, model.getApiOrderId());
@@ -71,7 +71,7 @@ public class RecordDao
 		String sql = "update daily_log.tbl_api_order_" + StringUtil.getMonthFormat() + " set sp_linkid = ? ,sp_exField = ?,cp_verifyCode = ?,port = ?,"
 				+ "msg=?,api_exdata=?,status=?,is_hidden=? where id = ?";
 		
-		Map<Integer, Object> params = new HashMap<>();
+		Map<Integer, Object> params = new HashMap<Integer, Object>();
 		params.put(1, model.getSpLinkId());
 		params.put(2, model.getSpExField());
 		params.put(3, model.getCpVerifyCode());
@@ -90,7 +90,7 @@ public class RecordDao
 	{
 		String sql = "update daily_log.tbl_api_order_" + tableName + " set cp_verifyCode = ?,SecondDate = now(), status = ?  where id = ? ";
 		
-		Map<Integer,Object> params = new HashMap<>();
+		Map<Integer,Object> params = new HashMap<Integer, Object>();
 		
 		params.put(1,model.getCpVerifyCode());
 		params.put(2, model.getStatus());
