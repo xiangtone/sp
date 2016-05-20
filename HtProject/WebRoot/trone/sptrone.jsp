@@ -36,6 +36,12 @@
 	String pageData = PageUtil.initPageQuery("sptrone.jsp", params, rowCount, pageIndex);
 	
 	String[] troneTypes = {"实时","隔天","IVR"};
+	
+	//0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结,6见帐单结
+	String[] jsTypes = {"对公周结","对公双周结","对公月结","对私周结","对私双周结","对私月结","见帐单结"};
+	
+	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -166,7 +172,8 @@
 					<td>业务名称</td>
 					<td>商务人员</td>
 					<td>数据类型</td>
-					<td>结算率</td>
+					<td>结算类型</td>
+					<td><%= jiuSuanName %></td>
 					<td>日限</td>
 					<td>月限</td>
 					<td>用户日限</td>
@@ -191,6 +198,7 @@
 					<td><%=model.getSpTroneName()%></td>
 					<td><%= model.getCommerceUserName() %></td>
 					<td><%= troneTypes[model.getTroneType()]%></td>
+					<td><%= jsTypes[model.getJsTypes()] %></td>
 					<td ondblclick="editShowData('<%= model.getId() %>')">
 						<span id="span_<%= model.getId() %>"><%= model.getJieSuanLv() %></span>
 					</td>
@@ -208,7 +216,7 @@
 			
 			<tbody>
 				<tr>
-					<td colspan="13" class="tfooter" style="text-align: center;"><%=pageData%></td>
+					<td colspan="14" class="tfooter" style="text-align: center;"><%=pageData%></td>
 				</tr>
 			</tbody>
 		</table>

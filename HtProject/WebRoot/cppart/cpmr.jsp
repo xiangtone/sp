@@ -38,16 +38,20 @@
 	
 	int userId = ((UserModel)session.getAttribute("user")).getId();
 	
+	int showType = StringUtil.getInteger(request.getParameter("show_type"), 0);
+	
 	int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone"), -1);
 
 	List<SpTroneModel> spTroneList = new SpTroneServer().loadCpTroneList(userId);
 
-	Map<String, Object> map =  new MrServer().getCpMrShowData(startDate, endDate, userId,spTroneId);
+	Map<String, Object> map =  new MrServer().getCpMrShowData(startDate, endDate, userId,spTroneId,showType);
 		
 	List<MrReportModel> list = (List<MrReportModel>)map.get("list");
 	
 	int showDataRows = (Integer)map.get("show_data_rows");
 	float showAmount = (Float)map.get("show_amount");
+	
+	String[] titles = {"日期","周数","月份","业务","指令"};
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -63,6 +67,7 @@
 	$(function()
 	{
 		$("#sel_sp_trone").val("<%= spTroneId %>");
+		$("#sel_show_type").val("<%= showType %>");
 	});
 </script>
 <body>
@@ -94,6 +99,16 @@
 							%>
 						</select>
 					</dd>
+					<dd class="dd01_me">展示方式</dd>
+					<dd class="dd04_me">
+						<select name="show_type" id="sel_show_type" title="展示方式" style="width: 110px;" >
+							<option value="0">日期</option>
+							<option value="1">周数</option>
+							<option value="2">月份</option>
+							<option value="3">业务</option>
+							<option value="4">指令</option>
+						</select>
+					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
@@ -104,7 +119,7 @@
 			<thead>
 				<tr>
 					<td>序号</td>
-					<td>日期</td>
+					<td><%= titles[showType] %></td>
 					<td>数据(条)</td>
 					<td>金额(元)</td>
 				</tr>

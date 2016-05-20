@@ -67,9 +67,9 @@ public class MrServer
 		return new MrDao().getCpMrTodayShowData(tableName, startDate, userId,spTroneId);
 	}
 	
-	public Map<String,Object> getCpMrShowData(String startDate,String endDate,int userId,int spTroneId)
+	public Map<String,Object> getCpMrShowData(String startDate,String endDate,int userId,int spTroneId,int showType)
 	{
-		return new MrDao().getCpMrShowData(startDate, endDate, userId,spTroneId);
+		return new MrDao().getCpMrShowData(startDate, endDate, userId,spTroneId,showType);
 	}
 	
 	/**

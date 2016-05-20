@@ -1,3 +1,4 @@
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.server.ServiceCodeServer"%>
 <%@page import="com.system.model.ServiceCodeModel"%>
 <%@page import="com.system.server.SpTroneApiServer"%>
@@ -32,6 +33,7 @@
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<SpTroneApiModel> spTroneApiList = new SpTroneApiServer().loadSpTroneApi();
 	List<List<ServiceCodeModel>> serviceCodeList = new ServiceCodeServer().loadServiceCode();
+	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -95,22 +97,23 @@
 			return;
 		}
 		
-		var jiesuanlv = $("#input_jiesuanlv").val();
-		
-		if (jiesuanlv == "") {
-			alert("请输入结算率");
-			$("#input_jesuanlv").focus();
+		if ($("#sel_js_type").val() == "-1") {
+			alert("请输入结算类型");
+			$("#sel_js_type").focus();
 			return;
 		}
 		
-		if (isNum(jiesuanlv))
+		var rate = parseFloat($("#input_jiesuanlv").val());
+		
+		if(isNaN(rate) || rate>=1 || rate<=0)
 		{
-			alert("结算率不正确");
-			$("#input_jesuanlv").focus();
+			alert("<%= jiuSuanName %>只能介于0和1之间");
+			$("#input_jiesuanlv").focus();
 			return;
 		}
 		
 		var limit = parseFloat($("#input_day_limit").val());
+		
 		if (isNaN(limit) || limit < 0)
 		{
 			alert("请输入正确的日限");
@@ -165,6 +168,7 @@
 		$("#sel_sp_trone_api").val("<%= spTroneModel.getTroneApiId() %>");
 		
 		$("#sel_service_code").val("<%= spTroneModel.getServiceCodeId() %>");
+		$("#sel_js_type").val("<%= spTroneModel.getJsTypes() %>");
 		
 		var provinceIds = "<%= spTroneModel.getProvinces() %>";
 		var provinces = provinceIds.split(",");
@@ -344,10 +348,27 @@
 					<br />
 					<br />
 					<br />
+					<dd class="dd01_me">结算类型</dd>
+					<dd class="dd04_me">
+						<select name="js_type" id="sel_js_type" title="结算类型" style="width: 200px" >
+							<option value="-1">请选择结算类型</option>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公月结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
+						</select>
+					</dd>
+					
+					<br />
+					<br />
+					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">结算率</dd>
+					<dd class="dd01_me"><%= jiuSuanName %></dd>
 					<dd class="dd03_me">
-						<input type="text" name="jiesuanlv" title="结算率" id="input_jiesuanlv"
+						<input type="text" name="jiesuanlv"  id="input_jiesuanlv"
 							style="width: 200px">
 					</dd>
 					

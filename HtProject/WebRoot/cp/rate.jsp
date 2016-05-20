@@ -12,7 +12,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	int refresh = StringUtil.getInteger(request.getParameter("refresh"), -1);
+	int refresh = StringUtil.getInteger(request.getParameter("refresh"), 1);
 
 	if(refresh==1)
 	{
@@ -121,10 +121,8 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<dl>
-				<dd class="ddbtn" ><a href="rate.jsp?refresh=1">导  入</a></dd>
-			</dl>
 			<form action="rate.jsp"  method="get" style="margin-top: 10px" id="addform">
+				<input type="hidden" value="2" name="refresh">
 				<dl>
 					<dd class="dd01_me">关键字</dd>
 						<dd class="dd03_me"><input type="text" name="keyword" value="<%= keyWord %>"  /></dd>

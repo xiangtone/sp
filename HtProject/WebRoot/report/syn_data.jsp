@@ -25,7 +25,7 @@
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone"), -1);
-	int synType = StringUtil.getInteger(request.getParameter("syn_type"), -1);
+	int synType = StringUtil.getInteger(request.getParameter("syn_type"), 1);
 	
 	int isLoadData = StringUtil.getInteger(request.getParameter("load_data"), -1);
 	

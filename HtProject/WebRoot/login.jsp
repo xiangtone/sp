@@ -9,6 +9,11 @@
 <script type="text/javascript" src="sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="sysjs/jquery.md5.js"></script>
 <script type="text/javascript">
+
+	if (top != this) {
+    	top.open(document.URL,"_self");
+	}
+
 	function subForm() {
 		var username = $("#name").val();
 		var userpwd = $("#pwd").val();

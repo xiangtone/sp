@@ -320,8 +320,9 @@
 						<dd class="dd04_me">
 						<select name="data_type" id="sel_data_type" style="width: 100px;">
 							<option value="-1">全部</option>
-							<option value="0">普通</option>
-							<option value="1">包月</option>
+							<option value="0">实时</option>
+							<option value="1">隔天</option>
+							<option value="2">IVR</option>
 						</select>
 					</dd>
 					<br /><br /><br />

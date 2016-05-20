@@ -9,6 +9,7 @@ public class SpTroneModel
 	private String spTroneName;
 	private int operator;
 	private String operatorName;
+	private int jsTypes;
 	private float jieSuanLv;
 	private String provinces;
 	private int troneApiId;
@@ -174,5 +175,13 @@ public class SpTroneModel
 	public void setServoceCodeName(String servoceCodeName)
 	{
 		this.servoceCodeName = servoceCodeName;
+	}
+	public int getJsTypes()
+	{
+		return jsTypes;
+	}
+	public void setJsTypes(int jsTypes)
+	{
+		this.jsTypes = jsTypes;
 	}
 }

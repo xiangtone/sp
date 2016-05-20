@@ -115,8 +115,8 @@ public class RecordDao
 					model.setTroneId(rs.getInt("trone_id"));
 					model.setTroneOrderId(rs.getInt("trone_order_id"));
 					model.setApiOrderId(rs.getInt("api_id"));
-					model.setImei(StringUtil.getString(rs.getString("imsi"), ""));
-					model.setImsi(StringUtil.getString(rs.getString("imei"), ""));
+					model.setImei(StringUtil.getString(rs.getString("imei"), ""));
+					model.setImsi(StringUtil.getString(rs.getString("imsi"), ""));
 					model.setMobile(StringUtil.getString(rs.getString("mobile"), ""));
 					model.setLac(rs.getInt("lac"));
 					model.setCid(rs.getInt("cid"));

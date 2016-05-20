@@ -413,14 +413,14 @@ public class MrDao
 		return map;
 	}
 	
-	public Map<String,Object> getCpMrShowData(String startDate,String endDate,int userId,int spTroneId)
+	public Map<String,Object> getCpMrShowData(String startDate,String endDate,int userId,int spTroneId,int showType)
 	{
 		final Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("show_data_rows", 0);
 		map.put("show_amount", 0F);
 		
-		String query = " a.`mr_date`,SUM(a.`data_rows`) show_data_rows,SUM(a.`amount`) show_amount ";
+		String query = " title,SUM(a.`data_rows`) show_data_rows,SUM(a.`amount`) show_amount ";
 		
 		String sql = " select " + Constant.CONSTANT_REPLACE_STRING + "  from daily_log.tbl_cp_mr_summer a ";
 		sql += " LEFT JOIN daily_config.`tbl_trone_order` b ON a.`trone_order_id` = b.`id`";
@@ -434,8 +434,43 @@ public class MrDao
 			sql += " AND e.id =" + spTroneId;
 		
 		sql += " AND c.user_id = " + userId ;
+		
+		String group = " GROUP BY a.`mr_date` ";
+		String queryName = " a.`mr_date`";
+		
+//		<option value="1">日期</option>
+//		<option value="2">周数</option>
+//		<option value="3">月份</option>
+//		<option value="4">业务</option>
+//		<option value="5">指令</option>
+		
+		switch(showType)
+		{
+			case 0:
+				break;
 				
-		String groupOrder = " GROUP BY a.`mr_date` order by a.mr_date";
+			case 1:
+				queryName = " DATE_FORMAT(a.mr_date,'%Y-%u')";
+				group = " GROUP BY  DATE_FORMAT(a.mr_date,'%Y-%u')";
+				break;
+				
+			case 2:
+				queryName = " DATE_FORMAT(a.mr_date,'%Y-%m')";
+				group = " GROUP BY  DATE_FORMAT(a.mr_date,'%Y-%m')";
+				break;
+			
+			case 3:
+				queryName = " e.name";
+				group = " GROUP BY e.id ";
+				break;
+				
+			case 4:
+				queryName = " concat(e.name,'-',d.orders,'-',d.price)";
+				group = " GROUP BY d.id ";
+				break;
+		}
+		
+		query = queryName + query;
 		
 		JdbcControl control = new JdbcControl();
 		
@@ -453,7 +488,7 @@ public class MrDao
 			}
 		});
 		
-		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, query) + groupOrder, new QueryCallBack()
+		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, query) + group + " order by title asc", new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
@@ -462,7 +497,7 @@ public class MrDao
 				while(rs.next())
 				{
 					MrReportModel model = new MrReportModel();
-					model.setTitle1(rs.getString("mr_date"));
+					model.setTitle1(rs.getString("title"));
 					model.setShowDataRows(rs.getInt("show_data_rows"));
 					model.setShowAmount(rs.getFloat("show_amount"));
 					list.add(model);

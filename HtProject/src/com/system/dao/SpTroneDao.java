@@ -89,6 +89,7 @@ public class SpTroneDao
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
+					model.setJsTypes(rs.getInt("js_type"));
 					
 					list.add(model);
 				}
@@ -170,6 +171,7 @@ public class SpTroneDao
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
+					model.setJsTypes(rs.getInt("js_type"));
 					model.setServoceCodeName(StringUtil.getString(rs.getString("service_name"), ""));
 					
 					list.add(model);
@@ -219,6 +221,7 @@ public class SpTroneDao
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
+					model.setJsTypes(rs.getInt("js_type"));
 					
 					list.add(model);
 				}
@@ -264,6 +267,7 @@ public class SpTroneDao
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
+					model.setJsTypes(rs.getInt("js_type"));
 					
 					list.add(model);
 				}
@@ -282,7 +286,7 @@ public class SpTroneDao
 		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
 		sql += " LEFT JOIN daily_config.tbl_cp e ON a.`cp_id` = e.`id`";
 		sql += " WHERE e.`user_id` = " + userId;
-		sql += " GROUP BY c.id;";
+		sql += " GROUP BY c.id order by convert(c.name using UTF8) asc";
 		
 		
 		return (List<SpTroneModel>)new JdbcControl().query(sql, new QueryCallBack()
@@ -389,6 +393,7 @@ public class SpTroneDao
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
+					model.setJsTypes(rs.getInt("js_type"));
 					
 					return model;
 				}
@@ -400,11 +405,11 @@ public class SpTroneDao
 	
 	public boolean addSpTrone(SpTroneModel model)
 	{
-		String sql = "insert into daily_config.tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,day_limit,month_limit,user_day_limit,user_month_limit,product_id) values("
+		String sql = "insert into daily_config.tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,day_limit,month_limit,user_day_limit,user_month_limit,product_id,js_type) values("
 				+ model.getSpId() + ",'" + model.getSpTroneName() + "',"
 				+ model.getOperator() + "," + model.getJieSuanLv() + ",'"
 				+ model.getProvinces() + "',now()," + model.getTroneType() + ","+ model.getTroneApiId() +","+ model.getStatus() +"," + model.getDayLimit() + "," 
-				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + ")";
+				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ")";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -416,7 +421,7 @@ public class SpTroneDao
 				+ model.getJieSuanLv() + ",provinces = '" + model.getProvinces()
 				+ "',trone_type = " + model.getTroneType() + ",trone_api_id = " 
 				+ model.getTroneApiId() + ",status = " + model.getStatus() + ",day_limit=" + model.getDayLimit() + ",month_limit=" + model.getMonthLimit() + ",user_day_limit=" 
-				+ model.getUserDayLimit() + ",user_month_limit=" + model.getUserMonthLimit() + ", product_id = " + model.getServiceCodeId() + " where id =" + model.getId();
+				+ model.getUserDayLimit() + ",user_month_limit=" + model.getUserMonthLimit() + ", product_id = " + model.getServiceCodeId() + ",js_type = " + model.getJsTypes() + " where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}

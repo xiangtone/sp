@@ -67,15 +67,13 @@ public class FeeDao
 	
 	public Map<String, Object> loadChannelAppFee(String startDate,String endDate,String keyWord, int pageIndex , int appType)
 	{
-		String query = " a.id,a.fee_date,b.appname,b.appkey,b.app_type,c.channelkey,c.data_rows,a.amount,a.show_amount,a.status ";
+		String query = " a.id,a.fee_date,b.appname,b.appkey,b.app_type,a.channelid channelkey,0 data_rows,a.amount,a.show_amount,a.status ";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xypay_summer a";
 		sql += " left join daily_config.tbl_xy_app b on a.appkey = b.appkey  ";
-		sql += " left join game_log.tbl_xy_user_summer c on a.appkey = c.appkey  ";
-		sql += " and a.channelid = c.channelkey and a.fee_date = c.active_date ";
-		sql += " left join daily_config.tbl_xy_channel d on c.channelkey = d.channel ";
+		sql += " left join daily_config.tbl_xy_channel d on a.channelid = d.channel ";
 		sql += " where 1=1 ";
 		sql += " and d.settle_type = 2 ";
 		sql += " and a.fee_date >= '" + startDate + "' ";
@@ -83,13 +81,13 @@ public class FeeDao
 		
 		if(!StringUtil.isNullOrEmpty(keyWord))
 		{
-			sql += " and (b.appname like '%" + keyWord + "%' or b.appkey like '%" + keyWord + "%' or c.channelkey like '%" + keyWord + "%') ";
+			sql += " and (b.appname like '%" + keyWord + "%' or b.appkey like '%" + keyWord + "%' or a.channelid like '%" + keyWord + "%') ";
 		}
 		
 		if(appType>0)
 			sql += " and b.app_type="+appType+" ";
 			
-		String orders = " order by a.fee_date asc,appname asc,channelkey asc ";
+		String orders = " order by a.fee_date asc,appname asc,a.channelid asc ";
 		
 		final Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -108,7 +106,7 @@ public class FeeDao
 		
 		result.put("row", count);
 		
-		new JdbcGameControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " sum(c.data_rows), sum(a.amount),sum(a.show_amount) "), new QueryCallBack()
+		new JdbcGameControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " sum(0), sum(a.amount),sum(a.show_amount) "), new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
