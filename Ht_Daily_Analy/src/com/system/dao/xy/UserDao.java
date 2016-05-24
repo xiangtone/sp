@@ -26,7 +26,7 @@ public class UserDao
 		//当增加了实时同步的渠道后，就不能删除立即同步的数据
 		//return new JdbcControl().execute("DELETE FROM daily_log.`tbl_xy_user_summer` WHERE active_date >= '" + startDate + "' AND active_date <= '" + endDate + "'");
 		
-		String sql = "DELETE  game_log.a from daily_log.`tbl_xy_user_summer` a, daily_config.tbl_xy_channel b ";
+		String sql = "DELETE  a from game_log.`tbl_xy_user_summer` a, daily_config.tbl_xy_channel b ";
 		sql += " WHERE a.active_date >= '" + startDate + "' AND a.active_date <= '" + endDate + "'";
 		sql += " and a.channelkey = b.channel and b.syn_type = 1";
 		

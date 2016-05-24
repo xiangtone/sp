@@ -83,4 +83,10 @@ public class UserServer
 		
 		dao.analyUserList(list,startDate);
 	}
+	
+	public static void main(String[] args)
+	{
+		new UserServer().startAnalyUser();
+	}
+	
 }

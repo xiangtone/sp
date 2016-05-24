@@ -255,7 +255,7 @@
 		<div class="content" style="margin-top: 10px">
 			<dl>
 				<dd class="ddbtn" style="width:200px" >
-				<label>增加包月数据</label>
+				<label>增加隔天数据</label>
 				</dd>
 			</dl>
 			<br />	<br />		

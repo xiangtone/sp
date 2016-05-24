@@ -119,7 +119,7 @@
 		<div class="content" style="margin-top: 10px">
 			<dl>
 				<dd class="ddbtn" style="width:200px" >
-				<label>修改包月数据</label>
+				<label>修改隔天数据</label>
 				</dd>
 			</dl>
 			<br />	<br />		
