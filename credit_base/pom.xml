@@ -69,6 +69,13 @@
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
+		<profile>
+			<id>bjtl</id>
+			<properties>
+				<runtime.env>config\bjtl</runtime.env>
+				<final.name>credit</final.name>
+			</properties>
+		</profile>
 	</profiles>
   <dependencies>
 		<dependency>
