@@ -107,11 +107,11 @@ public class DailyDataServer
 		
 		Calendar ca = Calendar.getInstance();
 		
-		ca.add(Calendar.DAY_OF_MONTH, -1);
+		ca.add(Calendar.DAY_OF_MONTH, -4);
 		
 		String feeDate = StringUtil.getDateFormat(ca.getTime());
 		
-		ca.add(Calendar.DAY_OF_MONTH, -3);
+		//ca.add(Calendar.DAY_OF_MONTH, -3);
 		
 		String monthFeeDate = StringUtil.getDateFormat(ca.getTime());
 		
