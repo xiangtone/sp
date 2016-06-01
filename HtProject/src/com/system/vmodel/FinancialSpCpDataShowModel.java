@@ -6,6 +6,7 @@ import java.util.List;
 public class FinancialSpCpDataShowModel
 {
 	public int spId;
+	public String spFullName;
 	public String spShortName;
 	public int spRowSpan = 1;
 	
@@ -14,6 +15,8 @@ public class FinancialSpCpDataShowModel
 	public class SpTroneModel
 	{
 		public int spTroneId;
+		public String productName;
+		public String spContactName;
 		public String spTroneName;
 		public double spJieSuanLv;
 		public int spTroneRowSpan = 1;
@@ -28,6 +31,7 @@ public class FinancialSpCpDataShowModel
 			public double showAmount;
 			public int cpId;
 			public String cpShortName;
+			public String cpFullName;
 			public double cpJieSuanLv;
 		}
 	}
