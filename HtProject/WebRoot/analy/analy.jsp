@@ -4,10 +4,19 @@
 	pageEncoding="UTF-8"%>
 <%
 	String date = StringUtil.getString(request.getParameter("date"), StringUtil.getDefaultDate());
-	boolean isAnaly = StringUtil.getInteger(request.getParameter("analy"), -1) == 1;
+	int analyType = StringUtil.getInteger(request.getParameter("analy"), -1);
 	String msg = "重新分析数据";
-	if (isAnaly) {
+	if (analyType==1) 
+	{
 		msg += new DailyAnalyServer().analyDailyMr(date) ? "成功" : "失败";
+	}
+	else if(analyType==2)
+	{
+		
+	}
+	else if(analyType==3)
+	{
+		
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -28,6 +37,14 @@
 			document.getElementById("formid").submit();
 		}
 	}
+	
+	$(
+		function()
+		{
+			
+		}
+	);
+	
 </script>
 <body>
 	<div class="main_content">
