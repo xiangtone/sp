@@ -9,6 +9,7 @@ public class SpTroneModel
 	private String spTroneName;
 	private int operator;
 	private String operatorName;
+	private int jsTypes;
 	private float jieSuanLv;
 	private String provinces;
 	private int troneApiId;
@@ -20,6 +21,8 @@ public class SpTroneModel
 	private float monthLimit;
 	private float userDayLimit;
 	private float userMonthLimit;
+	private int serviceCodeId;
+	private String servoceCodeName;
 	
 	public int getTroneType()
 	{
@@ -156,5 +159,29 @@ public class SpTroneModel
 	public void setUserMonthLimit(float userMonthLimit)
 	{
 		this.userMonthLimit = userMonthLimit;
+	}
+	public int getServiceCodeId()
+	{
+		return serviceCodeId;
+	}
+	public void setServiceCodeId(int serviceCodeId)
+	{
+		this.serviceCodeId = serviceCodeId;
+	}
+	public String getServoceCodeName()
+	{
+		return servoceCodeName;
+	}
+	public void setServoceCodeName(String servoceCodeName)
+	{
+		this.servoceCodeName = servoceCodeName;
+	}
+	public int getJsTypes()
+	{
+		return jsTypes;
+	}
+	public void setJsTypes(int jsTypes)
+	{
+		this.jsTypes = jsTypes;
 	}
 }

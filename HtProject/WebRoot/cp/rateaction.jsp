@@ -20,6 +20,7 @@
 	String remark = StringUtil.getString(request.getParameter("remark"), "");
 	float dayLimit = StringUtil.getFloat(request.getParameter("day_limit"), 0F);
 	float monthLimit = StringUtil.getFloat(request.getParameter("month_limit"), 0F);
+	String provinceHoldRate = StringUtil.getString(request.getParameter("pros_data"), "");
 	
 	SingleCpSpTroneRateModel model = new SingleCpSpTroneRateModel();
 	
@@ -66,6 +67,7 @@
 		tModel.setDayLimit(dayLimit);
 		tModel.setMonthLimit(monthLimit);
 		tModel.setRate(rate);
+		tModel.setProsData(provinceHoldRate);
 		
 		new CpSpTroneRateServer().updateCpSpTroneLimit(tModel);
 		

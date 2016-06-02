@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ServiceUtil
 {
+	private static final int REQUEST_EXPIRE_MILS = StringUtil.getInteger(ConfigManager.getConfigData("REQUEST_EXPIRE_MILS"), 30000);
+	
 	public static String sendGet(String url, Map<String,String> params,String postData)
 	{
 		StringBuffer result = new StringBuffer();
@@ -30,9 +32,9 @@ public class ServiceUtil
 			
 			URLConnection conn = realUrl.openConnection();
 			
-			conn.setConnectTimeout(10000);
+			conn.setConnectTimeout(REQUEST_EXPIRE_MILS);
 			
-			conn.setReadTimeout(10000);
+			conn.setReadTimeout(REQUEST_EXPIRE_MILS);
 			
 			conn.setRequestProperty("accept", "*/*");
 			

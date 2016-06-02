@@ -15,9 +15,9 @@ public class CpDataCache
 {
 	//private static Logger logger = Logger.getLogger(CpDataCache.class);
 	
-	private static List<TroneOrderModel> _troneOrderList = new ArrayList<>();
+	private static List<TroneOrderModel> _troneOrderList = new ArrayList<TroneOrderModel>();
 	
-	private static List<CpTroneModel> _cpTroneList = new ArrayList<>();
+	private static List<CpTroneModel> _cpTroneList = new ArrayList<CpTroneModel>();
 	
 	protected static void setTroneOrder(List<TroneOrderModel> troneOrderList)
 	{

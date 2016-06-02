@@ -1,3 +1,5 @@
+<%@page import="com.system.server.UserServer"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.system.server.SpTroneServer"%>
@@ -21,7 +23,6 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="com.system.util.PageUtil"%>
 <%@page import="java.util.Map"%>
-<%@page import="com.system.server.xy.UserServer"%>
 <%@page import="com.system.model.xy.XyUserModel"%>
 <%@page import="java.util.List"%>
 <%@page import="java.net.URLDecoder"%>
@@ -31,7 +32,7 @@
 <%
 	
 	String date = StringUtil.getString(request.getParameter("date"), StringUtil.getDefaultDate());
-	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 6);
+	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 10);
 	
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
@@ -40,8 +41,15 @@
 	int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order"), -1);
 	int provinceId = StringUtil.getInteger(request.getParameter("province"), -1);
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
+	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
+	
+	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
+	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
+	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
+	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId, sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId,cpCommerceUserId,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -61,7 +69,7 @@
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时"};
+	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时","SP商务","CP商务"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -197,7 +205,8 @@
 		$("#sel_province").change(provinceChange);
 		provinceChange();		
 		$("#sel_city").val(<%= cityId %>);
-		
+		$("#sel_commerce_user").val(<%= spCommerceUserId %>);
+		$("#sel_cp_commerce_user").val(<%= cpCommerceUserId %>);
 	});
 	
 	function troneChange()
@@ -281,13 +290,13 @@
 						<dd class="dd04_me">
 						<select name="sp_trone" id="sel_sp_trone" onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
 					</dd>
-				</dl>
-				<br /><br /><br />
-				<dl>
 					<dd class="dd01_me">SP通道</dd>
 						<dd class="dd04_me">
 						<select name="trone" id="sel_trone" title="请选择通道"></select>
 					</dd>
+				</dl>
+				<br /><br /><br />
+				<dl>
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp" title="选择CP" onclick="namePicker(this,cpList,onCpDataSelect)">
@@ -334,6 +343,34 @@
 						</select>
 					</dd>
 					-->
+					<dd class="dd01_me">SP商务</dd>
+						<dd class="dd04_me">
+						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
+							<option value="-1">全部</option>
+							<%
+							for(UserModel commerceUser : userList)
+							{
+								%>
+							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
+								<%
+							}
+							%>
+						</select>
+					</dd>
+					<dd class="dd01_me">CP商务</dd>
+						<dd class="dd04_me">
+						<select name="cp_commerce_user" id="sel_cp_commerce_user" style="width: 100px;">
+							<option value="-1">全部</option>
+							<%
+							for(UserModel commerceUser : cpCommerceUserList)
+							{
+								%>
+							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
+								<%
+							}
+							%>
+						</select>
+					</dd>
 					<dd class="dd01_me">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式">
@@ -350,12 +387,14 @@
 							-->
 							<option value="8">省份</option>
 							<option value="9">城市</option>
+							<option value="12">SP商务</option>
+							<option value="13">CP商务</option>
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
-					
+					<dd class="dd01_me"><a style="color:blue;" href="mr_lr_daily.jsp?<%= request.getQueryString() %>">查看利润</a></dd>
 				</dl>
 			</form>
 		</div>

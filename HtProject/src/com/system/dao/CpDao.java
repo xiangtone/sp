@@ -141,20 +141,15 @@ public class CpDao
 		return map;
 	}
 	
-	public Map<String, Object> loadCp(int pageIndex,String fullName,String shortName)
+	public Map<String, Object> loadCp(int pageIndex,String keyWord)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id where 1=1";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id left join daily_config.tbl_user c on a.commerce_user_id = c.id  where 1=1";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
-		if(!StringUtil.isNullOrEmpty(fullName))
+		if(!StringUtil.isNullOrEmpty(keyWord))
 		{
-			sql += " AND a.full_name LIKE '%"+fullName+"%' ";
-		}
-		
-		if(!StringUtil.isNullOrEmpty(shortName))
-		{
-			sql += " AND a.short_name LIKE '%"+shortName+"%' ";
+			sql += " AND (a.full_name LIKE '%"+keyWord+"%' or a.short_name like '%" + keyWord + "%' or c.nick_name like '%" + keyWord + "%' or b.nick_name like '%" + keyWord + "%') ";
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -174,7 +169,7 @@ public class CpDao
 			}
 		}));
 		
-		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.name,b.nick_name ") + limit, new QueryCallBack()
+		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.name,b.nick_name,c.nick_name commerce_user_name ") + limit, new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
@@ -196,6 +191,7 @@ public class CpDao
 					model.setContractStartDate(StringUtil.getString(rs.getString("contract_start_date"), ""));
 					model.setContractEndDate(StringUtil.getString(rs.getString("contract_end_date"), ""));
 					model.setUserName(StringUtil.getString(rs.getString("nick_name"),""));
+					model.setCommerceUserName(StringUtil.getString(rs.getString("commerce_user_name"),""));
 					
 					list.add(model);
 				}
@@ -208,7 +204,7 @@ public class CpDao
 	
 	public CpModel loadCpById(int id)
 	{
-		String sql = "select * from daily_config.tbl_cp where id = " + id;
+		String sql = "select * from daily_config.tbl_cp a  left join daily_config.tbl_user b on a.commerce_user_id = b.id where a.id = " + id;
 		return (CpModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -226,6 +222,7 @@ public class CpDao
 					model.setMail(StringUtil.getString(rs.getString("mail"), ""));
 					model.setAddress(StringUtil.getString(rs.getString("address"), ""));
 					model.setUserId(rs.getInt("user_id"));
+					model.setCommerceUserId(rs.getInt("commerce_user_id"));
 					model.setContractStartDate(StringUtil.getString(rs.getString("contract_start_date"), ""));
 					model.setContractEndDate(StringUtil.getString(rs.getString("contract_end_date"), ""));
 					return model;
@@ -238,12 +235,12 @@ public class CpDao
 	
 	public boolean addCp(CpModel model)
 	{
-		String sql = "insert into daily_config.tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date) "
+		String sql = "insert into daily_config.tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id) "
 				+ "value('" + model.getFullName() + "','" + model.getShortName()
 				+ "','" + model.getContactPerson() + "','" + model.getQq()
 				+ "','" + model.getMail() + "','" + model.getPhone() + "','"
 				+ model.getAddress() + "','" + model.getContractStartDate()
-				+ "','" + model.getContractEndDate() + "')";
+				+ "','" + model.getContractEndDate() + "'," + model.getCommerceUserId() + ")";
 		return new JdbcControl().execute(sql);
 	}
 
@@ -256,7 +253,7 @@ public class CpDao
 				+ "',mail='" + model.getMail() + "',phone='" + model.getPhone()
 				+ "',address='" + model.getAddress() + "',contract_start_date='"
 				+ model.getContractStartDate() + "',contract_end_date='"
-				+ model.getContractEndDate() + "' where id =" + model.getId();
+				+ model.getContractEndDate() + "',commerce_user_id=" + model.getCommerceUserId() + " where id =" + model.getId();
 		return new JdbcControl().execute(sql);
 	}
 	

@@ -10,10 +10,10 @@ import java.util.Map;
  */
 public class DayMonthLimitCache
 {
-	private static Map<String, Float> spTroneDayLimit = new HashMap<>();
-	private static Map<String, Float> spTroneMonthLimit = new HashMap<>();
-	private static Map<String, Float> cpSpTroneDayLimit = new HashMap<>();
-	private static Map<String, Float> cpSpTroneMonthLimit = new HashMap<>();
+	private static Map<String, Float> spTroneDayLimit = new HashMap<String, Float>();
+	private static Map<String, Float> spTroneMonthLimit = new HashMap<String, Float>();
+	private static Map<String, Float> cpSpTroneDayLimit = new HashMap<String, Float>();
+	private static Map<String, Float> cpSpTroneMonthLimit = new HashMap<String, Float>();
 	
 	public static void setSpTroneDayLimit(Map<String, Float> limit)
 	{
@@ -116,9 +116,16 @@ public class DayMonthLimitCache
 		
 		int i= 1;
 		
+		float totalMoney = 0F;
+		float money = 0F;
+		
 		for(String key : spTroneMonthLimit.keySet())
 		{
-			sb.append("<td>" +  key + ":" + spTroneMonthLimit.get(key) + "</td>");
+			money = spTroneMonthLimit.get(key);
+			
+			totalMoney += money;
+			
+			sb.append("<td>" +  key + ":" + money + "</td>");
 			
 			if(i%5==0)
 				sb.append("</tr><tr>");
@@ -126,7 +133,7 @@ public class DayMonthLimitCache
 			i++;
 		}
 		
-		sb.append("</tr><tr><td colspan='5'>SP业务当前日限</td></tr><tr>");
+		sb.append("<td>Total:" + totalMoney + "</td></tr><tr><td colspan='5'>SP业务当前日限</td></tr><tr>");
 		
 		i= 1;
 		

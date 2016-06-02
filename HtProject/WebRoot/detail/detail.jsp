@@ -37,11 +37,14 @@
 		
 		data = data.substring(0,data.length()-1);
 		
+		System.out.println("data:" + data);
+		
 		if(keys.length<=100)
 			list = new MrDetailServer().loadDetailDataByPhoneMsg(data, month,chkType);
 		
 		System.out.println(unMatchKeys);
 		
+		if(list!=null)
 		for(DetailDataVo vo : list)
 		{
 			if(chkType==1)

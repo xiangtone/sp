@@ -38,6 +38,20 @@ public class StringUtil
 		return defaultValue;
 	}
 	
+	public static long getLong(String str ,long defaultValue)
+	{
+		try
+		{
+			return Long.parseLong(str);
+		}
+		catch (Exception ex)
+		{
+			
+		}
+		return defaultValue;
+		
+	}
+	
 	public static Float getFloat(String str, float defaultValue)
 	{
 		try

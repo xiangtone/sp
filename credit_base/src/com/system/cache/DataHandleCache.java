@@ -7,7 +7,7 @@ import com.system.util.StringUtil;
 
 public class DataHandleCache
 {
-	private static List<String> verifyCodeCacheList = new ArrayList<>();			
+	private static List<String> verifyCodeCacheList = new ArrayList<String>();			
 	
 	public static boolean isExistVerifyCode(String key)
 	{

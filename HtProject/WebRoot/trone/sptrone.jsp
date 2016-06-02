@@ -15,17 +15,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String spTroneName = StringUtil.getString(request.getParameter("sp_trone_name"), "");
-
-	String query = Base64UTF.encode(request.getQueryString());
-
-	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
+	String keyWord = StringUtil.getString(request.getParameter("keyword"), "");
 
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
+
+	String query = Base64UTF.encode(request.getQueryString());
 	
-	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user_id"), -1);
-	
-	Map<String, Object> map = new SpTroneServer().loadSpTroneList(pageIndex,spId,commerceUserId,spTroneName);
+	Map<String, Object> map = new SpTroneServer().loadSpTroneList(pageIndex,keyWord);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 
@@ -35,15 +31,17 @@
 	
 	Map<String,String> params = new HashMap<String,String>();
 	
-	params.put("commerce_user_id", commerceUserId + "");
+	params.put("keyword", keyWord);
 	
 	String pageData = PageUtil.initPageQuery("sptrone.jsp", params, rowCount, pageIndex);
 	
-	String[] troneTypes = {"点播","包月","IVR"};
+	String[] troneTypes = {"实时","隔天","IVR"};
 	
-	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
+	//0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结,6见帐单结
+	String[] jsTypes = {"对公周结","对公双周结","对公月结","对私周结","对私双周结","对私月结","见帐单结"};
 	
-	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
+	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -84,8 +82,7 @@
 	
 	$(function()
 	{
-		$("#sel_sp").val(<%= spId %>);
-		$("#sel_commerce_user_id").val(<%= commerceUserId %>);
+		
 	});
 	
 	
@@ -153,38 +150,10 @@
 					<a href="sptroneadd.jsp">增 加</a>
 				</dd>
 				<form action="sptrone.jsp" method="get" id="formid">
-					<dl>
-						<dd class="dd01_me">SP</dd>
-						<dd class="dd04_me">
-							<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onDataSelect)">
-								<option value="-1">全部</option>
-								<%
-								for(SpModel sp : spList)
-								{
-									%>
-								<option value="<%= sp.getId() %>"><%= sp.getShortName() %></option>	
-									<%
-								}
-								%>
-							</select>
-						</dd>
-						<dd class="dd01_me">商务人员</dd>
-						<dd class="dd04_me">
-							<select name="commerce_user_id" id="sel_commerce_user_id">
-								<option value="-1">请选择</option>
-								<%
-								for(UserModel model : userList)
-								{
-									%>
-								<option value="<%= model.getId() %>"><%= model.getNickName() %></option>	
-									<%
-								}
-								%>
-							</select>
-						</dd>							
-						<dd class="dd01_me">业务</dd>
+						<dl>					
+						<dd class="dd01_me">关键字</dd>
 						<dd class="dd03_me">
-							<input name="sp_trone_name" id="input_sp_trone_name" value="<%= spTroneName %>"
+							<input name="keyword" id="input_keyword" value="<%= keyWord %>"
 								type="text" style="width: 150px">
 						</dd>
 						<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
@@ -199,11 +168,12 @@
 				<tr>
 					<td>序号</td>
 					<td>SP名称</td>
-					<td>运营商</td>
+					<td>业务线</td>
 					<td>业务名称</td>
 					<td>商务人员</td>
-					<td>类型</td>
-					<td>结算率</td>
+					<td>数据类型</td>
+					<td>结算类型</td>
+					<td><%= jiuSuanName %></td>
 					<td>日限</td>
 					<td>月限</td>
 					<td>用户日限</td>
@@ -224,10 +194,11 @@
 						<input type="hidden" id="hid_<%= model.getId() %>" value="<%= model.getJieSuanLv() %>" />
 					</td>
 					<td><%=model.getSpName()%></td>
-					<td><%=model.getOperatorName()%></td>
+					<td><%=model.getServoceCodeName() %></td>
 					<td><%=model.getSpTroneName()%></td>
 					<td><%= model.getCommerceUserName() %></td>
 					<td><%= troneTypes[model.getTroneType()]%></td>
+					<td><%= jsTypes[model.getJsTypes()] %></td>
 					<td ondblclick="editShowData('<%= model.getId() %>')">
 						<span id="span_<%= model.getId() %>"><%= model.getJieSuanLv() %></span>
 					</td>
@@ -245,7 +216,7 @@
 			
 			<tbody>
 				<tr>
-					<td colspan="13" class="tfooter" style="text-align: center;"><%=pageData%></td>
+					<td colspan="14" class="tfooter" style="text-align: center;"><%=pageData%></td>
 				</tr>
 			</tbody>
 		</table>

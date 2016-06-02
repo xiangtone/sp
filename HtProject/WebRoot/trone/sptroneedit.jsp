@@ -1,3 +1,6 @@
+<%@page import="com.system.util.ConfigManager"%>
+<%@page import="com.system.server.ServiceCodeServer"%>
+<%@page import="com.system.model.ServiceCodeModel"%>
 <%@page import="com.system.server.SpTroneApiServer"%>
 <%@page import="com.system.model.SpTroneApiModel"%>
 <%@page import="com.system.util.PageUtil"%>
@@ -29,6 +32,8 @@
 	List<SpModel> spList = new SpServer().loadSp();
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<SpTroneApiModel> spTroneApiList = new SpTroneApiServer().loadSpTroneApi();
+	List<List<ServiceCodeModel>> serviceCodeList = new ServiceCodeServer().loadServiceCode();
+	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -80,9 +85,9 @@
 			return;
 		}
 		
-		if ($("#sel_operator").val() == "-1") {
-			alert("请选择运营商");
-			$("#sel_operator").focus();
+		if ($("#sel_service_code").val() == "-1") {
+			alert("请选择业务线");
+			$("#sel_service_code").focus();
 			return;
 		}
 		
@@ -92,22 +97,23 @@
 			return;
 		}
 		
-		var jiesuanlv = $("#input_jiesuanlv").val();
-		
-		if (jiesuanlv == "") {
-			alert("请输入结算率");
-			$("#input_jesuanlv").focus();
+		if ($("#sel_js_type").val() == "-1") {
+			alert("请输入结算类型");
+			$("#sel_js_type").focus();
 			return;
 		}
 		
-		if (isNum(jiesuanlv))
+		var rate = parseFloat($("#input_jiesuanlv").val());
+		
+		if(isNaN(rate) || rate>=1 || rate<=0)
 		{
-			alert("结算率不正确");
-			$("#input_jesuanlv").focus();
+			alert("<%= jiuSuanName %>只能介于0和1之间");
+			$("#input_jiesuanlv").focus();
 			return;
 		}
 		
 		var limit = parseFloat($("#input_day_limit").val());
+		
 		if (isNaN(limit) || limit < 0)
 		{
 			alert("请输入正确的日限");
@@ -160,6 +166,10 @@
 		$("#input_sp_trone_name").val("<%= spTroneModel.getSpTroneName() %>");
 		$("#input_jiesuanlv").val("<%= spTroneModel.getJieSuanLv() %>");
 		$("#sel_sp_trone_api").val("<%= spTroneModel.getTroneApiId() %>");
+		
+		$("#sel_service_code").val("<%= spTroneModel.getServiceCodeId() %>");
+		$("#sel_js_type").val("<%= spTroneModel.getJsTypes() %>");
+		
 		var provinceIds = "<%= spTroneModel.getProvinces() %>";
 		var provinces = provinceIds.split(",");
 		setRadioCheck("trone_type",<%= spTroneModel.getTroneType() %>);
@@ -279,14 +289,49 @@
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">运营商</dd>
+					<dd class="dd01_me">业务线</dd>
 					<dd class="dd04_me">
-						<select name="operator" id="sel_operator" title="选择运营商"
+						<select name="service_code" id="sel_service_code" 
 							style="width: 200px">
-							<option value="-1">请选择</option>
+							<option value="-1">请选择业务线</option>
+							<optgroup label="移动">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(0))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>
+							<optgroup label="联通">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(1))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>
+							<optgroup label="电信">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(2))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>
+														
+							
+							<!--  
 							<option value="1">联通</option>
 							<option value="2">电信</option>
 							<option value="3">移动</option>
+							-->
+							
 						</select>
 					</dd>
 
@@ -303,10 +348,27 @@
 					<br />
 					<br />
 					<br />
+					<dd class="dd01_me">结算类型</dd>
+					<dd class="dd04_me">
+						<select name="js_type" id="sel_js_type" title="结算类型" style="width: 200px" >
+							<option value="-1">请选择结算类型</option>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公月结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
+						</select>
+					</dd>
+					
+					<br />
+					<br />
+					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">结算率</dd>
+					<dd class="dd01_me"><%= jiuSuanName %></dd>
 					<dd class="dd03_me">
-						<input type="text" name="jiesuanlv" title="结算率" id="input_jiesuanlv"
+						<input type="text" name="jiesuanlv"  id="input_jiesuanlv"
 							style="width: 200px">
 					</dd>
 					
@@ -333,12 +395,12 @@
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">业务类型</dd>
+					<dd class="dd01_me">数据类型</dd>
 					<dd class="dd03_me">
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="0" checked="checked" >
-						<label style="font-size: 14px;float:left">普通</label>
+						<label style="font-size: 14px;float:left">实时</label>
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="1" >
-						<label style="font-size: 14px;float:left">包月</label>
+						<label style="font-size: 14px;float:left">隔天</label>
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="2" >
 						<label style="font-size: 14px;float:left">IVR</label>
 					</dd>

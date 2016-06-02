@@ -24,7 +24,7 @@ public class LocateDao
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
 			{
-				List<ProvinceModel> list = new ArrayList<>();
+				List<ProvinceModel> list = new ArrayList<ProvinceModel>();
 				
 				while(rs.next())
 				{
@@ -48,7 +48,7 @@ public class LocateDao
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
 			{
-				List<CityModel> list = new ArrayList<>();
+				List<CityModel> list = new ArrayList<CityModel>();
 				while(rs.next())
 				{
 					CityModel  model = new CityModel();
@@ -72,7 +72,7 @@ public class LocateDao
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
 			{
-				Map<String,Integer> map = new HashMap<>();
+				Map<String,Integer> map = new HashMap<String, Integer>();
 				
 				while(rs.next())
 				{

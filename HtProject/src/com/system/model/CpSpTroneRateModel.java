@@ -12,6 +12,7 @@ public class CpSpTroneRateModel
 	private float rate;
 	private float dayLimit;
 	private float monthLimit;
+	private String prosData;
 	
 	public int getId()
 	{
@@ -92,6 +93,14 @@ public class CpSpTroneRateModel
 	public void setMonthLimit(float monthLimit)
 	{
 		this.monthLimit = monthLimit;
+	}
+	public String getProsData()
+	{
+		return prosData;
+	}
+	public void setProsData(String prosData)
+	{
+		this.prosData = prosData;
 	}
 	
 	

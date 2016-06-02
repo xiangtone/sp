@@ -60,7 +60,7 @@ public class CpDataDao
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
 			{
-				List<CpTroneModel> list = new ArrayList<>();
+				List<CpTroneModel> list = new ArrayList<CpTroneModel>();
 				
 				while(rs.next())
 				{

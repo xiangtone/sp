@@ -10,11 +10,11 @@ import com.system.model.ProvinceModel;
 
 public class LocateCache
 {
-	private static List<ProvinceModel> _provinceList = new ArrayList<>();
+	private static List<ProvinceModel> _provinceList = new ArrayList<ProvinceModel>();
 	
-	private static List<CityModel> _cityList = new ArrayList<>();
+	private static List<CityModel> _cityList = new ArrayList<CityModel>();
 	
-	private static Map<String, Integer> _phoneLocateMap = new HashMap<>();
+	private static Map<String, Integer> _phoneLocateMap = new HashMap<String, Integer>();
 	
 	protected static void setProvince(List<ProvinceModel> list)
 	{

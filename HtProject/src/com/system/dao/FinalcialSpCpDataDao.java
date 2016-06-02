@@ -26,12 +26,12 @@ public class FinalcialSpCpDataDao
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
 		
-		String sql = "SELECT a.sp_id,a.sp_name,a.sp_trone_id,a.sp_trone_name,a.cp_id,";
-		sql += " a.cp_name,a.data_rows,a.amount,b.show_data_rows,b.show_amounts,";
+		String sql = "SELECT a.sp_id,a.sp_name,a.sp_full_name,a.sp_trone_id,a.sp_trone_name,a.cp_id,";
+		sql += " a.cp_name,a.cp_full_name,a.data_rows,a.amount,b.show_data_rows,b.show_amounts,";
 		sql += " a.sp_jie_suan_lv,b.cp_jie_suan_lv";
 		sql += " FROM(";
-		sql += " SELECT d.id sp_id,d.`short_name` sp_name,c.id sp_trone_id,c.`name` sp_trone_name,";
-		sql += " f.id cp_id,f.`short_name` cp_name,c.`jiesuanlv` sp_jie_suan_lv,SUM(a.data_rows) data_rows,SUM(a.amount) amount";
+		sql += " SELECT d.id sp_id,d.`short_name` sp_name,d.full_name sp_full_name,c.id sp_trone_id,c.`name` sp_trone_name,";
+		sql += " f.id cp_id,f.`short_name` cp_name,f.`full_name` cp_full_name,c.`jiesuanlv` sp_jie_suan_lv,SUM(a.data_rows) data_rows,SUM(a.amount) amount";
 		sql += " FROM daily_log.tbl_mr_summer a";
 		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
@@ -43,8 +43,8 @@ public class FinalcialSpCpDataDao
 		sql += " ) a";
 		sql += " LEFT JOIN ";
 		sql += " (";
-		sql += " SELECT d.id sp_id,d.`short_name` sp_name,c.id sp_trone_id,c.`name` sp_trone_name,";
-		sql += " f.id cp_id,f.`short_name` cp_name,g.`rate` cp_jie_suan_lv,SUM(a.data_rows) show_data_rows,SUM(a.amount) show_amounts";
+		sql += " SELECT d.id sp_id,d.`short_name` sp_name,d.full_name sp_full_name,c.id sp_trone_id,c.`name` sp_trone_name,";
+		sql += " f.id cp_id,f.`short_name` cp_name,f.`full_name` cp_full_name,g.`rate` cp_jie_suan_lv,SUM(a.data_rows) show_data_rows,SUM(a.amount) show_amounts";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a";
 		sql += " LEFT JOIN daily_config.`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
 		sql += " LEFT JOIN daily_config.tbl_trone b ON e.`trone_id` = b.`id`";
@@ -66,6 +66,7 @@ public class FinalcialSpCpDataDao
 				List<FinancialSpCpDataShowModel> list = new ArrayList<FinancialSpCpDataShowModel>();
 				int spId;
 				String spShortName;
+				String spFullName;
 				int spTroneId;
 				String spTroneName;
 				double spJieSuanLv;
@@ -75,6 +76,7 @@ public class FinalcialSpCpDataDao
 				double showAmount;
 				int cpId;
 				String cpShortName;
+				String cpFullName;
 				double cpJieSuanLv;
 				
 				FinancialSpCpDataShowModel model = null;
@@ -83,6 +85,7 @@ public class FinalcialSpCpDataDao
 				while(rs.next())
 				{
 					spId = rs.getInt("sp_id");
+					spFullName = StringUtil.getString(rs.getString("sp_full_name"), "");
 					spShortName = StringUtil.getString(rs.getString("sp_name"), "");
 					spTroneId = rs.getInt("sp_trone_id");
 					spTroneName = StringUtil.getString(rs.getString("sp_trone_name"), "");
@@ -92,6 +95,7 @@ public class FinalcialSpCpDataDao
 					showDataRows = rs.getInt("show_data_rows");
 					showAmount = rs.getInt("show_amounts");
 					cpId = rs.getInt("cp_id");
+					cpFullName = StringUtil.getString(rs.getString("cp_full_name"), "");
 					cpShortName = StringUtil.getString(rs.getString("cp_name"), "");
 					cpJieSuanLv = rs.getDouble("cp_jie_suan_lv");
 					
@@ -112,6 +116,7 @@ public class FinalcialSpCpDataDao
 						
 						model.spId = spId;
 						model.spShortName = spShortName;
+						model.spFullName = spFullName;
 						
 						spTroneModel = model.new SpTroneModel();
 						spTroneModel.spJieSuanLv = spJieSuanLv;
@@ -124,6 +129,7 @@ public class FinalcialSpCpDataDao
 						
 						cpModelData.cpId = cpId;
 						cpModelData.cpShortName = cpShortName;
+						cpModelData.cpFullName = cpFullName;
 						cpModelData.cpJieSuanLv = cpJieSuanLv;
 						cpModelData.dataRows = dataRows;
 						cpModelData.showDataRows = showDataRows;
@@ -158,6 +164,7 @@ public class FinalcialSpCpDataDao
 							
 							cpModelData.cpId = cpId;
 							cpModelData.cpShortName = cpShortName;
+							cpModelData.cpFullName = cpFullName;
 							cpModelData.cpJieSuanLv = cpJieSuanLv;
 							cpModelData.dataRows = dataRows;
 							cpModelData.showDataRows = showDataRows;
@@ -172,6 +179,7 @@ public class FinalcialSpCpDataDao
 							
 							cpModelData.cpId = cpId;
 							cpModelData.cpShortName = cpShortName;
+							cpModelData.cpFullName = cpFullName;
 							cpModelData.cpJieSuanLv = cpJieSuanLv;
 							cpModelData.dataRows = dataRows;
 							cpModelData.showDataRows = showDataRows;

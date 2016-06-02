@@ -16,6 +16,7 @@
 		return;
 	}
 
+	int serviceCodeId = StringUtil.getInteger(request.getParameter("service_code"), -1);
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
 	int spId = StringUtil.getInteger(request.getParameter("sp_id_1"), -1);
 	int operator = StringUtil.getInteger(request.getParameter("operator"), -1);	
@@ -25,6 +26,9 @@
 	int troneType = StringUtil.getInteger(request.getParameter("trone_type"), 0);
 	int troneApiId = StringUtil.getInteger(request.getParameter("sp_trone_api"), 0);
 	int status = StringUtil.getInteger(request.getParameter("status"), 0);
+	int jsType = StringUtil.getInteger(request.getParameter("js_type"), 0);
+	
+	System.out.println("jsType:" + jsType);
 	
 	float dayLimit = StringUtil.getFloat(request.getParameter("day_limit"), 0.0F);
 	float monthLimit = StringUtil.getFloat(request.getParameter("month_limit"), 0.0F);
@@ -54,6 +58,8 @@
 	model.setMonthLimit(monthLimit);
 	model.setUserDayLimit(userDayLimit);
 	model.setUserMonthLimit(userMonthLimit);
+	model.setServiceCodeId(serviceCodeId);
+	model.setJsTypes(jsType);
 	
 	if(id==-1)
 		new SpTroneServer().addSpTrone(model); 

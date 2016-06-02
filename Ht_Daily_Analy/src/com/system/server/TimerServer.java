@@ -11,6 +11,7 @@ import com.system.server.ad.AdServer;
 import com.system.server.analy.AnalyMrDailyServer;
 import com.system.server.xy.FeeServer;
 import com.system.server.xy.UserServer;
+import com.system.util.ConfigManager;
 
 public class TimerServer
 {
@@ -19,6 +20,7 @@ public class TimerServer
 	// 一个不同时段的定时任务就起一个TIMMER
 	public void startTimer()
 	{
+		ConfigManager.setConfigFilePath("");
 		startAnalyDataTimer();
 		startUpdateDataTimer();
 		startXyQdAnalyDataTimer();

@@ -25,7 +25,7 @@
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone"), -1);
-	int synType = StringUtil.getInteger(request.getParameter("syn_type"), -1);
+	int synType = StringUtil.getInteger(request.getParameter("syn_type"), 1);
 	
 	int isLoadData = StringUtil.getInteger(request.getParameter("load_data"), -1);
 	
@@ -181,7 +181,7 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="syn_data.jsp"  method="get" style="margin-top: 10px" >
+			<form action="syn_data.jsp"  method="post" style="margin-top: 10px" >
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">

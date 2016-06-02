@@ -13,6 +13,11 @@ public class SpTroneServer
 		return new SpTroneDao().loadSpTroneList(pageIndex,spId,userId,spTroneName);
 	}
 	
+	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord)
+	{
+		return new SpTroneDao().loadSpTroneList(pageIndex,keyWord);
+	}
+	
 	public void addSpTrone(SpTroneModel model)
 	{
 		new SpTroneDao().addSpTrone(model);

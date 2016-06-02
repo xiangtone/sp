@@ -140,14 +140,14 @@ public class SettleAcountDao
 	@SuppressWarnings("unchecked")
 	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate)
 	{
-		String sql = "SELECT c.`name`,d.`name_cn`,SUM(a.amount) total_amount,c.rate jiesuanlv";
+		String sql = "SELECT c.`name`,d.`name_cn`,SUM(a.amount) total_amount,f.rate jiesuanlv";
 			sql += " FROM daily_log.`tbl_cp_mr_summer` a";
 			sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
 			sql += " LEFT JOIN daily_config.tbl_trone e ON b.`trone_id` = e.`id`";
 			sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON e.`sp_trone_id` = c.`id`";
 			sql += " LEFT JOIN daily_config.`tbl_operator` d ON c.`operator` = d.`id`";
 			sql += " left join daily_config.tbl_cp g on b.cp_id = g.id";
-			sql += " left join daily_config.tbl_cp_trone_rate f on e.id = f.cp_id and c.id = f.sp_trone_id";
+			sql += " left join daily_config.tbl_cp_trone_rate f on g.id = f.cp_id and c.id = f.sp_trone_id";
 			sql += " where a.`cp_id` =  " + cpId;
 			sql += " and a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
 			sql += " group by c.id";

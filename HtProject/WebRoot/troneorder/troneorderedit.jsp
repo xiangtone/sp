@@ -78,7 +78,7 @@
 	
 	function onCpDataSelect(joData)
 	{
-		$("#sel_cp_id").val(joData.id);
+		$("#sel_cp").val(joData.id);
 		cpChange();
 	}
 
@@ -318,7 +318,7 @@
 		<div class="content" style="margin-top: 10px">
 			<dl>
 				<dd class="ddbtn" style="width:200px" >
-				<label>增加CP业务</label>
+				<label>修改CP业务</label>
 				</dd>
 			</dl>
 			<br />	<br />		
