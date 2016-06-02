@@ -29,7 +29,8 @@ public partial class report_UnmatchCPTrone : Shotgun.PagePlus.ShotgunPage
         l.CurrentPage = PS.CurrentPage;
         var mrData = l.GetDataList();
         rpList.DataSource = mrData;
-
+        if (mrData.Count == 0)
+            return;
         //mrData[X].sp_api_url_id
         var urlids = mrData.GetFieldValueArray<int>(tbl_mrItem.Fields.sp_api_url_id);
         var url_list = LightDataModel.tbl_sp_api_urlItem.GetQueries(dBase);// 查询器

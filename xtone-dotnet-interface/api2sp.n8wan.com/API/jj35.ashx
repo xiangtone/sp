@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.Security;
 using Newtonsoft.Json.Linq;
 
+/// <summary>
+/// 成都次世代
+/// </summary>
 public class jj35 : sdk_Request.Logical.APIRequestGet
 {
     const string skey = "ht0428";
@@ -24,6 +27,8 @@ public class jj35 : sdk_Request.Logical.APIRequestGet
         dict["platType"] = "9";
         dict["returl"] = "http://baidu.com/";
         dict["merpriv"] = OrderInfo.spLinkId;
+        dict["provcode"] = getProvcode();
+        dict["iccid"] = OrderInfo.iccid;
         dict["IMEI"] = OrderInfo.imei;
         dict["IMSI"] = OrderInfo.imsi;
         var val = string.Join(string.Empty, dict.Values);
@@ -46,7 +51,7 @@ public class jj35 : sdk_Request.Logical.APIRequestGet
 
         var jobj = JObject.Parse(html);
         var jval = jobj["retCode"];
-        if (jval == null || !jval.HasValues || jval.Value<int>() != 0)
+        if (jval == null || !"0000".Equals(jval.ToString()))
         {
             jval = jobj["retMsg"];
             SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, jval != null ? jval.Value<string>() : null);
@@ -58,13 +63,14 @@ public class jj35 : sdk_Request.Logical.APIRequestGet
 
         jval = jobj["called2"];
         sdk_Request.Model.SP_SMS_Result sms = null;
-        if (jval != null && jval.HasValues)
+        if (jval != null && !string.IsNullOrEmpty(jval.ToString()))
         {
-            var sms2 = new sdk_Request.Model.SP_2SMS_Result();
-            sms2.port2 = jval.Value<string>();
-            jval = jobj["mo2"];
-            sms2.msg2 = jval.Value<string>();
-            sms = sms2;
+            sms = new sdk_Request.Model.SP_2SMS_Result()
+            {
+                port2 = jval.Value<string>(),
+                msg2 = jval.Value<string>(),
+                interval = 5
+            };
         }
         else
         {
@@ -115,6 +121,48 @@ public class jj35 : sdk_Request.Logical.APIRequestGet
         }
         return new sdk_Request.Model.SP_RESULT();
 
+    }
+
+    string getProvcode()
+    {
+        var city = getCityByImsi(OrderInfo.imsi);
+        if (city == null)
+            return string.Empty;
+        switch (city.province_id)
+        {
+            case 3: return "551";//安徽
+            case 1: return "010";//北京
+            case 21: return "591";//福建
+            case 11: return "931";//甘肃
+            case 8: return "020";//广东
+            case 10: return "771";//广西
+            case 28: return "851";//贵州
+            case 22: return "898";//海南
+            case 17: return "311";//河北
+            case 26: return "371";//河南
+            case 16: return "451";//黑龙江
+            case 4: return "027";//湖北
+            case 25: return "731";//湖南
+            case 12: return "431";//吉林
+            case 2: return "025";//江苏
+            case 23: return "791";//江西
+            case 13: return "024";//辽宁
+            case 14: return "471";//内蒙古
+            case 29: return "951";//宁夏
+            case 27: return "971";//青海
+            case 6: return "531";//山东
+            case 24: return "351";//山西
+            case 20: return "029";//陕西
+            case 7: return "021";//上海
+            case 19: return "028";//四川
+            case 5: return "022";//天津
+            case 31: return "891";//西藏
+            case 15: return "991";//新疆
+            case 30: return "871";//云南
+            case 9: return "571";//浙江
+            case 18: return "023";//重庆
+        }
+        return string.Empty;
     }
 }
  

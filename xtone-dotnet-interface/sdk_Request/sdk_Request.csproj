@@ -58,7 +58,7 @@
     <Folder Include="Database\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="E:\Website.git\xtone-dotnet-interface\n8wan.public\n8wan.Public.csproj">
+    <ProjectReference Include="..\n8wan.public\n8wan.Public.csproj">
       <Project>{638ee824-4bd3-4ec8-9c9d-129437f20187}</Project>
       <Name>n8wan.Public</Name>
     </ProjectReference>
@@ -71,6 +71,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

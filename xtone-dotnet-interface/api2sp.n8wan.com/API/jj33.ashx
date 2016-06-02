@@ -33,32 +33,30 @@ public class jj33 : sdk_Request.Logical.APIRequestGet
                 case 30: vIP = "116.52.147."; break;//云南
                 case 31: vIP = "220.182.50."; break;//西藏
                 case 24: vIP = "211.142.2."; break;//山西
-                case 2: //江苏
-                case 4: //湖北
-                case 5: //天津
-                case 6: //山东
-                case 7: //上海
-                case 8: //广东
-                case 9: //浙江
-                case 10: //广西
-                case 11: //甘肃
-                case 13: //辽宁
-                case 15: //新疆
-                case 16: //黑龙江
-                case 17: //河北
-                case 18: //重庆
-                case 19: //四川
-                case 20: //陕西
-                case 21: //福建
-                case 22: //海南
-                case 23: //江西
-                case 25: //湖南
-                case 26: //河南
-                case 27: //青海
-                case 29: //宁夏
-                case 32: //未知
-                    break;
-
+                case 2: vIP = "114.212.0."; break;//江苏
+                case 4: vIP = "61.136.128."; break; //湖北
+                case 5: vIP = "202.113.16."; break;//天津
+                case 6: vIP = "202.102.136."; break; //山东
+                case 7: vIP = "202.136.208."; break;  //上海
+                case 8: vIP = "202.116.128.0"; break; //广东
+                case 9: vIP = "202.91.224."; break; //浙江
+                case 10: vIP = "202.103.232.0"; break;  //广西
+                case 11: vIP = "202.100.72.0"; break; //甘肃
+                case 13: vIP = "202.118.64."; break; //辽宁
+                case 15: vIP = "103.22.116."; break; //新疆
+                case 16: vIP = "103.29.128."; break; //黑龙江
+                case 17: vIP = "202.99.128."; break; //河北
+                case 18: vIP = "219.151.128."; break; //重庆
+                case 19: vIP = "60.255.0."; break; //四川
+                case 20: vIP = "202.100.32."; break; //陕西
+                case 21: vIP = "218.185.240."; break; //福建
+                case 22: vIP = "221.199.224."; break; //海南
+                case 23: vIP = "202.101.224."; break;  //江西
+                case 25: vIP = "202.103.64."; break; //湖南
+                case 26: vIP = "202.102.240."; break;  //河南
+                case 27: vIP = "202.100.144."; break; //青海
+                case 29: vIP = "221.199.32."; break; //宁夏
+                case 32: vIP = ""; break; //未知
             }
             if (vIP.EndsWith("."))
             {

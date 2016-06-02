@@ -89,7 +89,7 @@ namespace n8wan.Public.Logical
             }
 
             //更新日月限数据
-            TroneDayLimit.UpdateDayLimit(dBase, Trone.id, _config.cp_id, Trone.price);
+            TroneDayLimit.UpdateDayLimit(dBase, Trone.sp_trone_id, _config.cp_id, Trone.price);
 
             DateTime today = DateTime.Today;
 

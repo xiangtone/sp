@@ -101,6 +101,7 @@
     <Compile Include="LightDataModel_manual\tbl_request_logItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_request_logItem_plus.cs" />
     <Compile Include="LightDataModel_manual\tbl_sp_api_urlItemPlus.cs" />
+    <Compile Include="LightDataModel_manual\tbl_sp_troneItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_sp_trone_apiItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_troneItemPlus.cs" />
     <Compile Include="LightDataModel_manual\tbl_trone_orderItem.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Logical\AppUserFixSync.cs" />
     <Compile Include="Logical\TroneDayLimit.cs" />
     <Compile Include="Logical\UserLoginProc.cs" />
+    <Compile Include="Model\SpTroneCountInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Logical\BaseSPCallback.cs">
       <SubType>Code</SubType>
