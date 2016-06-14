@@ -1,8 +1,6 @@
 package com.system.server.analy;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -33,6 +31,8 @@ public class AnalyMrDailyServer
 		mrSummerDao.analyMrToSummer(tableName, startDate, endDate);
 		
 		mrSummerDao.analyIvrMrToSummer(tableName, startDate, endDate);
+		
+		mrSummerDao.analyThirdPayToSummer(tableName,startDate,endDate);
 		
 		log.info("Analy Mr To Summer Finish");
 		
@@ -83,6 +83,8 @@ public class AnalyMrDailyServer
 		cpMrDao.analyCpMrToCpMrSummer(StringUtil.getMonthFormat(startDate), startDate, endDate);	
 		
 		cpMrDao.analyIvrCpMrToCpMrSummer(StringUtil.getMonthFormat(startDate), startDate, endDate);
+		
+		cpMrDao.analyThirdPayToCpMrSummer(StringUtil.getMonthFormat(startDate), startDate, endDate);
 		
 		log.info("finish analy cp mr to summer");
 		
