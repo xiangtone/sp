@@ -73,9 +73,6 @@
 		{
 			document.getElementById("menuid_" + rightArr[i]).checked = true;	
 		}
-		
-		console.log("<%=name%>");
-		
 	}
 	
 	function goToMain()

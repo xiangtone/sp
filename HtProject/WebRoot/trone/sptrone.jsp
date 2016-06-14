@@ -35,7 +35,7 @@
 	
 	String pageData = PageUtil.initPageQuery("sptrone.jsp", params, rowCount, pageIndex);
 	
-	String[] troneTypes = {"实时","隔天","IVR"};
+	String[] troneTypes = {"实时","隔天","IVR","第三方支付"};
 	
 	//0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结,6见帐单结
 	String[] jsTypes = {"对公周结","对公双周结","对公月结","对私周结","对私双周结","对私月结","见帐单结"};

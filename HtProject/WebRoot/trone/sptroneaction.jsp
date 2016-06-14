@@ -28,7 +28,6 @@
 	int status = StringUtil.getInteger(request.getParameter("status"), 0);
 	int jsType = StringUtil.getInteger(request.getParameter("js_type"), 0);
 	
-	System.out.println("jsType:" + jsType);
 	
 	float dayLimit = StringUtil.getFloat(request.getParameter("day_limit"), 0.0F);
 	float monthLimit = StringUtil.getFloat(request.getParameter("month_limit"), 0.0F);
