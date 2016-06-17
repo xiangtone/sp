@@ -80,7 +80,7 @@
 			</dl>
 			<br />	<br />		
 			<dl>
-				<form action="action.jsp?query=<%= query %>" method="get"  id="addform">
+				<form action="action.jsp?query=<%= query %>" method="post"  id="addform">
 					<input type="hidden" value="<%= model.getId() %>" name="id" />
 										
 					<dd class="dd00_me"></dd>

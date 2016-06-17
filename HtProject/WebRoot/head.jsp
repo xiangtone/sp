@@ -58,12 +58,12 @@
 </head>
 
 <body>
-	<div class="header" style="background-color: #F7F7F7">
+	<div class="header" style="background-color: #F7F7F7;height: 50px;">
 		<div class="logo" style="float: left">
-			<img src="head_data/<%= logoImg %>" style="margin-left: -20px;margin-top: 8px" alt="">
+			<img src="head_data/<%= logoImg %>" style="margin-left: -20px; padding: 0px;" alt="">
 		</div>
 		<div
-			style="float: right;height: 100%;line-height: 70px;text-align: center;font-size: 14px;">
+			style="float: right;height: 100%;line-height: 50px;text-align: center;font-size: 14px;">
 			你好, <strong style="font-size: 16px"><%= user.getNickName() %></strong> 欢迎登陆运营管理平台&nbsp;&nbsp;|&nbsp;&nbsp;
 			<script type="text/javascript">
 				document.write(getDayDisplay())

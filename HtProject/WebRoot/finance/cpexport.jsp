@@ -18,10 +18,11 @@
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int dateType = StringUtil.getInteger(request.getParameter("datetype"), 1);
 	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
+	boolean isExport = StringUtil.getInteger(request.getParameter("export"), -1) == 1 ;
 	List<CpModel> cpList = new CpServer().loadCp();
 	String display = "";
 	Map<String, List<SpFinanceShowModel>> map = null;
-	if (cpId > 0 && isNotFirstLoad) 
+	if (isExport) 
 	{
 		SettleAccountServer accountServer = new SettleAccountServer();
 		List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(cpId, startDate, endDate);
@@ -63,9 +64,10 @@
 			display = "alert('没有相应的数据');";
 		}
 	}
-	else if (cpId < 0 && isNotFirstLoad) 
+	else
 	{
-		map = new SettleAccountServer().loadCpSettleAccountData(startDate, endDate);
+		if(isNotFirstLoad)
+			map = new SettleAccountServer().loadCpSettleAccountData(startDate, endDate,cpId);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -77,12 +79,32 @@
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
+<script type="text/javascript" src="../sysjs/base.js"></script>
+<script type="text/javascript" src="../sysjs/pinyin.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 
+	var cpList = new Array();
+	<%
+	for(CpModel cpModel : cpList)
+	{
+		%>
+		cpList.push(new joSelOption(<%= cpModel.getId() %>,1,'<%= cpModel.getShortName() %>'));
+		<%
+	}
+	%>
+	
+	function onCpDataSelect(joData)
+	{
+		$("#sel_cp").val(joData.id);
+	}
+
 	$(function()
-		{
-			$("#sel_date_type").val("<%= dateType %>");
-		});
+	{
+		$("#sel_date_type").val("<%= dateType %>");
+		$("#sel_cp").val("<%= cpId %>");
+	});
 	
 	function subForm() 
 	{
@@ -113,9 +135,23 @@
 						<input name="enddate" type="text" value="<%=endDate%>"
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
 					</dd>
+					<dd class="dd01_me">CP</dd>
+					<dd class="dd04_me">
+						<select name="cp_id" id="sel_cp"  style="width: 120px" onclick="namePicker(this,cpList,onCpDataSelect)">
+							<option value="-1">全部</option>
+							<%
+								for (CpModel cp : cpList)
+								{
+							%>
+							<option value="<%=cp.getId()%>"><%=cp.getShortName()%></option>
+							<%
+								}
+							%>
+						</select>
+					</dd>
 					<dd class="dd01_me">结算类型</dd>
 					<dd class="dd04_me">
-						<select name="datetype" id="sel_date_type" title="选择日期结算类型" style="width:100px">
+						<select name="datetype" id="sel_date_type" title="选择结算类型" style="width:100px">
 							<option value="-1">请选择</option>
 							<option value="1">周结</option>
 							<option value="2">双周结</option>
@@ -174,7 +210,7 @@
 												+ startDate + "&enddate=" + endDate
 												+ "&cp_id=" + sfsModel.getSpId()
 												+ "&load=1&datetype=" + dateType
-												+ "'>导出</a></td></tr>");
+												+ "&export=1'>导出</a></td></tr>");
 									}
 									else
 									{

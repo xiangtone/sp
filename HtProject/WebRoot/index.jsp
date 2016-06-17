@@ -18,7 +18,7 @@
 <head>
 <title>运营管理平台</title>
 </head>
-<frameset rows="104,*" cols="*" frameborder="no" border="0"
+<frameset rows="80,*" cols="*" frameborder="no" border="0"
 	framespacing="0">
 	<frame src="head.jsp" name="head" scrolling="No" noresize="noresize">
 	<frameset cols="170,*" rows="*" id="attachucp" frameborder="no"
