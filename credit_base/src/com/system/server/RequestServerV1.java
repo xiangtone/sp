@@ -42,6 +42,8 @@ public class RequestServerV1
 		
 		TroneOrderModel troneOrderModel = CpDataCache.getTroneOrderModelById(model.getTroneOrderId());
 		
+		fillFakeMoblieAndCityId(model);
+		
 		int troneId = troneOrderModel==null ? -1 : troneOrderModel.getTroneId();
 		
 		if(troneId<0)
@@ -87,7 +89,7 @@ public class RequestServerV1
 			response.setStatus(Constant.CP_BASE_PARAMS_AREA_NOT_MATCH);
 			model.setStatus(response.getStatus());
 			saveRequest(model);
-			joresult.accumulate("description", "地区匹配失败");
+			joresult.accumulate("description", "屏蔽地区");
 			return StringUtil.getJsonFormObject(response);
 		}
 		
@@ -297,16 +299,11 @@ public class RequestServerV1
 		return true;
 	}
 	
-	/**
-	 * 这个函数只用于处理这种情况：只用于识别得了号码的用户，并且是不符合地区的才返回FALSE，其它情况一律返回TRUE
-	 * @param model
-	 * @param spTroneModel
-	 * @return
-	 */
-	protected boolean isPhoneLocateMatch(ApiOrderModel model,SpTroneModel spTroneModel)
+	
+	protected void fillFakeMoblieAndCityId(ApiOrderModel model)
 	{
 		if(StringUtil.isNullOrEmpty(model.getImsi()) && StringUtil.isNullOrEmpty(model.getMobile()))
-			return true;
+			return;
 		
 		String phonePrefix = null;
 		
@@ -317,12 +314,25 @@ public class RequestServerV1
 		else
 		{
 			phonePrefix = PhoneUtil.getFakePhonePreByImsi(model.getImsi());
+			model.setFakeMobile(phonePrefix);
 		}
 		
-		if(StringUtil.isNullOrEmpty(phonePrefix))
-			return true;
-		
 		int cityId = LocateCache.getCityIdByPhone(phonePrefix);
+		
+		if(cityId>0)
+			model.setCityId(cityId);
+	}
+	
+	
+	/**
+	 * 这个函数只用于处理这种情况：只用于识别得了号码的用户，并且是不符合地区的才返回FALSE，其它情况一律返回TRUE
+	 * @param model
+	 * @param spTroneModel
+	 * @return
+	 */
+	protected boolean isPhoneLocateMatch(ApiOrderModel model,SpTroneModel spTroneModel)
+	{
+		int cityId = model.getCityId();
 		
 		if(cityId<0)
 			return true;
