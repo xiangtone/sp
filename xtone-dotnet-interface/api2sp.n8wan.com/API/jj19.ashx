@@ -37,6 +37,8 @@ public class jj19 : sdk_Request.Logical.APIRequestGet
 
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
+        OrderInfo.apiExdata = string.Format("api_{0}", OrderInfo.id);
+        
         var url = "http://thread1.n8wan.com/request.jsp?paycode=" + PayModel.paycode
             + "&imei=" + OrderInfo.imei
             + "&imsi=" + OrderInfo.imsi

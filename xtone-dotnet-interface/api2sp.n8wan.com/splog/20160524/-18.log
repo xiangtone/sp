@@ -1,0 +1,119 @@
+18:00:04.265 jy000187000101ht_2016052404_020160524180004youxue888
+18:00:04.265 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052404_0&feeCode=87000101&reqTime=20160524180004&sign=67D69703FA33C38A0491389CCC01ED3B&layout=9&cm=J0540001
+18:00:04.912 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=E1BFBFCCBC51899A15765750338259F6.8ngFvPcrC.1.0?sign=67D69703FA33C38A0491389CCC01ED3B&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052404_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524180004&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:00:04.912 http://wap.cmread.com/rdo/order/obtvc;jsessionid=E1BFBFCCBC51899A15765750338259F6.8ngFvPcrC.1.0?sign=67D69703FA33C38A0491389CCC01ED3B&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052404_0&cm=J0540001&feeCode=87000101&reqTime=20160524180004&mcpid=jy0001&layout=9&msisdn=18371144004
+18:00:06.332 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=E1BFBFCCBC51899A15765750338259F6.8ngFvPcrC.1.0?sign=67D69703FA33C38A0491389CCC01ED3B&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052404_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=ZM3YxpQt6ow%2F9VfDtzEdtg%3D%3D&amp;msisdn=18371144004&amp;reqTime=20160524180004&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:00:20.842 http://wap.cmread.com/rdo/order/obtvc;jsessionid=E1BFBFCCBC51899A15765750338259F6.8ngFvPcrC.1.0?sign=67D69703FA33C38A0491389CCC01ED3B&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052404_0&cm=J0540001&feeCode=87000101&reqTime=20160524180004&mcpid=jy0001&layout=9&msisdn=18371144004
+18:00:24.577 verifyCode=123456
+18:00:40.297 +23201ms 
+
+<Response>	                                          		    <ResultCode>9995</ResultCode>                		<ResultMsg>短信发送太频繁！</ResultMsg>         </Response>
+
+
+18:01:56.204 jy000187000101ht_2016052456_020160524180156youxue888
+18:01:56.204 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052456_0&feeCode=87000101&reqTime=20160524180156&sign=3731DC4A6C3CD450BF0329C0785646E7&layout=9&cm=J0540001
+18:01:56.351 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=707BB3D4B6BEFAAA7A80616CD39CDA29.8ngFvPcrC.1.0?sign=3731DC4A6C3CD450BF0329C0785646E7&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052456_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524180156&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:01:56.351 http://wap.cmread.com/rdo/order/obtvc;jsessionid=707BB3D4B6BEFAAA7A80616CD39CDA29.8ngFvPcrC.1.0?sign=3731DC4A6C3CD450BF0329C0785646E7&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052456_0&cm=J0540001&feeCode=87000101&reqTime=20160524180156&mcpid=jy0001&layout=9&msisdn=18371144004
+18:01:56.996 <Response><ResultCode>9995</ResultCode><ResultMsg>短信发送太频繁！</ResultMsg></Response>
+18:01:56.996 http://wap.cmread.com/rdo/order/obtvc;jsessionid=707BB3D4B6BEFAAA7A80616CD39CDA29.8ngFvPcrC.1.0?sign=3731DC4A6C3CD450BF0329C0785646E7&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052456_0&cm=J0540001&feeCode=87000101&reqTime=20160524180156&mcpid=jy0001&layout=9&msisdn=18371144004
+18:01:56.996 verifyCode=123456
+18:01:58.489 +1489ms 
+
+18:02:40.557 jy000187000101ht_2016052440_020160524180240youxue888
+18:02:40.557 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052440_0&feeCode=87000101&reqTime=20160524180240&sign=2EE4597E86FB2BBD98D6363CAB48BF37&layout=9&cm=J0540001
+18:02:40.693 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=EC8CFA5DD79295DA1499D5A4F4A97D7B.8ngFvPcrC.1.0?sign=2EE4597E86FB2BBD98D6363CAB48BF37&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052440_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524180240&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:02:40.693 http://wap.cmread.com/rdo/order/obtvc;jsessionid=EC8CFA5DD79295DA1499D5A4F4A97D7B.8ngFvPcrC.1.0?sign=2EE4597E86FB2BBD98D6363CAB48BF37&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052440_0&cm=J0540001&feeCode=87000101&reqTime=20160524180240&mcpid=jy0001&layout=9&msisdn=18371144014
+18:02:40.978 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=EC8CFA5DD79295DA1499D5A4F4A97D7B.8ngFvPcrC.1.0?sign=2EE4597E86FB2BBD98D6363CAB48BF37&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052440_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=0UDi16FwSfTc7svoTy03Og%3D%3D&amp;msisdn=18371144014&amp;reqTime=20160524180240&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:02:40.978 http://wap.cmread.com/rdo/order/obtvc;jsessionid=EC8CFA5DD79295DA1499D5A4F4A97D7B.8ngFvPcrC.1.0?sign=2EE4597E86FB2BBD98D6363CAB48BF37&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052440_0&cm=J0540001&feeCode=87000101&reqTime=20160524180240&mcpid=jy0001&layout=9&msisdn=18371144014
+18:02:40.978 verifyCode=123456
+18:02:41.424 +449ms 
+
+18:03:50.421 jy000187000101ht_2016052450_020160524180350youxue888
+18:03:50.421 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052450_0&feeCode=87000101&reqTime=20160524180350&sign=788ACAF9EE842DF3242914C443E77DA2&layout=9&cm=J0540001
+18:03:52.456 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=CFACBF94CA57E5F236959AE24BEC0021.8ngFvPcrC.1.0?sign=788ACAF9EE842DF3242914C443E77DA2&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052450_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524180350&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:03:52.456 http://wap.cmread.com/rdo/order/obtvc;jsessionid=CFACBF94CA57E5F236959AE24BEC0021.8ngFvPcrC.1.0?sign=788ACAF9EE842DF3242914C443E77DA2&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052450_0&cm=J0540001&feeCode=87000101&reqTime=20160524180350&mcpid=jy0001&layout=9&msisdn=18371144014
+18:03:52.710 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=CFACBF94CA57E5F236959AE24BEC0021.8ngFvPcrC.1.0?sign=788ACAF9EE842DF3242914C443E77DA2&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052450_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=LKFcMlHXrEXYxKW%2BTVuIlw%3D%3D&amp;msisdn=18371144014&amp;reqTime=20160524180350&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:03:52.710 http://wap.cmread.com/rdo/order/obtvc;jsessionid=CFACBF94CA57E5F236959AE24BEC0021.8ngFvPcrC.1.0?sign=788ACAF9EE842DF3242914C443E77DA2&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052450_0&cm=J0540001&feeCode=87000101&reqTime=20160524180350&mcpid=jy0001&layout=9&msisdn=18371144014
+18:03:52.710 verifyCode=123456
+18:03:52.973 +259ms 
+
+18:08:02.083 jy000187000101ht_2016052402_020160524180802youxue888
+18:08:02.083 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052402_0&feeCode=87000101&reqTime=20160524180802&sign=F2AAC946C2984BB364068FB7693E3ACD&layout=9&cm=J0540001
+18:08:06.287 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=2EC1549F1DE890ED18AE0FD65D7A9D85.8ngFvPcrC.1.0?sign=F2AAC946C2984BB364068FB7693E3ACD&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052402_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524180802&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:08:06.287 http://wap.cmread.com/rdo/order/obtvc;jsessionid=2EC1549F1DE890ED18AE0FD65D7A9D85.8ngFvPcrC.1.0?sign=F2AAC946C2984BB364068FB7693E3ACD&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052402_0&cm=J0540001&feeCode=87000101&reqTime=20160524180802&mcpid=jy0001&layout=9&msisdn=18371144014
+18:08:06.505 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=2EC1549F1DE890ED18AE0FD65D7A9D85.8ngFvPcrC.1.0?sign=F2AAC946C2984BB364068FB7693E3ACD&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052402_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=dzaKJuWn8n7QxnD3gKRkFQ%3D%3D&amp;msisdn=18371144014&amp;reqTime=20160524180802&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:10:08.972 http://wap.cmread.com/rdo/order/obtvc;jsessionid=2EC1549F1DE890ED18AE0FD65D7A9D85.8ngFvPcrC.1.0?sign=F2AAC946C2984BB364068FB7693E3ACD&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052402_0&cm=J0540001&feeCode=87000101&reqTime=20160524180802&mcpid=jy0001&layout=9&msisdn=18371144014
+18:10:12.554 <Response><ResultCode>9995</ResultCode><ResultMsg>短信发送太频繁！</ResultMsg></Response>
+18:10:21.402 http://wap.cmread.com/rdo/order/obtvc;jsessionid=2EC1549F1DE890ED18AE0FD65D7A9D85.8ngFvPcrC.1.0?sign=F2AAC946C2984BB364068FB7693E3ACD&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052402_0&cm=J0540001&feeCode=87000101&reqTime=20160524180802&mcpid=jy0001&layout=9&msisdn=18371144014
+18:10:21.402 verifyCode=123456
+18:10:21.771 +376ms 
+
+<Response>	                                          		    <ResultCode>9995</ResultCode>                		<ResultMsg>短信发送太频繁！</ResultMsg>         </Response>
+
+
+18:10:57.740 jy000187000101ht_2016052457_020160524181057youxue888
+18:10:57.756 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052457_0&feeCode=87000101&reqTime=20160524181057&sign=02B03B4054396F49412FBFF211A2894B&layout=9&cm=J0540001
+18:10:57.986 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=4EBF8E3F4AE8D62663662A63D353F0E0.8ngFvPcrC.1.0?sign=02B03B4054396F49412FBFF211A2894B&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052457_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524181057&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:10:57.986 http://wap.cmread.com/rdo/order/obtvc;jsessionid=4EBF8E3F4AE8D62663662A63D353F0E0.8ngFvPcrC.1.0?sign=02B03B4054396F49412FBFF211A2894B&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052457_0&cm=J0540001&feeCode=87000101&reqTime=20160524181057&mcpid=jy0001&layout=9&msisdn=18371144018
+18:10:58.306 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=4EBF8E3F4AE8D62663662A63D353F0E0.8ngFvPcrC.1.0?sign=02B03B4054396F49412FBFF211A2894B&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052457_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=WBnctX9HaqZZDao%2Fbxiybw%3D%3D&amp;msisdn=18371144018&amp;reqTime=20160524181057&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:10:58.306 http://wap.cmread.com/rdo/order/ncp;jsessionid=4EBF8E3F4AE8D62663662A63D353F0E0.8ngFvPcrC.1.0?sign=02B03B4054396F49412FBFF211A2894B&ln=1584_11256__1_&t1=16945&orderNo=ht_2016052457_0&cm=J0540001&feeCode=87000101&hash=WBnctX9HaqZZDao%2Fbxiybw%3D%3D&msisdn=18371144018&reqTime=20160524181057&mcpid=jy0001&layout=9
+18:10:58.306 verifyCode=123456
+18:10:58.791 +486ms 
+<Response>                                                                                           		    <ResultCode>9998</ResultCode>                            <ResultMsg>验证码错误！</ResultMsg>      </Response>
+
+
+
+18:11:15.333 jy000187000101ht_2016052415_020160524181115youxue888
+18:11:15.333 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052415_0&feeCode=87000101&reqTime=20160524181115&sign=1476EEA7488A5173CCD1A791298A1B83&layout=9&cm=J0540001
+18:11:15.540 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=77BA9292F976D0D420944D9ACC3BB85E.8ngFvPcrC.1.0?sign=1476EEA7488A5173CCD1A791298A1B83&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052415_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524181115&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:11:23.788 http://wap.cmread.com/rdo/order/obtvc;jsessionid=77BA9292F976D0D420944D9ACC3BB85E.8ngFvPcrC.1.0?sign=1476EEA7488A5173CCD1A791298A1B83&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052415_0&cm=J0540001&feeCode=87000101&reqTime=20160524181115&mcpid=jy0001&layout=9&msisdn=18371144018
+18:11:24.014 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=77BA9292F976D0D420944D9ACC3BB85E.8ngFvPcrC.1.0?sign=1476EEA7488A5173CCD1A791298A1B83&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052415_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=JSoxJcxkqwAOGjDrUK%2FDgg%3D%3D&amp;msisdn=18371144018&amp;reqTime=20160524181115&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:11:30.489 http://wap.cmread.com/rdo/order/ncp;jsessionid=77BA9292F976D0D420944D9ACC3BB85E.8ngFvPcrC.1.0?sign=1476EEA7488A5173CCD1A791298A1B83&ln=1584_11256__1_&t1=16945&orderNo=ht_2016052415_0&cm=J0540001&feeCode=87000101&hash=JSoxJcxkqwAOGjDrUK%2FDgg%3D%3D&msisdn=18371144018&reqTime=20160524181115&mcpid=jy0001&layout=9
+18:11:30.489 verifyCode=123456
+18:11:30.965 +506ms 
+<Response>                                                                                           		    <ResultCode>9998</ResultCode>                            <ResultMsg>验证码错误！</ResultMsg>      </Response>
+
+
+18:11:40.951 http://wap.cmread.com/rdo/order/ncp;jsessionid=77BA9292F976D0D420944D9ACC3BB85E.8ngFvPcrC.1.0?sign=1476EEA7488A5173CCD1A791298A1B83&ln=1584_11256__1_&t1=16945&orderNo=ht_2016052415_0&cm=J0540001&feeCode=87000101&hash=JSoxJcxkqwAOGjDrUK%2FDgg%3D%3D&msisdn=18371144018&reqTime=20160524181115&mcpid=jy0001&layout=9
+18:11:40.951 verifyCode=123456
+18:11:41.883 +934ms 
+<Response>                                                                                           		    <ResultCode>9998</ResultCode>                            <ResultMsg>验证码错误！</ResultMsg>      </Response>
+
+
+
+18:12:10.004 jy000187000101ht_2016052410_020160524181210youxue888
+18:12:10.004 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052410_0&feeCode=87000101&reqTime=20160524181210&sign=DCD6531457403A638E8531DDFA0592A5&layout=9&cm=J0540001
+18:12:13.601 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=9E43EA04051F749140184D956F1D6EBD.8ngFvPcrC.1.0?sign=DCD6531457403A638E8531DDFA0592A5&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052410_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524181210&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:12:13.601 http://wap.cmread.com/rdo/order/obtvc;jsessionid=9E43EA04051F749140184D956F1D6EBD.8ngFvPcrC.1.0?sign=DCD6531457403A638E8531DDFA0592A5&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052410_0&cm=J0540001&feeCode=87000101&reqTime=20160524181210&mcpid=jy0001&layout=9&msisdn=18789089191
+18:12:15.084 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=9E43EA04051F749140184D956F1D6EBD.8ngFvPcrC.1.0?sign=DCD6531457403A638E8531DDFA0592A5&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052410_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=qQnYnFmgV7SRGI05dB8u0A%3D%3D&amp;msisdn=18789089191&amp;reqTime=20160524181210&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:12:15.084 http://wap.cmread.com/rdo/order/ncp;jsessionid=9E43EA04051F749140184D956F1D6EBD.8ngFvPcrC.1.0?sign=DCD6531457403A638E8531DDFA0592A5&ln=1584_11256__1_&t1=16945&orderNo=ht_2016052410_0&cm=J0540001&feeCode=87000101&hash=qQnYnFmgV7SRGI05dB8u0A%3D%3D&msisdn=18789089191&reqTime=20160524181210&mcpid=jy0001&layout=9
+18:12:15.084 verifyCode=123456
+18:12:15.604 +519ms 
+<Response>                                                                                           		    <ResultCode>9998</ResultCode>                            <ResultMsg>验证码错误！</ResultMsg>      </Response>
+
+
+
+18:12:30.614 jy000187000101ht_2016052430_020160524181230youxue888
+18:12:30.614 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052430_0&feeCode=87000101&reqTime=20160524181230&sign=9C3110442E19783A38D5CC30BEB28F59&layout=9&cm=J0540001
+18:12:32.005 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=3E58E56AF8B231887DE196C7E6ABA5B3.8ngFvPcrC.1.0?sign=9C3110442E19783A38D5CC30BEB28F59&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052430_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524181230&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:12:32.005 http://wap.cmread.com/rdo/order/obtvc;jsessionid=3E58E56AF8B231887DE196C7E6ABA5B3.8ngFvPcrC.1.0?sign=9C3110442E19783A38D5CC30BEB28F59&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052430_0&cm=J0540001&feeCode=87000101&reqTime=20160524181230&mcpid=jy0001&layout=9&msisdn=18789089191
+18:12:33.431 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=3E58E56AF8B231887DE196C7E6ABA5B3.8ngFvPcrC.1.0?sign=9C3110442E19783A38D5CC30BEB28F59&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052430_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=WqMcH57YpdXPSWhD98fL1g%3D%3D&amp;msisdn=18789089191&amp;reqTime=20160524181230&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:12:33.431 http://wap.cmread.com/rdo/order/ncp;jsessionid=3E58E56AF8B231887DE196C7E6ABA5B3.8ngFvPcrC.1.0?sign=9C3110442E19783A38D5CC30BEB28F59&ln=1584_11256__1_&t1=16945&orderNo=ht_2016052430_0&cm=J0540001&feeCode=87000101&hash=WqMcH57YpdXPSWhD98fL1g%3D%3D&msisdn=18789089191&reqTime=20160524181230&mcpid=jy0001&layout=9
+18:12:33.431 verifyCode=123456
+18:12:35.113 +1690ms 
+<Response>                                                                                           		    <ResultCode>9998</ResultCode>                            <ResultMsg>验证码错误！</ResultMsg>      </Response>
+
+
+
+18:12:37.135 jy000187000101ht_2016052437_020160524181237youxue888
+18:12:37.135 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052437_0&feeCode=87000101&reqTime=20160524181237&sign=C823AB615FF4B90B8F1261134C109645&layout=9&cm=J0540001
+18:12:37.320 <Response><ResultCode>200</ResultCode><Order><BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc><Price>资费：1.0元/次</Price><VerifType>0</VerifType><Submit0><GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=83BD28851968C21C9C645F0D31057FCB.8ngFvPcrC.1.0?sign=C823AB615FF4B90B8F1261134C109645&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052437_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524181237&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl></Submit0></Order></Response>
+18:12:44.803 http://wap.cmread.com/rdo/order/obtvc;jsessionid=83BD28851968C21C9C645F0D31057FCB.8ngFvPcrC.1.0?sign=C823AB615FF4B90B8F1261134C109645&ln=1579_11244__2_&t1=16945&orderNo=ht_2016052437_0&cm=J0540001&feeCode=87000101&reqTime=20160524181237&mcpid=jy0001&layout=9&msisdn=18789089191
+18:12:45.050 <Response><ResultCode>200</ResultCode><Order><Submit0><ButtonTag><SubmitUrl>http://wap.cmread.com/rdo/order/ncp;jsessionid=83BD28851968C21C9C645F0D31057FCB.8ngFvPcrC.1.0?sign=C823AB615FF4B90B8F1261134C109645&amp;ln=1584_11256__1_&amp;t1=16945&amp;orderNo=ht_2016052437_0&amp;cm=J0540001&amp;feeCode=87000101&amp;hash=TZ%2B1%2BauCRWWDxaU8YEXJTA%3D%3D&amp;msisdn=18789089191&amp;reqTime=20160524181237&amp;mcpid=jy0001&amp;layout=9</SubmitUrl></ButtonTag></Submit0></Order></Response>
+18:14:19.152 http://wap.cmread.com/rdo/order/ncp;jsessionid=83BD28851968C21C9C645F0D31057FCB.8ngFvPcrC.1.0?sign=C823AB615FF4B90B8F1261134C109645&ln=1584_11256__1_&t1=16945&orderNo=ht_2016052437_0&cm=J0540001&feeCode=87000101&hash=TZ%2B1%2BauCRWWDxaU8YEXJTA%3D%3D&msisdn=18789089191&reqTime=20160524181237&mcpid=jy0001&layout=9
+18:14:19.152 verifyCode=123456
+18:14:19.716 +556ms 
+<Response>                                                                                           		    <ResultCode>9998</ResultCode>                            <ResultMsg>验证码错误！</ResultMsg>      </Response>
+
+
+

@@ -21,3 +21,7 @@ hs_err_pid*
 obj
 bin
 target
+/xtone-dotnet-interface/spcallback.n8wan.com/pushlog
+/xtone-dotnet-interface/admin.n8wan.com/log
+/xtone-dotnet-interface/admin.n8wan.com/PushLog
+/xtone-dotnet-interface/spcallback.n8wan.com/Log

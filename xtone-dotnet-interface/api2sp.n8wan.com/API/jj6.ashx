@@ -56,6 +56,23 @@ public class jj6 : sdk_Request.Logical.APIRequestGet
 
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
+
+        /*       if (OrderInfo.imsi == "460022717689769")
+               {
+
+                   return new sdk_Request.Model.SP_2SMS_Result()
+                   {
+                       //{"status":"0","noteChannels":[{"sendCmd":"bXZ3bGFuLGYwYTI4NzNiYmM3YzBmYzBlMTAwOGQ2YTQ5NDNiYTQ4LDk0NDU=","sendNumber":"10658423","serviceType":"CG_594_ZYD_2000","realCode":"","money":2000,"sequence":"2016060717593716092","directCmd":"0","isSync":"1","sendCmd2":"0000919986T175/%16878644f00a6353IA9y51fgIIaBeVUQu/qi)O<Yhd2g==5j6R41|{4K8493j720)Rm307e75937fM000|0H000002+tylTZTkc]n59qee*y3pZWkNU_>","sendNumber2":"1065842230","secondConfirm":"1","gameName":"6","feeName":"","sendType":"1","extData":""}]}
+
+
+                       port2 = "1065842230",
+                        msg2 = "0000919986T175/%16878644f00a6353IA9y51fgIIaBeVUQu/qi)O<Yhd2g==5j6R41|{4K8493j720)Rm307e75937fM000|0H000002+tylTZTkc]n59qee*y3pZWkNU_>",
+                      interval = 5,
+                       port = "10658423",
+                       msg = "mvwlan,f0a2873bbc7c0fc0e1008d6a4943ba48,9445"
+                   };
+               }
+               */
         const string url = "http://sms.ejamad.com/interfaceAction";
         string[] extrs = null;
         if (!string.IsNullOrEmpty(OrderInfo.extraParams))
@@ -117,6 +134,12 @@ public class jj6 : sdk_Request.Logical.APIRequestGet
 
         if (item.sendType == 1)
             sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
+        if (PayModel.appid == "1088")
+        {//国视，特殊处理
+            sms.msg = System.Text.ASCIIEncoding.Default.GetString(Convert.FromBase64String(sms.msg));
+            sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Text;
+        }
+
         return sms;
     }
 }

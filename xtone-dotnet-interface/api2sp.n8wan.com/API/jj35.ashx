@@ -68,7 +68,7 @@ public class jj35 : sdk_Request.Logical.APIRequestGet
             sms = new sdk_Request.Model.SP_2SMS_Result()
             {
                 port2 = jval.Value<string>(),
-                msg2 = jval.Value<string>(),
+                msg2 = jobj["mo2"].Value<string>(),
                 interval = 5
             };
         }

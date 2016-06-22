@@ -1,0 +1,8 @@
+12:11:51.815 Request:{"apiExdata":"","apiOrderId":35,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":127055,"imei":"866568022922909","imsi":"460022717689769","ip":"113.116.78.153","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1163,"troneOrderId":2137,"userAgent":""}
+
+12:11:52.278 value:szhaot010192.168.1.90szhaot0000127055201605091211529http://baidu.com/szhaot0000127055866568022922909460022717689769ht0428,md5:0219B55F69866A03E9B3A6A805072191
+12:11:52.278 http://123.56.91.64:8888/igameunpay/req.jsp
+12:11:52.278 merid=szhaot&goodsid=010&mobileid=&clientip=192.168.1.90&orderid=szhaot0000127055&orderdate=20160509121152&platType=9&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000127055&IMEI=866568022922909&IMSI=460022717689769&sign=0219B55F69866A03E9B3A6A805072191
+12:11:52.363 +79ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000127055","paytype":"Error","province":"","retCode":"4","retMsg":"orderid is exists!"}
+
+
