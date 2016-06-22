@@ -406,9 +406,17 @@ namespace n8wan.Public.Logical
                 fi.Directory.Create();
             lock (logFileLocker)
             {
-                using (var stm = new StreamWriter(LogFile, true))
+                StreamWriter stm = null;
+                try
                 {
+                    stm = new StreamWriter(LogFile, true);
                     stm.WriteLine("{0:HH:mm:ss} {1} {2} {3} {4}", DateTime.Now, this._linkID, this._url, p, msg);
+                }
+                catch { }
+                finally
+                {
+                    if (stm != null)
+                        stm.Dispose();
                 }
             }
         }

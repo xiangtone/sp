@@ -399,8 +399,12 @@ namespace n8wan.Public.Logical
             var num = m.mobile;
             m.city_id = 416;
             m.province_id = 32;
-            if (num == null)
+
+            if (string.IsNullOrEmpty(num) && string.IsNullOrEmpty(m.imsi))
                 return;
+            
+            if (num == null)
+                num = string.Empty;
 
             int spNum = 0;
             if (num.Length == 11 && num.StartsWith("1"))//传统手机
