@@ -99,10 +99,18 @@ namespace n8wan.Public.Logical
         {
             var l = tbl_api_orderItem.GetQueries(dBase);
             //l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.trone_id, TroneId);
+            string ptr;
             switch (_apiMatchAPI.match_field_E)
             {//订单匹配条件生成
-                case tbl_sp_trone_apiItem.EMathcField.Cpprams: l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.api_exdata, this.PushObject.GetValue(EPushField.cpParam)); break;
-                case tbl_sp_trone_apiItem.EMathcField.LinkId: l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.sp_linkid, this.PushObject.GetValue(EPushField.LinkID)); break;
+                case tbl_sp_trone_apiItem.EMathcField.Cpprams:
+                    ptr = this.PushObject.GetValue(EPushField.cpParam);
+                    if (string.IsNullOrEmpty(ptr))
+                        return null;//同步配置错，SP并没有回传透传
+                    l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.api_exdata, this.PushObject.GetValue(EPushField.cpParam));
+                    break;
+                case tbl_sp_trone_apiItem.EMathcField.LinkId:
+                    l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.sp_linkid, this.PushObject.GetValue(EPushField.LinkID));
+                    break;
                 case tbl_sp_trone_apiItem.EMathcField.Msg:
                     l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.msg, this.PushObject.GetValue(EPushField.Msg));
                     l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.port, this.PushObject.GetValue(EPushField.port));
