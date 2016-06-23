@@ -15,15 +15,28 @@ public class jj66 : sdk_Request.Logical.APIRequestGet
         + "&price=" + PayModel.appid
         + "&billno=" + OrderInfo.id
         + "&cip=" + OrderInfo.clientIp;
-        var html = GetHTML(url);
+        var html = GetHTML(url,15000,null);
         if (string.IsNullOrEmpty(html))
         {
             SetError(sdk_Request.Logical.API_ERROR.GATEWAY_TIMEOUT);
+            return null;
+        } if (html.IndexOf("province") > 0)
+        {
+
+            var error = "error:省份错误";
+            SetError(sdk_Request.Logical.API_ERROR.AREA_CLOSE, error.ToString());
+            return null;
+        }
+        if (html.ToString().Length < 100)
+        {
+            var error = "error:请求失败";
+            SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL,error.ToString());
             return null;
         }
         var jobj = JArray.Parse(html);
         OrderInfo.apiExdata = OrderInfo.id.ToString();
         OrderInfo.spLinkId = OrderInfo.id.ToString();
+
         var sms = new sdk_Request.Model.SP_SMS_Result();
         sms.port = jobj[0]["address"].Value<string>();
         sms.msg = jobj[0]["SMS"].Value<string>();

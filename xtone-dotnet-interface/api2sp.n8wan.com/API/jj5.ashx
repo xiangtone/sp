@@ -3,9 +3,6 @@
 using System;
 using System.Web;
 
-/// <summary>
-/// 
-/// </summary>
 public class jj5 : sdk_Request.Logical.APIRequestGet
 {
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()

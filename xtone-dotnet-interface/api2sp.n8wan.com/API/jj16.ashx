@@ -67,7 +67,7 @@ public class jj15 : sdk_Request.Logical.APIRequestGet
         string url = "http://139.196.53.146:8888/keku/video/1001/mg?content=" + PayModel.paycode
                     + "&imei=" + OrderInfo.imei
                     + "&imsi=" + OrderInfo.imsi
-                    + "&iccid=" + (String.IsNullOrEmpty(OrderInfo.iccid) || OrderInfo.iccid.Length != 20 ? "null" : OrderInfo.iccid)
+                    + "&iccid=" + (String.IsNullOrEmpty(OrderInfo.iccid) ? "null" : OrderInfo.iccid)
                     + "&ua=" + HttpUtility.UrlEncode(userAgent)
                     + "&location=" + py;
 
@@ -115,5 +115,4 @@ public class jj15 : sdk_Request.Logical.APIRequestGet
 
         return uas[i % uas.Length];
     }
-    
 }

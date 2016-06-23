@@ -5,7 +5,7 @@ using System.Web;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 /// <summary>
-/// 苏州微派 - 短信形式尚未支持
+/// 苏州微派
 /// </summary>
 public class jj10 : sdk_Request.Logical.APIRequestGet
 {
@@ -37,7 +37,7 @@ public class jj10 : sdk_Request.Logical.APIRequestGet
 
         var jarr = (JArray)jobj["smsList"];
         if (jarr != null && jarr.Count != 0)
-        {//短信形式支持代码
+        {
             SetError(sdk_Request.Logical.API_ERROR.INNER_CONFIG_ERROR);
             return null;
 

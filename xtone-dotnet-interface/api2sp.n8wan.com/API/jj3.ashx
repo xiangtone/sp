@@ -70,11 +70,7 @@ public class jj3 : sdk_Request.Logical.APIRequestGet
 
 
         var html = GetHTML(url);
-        if (string.IsNullOrEmpty(html))
-        {
-            SetError(sdk_Request.Logical.API_ERROR.GATEWAY_TIMEOUT);
-            return null;
-        }
+
         var jobj = JObject.Parse(html);
         var jval = jobj["result"];
         var code = jval == null ? -1 : jval.Value<int>();

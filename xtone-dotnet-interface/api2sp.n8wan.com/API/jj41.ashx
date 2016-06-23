@@ -31,6 +31,6 @@ public class jj41 : sdk_Request.Logical.APIRequestGet
         sms.msg = html;
         sms.port = "10658424";
         return sms;
-    }
+   }
 
 }

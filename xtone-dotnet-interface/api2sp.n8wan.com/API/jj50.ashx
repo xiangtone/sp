@@ -3,9 +3,7 @@
 using System;
 using System.Web;
 using System.Runtime.Serialization;
-/// <summary>
-/// 数通世纪 - 中投
-/// </summary>
+
 public class jj50 : sdk_Request.Logical.APIRequestGet
 {
     [DataContract]

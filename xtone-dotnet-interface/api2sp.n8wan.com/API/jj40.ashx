@@ -19,7 +19,7 @@ public class jj40 : sdk_Request.Logical.APIRequestGet
                 + "&imsi=" + OrderInfo.imsi
                 + "&imei=" + OrderInfo.imei;
 
-        var html = GetHTML(url, 15000, null);
+        var html = GetHTML(url,15000,null);
         if (string.IsNullOrEmpty(html))
         {
             SetError(sdk_Request.Logical.API_ERROR.GATEWAY_TIMEOUT);
@@ -75,28 +75,4 @@ public class jj40 : sdk_Request.Logical.APIRequestGet
         }
         return new sdk_Request.Model.SP_RESULT();
     }
-
-
-    void GetHtml(string url, Action<string> func)
-    {
-        var web = System.Net.WebRequest.Create(url);
-        var html = string.Empty;
-        bool isTimeOut = false;
-        web.BeginGetResponse(e =>
-        {
-            var rsp = web.EndGetResponse(e);
-            using (var stm = rsp.GetResponseStream())
-            {
-                var rd = new System.IO.StreamReader(stm);
-                html = rd.ReadToEnd();
-            }
-        }, null);
-
-        
-
-    }
-
-
-
-
 }

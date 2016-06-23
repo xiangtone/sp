@@ -3,9 +3,6 @@
 using System;
 using System.Web;
 
-/// <summary>
-/// 萌猪消消乐（面包版）
-/// </summary>
 public class jj65 : sdk_Request.Logical.APIRequestGet
 {
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()

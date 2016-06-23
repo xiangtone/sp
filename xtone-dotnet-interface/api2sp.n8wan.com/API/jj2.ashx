@@ -3,9 +3,7 @@
 using System;
 using System.Web;
 using Newtonsoft.Json.Linq;
-/// <summary>
-/// 全名互动MM
-/// </summary>
+
 public class jj2 : sdk_Request.Logical.APIRequestGet
 {
 

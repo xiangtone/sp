@@ -20,7 +20,7 @@ public class jj1 : sdk_Request.Logical.APIRequestGet
         [DataMember]
         public string resultMsg;
     }
-    
+
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
 
