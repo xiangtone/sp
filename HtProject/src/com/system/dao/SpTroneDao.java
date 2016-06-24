@@ -116,12 +116,32 @@ public class SpTroneDao
 		sql += " left join daily_config.tbl_operator h on g.operator_id = h.id";
 		sql += " where 1=1 ";
 		
-		if(!StringUtil.isNullOrEmpty(keyWord))
+		
+		String[] troneTypes = {"实时","隔天","IVR","第三方支付"};
+		
+		int queryTroneType = -1;
+		
+		for(int i=0; i<troneTypes.length; i++)
 		{
-			sql += " and (a.name like '%" + keyWord + "%' or e.nick_name like '%" + keyWord + "%' or b.short_name like '%" 
-					+ keyWord + "%' or b.full_name like '%" + keyWord + "%' or h.name_cn like '%" 
-					+ keyWord + "%' or h.name_en like '%" + keyWord + "%' or d.name like '%" + keyWord + "%' or e.name like '%" + keyWord + "%'"
-							+ " or CONCAT(h.`name_cn`,'-',g.`name`,'-',f.`name`) like '%" + keyWord + "%' )";
+			if(troneTypes[i].equalsIgnoreCase(keyWord.trim()))
+			{
+				queryTroneType = i;
+			}
+		}
+		
+		if(queryTroneType>=0)
+		{
+			 sql += " and a.trone_type = " + queryTroneType;
+		}
+		else
+		{
+			if(!StringUtil.isNullOrEmpty(keyWord))
+			{
+				sql += " and (a.name like '%" + keyWord + "%' or e.nick_name like '%" + keyWord + "%' or b.short_name like '%" 
+						+ keyWord + "%' or b.full_name like '%" + keyWord + "%' or h.name_cn like '%" 
+						+ keyWord + "%' or h.name_en like '%" + keyWord + "%' or d.name like '%" + keyWord + "%' or e.name like '%" + keyWord + "%'"
+								+ " or CONCAT(h.`name_cn`,'-',g.`name`,'-',f.`name`) like '%" + keyWord + "%' )";
+			}
 		}
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;

@@ -43,6 +43,7 @@
 		$("#input_rate").val("<%= model.getRate() %>");
 		$("#input_day_limit").val("<%= model.getDayLimit() %>");
 		$("#input_month_limit").val("<%= model.getMonthLimit() %>");
+		$("#sel_js_type").val("<%= model.getJsType() %>");
 		initData();
 	}
 	
@@ -568,6 +569,25 @@
 					<dd class="dd03_me">
 						<input type="text" name="rate" title="结算率" id="input_rate"
 							style="width: 200px">
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">结算方式</dd>
+					<dd class="dd04_me">
+						<select name="js_type" id="sel_js_type" title="结算类型" style="width: 200px" >
+							<option value="-1">请选择结算类型</option>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公月结</option>
+							<option value="7">对公N+1结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
+						</select>
 					</dd>
 					
 					<br />

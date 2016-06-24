@@ -71,6 +71,7 @@ public class CpSpTroneRateDao
 					model.setDayLimit(rs.getFloat("day_limit"));
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setProsData(StringUtil.getString(rs.getString("province_hold_rate"), ""));
+					model.setJsType(rs.getInt("js_type"));
 					list.add(model);
 				}
 				
@@ -109,6 +110,7 @@ public class CpSpTroneRateDao
 					model.setDayLimit(rs.getFloat("day_limit"));
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setProsData(StringUtil.getString(rs.getString("province_hold_rate"), ""));
+					model.setJsType(rs.getInt("js_type"));
 					
 					return model;
 				}
@@ -131,27 +133,29 @@ public class CpSpTroneRateDao
 	
 	public void updateCpSpTroneRate(CpSpTroneRateModel model)
 	{
-		String sql = "udpate daily_config.tbl_cp_trone_rate set cp_id = ?,sp_trone_id = ?,rate = ? where id = ?";
+		String sql = "udpate daily_config.tbl_cp_trone_rate set cp_id = ?,sp_trone_id = ?,rate = ?, js_type = ? where id = ?";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getCpId());
 		map.put(2, model.getSpTroneId());
 		map.put(3, model.getRate());
-		map.put(4, model.getId());
+		map.put(4, model.getJsType());
+		map.put(5, model.getId());
 		
 		new JdbcControl().execute(sql,map);
 	}
 	
 	public void updateCpSpTroneLimit(CpSpTroneRateModel model)
 	{
-		String sql = "update daily_config.tbl_cp_trone_rate set day_limit = ? , month_limit = ? , rate = ?, province_hold_rate = ? where id = ?";
+		String sql = "update daily_config.tbl_cp_trone_rate set day_limit = ? , month_limit = ? , rate = ?, province_hold_rate = ?, js_type = ? where id = ?";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getDayLimit());
 		map.put(2, model.getMonthLimit());
 		map.put(3, model.getRate());
 		map.put(4, model.getProsData());
-		map.put(5, model.getId());
+		map.put(5, model.getJsType());
+		map.put(6, model.getId());
 		
 		new JdbcControl().execute(sql,map);
 	}

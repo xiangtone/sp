@@ -13,6 +13,8 @@ public class CpSpTroneRateModel
 	private float dayLimit;
 	private float monthLimit;
 	private String prosData;
+	//结算类型
+	private int jsType;
 	
 	public int getId()
 	{
@@ -101,6 +103,14 @@ public class CpSpTroneRateModel
 	public void setProsData(String prosData)
 	{
 		this.prosData = prosData;
+	}
+	public int getJsType()
+	{
+		return jsType;
+	}
+	public void setJsType(int jsType)
+	{
+		this.jsType = jsType;
 	}
 	
 	
