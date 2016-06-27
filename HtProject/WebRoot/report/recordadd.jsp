@@ -99,10 +99,13 @@
 	{
 		var spTroneId =  $("#sel_sp_trone").val();
 		getAjaxValue("../ajaction.jsp?type=3&sp_trone_id=" + spTroneId,onSpTroneChange);
+		//sss
 	}
 	
 	function onSpTroneChange(data)
 	{
+		//EVAL DATA 之前先把 troneOrderArray 清空
+		troneOrderArray.length = 0;
 		eval(data);
 		$("#sel_trone_order").empty();
 		$("#sel_trone_order").append("<option value='-1'>请选择</option>");

@@ -97,6 +97,13 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>hs</id>
+			<properties>
+				<runtime.env>config\hs</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+		<profile>
 			<id>sh</id>
 			<properties>
 				<runtime.env>config\sh</runtime.env>

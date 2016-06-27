@@ -22,17 +22,11 @@
 
 	String query = Base64UTF.encode(request.getQueryString());
 
-	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
-	
-	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
-	
-	int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone_id"), -1);
-	
 	int status = StringUtil.getInteger(request.getParameter("trone_status"), -1);
 	
 	String	keyWord = StringUtil.getString(request.getParameter("keyword"), "");
 
-	Map<String, Object> map =  new TroneOrderServer().loadTroneOrder(spId, spTroneId, cpId,status,pageIndex,keyWord);
+	Map<String, Object> map =  new TroneOrderServer().loadTroneOrder(status,pageIndex,keyWord);
 		
 	List<TroneOrderModel> list = (List<TroneOrderModel>)map.get("list");
 	
@@ -47,9 +41,6 @@
 	Map<String, String> params = new HashMap<String,String>();
 	
 	params = new HashMap<String,String>();
-	params.put("sp_id", spId + "");
-	params.put("cp_id", cpId + "");
-	params.put("sp_trone_id", spTroneId + "");
 	params.put("trone_status",status + "");
 	params.put("keyword",keyWord);
 	
@@ -64,92 +55,12 @@
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
-<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
-<script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
-
-	var spList = new Array();
-	<%
-	for(SpModel spModel : spList)
-	{
-		%>
-		spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
-		<%
-	}
-	%>
-	
-	var cpList = new Array();
-	<%
-	for(CpModel cpModel : cpList)
-	{
-		%>
-		cpList.push(new joSelOption(<%= cpModel.getId() %>,1,'<%= cpModel.getShortName() %>'));
-		<%
-	}
-	%>
-	
-	function onSpDataSelect(joData)
-	{
-		$("#sel_sp").val(joData.id);
-		spChange();
-	}
-	
-	function onCpDataSelect(joData)
-	{
-		$("#sel_cp_id").val(joData.id);
-	}
-
-	function joSpTrone(id,spId,name)
-	{
-		var obj = {};
-		obj.id = id ;
-		obj.spId = spId;
-		obj.name = name;
-		return obj;
-	}
-	
-	var spTroneArray = new Array();
-	<%
-		for(SpTroneModel spTrone : spTroneList)
-		{
-			%>
-	spTroneArray.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpTroneName() %>'));	
-			<%
-		}
-	%>
-
-	function delTrone(id)
-	{
-		if(confirm('真的要删除吗？'))
-		{
-			window.location.href = "troneaction.jsp?did=" + id;	
-		}
-	}
 	
 	$(function()
 	{
-		$("#sel_sp").val(<%= spId %>);
-		$("#sel_cp_id").val(<%= cpId %>);
-		$("#sel_sp").change(spChange);
-		spChange();
-		$("#sel_sp_trone_id").val(<%= spTroneId %>);
 		$("#sel_trone_status").val(<%= status %>);
 	});
-	
-	function spChange()
-	{
-		var spId = $("#sel_sp").val();
-		$("#sel_sp_trone_id").empty(); 
-		$("#sel_sp_trone_id").append("<option value='-1'>请选择</option>");
-		for(i=0; i<spTroneArray.length; i++)
-		{
-			if(spTroneArray[i].spId==spId || spId == "-1")
-			{
-				$("#sel_sp_trone_id").append("<option value='" + spTroneArray[i].id + "'>" + spTroneArray[i].name + "</option>");
-			}
-		}
-	}
 	
 </script>
 
@@ -161,38 +72,6 @@
 			</dl>
 			<form action="troneorder.jsp"  method="get" style="margin-top: 10px">
 				<dl>
-					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp_id" onclick="namePicker(this,cpList,onCpDataSelect)">
-						<option value="-1">全部</option>
-							<%
-							for(CpModel cp : cpList)
-							{
-								%>
-							<option value="<%= cp.getId() %>"><%= cp.getShortName() %></option>	
-								<%
-							}
-							%>
-						</select>
-					</dd>
-					<dd class="dd01_me">SP</dd>
-					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
-							<option value="-1">全部</option>
-							<%
-							for(SpModel sp : spList)
-							{
-								%>
-							<option value="<%= sp.getId() %>"><%= sp.getShortName() %></option>	
-								<%
-							}
-							%>
-						</select>
-					</dd>
-					<dd class="dd01_me">SP业务</dd>
-					<dd class="dd04_me">
-						<select name="sp_trone_id" id="sel_sp_trone_id" ></select>
-					</dd>
 					<dd class="dd01_me">状态</dd>
 					<dd class="dd04_me">
 						<select name="trone_status" id="sel_trone_status" >

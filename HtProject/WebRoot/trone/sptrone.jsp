@@ -207,8 +207,7 @@
 					<td><%= model.getUserDayLimit() %></td>
 					<td><%= model.getUserMonthLimit() %></td>
 					<td><%= model.getStatus()==1 ? "开启" : "关闭" %></td>
-					<td><a href="sptroneedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a>
-						<a href="#" onclick="delSpTrone(<%=model.getId()%>)">删除</a></td>
+					<td><a href="sptroneedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a></td>
 				</tr>
 				<%
 					}

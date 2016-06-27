@@ -190,7 +190,7 @@ public class TroneDao
 		return map;
 	}
 	
-	public Map<String, Object> loadTrone(int spId,int pageIndex,int spTroneId,String orders,String troneNum,String troneName)
+	public Map<String, Object> loadTrone(int pageIndex,String keyWord)
 	{
 		String query = " a.*,c.`short_name`,b.`name` sp_trone_name ";
 		
@@ -201,20 +201,13 @@ public class TroneDao
 		
 		String wheres = "";
 		
-		if(spId>0)
-			wheres = " and c.id = " + spId;
-		
-		if(spTroneId>0)
-			wheres += " and b.id= "+spTroneId;
-		
-		if(!StringUtil.isNullOrEmpty(orders))
-			wheres += " and a.orders LIKE '%"+orders+"%' ";
-		
-		if(!StringUtil.isNullOrEmpty(troneNum))
-			wheres += " and a.trone_num LIKE '%"+troneNum+"%' ";
-		
-		if(!StringUtil.isNullOrEmpty(troneName))
-			wheres += " and b.name LIKE '%"+troneName+"%' ";
+		if(!StringUtil.isNullOrEmpty(keyWord))
+		{
+			wheres += " and (c.short_name like '%" + keyWord + "%' or c.full_name like '%" + keyWord 
+					+ "%' or b.name like '%" + keyWord + "%' or a.trone_num like '%" + keyWord 
+					+ "%' or a.orders like '%" + keyWord + "%' or a.trone_name like '%" + keyWord 
+					+ "%')";
+		}
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		

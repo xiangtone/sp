@@ -16,37 +16,21 @@
 <%
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
 
+	String keyWord = StringUtil.getString(request.getParameter("keyword"), "");
+
 	String query = Base64UTF.encode(request.getQueryString());
 	
-	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
-	
-	int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone"), -1);
-	
-	String orders = StringUtil.getString(request.getParameter("orders"), "");
-	
-	String troneNum = StringUtil.getString(request.getParameter("trone_num"), "");
-	
-	String troneName = StringUtil.getString(request.getParameter("trone_name"), "");
-	
-	Map<String, Object> map =  new TroneServer().loadTrone(spId, pageIndex, spTroneId, orders, troneNum, troneName);
+	Map<String, Object> map =  new TroneServer().loadTrone(pageIndex,keyWord);
 		
-	List<TroneModel> list = (List<TroneModel>)map.get("list");
-	
-	List<SpModel> spList = new SpServer().loadSp();
-	
-	List<TroneModel> tronList = new TroneServer().loadSpTrone();
-	
 	int rowCount = (Integer)map.get("rows");
+	
+	List<TroneModel> list = (List<TroneModel>)map.get("list");
 	
 	Map<String, String> params = null;
 	
 	params = new HashMap<String,String>();
 	
-	params.put("sp_id", spId + "");
-	params.put("sp_trone", spTroneId+"");
-	params.put("orders", orders);
-	params.put("trone_num", troneNum);
-	params.put("trone_name", troneName);
+	params.put("keyword", keyWord);
 	
 	String pageData = PageUtil.initPageQuery("trone.jsp",params,rowCount,pageIndex);
 	
@@ -59,81 +43,6 @@
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
-<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
-<script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
-<script type="text/javascript">
-
-	function SpTroneObject(SpTroneId,SpId,name)
-	{
-		var obj = {};
-		obj.SpId = SpId;
-		obj.SpTroneId = SpTroneId;
-		obj.name = name;
-		return obj;
-	}
-	
-	var spList = new Array();
-	<%
-	for(SpModel spModel : spList)
-	{
-		%>
-		spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
-		<%
-	}
-	%>
-
-	var menu1Arr = new Array();
-	<%
-		for(TroneModel trone : tronList)
-		{
-			
-			%>
-	menu1Arr.push(new SpTroneObject(<%= trone.getSpTroneId() %>,<%= trone.getSpId() %>,'<%= trone.getSpTroneName() %>'));
-			<%
-		}
-	%>
-	
-	function delTrone(id)
-	{
-		if(confirm('真的要删除吗？'))
-		{
-			window.location.href = "troneaction.jsp?did=" + id;	
-		}
-	}
-	
-	$(function()
-	{
-		$("#sel_sp").val(<%= spId %>);
-		$("#sel_sp").change(SpTroneChange);
-		SpTroneChange();
-		$("#sel_sp_trone_id").val(<%= spTroneId %>);
-		$("#input_orders").val(<%= orders %>);
-		$("#input_trone_num").val(<%= troneNum %>);
-		$("#input_trone_name").val(<%= troneName %>);
-	});
-	
-	function SpTroneChange()
-	{
-		var SpId = $("#sel_sp").val();
-		$("#sel_sp_trone_id").empty(); 
-		$("#sel_sp_trone_id").append("<option value='-1'>请选择</option>");
-		for(i=0; i<menu1Arr.length; i++)
-		{
-			if(menu1Arr[i].SpId==SpId)
-			{
-				$("#sel_sp_trone_id").append("<option value='" + menu1Arr[i].SpTroneId + "'>" + menu1Arr[i].name + "</option>");
-			}
-		}
-	}
-	
-	function onSpDataSelect(joData)
-	{
-		$("#sel_sp").val(joData.id);
-		SpTroneChange();
-	}
-	
-</script>
 
 <body>
 	<div class="main_content">
@@ -143,35 +52,9 @@
 			</dl>
 			<form action="trone.jsp"  method="get" style="margin-top: 10px">
 				<dl>
-					<dd class="dd01_me">SP</dd>
-					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
-							<option value="-1">全部</option>
-							<%
-							for(SpModel sp : spList)
-							{
-								%>
-							<option value="<%= sp.getId() %>"><%= sp.getShortName() %></option>	
-								<%
-							}
-							%>
-						</select>
-					</dd>
-					<dd class="dd01_me">SP业务</dd>
-					<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone_id" > </select>
-					</dd>
-					<dd class="dd01_me">指令</dd>
+					<dd class="dd01_me">关键字</dd>
 					<dd class="dd03_me">
-						<input name="orders" id="input_orders" value="" type="text" style="width: 100px">
-					</dd>
-					<dd class="dd01_me">通道号</dd>
-					<dd class="dd03_me">
-						<input name="trone_num" id="input_trone_num" value="" type="text" style="width: 100px">
-					</dd>
-					<dd class="dd01_me">通道名称</dd>
-					<dd class="dd03_me">
-						<input name="trone_name" id="input_trone_name" value="" type="text" style="width: 100px">
+						<input name="keyword" id="input_keyword" value="<%= keyWord %>" type="text" style="width: 100px">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查     询" type="submit" />
