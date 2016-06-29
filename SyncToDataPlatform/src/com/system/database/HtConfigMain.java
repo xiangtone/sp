@@ -6,10 +6,10 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 import com.system.util.ConfigManager;
 
-public abstract class ConnHtPayMain
+public abstract class HtConfigMain
 {
 
-    public ConnHtPayMain()
+    public HtConfigMain()
     {
     }
 
@@ -29,9 +29,9 @@ public abstract class ConnHtPayMain
     {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl(ConfigManager.getConfigData("MainHtPayDbServer"));
-        ds.setUsername(ConfigManager.getConfigData("MainHtPayUserName"));
-        ds.setPassword(ConfigManager.getConfigData("MainHtPayPassword"));
+        ds.setUrl(ConfigManager.getConfigData("HtDbServer"));
+        ds.setUsername(ConfigManager.getConfigData("HtDbServerName"));
+        ds.setPassword(ConfigManager.getConfigData("HtDbServerPwd"));
         ds.setInitialSize(4);
         ds.setMaxActive(32);
         ds.setMaxIdle(8);

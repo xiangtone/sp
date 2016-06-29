@@ -9,10 +9,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-
-public class JdbcGameControl 
+public class HtJdbcControl implements IJdbcControl
 {
-	Logger logger = Logger.getLogger(JdbcGameControl.class);
+	Logger logger = Logger.getLogger(HtJdbcControl.class);
 	
 	public Object query(String sql,QueryCallBack callBack)
 	{
@@ -21,7 +20,7 @@ public class JdbcGameControl
 		ResultSet rs = null;
 		try
 		{
-			conn = ConnGameMain.getConnection();
+			conn = HtConfigMain.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			logger.debug("finish query sql [ " + sql + " ]");
@@ -51,7 +50,7 @@ public class JdbcGameControl
 		PreparedStatement pstmt = null;
 		try
 		{
-			conn = ConnGameMain.getConnection();
+			conn = HtConfigMain.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			for(Map<Integer, Object> params : dataParams)
 			{
@@ -83,7 +82,7 @@ public class JdbcGameControl
 		
 		try
 		{
-			conn = ConnGameMain.getConnection();
+			conn = HtConfigMain.getConnection();
 			stmt = conn.createStatement();
 			stmt.execute(sql);
 			logger.debug("execute sql [" + sql + "] finish");
@@ -105,10 +104,9 @@ public class JdbcGameControl
 	{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		System.out.println("why i am here");
 		try
 		{
-			conn = ConnGameMain.getConnection();
+			conn = HtConfigMain.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			
 			for(int key : param.keySet())
@@ -139,7 +137,7 @@ public class JdbcGameControl
 		ResultSet rs = null;
 		try
 		{
-			conn = ConnGameMain.getConnection();
+			conn = HtConfigMain.getConnection();
 			stmt = conn.createStatement();
 			if(callBack!=null)
 				callBack.onConnectionCallBack(stmt,rs);
@@ -154,7 +152,7 @@ public class JdbcGameControl
 		}
 	}
 	
-	public static void free(ResultSet rs,Statement stmt,Connection conn)
+	public void free(ResultSet rs,Statement stmt,Connection conn)
 	{
 		try{ if(rs!=null)rs.close(); }catch(Exception ex){}
 		try{ if(stmt!=null)stmt.close(); }catch(Exception ex){}

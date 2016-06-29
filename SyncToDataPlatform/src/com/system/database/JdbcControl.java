@@ -10,7 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 
-public class JdbcControl 
+public class JdbcControl implements IJdbcControl 
 {
 	Logger logger = Logger.getLogger(JdbcControl.class);
 	
@@ -153,7 +153,7 @@ public class JdbcControl
 		}
 	}
 	
-	public static void free(ResultSet rs,Statement stmt,Connection conn)
+	public void free(ResultSet rs,Statement stmt,Connection conn)
 	{
 		try{ if(rs!=null)rs.close(); }catch(Exception ex){}
 		try{ if(stmt!=null)stmt.close(); }catch(Exception ex){}
