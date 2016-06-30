@@ -7,6 +7,12 @@ import com.system.model.ComSumSummerModel;
 
 public class ComSumAnalyServer
 {
+	/**
+	 * 去分析指定公司指定日期的数据
+	 * @param coId
+	 * @param startDate
+	 * @param endDate
+	 */
 	public void analyComSumData(int coId,String startDate,String endDate)
 	{
 		ComSumSummerDao dao = new ComSumSummerDao();
@@ -40,9 +46,17 @@ public class ComSumAnalyServer
 		}
 	}
 	
+	/**
+	 * 开始分析各大公司的数据
+	 */
+	public void startAnalyComSumData()
+	{
+		
+	}
+	
 	public static void main(String[] args)
 	{
 		ComSumAnalyServer server = new ComSumAnalyServer();
-		server.analyComSumData(1, "2016-06-01", "2016-06-27");
+		server.analyComSumData(2, "2016-06-08", "2016-06-08");
 	}
 }

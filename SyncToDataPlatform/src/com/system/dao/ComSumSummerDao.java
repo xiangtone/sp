@@ -1,20 +1,23 @@
 package com.system.dao;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.system.database.HtJdbcControl;
 import com.system.database.IJdbcControl;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
+import com.system.database.TlJdbcControl;
+import com.system.database.YdJdbcControl;
 import com.system.model.ComSumSummerModel;
+import com.system.model.FeeDateDataModel;
 
 public class ComSumSummerDao
 {
-	
 	public void addCpDailyData(String sql)
 	{
 		new JdbcControl().execute(sql);
@@ -55,14 +58,21 @@ public class ComSumSummerDao
 		sql.append(" ) b ON a.trone_order_id = b.trone_order_id AND a.province_id = b.province_id AND a.mr_date = b.mr_date");
 		sql.append(" ORDER BY a.mr_date,trone_order_id,province_id");
 		
-		IJdbcControl control = null;
+		IJdbcControl control = getCoControl(coId);
 		
 		switch(coId)
 		{
 			case 1:
-				control = new HtJdbcControl();
 				keepCpId = 157;
 				break;
+				
+			case 2:
+				keepCpId = 43;
+				break;
+				
+			case 3:
+				keepCpId = 162;
+				break;			
 				
 			default:
 				break;
@@ -159,24 +169,70 @@ public class ComSumSummerDao
 		return null;
 	}
 	
-	public void conn()
+	/**
+	 * 从指定公司里面获取指定日期的每日数据
+	 * @param coId
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public Map<String,FeeDateDataModel> loadOriSource(int coId,String startDate,String endDate)
 	{
-		new HtJdbcControl().query("select count(*) from daily_config.tbl_cp", new QueryCallBack()
+		String sql = " SELECT mr_date,SUM(data_rows) data_rows,SUM(amount) amount FROM daily_log.`tbl_mr_summer` a";
+		sql += " WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		sql += " GROUP BY mr_date ORDER BY mr_date";
+		
+		IJdbcControl control = getCoControl(coId);
+		
+		if(control!=null)
 		{
-			
-			@Override
-			public Object onCallBack(ResultSet rs) throws SQLException
+			control.query(sql, new QueryCallBack()
 			{
-				if(rs.next())
-					System.out.println(rs.getInt(1));
-				return null;
-			}
-		}) ;
+				@Override
+				public Object onCallBack(ResultSet rs) throws SQLException
+				{
+					Map<String,FeeDateDataModel> map = new HashMap<String, FeeDateDataModel>();
+					
+					while(rs.next())
+					{
+						FeeDateDataModel model = new FeeDateDataModel();
+						model.setFeeDate(rs.getString("mr_date"));
+						model.setAmount(rs.getFloat("amount"));
+						model.setDataRows(rs.getInt("data_rows"));
+						map.put(model.getFeeDate(), model);
+					}
+					
+					return map;
+				}
+			});
+		}
+		
+		return null;
 	}
 	
-	public static void main(String[] args) throws UnsupportedEncodingException
+	private IJdbcControl getCoControl(int coId)
 	{
-		new ComSumSummerDao().delDailyData(1, "2016-06-01", "2016-06-02");
+		IJdbcControl control = null;
+		
+		switch(coId)
+		{
+			case 1:
+				control = new HtJdbcControl();
+				break;
+				
+			case 2:
+				control = new TlJdbcControl();
+				break;
+				
+			case 3:
+				control = new YdJdbcControl();
+				break;			
+				
+			default:
+				break;
+		}
+		
+		return control;
 	}
 	
 }
