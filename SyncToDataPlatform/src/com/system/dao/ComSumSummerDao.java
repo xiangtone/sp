@@ -110,11 +110,6 @@ public class ComSumSummerDao
 						if(cpId==34)
 						{
 							insertId = lastKeepCpId;
-						}
-						
-						//全扣量的用户
-						if(showAmount==0)
-						{
 							ComSumSummerModel model = new ComSumSummerModel();
 							model.setMrDate(mrDate);
 							model.setAmount(amount);
@@ -142,7 +137,7 @@ public class ComSumSummerDao
 						}
 						
 						//扣掉的CP量
-						if(diffAmount>0)
+						if(diffAmount!=0)
 						{
 							ComSumSummerModel model = new ComSumSummerModel();
 							model.setMrDate(mrDate);

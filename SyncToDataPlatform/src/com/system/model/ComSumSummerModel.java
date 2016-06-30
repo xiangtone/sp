@@ -76,6 +76,10 @@ public class ComSumSummerModel
 		this.recordType = recordType;
 	}
 	
-	
-	
+//	@Override
+//	public String toString()
+//	{
+//		return troneId + "-" + cpId + "-" + ;
+//	}
+//	
 }
