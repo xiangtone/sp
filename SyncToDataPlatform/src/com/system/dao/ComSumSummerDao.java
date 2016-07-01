@@ -114,6 +114,12 @@ public class ComSumSummerDao
 						recordType = rs.getInt("record_type");
 						cpId = rs.getInt("cp_id");
 						insertId = cpId;
+						
+						//这个东西呢，是处理极其变态的数据，就是数据条数据给CP同步个-1，
+						//然后金钱又一分都没同步，不要问我是那个公司的，没错，就是游动！
+						if(showAmount==0)
+							showDataRows=0;
+						
 						diffDataRows = dataRows - showDataRows;
 						diffAmount = amount - showAmount;
 						
@@ -170,12 +176,13 @@ public class ComSumSummerDao
 	}
 	
 	/**
-	 * 从指定公司里面获取指定日期的每日数据
+	 * 从指定公司里面的源数据里取指定日期的每日数据
 	 * @param coId
 	 * @param startDate
 	 * @param endDate
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String,FeeDateDataModel> loadOriSource(int coId,String startDate,String endDate)
 	{
 		String sql = " SELECT mr_date,SUM(data_rows) data_rows,SUM(amount) amount FROM daily_log.`tbl_mr_summer` a";
@@ -186,7 +193,7 @@ public class ComSumSummerDao
 		
 		if(control!=null)
 		{
-			control.query(sql, new QueryCallBack()
+			return (Map<String,FeeDateDataModel>)control.query(sql, new QueryCallBack()
 			{
 				@Override
 				public Object onCallBack(ResultSet rs) throws SQLException
@@ -208,6 +215,43 @@ public class ComSumSummerDao
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * 从大平台数据里取指定公司指定日期的每日数据
+	 * @param coId
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String,FeeDateDataModel> loadDescSource(int coId,String startDate,String endDate)
+	{
+		String sql = " SELECT mr_date,SUM(data_rows) data_rows,SUM(amount) amount FROM comsum_config.`tbl_data_summer` a";
+		sql += " WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "' AND a.co_id = " + coId;
+		sql += " GROUP BY mr_date ORDER BY mr_date";
+		
+		JdbcControl control = new JdbcControl();
+		
+		return (Map<String,FeeDateDataModel>)control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				Map<String,FeeDateDataModel> map = new HashMap<String, FeeDateDataModel>();
+				
+				while(rs.next())
+				{
+					FeeDateDataModel model = new FeeDateDataModel();
+					model.setFeeDate(rs.getString("mr_date"));
+					model.setAmount(rs.getFloat("amount"));
+					model.setDataRows(rs.getInt("data_rows"));
+					map.put(model.getFeeDate(), model);
+				}
+				
+				return map;
+			}
+		});
 	}
 	
 	private IJdbcControl getCoControl(int coId)

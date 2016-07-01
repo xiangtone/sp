@@ -1,12 +1,22 @@
 package com.system.server;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import com.system.dao.ComSumSummerDao;
 import com.system.model.ComSumSummerModel;
+import com.system.model.FeeDateDataModel;
+import com.system.util.StringUtil;
 
 public class ComSumAnalyServer
 {
+	
+	Logger logger = Logger.getLogger(ComSumAnalyServer.class);
+	
 	/**
 	 * 去分析指定公司指定日期的数据
 	 * @param coId
@@ -24,10 +34,17 @@ public class ComSumAnalyServer
 		
 		if(list!=null && !list.isEmpty())
 		{
+			logger.info("分析数据：" + coId +"->" + startDate + "->" + endDate + "->SIZE:" + list.size());
 			ComSumSummerModel model = null;
 			for(int i=0; i<list.size(); i++)
 			{
 				model = list.get(i);
+				
+				if(model.getTroneId()==437)
+				{
+					System.out.println(model);
+				}
+				
 				sbData.append("(" + coId + "," + model.getTroneId() + "," + model.getProvinceId() + "," + model.getDataRows() + "," + model.getAmount() + ",'" + model.getMrDate() + "'," + model.getRecordType() + "," + model.getCpId() + "),");
 				if((i+1)%500==0)
 				{
@@ -51,12 +68,79 @@ public class ComSumAnalyServer
 	 */
 	public void startAnalyComSumData()
 	{
+		Calendar ca = Calendar.getInstance();
 		
+		ca.add(Calendar.DAY_OF_MONTH, -1);
+		
+		String endDate = StringUtil.getDateFormat(ca.getTime());
+		
+		ca.add(Calendar.MONTH, -2);
+		
+		String startDate = StringUtil.getDateFormat(ca.getTime());
+		
+		ComSumSummerDao dao = new ComSumSummerDao();
+		
+		List<String> analyDataList = new ArrayList<String>();
+		
+		FeeDateDataModel oriModel = null;
+		FeeDateDataModel descModel = null;
+		
+		for(int i=1; i<=3; i++)
+		{
+			Map<String, FeeDateDataModel> descMap = dao.loadDescSource(i, startDate, endDate);
+			Map<String, FeeDateDataModel> oriMap = dao.loadOriSource(i, startDate, endDate);
+			
+			analyDataList.clear();
+			
+			for(String oriDate : oriMap.keySet())
+			{
+				oriModel = oriMap.get(oriDate);
+				descModel = descMap.get(oriDate);
+				
+				if(descModel==null 
+						|| ((oriModel.getDataRows() != descModel.getDataRows()) 
+						|| oriModel.getAmount() != descModel.getAmount()))
+				{
+					analyDataList.add(oriDate);
+				}
+			}
+			
+			if(!analyDataList.isEmpty())
+			{
+				startAnalyComSumData(i,analyDataList);
+			}
+		}
+	}
+	
+	/**
+	 * 单独分析每一天的数据
+	 * @param coId
+	 * @param analyDataList
+	 */
+	private void startAnalyComSumData(int coId,List<String> analyDataList)
+	{
+		for(String date : analyDataList)
+		{
+			analyComSumData(coId, date, date);
+		}
 	}
 	
 	public static void main(String[] args)
 	{
-		ComSumAnalyServer server = new ComSumAnalyServer();
-		server.analyComSumData(2, "2016-06-08", "2016-06-08");
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				System.out.println("really start...");
+				
+				ComSumAnalyServer server = new ComSumAnalyServer();
+				
+				server.startAnalyComSumData();
+				
+				System.out.println("really end...");
+			}
+		}).start();
+		System.out.println("end..");
 	}
 }

@@ -52,7 +52,7 @@
 		<div class="content" >
 			<dl>
 				<dd class="ddbtn" ><a href="cpadd.jsp">增  加</a></dd>
-				<form action="cp.jsp"  method="post" id="formid">
+				<form action="cp.jsp"  method="get" id="formid">
 				<dl>
 					<dd class="dd01_me">关键字</dd>
 					<dd class="dd03_me">
