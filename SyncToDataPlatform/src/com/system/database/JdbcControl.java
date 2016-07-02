@@ -101,7 +101,7 @@ public class JdbcControl implements IJdbcControl
 		return false;
 	}
 	
-	public boolean execute(String sql,Map<Integer,Object> param)
+	public boolean executeWithParam(String sql,Map<Integer,Object> param)
 	{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -131,17 +131,65 @@ public class JdbcControl implements IJdbcControl
 		return false;
 	}
 	
+	public boolean executeWithParam(String sql,List<Map<Integer,Object>> paramList)
+	{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try
+		{
+			conn = ConnConfigMain.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			
+			for(int i=0; i<paramList.size(); i++)
+			{
+				pstmt.clearParameters();
+				
+				Map<Integer,Object> param = paramList.get(i);
+				
+				for(int key : param.keySet())
+				{
+					pstmt.setObject(key, param.get(key));
+				}
+				
+				pstmt.execute();
+				
+				logger.debug("execute sql [" + sql + "] with param finish");
+			}
+			
+			return true;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			logger.error("execute sql [" + sql + "] error:" + ex.getMessage());
+		}
+		finally
+		{
+			free(null,pstmt,conn);
+		}
+		
+		return false;
+	}
+	
+	
+	
 	public void getConnection(ConnectionCallBack callBack)
 	{
 		Connection conn = null;
 		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try
 		{
 			conn = ConnConfigMain.getConnection();
 			stmt = conn.createStatement();
+			
 			if(callBack!=null)
+			{
 				callBack.onConnectionCallBack(stmt,rs);
+				callBack.onConnectionCallBack(pstmt, rs);
+			}
+			
 		}
 		catch(Exception ex)
 		{
@@ -150,6 +198,7 @@ public class JdbcControl implements IJdbcControl
 		finally
 		{
 			free(rs,stmt,conn);
+			free(rs,pstmt,conn);
 		}
 	}
 	

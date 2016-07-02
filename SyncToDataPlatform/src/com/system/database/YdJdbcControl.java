@@ -100,7 +100,7 @@ public class YdJdbcControl implements IJdbcControl
 		return false;
 	}
 	
-	public boolean execute(String sql,Map<Integer,Object> param)
+	public boolean executeWithParam(String sql,Map<Integer,Object> param)
 	{
 		Connection conn = null;
 		PreparedStatement pstmt = null;

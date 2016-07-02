@@ -14,7 +14,7 @@ public interface IJdbcControl
 	
 	public boolean execute(String sql);
 	
-	public boolean execute(String sql,Map<Integer,Object> param);
+	public boolean executeWithParam(String sql,Map<Integer,Object> param);
 	
 	public void getConnection(ConnectionCallBack callBack);
 	

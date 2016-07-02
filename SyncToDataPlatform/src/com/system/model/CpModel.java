@@ -1,20 +1,12 @@
 package com.system.model;
 
-public class SpModel
+public class CpModel
 {
-	private int spId;
+	private int cpId;
 	private String shortName;
 	private String fullName;
 	private int status;
 	
-	public int getSpId()
-	{
-		return spId;
-	}
-	public void setSpId(int spId)
-	{
-		this.spId = spId;
-	}
 	public String getShortName()
 	{
 		return shortName;
@@ -43,18 +35,18 @@ public class SpModel
 	@Override
 	public boolean equals(Object obj)
 	{
-		if(!(obj instanceof SpModel))
+		if(!(obj instanceof CpModel))
 		{
 			return false;
 		}
 		
-		SpModel model = (SpModel)obj;
+		CpModel model = (CpModel)obj;
 		
 		try
 		{
 			if (model.getFullName().equalsIgnoreCase(fullName)
 					&& model.getShortName().equalsIgnoreCase(shortName)
-					&& (model.getSpId() == spId)
+					&& (model.getCpId() == cpId)
 					&& (model.getStatus() == status))
 				return true;
 		}
@@ -65,10 +57,12 @@ public class SpModel
 		
 		return false;
 	}
-	
-	@Override
-	public String toString()
+	public int getCpId()
 	{
-		return spId + "-" + shortName + "-" + fullName + "-" + status;
+		return cpId;
+	}
+	public void setCpId(int cpId)
+	{
+		this.cpId = cpId;
 	}
 }
