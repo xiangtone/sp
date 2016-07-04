@@ -21,11 +21,11 @@ public class UserDao
 	
 	public Map<String, Object> loadUser(int pageIndex,int groupId)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  daily_base.`tbl_group_user` a LEFT JOIN  daily_base.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
 		
 		String query = "";
 		
-		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM daily_base.tbl_user";
+		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM comsum_config.tbl_user";
 		
 		if(groupId>0)
 			query = " and group_id =" + groupId;
@@ -82,11 +82,11 @@ public class UserDao
 	
 	public Map<String, Object> loadUser(int pageIndex,int groupId,String userName,String nickName)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  daily_base.`tbl_group_user` a LEFT JOIN  daily_base.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
 		
 		String query = "";
 		
-		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM daily_base.tbl_user a LEFT JOIN daily_base.`tbl_user` b ON b.`id`=a.`create_user` where 1=1 ";
+		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM comsum_config.tbl_user a LEFT JOIN comsum_config.`tbl_user` b ON b.`id`=a.`create_user` where 1=1 ";
 		
 		if(groupId>0)
 			query = " and group_id =" + groupId;
@@ -153,11 +153,11 @@ public class UserDao
 	//
 	public Map<String, Object> loadUser(int pageIndex,int groupId,String userName,String nickName,int userId)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  daily_base.`tbl_group_user` a LEFT JOIN  daily_base.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
 		
 		String query = "";
 		
-		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM daily_base.tbl_user where 1=1 ";
+		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM comsum_config.tbl_user where 1=1 ";
 		
 		if(groupId>0)
 			query += " and group_id =" + groupId;
@@ -256,7 +256,7 @@ public class UserDao
 	
 	public boolean updateUserWithPwd(UserModel model)
 	{
-		String sql = "update daily_base.tbl_user set name = '" + model.getName() + "', pwd = md5('"
+		String sql = "update comsum_config.tbl_user set name = '" + model.getName() + "', pwd = md5('"
 				+ model.getPassword() + "') ,nick_name = '" + model.getNickName()
 				+ "',mail='" + model.getMail() + "',qq='" + model.getQq()
 				+ "',phone='" + model.getPhone() + "' where id ="
@@ -267,7 +267,7 @@ public class UserDao
 	
 	public boolean updateUser(UserModel model)
 	{
-		String sql = "update daily_base.tbl_user set name = '" + model.getName() + "', pwd = md5('"
+		String sql = "update comsum_config.tbl_user set name = '" + model.getName() + "', pwd = md5('"
 				+ model.getPassword() + "') ,nick_name = '" + model.getNickName()
 				+ "',mail='" + model.getMail() + "',qq='" + model.getQq()
 				+ "',phone='" + model.getPhone() + "',status=" + model.getStatus() + " where id ="
@@ -278,7 +278,7 @@ public class UserDao
 	
 	public boolean updateUserWithoutPwd(UserModel model)
 	{
-		String sql = "update daily_base.tbl_user  set name = '" + model.getName() + "', nick_name = '" + model.getNickName()
+		String sql = "update comsum_config.tbl_user  set name = '" + model.getName() + "', nick_name = '" + model.getNickName()
 				+ "',mail='" + model.getMail() + "',qq='" + model.getQq()
 				+ "',phone='" + model.getPhone() + "' where id ="
 				+ model.getId();
@@ -288,7 +288,7 @@ public class UserDao
 	
 	public UserModel getUserModelById(int id)
 	{
-		String sql = "select * from daily_base.tbl_user where id=" + id;
+		String sql = "select * from comsum_config.tbl_user where id=" + id;
 		
 		return (UserModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -317,7 +317,7 @@ public class UserDao
 	
 	public void addUser(UserModel model)
 	{
-		String sql = "insert into daily_base.tbl_user(name,pwd,nick_name,mail,qq,phone) value(?,?,?,?,?,?)";
+		String sql = "insert into comsum_config.tbl_user(name,pwd,nick_name,mail,qq,phone) value(?,?,?,?,?,?)";
 		
 		Map<Integer, Object> param = new HashMap<Integer, Object>();
 		
@@ -333,20 +333,20 @@ public class UserDao
 	
 	public void delUserInGroup(int userId)
 	{
-		String sql = "delete from daily_base.tbl_group_user where user_id =" + userId;
+		String sql = "delete from comsum_config.tbl_group_user where user_id =" + userId;
 		new JdbcControl().execute(sql);
 	}
 	
 	public void delUser(int id)
 	{
-		String sql = "delete from daily_base.tbl_user where id = " + id;
+		String sql = "delete from comsum_config.tbl_user where id = " + id;
 		new JdbcControl().execute(sql);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Integer> loadUserGroup(int id)
 	{
-		String sql = "select group_id from daily_base.tbl_group_user where user_id = " + id;
+		String sql = "select group_id from comsum_config.tbl_group_user where user_id = " + id;
 		return (List<Integer>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -362,7 +362,7 @@ public class UserDao
 	
 	public void updateUserGroup(List<Integer> list,int userId)
 	{
-		String sql = "insert into daily_base.tbl_group_user(user_id,group_id) value("+ userId +",?)";
+		String sql = "insert into comsum_config.tbl_group_user(user_id,group_id) value("+ userId +",?)";
 		List<Map<Integer, Object>> dataParams = new ArrayList<Map<Integer,Object>>();
 		for(int i=0; i <list.size(); i++)
 		{

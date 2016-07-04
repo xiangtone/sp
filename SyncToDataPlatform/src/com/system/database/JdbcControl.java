@@ -24,7 +24,7 @@ public class JdbcControl implements IJdbcControl
 			conn = ConnConfigMain.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-			logger.debug("finish query sql [ " + sql + " ]");
+			logger.info("finish query sql [ " + sql + " ]");
 			return callBack.onCallBack(rs);
 		}
 		catch(Exception ex)

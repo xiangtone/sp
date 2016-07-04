@@ -48,7 +48,7 @@ public class Menu1Dao
 	
 	public Map<String, Object> loadMenu1(int menuHeadId,int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_base.tbl_menu_1 a left join daily_base.tbl_menu_head b on a.head_id = b.id ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from comsum_config.tbl_menu_1 a left join comsum_config.tbl_menu_head b on a.head_id = b.id ";
 		String query = "";
 		if(menuHeadId>0)
 			query = " where head_id = " + menuHeadId;
@@ -93,7 +93,7 @@ public class Menu1Dao
 	
 	public Map<String, Object> loadMenu1(int menuHeadId,int pageIndex,int menu1Id)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_base.tbl_menu_1 a left join daily_base.tbl_menu_head b on a.head_id = b.id WHERE 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from comsum_config.tbl_menu_1 a left join comsum_config.tbl_menu_head b on a.head_id = b.id WHERE 1=1 ";
 		String query = "";
 		if(menuHeadId>0)
 			query = " AND head_id = " + menuHeadId;
@@ -144,7 +144,7 @@ public class Menu1Dao
 	
 	public Menu1Model loadMenu1ModelById(int id)
 	{
-		String sql = "select * from daily_base.tbl_menu_1 where id = " + id;
+		String sql = "select * from comsum_config.tbl_menu_1 where id = " + id;
 		return (Menu1Model)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -166,28 +166,28 @@ public class Menu1Dao
 	
 	public boolean updateMenu1Model(Menu1Model model)
 	{
-		String sql = "update daily_base.tbl_menu_1 set head_id = " + model.getMenuHeadId() + ", name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
+		String sql = "update comsum_config.tbl_menu_1 set head_id = " + model.getMenuHeadId() + ", name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean updateMenu1Model(int id,int sort)
 	{
-		String sql = "update daily_base.tbl_menu_1 set sort ="+sort+" where id="+id;
+		String sql = "update comsum_config.tbl_menu_1 set sort ="+sort+" where id="+id;
 		
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean addMenu1Model(Menu1Model model)
 	{
-		String sql = "insert into daily_base.tbl_menu_1 (head_id,name,remark) value(" + model.getMenuHeadId() + ",'" + model.getName() + "','" + model.getRemark() + "')";
+		String sql = "insert into comsum_config.tbl_menu_1 (head_id,name,remark) value(" + model.getMenuHeadId() + ",'" + model.getName() + "','" + model.getRemark() + "')";
 		return new JdbcControl().execute(sql);
 	}
 	
 	public List<Menu1Model> loadMenu1NameById(int id)
 	{
-		String sql = "SELECT a.name,a.id FROM daily_base.tbl_menu_1 a "
-				+ "LEFT JOIN daily_base.tbl_menu_head b ON a.head_id = b.id WHERE b.`id`="+id;
+		String sql = "SELECT a.name,a.id FROM comsum_config.tbl_menu_1 a "
+				+ "LEFT JOIN comsum_config.tbl_menu_head b ON a.head_id = b.id WHERE b.`id`="+id;
 		
 		
 		final List<Menu1Model> list = new ArrayList<Menu1Model>();

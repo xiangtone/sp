@@ -1,3 +1,4 @@
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.server.RightServer"%>
 <%@page import="com.system.model.UserModel"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
@@ -10,13 +11,14 @@
 		out.print("<script>window.location.href='login.jsp'</script>");
 		return;
 	}
+	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台");
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 </head>
-<frameset rows="104,*" cols="*" frameborder="no" border="0"
+<frameset rows="80,*" cols="*" frameborder="no" border="0"
 	framespacing="0">
 	<frame src="head.jsp" name="head" scrolling="No" noresize="noresize">
 	<frameset cols="170,*" rows="*" id="attachucp" frameborder="no"

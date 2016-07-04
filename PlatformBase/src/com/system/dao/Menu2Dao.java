@@ -59,8 +59,8 @@ public class Menu2Dao
 	{
 		String params = " a.id menu2Id,a.name menu2Name,b.id menu1Id,b.name menu1Name,c.id menuHeadId,c.name menuHeadName,a.url,a.action_url,a.remark,a.sort  ";
 		
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_base.tbl_menu_2 a left join daily_base.tbl_menu_1 b "
-				+ "on a.menu_1_id = b.id left join daily_base.tbl_menu_head c on b.head_id = c.id where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from comsum_config.tbl_menu_2 a left join comsum_config.tbl_menu_1 b "
+				+ "on a.menu_1_id = b.id left join comsum_config.tbl_menu_head c on b.head_id = c.id where 1=1 ";
 		
 		String sort = " order by c.sort,b.sort,a.sort asc ";
 		
@@ -124,8 +124,8 @@ public class Menu2Dao
 	public Menu2Model loadMenu2ById(int id)
 	{
 		String sql = "select a.id menu2Id,a.name menu2Name,b.id menu1Id,b.name menu1Name,"
-				+ "c.id menuHeadId,c.name menuHeadName,a.url,a.action_url from daily_base.tbl_menu_2 a left join daily_base.tbl_menu_1 b "
-				+ "on a.menu_1_id = b.id left join daily_base.tbl_menu_head c on b.head_id = c.id where a.id = " + id;
+				+ "c.id menuHeadId,c.name menuHeadName,a.url,a.action_url from comsum_config.tbl_menu_2 a left join comsum_config.tbl_menu_1 b "
+				+ "on a.menu_1_id = b.id left join comsum_config.tbl_menu_head c on b.head_id = c.id where a.id = " + id;
 		
 		return (Menu2Model)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -156,7 +156,7 @@ public class Menu2Dao
 	
 	public void addMenu2(Menu2Model model)
 	{
-		String sql = "insert into daily_base.tbl_menu_2(menu_1_id,name,url,action_url)value("
+		String sql = "insert into comsum_config.tbl_menu_2(menu_1_id,name,url,action_url)value("
 				+ model.getMenu1Id() + ",'" + model.getName() + "','"
 				+ model.getUrl() + "','" + model.getActionUrl() + "')";
 		new JdbcControl().execute(sql);
@@ -164,7 +164,7 @@ public class Menu2Dao
 
 	public void updateMenu2(Menu2Model model)
 	{
-		String sql = "update daily_base.tbl_menu_2 set menu_1_id = "
+		String sql = "update comsum_config.tbl_menu_2 set menu_1_id = "
 				+ model.getMenu1Id() + " ,name = '" + model.getName()
 				+ "',url = '" + model.getUrl() + "',action_url = '"
 				+ model.getActionUrl() + "' where id =" + model.getId();
@@ -173,7 +173,7 @@ public class Menu2Dao
 	
 	public boolean updateMenu2(int id,int sort)
 	{
-		String sql = "update daily_base.tbl_menu_2 set sort="+sort+" where id="+id;
+		String sql = "update comsum_config.tbl_menu_2 set sort="+sort+" where id="+id;
 		
 		return new JdbcControl().execute(sql);
 	}

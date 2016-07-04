@@ -16,7 +16,15 @@ public class BaseDataAnalyServer
 {
 	Logger logger = Logger.getLogger(BaseDataAnalyServer.class);
 	
-	public void analyBaseSpData()
+	public void startAnalyBaseData()
+	{
+		analyBaseSpData();
+		analyBaseCpData();
+		analyBaseSpTroneData();
+		analyBaseTroneData();
+	}
+	
+	private void analyBaseSpData()
 	{
 		BaseDataDao dao = new BaseDataDao();
 		
@@ -66,7 +74,7 @@ public class BaseDataAnalyServer
 		}
 	}
 	
-	public void analyBaseCpData()
+	private void analyBaseCpData()
 	{
 		BaseDataDao dao = new BaseDataDao();
 		
@@ -116,7 +124,7 @@ public class BaseDataAnalyServer
 		}
 	}
 	
-	public void analyBaseSpTroneData()
+	private void analyBaseSpTroneData()
 	{
 		BaseDataDao dao = new BaseDataDao();
 		
@@ -166,7 +174,7 @@ public class BaseDataAnalyServer
 		}
 	}
 	
-	public void analyBaseTroneData()
+	private void analyBaseTroneData()
 	{
 		BaseDataDao dao = new BaseDataDao();
 		
@@ -214,12 +222,5 @@ public class BaseDataAnalyServer
 				dao.updateTroneData(i, updateList);
 			}
 		}
-	}
-	
-	public static void main(String[] args)
-	{
-		BaseDataAnalyServer server = new BaseDataAnalyServer();
-		
-		server.analyBaseTroneData();
 	}
 }

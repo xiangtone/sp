@@ -8,6 +8,7 @@
 	{
 		String userName = StringUtil.getString(request.getParameter("username"), "");
 		String password = StringUtil.getString(request.getParameter("pwd"), "");
+		
 		int loginStatus = RightServer.login(session, userName, password);
 		out.clear();
 		out.print(loginStatus);

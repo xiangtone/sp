@@ -18,7 +18,7 @@ public class GroupDao
 	@SuppressWarnings("unchecked")
 	public List<GroupModel> loadAllGroup()
 	{
-		String sql = "select * from daily_base.tbl_group";
+		String sql = "select * from comsum_config.tbl_group";
 		
 		return (List<GroupModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -44,7 +44,7 @@ public class GroupDao
 	
 	public Map<String, Object> loadGroup(int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_base.tbl_group";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from comsum_config.tbl_group";
 		Map<String, Object> map = new  HashMap<String, Object>();
 		map.put("rows", new JdbcControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " count(*) "), new QueryCallBack()
 		{
@@ -84,7 +84,7 @@ public class GroupDao
 	
 	public Map<String, Object> loadGroup(int pageIndex,String name)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_base.tbl_group WHERE 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from comsum_config.tbl_group WHERE 1=1 ";
 		
 		if (!StringUtil.isNullOrEmpty(name)) {
 			sql += " AND name LIKE '%"+name+"%' ";
@@ -129,7 +129,7 @@ public class GroupDao
 	
 	public GroupModel loadGroupById(int id)
 	{
-		String sql = "select * from daily_base.tbl_group where id =" + id;
+		String sql = "select * from comsum_config.tbl_group where id =" + id;
 		return (GroupModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -150,14 +150,14 @@ public class GroupDao
 	
 	public boolean updateGroup(GroupModel model)
 	{
-		String sql = "update daily_base.tbl_group set name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
+		String sql = "update comsum_config.tbl_group set name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean addGroup(GroupModel model)
 	{
-		String sql = "insert into daily_base.tbl_group (name,remark) value('" + model.getName() + "','" + model.getRemark() + "')";
+		String sql = "insert into comsum_config.tbl_group (name,remark) value('" + model.getName() + "','" + model.getRemark() + "')";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -165,7 +165,7 @@ public class GroupDao
 	@SuppressWarnings("unchecked")
 	public Map<Integer,Integer> loadUserByGroupId(int id)
 	{
-		String sql = "select user_id,group_id from daily_base.tbl_group_user where group_id =" + id;
+		String sql = "select user_id,group_id from comsum_config.tbl_group_user where group_id =" + id;
 		return (Map<Integer,Integer>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -188,7 +188,7 @@ public class GroupDao
 	@SuppressWarnings("unchecked")
 	public List<Integer> loadRightByGroupId(int id)
 	{
-		String sql = "SELECT menu_2_id FROM daily_base.`tbl_group_right` WHERE group_id = " + id;
+		String sql = "SELECT menu_2_id FROM comsum_config.`tbl_group_right` WHERE group_id = " + id;
 		return (List<Integer>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -206,13 +206,13 @@ public class GroupDao
 	
 	public void delGroupRightById(int id)
 	{
-		String sql = "delete from daily_base.tbl_group_right where group_id = " + id;
+		String sql = "delete from comsum_config.tbl_group_right where group_id = " + id;
 		new JdbcControl().execute(sql);
 	}
 	
 	public void addGroupRight(int groupId,List<Integer> list)
 	{
-		String sql = "insert into daily_base.tbl_group_right(group_id,menu_2_id) value("+ groupId +",?)";
+		String sql = "insert into comsum_config.tbl_group_right(group_id,menu_2_id) value("+ groupId +",?)";
 		List<Map<Integer, Object>> dataParams = new ArrayList<Map<Integer,Object>>();
 		for(int i=0; i <list.size(); i++)
 		{

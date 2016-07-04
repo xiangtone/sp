@@ -1,14 +1,12 @@
 
 package com.system.server;
 
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
 import com.system.util.ConfigManager;
-import com.system.util.StringUtil;
 
 public class TimerServer
 {
@@ -16,69 +14,49 @@ public class TimerServer
 
 	public void startTimer()
 	{
-		startAnalyDataFromHtSummer();
+		startAnalyData();
 	}
 
-	//每天早上三点分析浩天的数据到大数据平台
-	private void startAnalyDataFromHtSummer()
+	//每次启去分析数据，每隔三小时扫描一次数据变化
+	private void startAnalyData()
 	{
-		Calendar ca = Calendar.getInstance();
-
-		int curHour = ca.get(Calendar.HOUR_OF_DAY);
-
-		if (curHour > 3)
-		{
-			ca.add(Calendar.DAY_OF_MONTH, 1);
-		}
-		
-		ca.set(Calendar.HOUR_OF_DAY, 3);
-		ca.set(Calendar.MINUTE, 0);
-		ca.set(Calendar.SECOND, 0);
-
-		//ca.set(Calendar.HOUR_OF_DAY, 21);
-		//ca.set(Calendar.MINUTE, 15);
-		//ca.set(Calendar.SECOND, 0);
-
-		long firstTime = ca.getTimeInMillis();
-
-		//24小时
-		long periodTime = 3600000*24;
-
-		// long periodTime = 120000;
-
-		long delayMils = firstTime - System.currentTimeMillis();
-
-		log.info("大数据分析准备开启:" + delayMils);
-		log.info("周期时间是:" + periodTime);
+		//3小时
+		long periodTime = 3600000*3;
 		Timer timer = new Timer();
-		timer.schedule(new AnalyDataTimerTask1(), delayMils, periodTime);
-		log.info("已经启动了大数据分析定时任务...");
+		timer.schedule(new AnalyDataTimerTask1(), 0, periodTime);
+		log.info("每隔三个小时就会分析一次数据 ");
+	}
+	
+	public static void analyData()
+	{
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				long  curMils = System.currentTimeMillis();
+				System.out.println("开始分析数据...");
+				new ComSumAnalyServer().startAnalyComSumData();
+				new BaseDataAnalyServer().startAnalyBaseData();
+				System.out.println("结束分析数据，共耗时：" + (System.currentTimeMillis() - curMils));
+			}
+		}).start();
 	}
 	
 	public static void main(String[] args)
 	{
-		ConfigManager.setConfigFilePath("");
+		//ConfigManager.setConfigFilePath("");
 		
 		new TimerServer().startTimer();
 	}
 
-	//每隔一小时扫描daily_log.tbl_mr_xxxx，把更新的数据传到大数据中心
+	//每隔三小时同步一次三个公司的基础数据和报表数据到大平台中心
 	private class AnalyDataTimerTask1 extends TimerTask
 	{
 		@Override
 		public void run()
 		{
-			Calendar ca = Calendar.getInstance();
-			
-			ca.add(Calendar.DAY_OF_MONTH, -1);
-			
-			String feeDate = StringUtil.getDateFormat(ca.getTime());
-			
-			ca.add(Calendar.DAY_OF_MONTH, -3);
-			
-			String monthFeeDate = StringUtil.getDateFormat(ca.getTime());
-			
-			new DailyDataServer().analyDataToSummer(feeDate,monthFeeDate);
+			analyData();
 		}
 	}
 	

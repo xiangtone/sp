@@ -22,11 +22,11 @@ public class SystemUserDao {
 	
 	public Map<String, Object> loadUser(int pageIndex,int groupId,String userName,String nickName,int userId)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  daily_base.`tbl_group_user` a LEFT JOIN  daily_base.tbl_user b ON a.`user_id` = b.`id` where a.create_user="+userId;
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` where a.create_user="+userId;
 		
 		String query = "";
 		
-		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM daily_base.tbl_user a LEFT JOIN daily_base.`tbl_user` b ON b.`id`=a.`create_user` where a.create_user="+userId;
+		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM comsum_config.tbl_user a LEFT JOIN comsum_config.`tbl_user` b ON b.`id`=a.`create_user` where a.create_user="+userId;
 		
 		if(groupId>0)
 			query = " and group_id =" + groupId;
@@ -107,7 +107,7 @@ public class SystemUserDao {
 	}
 	
 	public boolean adduser(SystemUserModel model){
-		String sql = "INSERT INTO `daily_base`.`tbl_user`(`name`,`pwd`,`mail`,`qq`,`phone`,`create_user`,`status`) "
+		String sql = "INSERT INTO `comsum_config`.`tbl_user`(`name`,`pwd`,`mail`,`qq`,`phone`,`create_user`,`status`) "
 				+ " VALUE('"+model.getName()+"','"+model.getPwd()+"',"
 						+ "'"+model.getMail()+"','"+model.getQq()+"',"
 						+ "'"+model.getPhone()+"',"+model.getUserid()+",1)";
@@ -151,7 +151,7 @@ public class SystemUserDao {
 	}
 	
 	public boolean deleteUser(int id){
-		String sql = "DELETE FROM `daily_base`.`tbl_user` WHERE id="+id;
+		String sql = "DELETE FROM `comsum_config`.`tbl_user` WHERE id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	

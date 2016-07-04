@@ -26,7 +26,7 @@ public class ComSumSummerDao
 	//删除指定公司内的指定时间的数据
 	public void delDailyData(int companyId,String startDate,String endDate)
 	{
-		String sql = "DELETE FROM comsum_config.`tbl_data_summer` WHERE co_id = " + companyId + " AND mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "' ANDY show_type = 0";
+		String sql = "DELETE FROM comsum_config.`tbl_data_summer` WHERE co_id = " + companyId + " AND mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "' AND show_type = 0";
 		new JdbcControl().execute(sql);
 	}
 	
@@ -186,7 +186,7 @@ public class ComSumSummerDao
 	public Map<String,FeeDateDataModel> loadOriSource(int coId,String startDate,String endDate)
 	{
 		String sql = " SELECT mr_date,SUM(data_rows) data_rows,SUM(amount) amount FROM daily_log.`tbl_mr_summer` a";
-		sql += " WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "' and show_type = 0";
+		sql += " WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
 		sql += " GROUP BY mr_date ORDER BY mr_date";
 		
 		IJdbcControl control = getCoControl(coId);

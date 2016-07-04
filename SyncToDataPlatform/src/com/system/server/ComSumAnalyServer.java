@@ -124,23 +124,4 @@ public class ComSumAnalyServer
 			analyComSumData(coId, date, date);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				System.out.println("really start...");
-				
-				ComSumAnalyServer server = new ComSumAnalyServer();
-				
-				server.startAnalyComSumData();
-				
-				System.out.println("really end...");
-			}
-		}).start();
-		System.out.println("end..");
-	}
 }
