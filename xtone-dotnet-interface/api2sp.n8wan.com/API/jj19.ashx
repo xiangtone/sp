@@ -22,6 +22,7 @@ public class jj19 : sdk_Request.Logical.APIRequestGet
         public string port2;
         [DataMember]
         public string description;
+        [DataMember]
         public sdk_Request.Logical.E_SMS_TYPE SMSType;
     }
     [DataContract]
@@ -77,7 +78,8 @@ public class jj19 : sdk_Request.Logical.APIRequestGet
         }
         sms.SMSType = rlt.resultJson.SMSType;
         sms.port = rlt.resultJson.port;
-        sms.msg = System.Text.ASCIIEncoding.UTF8.GetString(Convert.FromBase64String(rlt.resultJson.msg));
+        sms.msg = rlt.resultJson.msg;
+        
         return sms;
     }
 
