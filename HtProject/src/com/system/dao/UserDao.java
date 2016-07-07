@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
@@ -17,8 +15,6 @@ import com.system.util.StringUtil;
 
 public class UserDao
 {
-	private final static Logger LOG = Logger.getLogger("UserDao.class");
-	
 	public Map<String, Object> loadUser(int pageIndex,int groupId)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  daily_config.`tbl_group_user` a LEFT JOIN  daily_config.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
@@ -420,15 +416,22 @@ public class UserDao
 	
 	public void updateUserGroup(List<Integer> list,int userId)
 	{
-		String sql = "insert into daily_config.tbl_group_user(user_id,group_id) value("+ userId +",?)";
-		List<Map<Integer, Object>> dataParams = new ArrayList<Map<Integer,Object>>();
+		String sql = "insert into daily_config.tbl_group_user(user_id,group_id) values ";
+		
+		String values = "";
+		
 		for(int i=0; i <list.size(); i++)
 		{
-			Map<Integer, Object> map = new HashMap<Integer, Object>();
-			map.put(1, list.get(i));
-			dataParams.add(map);
+			values += "("+ userId +","+ list.get(i) +"),";
 		}
-		new JdbcControl().executeMulData(sql, dataParams);
+		
+		if(!StringUtil.isNullOrEmpty(values))
+		{
+			values = values.substring(0,values.length()-1);
+			values += ";";
+			new JdbcControl().execute(sql + values);
+		}
+		
 	}
 	
 	

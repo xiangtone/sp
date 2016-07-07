@@ -1,9 +1,11 @@
 
 package com.system.server;
 
+import java.util.List;
 import java.util.Map;
 
 import com.system.dao.MrDao;
+import com.system.model.MrReportModel;
 import com.system.util.StringUtil;
 
 public class MrServer
@@ -12,8 +14,25 @@ public class MrServer
 			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
 			int cityId,int operatorId,int dataType,int spCommerceUserId,int cpCommerceUserId,int sortType)
 	{
-		return new MrDao().getMrAnalyData(startDate, endDate, spId, spTroneId,troneId,
+		
+		Map<String, Object> result = new MrDao().getMrAnalyData(startDate, endDate, spId, spTroneId,troneId,
 				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
+		
+		//如果数据类型，只能重新处理标题
+		if(sortType==15)
+		{
+			String[] titles = {"实时","隔天","IVR","第三方支付"};
+			
+			@SuppressWarnings("unchecked")
+			List<MrReportModel> list = (List<MrReportModel>)result.get("list");
+			if(list!=null)
+			for(MrReportModel model : list)
+			{
+				model.setTitle1(titles[StringUtil.getInteger(model.getTitle1(),0)]);
+			}
+		}
+		
+		return result;
 	}
 	
 	public Map<String, Object> getMrLrData(String startDate, String endDate,

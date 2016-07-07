@@ -288,15 +288,21 @@ public class GroupDao
 	
 	public void addGroupRight(int groupId,List<Integer> list)
 	{
-		String sql = "insert into daily_config.tbl_group_right(group_id,menu_2_id) value("+ groupId +",?)";
-		List<Map<Integer, Object>> dataParams = new ArrayList<Map<Integer,Object>>();
+		String sql = "insert into daily_config.tbl_group_right(group_id,menu_2_id) values ";
+		
+		String values = "";
+		
 		for(int i=0; i <list.size(); i++)
 		{
-			Map<Integer, Object> map = new HashMap<Integer, Object>();
-			map.put(1, list.get(i));
-			dataParams.add(map);
+			values += "("+ groupId +","+ list.get(i) +"),";
 		}
-		new JdbcControl().executeMulData(sql, dataParams);
+		
+		if(!StringUtil.isNullOrEmpty(values))
+		{
+			values = values.substring(0,values.length()-1);
+			values += ";";
+			new JdbcControl().execute(sql + values);
+		}
 	}
 	
 }

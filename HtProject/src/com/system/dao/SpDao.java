@@ -135,30 +135,20 @@ public class SpDao
 		return map;
 	}
 	
-	public Map<String, Object> loadSp(int pageIndex,String fullName,String shortName,int commerceUserId)
+	public Map<String, Object> loadSp(int pageIndex,String keyWord)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_sp a left join daily_config.tbl_user b on a.commerce_user_id = b.id where 1=1 ";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
-		if(!StringUtil.isNullOrEmpty(fullName))
+		if(!StringUtil.isNullOrEmpty(keyWord))
 		{
-			sql += " AND full_name LIKE '%"+fullName+"%' ";
-		}
-		
-		if(!StringUtil.isNullOrEmpty(shortName))
-		{
-			sql += " AND short_name LIKE '%"+shortName+"%' ";
-		}
-		
-		if(commerceUserId>0)
-		{
-			sql += " AND a.commerce_user_id = " + commerceUserId;
+			sql += " AND (full_name LIKE '%" + keyWord + "%' or short_name LIKE '%"+ keyWord +"%' or b.nick_name like '%" + keyWord + "%' or a.id = '" + keyWord + "' )";
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		sql += " order by convert(short_name using gbk) asc ";
+		sql += " order by a.id desc ";
 		JdbcControl control = new JdbcControl();
 		map.put("rows",control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"), new QueryCallBack()
 		{

@@ -257,7 +257,16 @@
 									}
 								%>
 							</optgroup>
-														
+							<optgroup label="第三方支付">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(3))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>							
 							
 							<!--  
 							<option value="1">联通</option>
@@ -288,6 +297,7 @@
 							<option value="0">对公周结</option>
 							<option value="1">对公双周结</option>
 							<option value="2">对公月结</option>
+							<option value="7">对公N+2结</option>
 							<option value="3">对私周结</option>
 							<option value="4">对私双周结</option>
 							<option value="5">对私月结</option>
@@ -329,13 +339,15 @@
 					<br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">数据类型</dd>
-					<dd class="dd03_me">
+					<dd class="dd03_me" style="background: none">
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="0" checked="checked" >
 						<label style="font-size: 14px;float:left">实时</label>
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="1" >
 						<label style="font-size: 14px;float:left">隔天</label>
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="2" >
 						<label style="font-size: 14px;float:left">IVR</label>
+						<input type="radio" name="trone_type" style="width: 35px;float:left" value="3" >
+						<label style="font-size: 14px;float:left">第三方支付</label>
 					</dd>
 					
 					<br />

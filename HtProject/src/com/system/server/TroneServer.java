@@ -23,9 +23,9 @@ public class TroneServer
 		return new TroneDao().loadTrone(spId, pageIndex);
 	}
 	
-	public Map<String, Object> loadTrone(int spId,int pageIndex,int spTroneId,String orders,String troneNum,String troneName)
+	public Map<String, Object> loadTrone(int pageIndex,String keyWord)
 	{
-		return new TroneDao().loadTrone(spId, pageIndex, spTroneId, orders, troneNum, troneName);
+		return new TroneDao().loadTrone(pageIndex, keyWord);
 	}
 	
 	public List<TroneModel> loadSpTrone()

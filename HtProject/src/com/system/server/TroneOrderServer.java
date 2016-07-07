@@ -21,9 +21,9 @@ public class TroneOrderServer
 		return new TroneOrderDao().loadTroneOrderList();
 	}
 	
-	public Map<String, Object> loadTroneOrder(int spId,int spTroneId,int cpId, int status,int pageIndex,String keyWord)
+	public Map<String, Object> loadTroneOrder(int status,int pageIndex,String keyWord)
 	{
-		return new TroneOrderDao().loadTroneOrder(spId, spTroneId, cpId, status ,pageIndex,keyWord);
+		return new TroneOrderDao().loadTroneOrder(status ,pageIndex,keyWord);
 	}
 	
 	public boolean addTroneOrder(TroneOrderModel model)

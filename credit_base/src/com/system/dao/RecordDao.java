@@ -33,7 +33,7 @@ public class RecordDao
 		String sql = "insert into daily_log.tbl_api_order_" + StringUtil.getMonthFormat() + " (trone_order_id,api_id,imsi,imei,mobile,lac,"
 				+ "cid,ExtrData,sdkversion,packagename,ip,clientip,nettype,"
 				+ "sp_linkid,sp_exField,cp_verifyCode,FirstDate,port,"
-				+ "msg,api_exdata,status,is_hidden,trone_id,extra_param,iccid,user_agent) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?)";
+				+ "msg,api_exdata,status,is_hidden,trone_id,extra_param,iccid,user_agent,fake_mobile,city) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?)";
 		
 		Map<Integer, Object> params = new HashMap<Integer, Object>();
 		
@@ -62,6 +62,8 @@ public class RecordDao
 		params.put(23, model.getExtraParams());
 		params.put(24, model.getIccid());
 		params.put(25, model.getUserAgent());
+		params.put(26, StringUtil.getString(model.getFakeMobile(), ""));
+		params.put(27, model.getCityId());
 		
 		model.setId(new JdbcControl().insertWithGenKey(sql, params));
 	}

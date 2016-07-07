@@ -29,9 +29,9 @@ public abstract class ConnConfigMain
     {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl(ConfigManager.getConfigData("MainConfigDbServer"));
-        ds.setUsername(ConfigManager.getConfigData("MainConfigUserName"));
-        ds.setPassword(ConfigManager.getConfigData("MainConfigPassword"));
+        ds.setUrl(ConfigManager.getConfigData("MainDbServer"));
+        ds.setUsername(ConfigManager.getConfigData("MainDbServerName"));
+        ds.setPassword(ConfigManager.getConfigData("MainDbServerPwd"));
         ds.setInitialSize(4);
         ds.setMaxActive(32);
         ds.setMaxIdle(8);

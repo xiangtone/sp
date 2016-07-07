@@ -10,7 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 
-public class JdbcControl 
+public class JdbcControl implements IJdbcControl 
 {
 	Logger logger = Logger.getLogger(JdbcControl.class);
 	
@@ -24,7 +24,7 @@ public class JdbcControl
 			conn = ConnConfigMain.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-			logger.debug("finish query sql [ " + sql + " ]");
+			logger.info("finish query sql [ " + sql + " ]");
 			return callBack.onCallBack(rs);
 		}
 		catch(Exception ex)
@@ -101,7 +101,7 @@ public class JdbcControl
 		return false;
 	}
 	
-	public boolean execute(String sql,Map<Integer,Object> param)
+	public boolean executeWithParam(String sql,Map<Integer,Object> param)
 	{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -131,17 +131,65 @@ public class JdbcControl
 		return false;
 	}
 	
+	public boolean executeWithParam(String sql,List<Map<Integer,Object>> paramList)
+	{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try
+		{
+			conn = ConnConfigMain.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			
+			for(int i=0; i<paramList.size(); i++)
+			{
+				pstmt.clearParameters();
+				
+				Map<Integer,Object> param = paramList.get(i);
+				
+				for(int key : param.keySet())
+				{
+					pstmt.setObject(key, param.get(key));
+				}
+				
+				pstmt.execute();
+				
+				logger.debug("execute sql [" + sql + "] with param finish");
+			}
+			
+			return true;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			logger.error("execute sql [" + sql + "] error:" + ex.getMessage());
+		}
+		finally
+		{
+			free(null,pstmt,conn);
+		}
+		
+		return false;
+	}
+	
+	
+	
 	public void getConnection(ConnectionCallBack callBack)
 	{
 		Connection conn = null;
 		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try
 		{
 			conn = ConnConfigMain.getConnection();
 			stmt = conn.createStatement();
+			
 			if(callBack!=null)
+			{
 				callBack.onConnectionCallBack(stmt,rs);
+				callBack.onConnectionCallBack(pstmt, rs);
+			}
+			
 		}
 		catch(Exception ex)
 		{
@@ -150,10 +198,11 @@ public class JdbcControl
 		finally
 		{
 			free(rs,stmt,conn);
+			free(rs,pstmt,conn);
 		}
 	}
 	
-	public static void free(ResultSet rs,Statement stmt,Connection conn)
+	public void free(ResultSet rs,Statement stmt,Connection conn)
 	{
 		try{ if(rs!=null)rs.close(); }catch(Exception ex){}
 		try{ if(stmt!=null)stmt.close(); }catch(Exception ex){}

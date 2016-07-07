@@ -295,7 +295,7 @@
 			</tbody>
 		</table>
 	</div>
-	<form action="<%= synUrl %>" id="deng_form" >
+	<form action="<%= synUrl %>" id="deng_form" method="post" >
 		<input type="hidden" value="" id="hid_month" name="month" />
 		<input type="hidden" value="" id="hid_data" name="data" />
 	</form>

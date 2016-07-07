@@ -45,7 +45,7 @@ public class MrDao
 			query += " and h.id = " + spTroneId;
 		
 		if(operatorId>0)
-			query += " and h.operator = " + operatorId;
+			query += " and n.flag = " + operatorId;
 		
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
@@ -72,6 +72,9 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";		
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
@@ -86,6 +89,9 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";
@@ -861,7 +867,7 @@ public class MrDao
 		return map;
 	}
 	
-	//sortType 1:天  2:周  3：月  4：SP 5：CP 6：TRONE 7:TRONE_ORDER 8:PROVINCE 9:CITY 10:SP业务 
+	//sortType 1:天  2:周  3：月  4：SP 5：CP 6：TRONE 7 CP通道 8省份 9城市 10SP业务 11小时 12SP商务 13CP商务 14运营商 15数据类型 16一级业务线 17二级业务线
 	private String[] getSortType(int sortType)
 	{
 		String joinId = " a.mr_date ";
@@ -922,6 +928,26 @@ public class MrDao
 			case 13:
 				queryParams = " k.nick_name ";
 				joinId = " k.id ";
+				break;
+				
+			case 14:
+				queryParams = " n.name_cn ";
+				joinId = " n.id ";
+				break;
+			
+			case 15:
+				queryParams = " a.record_type ";
+				joinId = " a.record_type ";
+				break;
+				
+			case 16: //一级业务线
+				queryParams = "  CONCAT(n.name_cn,'-',m.name) ";
+				joinId = " m.id ";
+				break;
+				
+			case 17: //二级业务线
+				queryParams = "  CONCAT(n.name_cn,'-',m.name,'-',l.name) ";
+				joinId = " l.id ";
 				break;
 				
 			default:

@@ -35,10 +35,10 @@
 	
 	String pageData = PageUtil.initPageQuery("sptrone.jsp", params, rowCount, pageIndex);
 	
-	String[] troneTypes = {"实时","隔天","IVR"};
+	String[] troneTypes = {"实时","隔天","IVR","第三方支付"};
 	
-	//0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结,6见帐单结
-	String[] jsTypes = {"对公周结","对公双周结","对公月结","对私周结","对私双周结","对私月结","见帐单结"};
+	//0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结,6见帐单结,7对公N+1结
+	String[] jsTypes = {"对公周结","对公双周结","对公月结","对私周结","对私双周结","对私月结","见帐单结","对公N+2结"};
 	
 	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
 	
@@ -207,8 +207,7 @@
 					<td><%= model.getUserDayLimit() %></td>
 					<td><%= model.getUserMonthLimit() %></td>
 					<td><%= model.getStatus()==1 ? "开启" : "关闭" %></td>
-					<td><a href="sptroneedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a>
-						<a href="#" onclick="delSpTrone(<%=model.getId()%>)">删除</a></td>
+					<td><a href="sptroneedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a></td>
 				</tr>
 				<%
 					}

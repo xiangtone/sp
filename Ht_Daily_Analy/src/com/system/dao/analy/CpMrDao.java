@@ -56,7 +56,7 @@ public class CpMrDao
 	
 	public boolean deleteCpMrSummer(String startDate,String endDate)
 	{
-		String sql = "DELETE FROM daily_log.tbl_cp_mr_summer WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "' and record_type in( 0,2)";
+		String sql = "DELETE FROM daily_log.tbl_cp_mr_summer WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "' and record_type in( 0,2,3)";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -87,6 +87,26 @@ public class CpMrDao
 				+ "mcc,province_id,city_id order by mr_date asc";
 		
 		return new JdbcControl().execute(sql);
+	}
+	
+	public boolean analyThirdPayToCpMrSummer(String tableName,String startDate,String endDate)
+	{
+		StringBuffer sb = new StringBuffer(1024);
+		
+		sb.append("INSERT INTO daily_log.`tbl_cp_mr_summer`(cp_id,mcc,province_id,city_id,trone_order_id,mr_date,data_rows,amount,record_type)");
+		sb.append(" SELECT b.cp_id,460,32,416,b.trone_order_id,DATE_FORMAT(a.`createdate`,'%Y-%m-%d') mr_date,COUNT(*) data_rows,SUM(amount)/100 amount,3 FROM game_log.`tbl_xypay_" + tableName + "` a");
+		sb.append(" LEFT JOIN");
+		sb.append(" (");
+		sb.append(" SELECT a.id trone_order_id,a.`order_num` appkey,b.`orders` pay_type,c.`sp_id`,a.cp_id,b.id trone_id  FROM daily_config.tbl_trone_order a");
+		sb.append(" LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`");
+		sb.append(" LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`");
+		sb.append(" WHERE c.`trone_type` = 3");
+		sb.append(" )");
+		sb.append(" b ON a.`appkey` = b.appkey AND a.`oprator` = b.pay_type");
+		sb.append(" WHERE a.oprator >= 4 AND a.`createdate` >= '" + startDate + " 00:00:00' AND a.`createdate` <= '" + endDate + " 23:59:59' AND trone_order_id >0 ");
+		sb.append(" GROUP BY b.trone_order_id;");
+		
+		return new JdbcControl().execute(sb.toString());
 	}
 	
 	
