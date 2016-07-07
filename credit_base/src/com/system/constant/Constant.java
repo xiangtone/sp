@@ -16,6 +16,13 @@ public class Constant
 	public static final int SP_TRONE_USER_MONTH_OVER_LIMIT = 1014;//业务用户月限已超
 	public static final int SP_TRONE_USER_DAY_OVER_LIMIT = 1015;//业务用户日限已超
 	
+	public static final int SP_TRONE_PROVINCE_OVER_MONTH_LIMIT = 1016; //SP业务省份月限已超
+	public static final int SP_TRONE_PROVINCE_OVER_DAY_LIMIT = 1017; //SP业务省份日限已超
+	public static final int SP_TRONE_CITY_OVER_MONTH_LIMIT = 1018; //SP业务城市月限已超
+	public static final int SP_TRONE_CITY_OVER_DAY_LIMIT = 1019; //SP业务城市日限已超
+	
+	//再往下加要往1100起
+	
 	public static final int CP_BASE_PARAMS_ERROR = 1008;//基础参数没匹配上
 	public static final int CP_BASE_PARAMS_AREA_NOT_MATCH = 1009; //地区没匹配
 	public static final int CP_SP_TRONE_ERROR = 1010;//第一次数据没取成功

@@ -88,6 +88,18 @@
 			</activation>
 		</profile>
 		<profile>
+			<id>bjxy</id>
+			<properties>
+				<runtime.env>config\bjxy</runtime.env>
+				<final.name>XyProject</final.name>
+				<ftp.server.id>BjYdFtpServer</ftp.server.id>
+				<ftp.to.url>ftp://120.26.105.75/tomcat/swap_dir/</ftp.to.url>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
 			<id>sz</id>
 			<properties>
 				<runtime.env>config\sz</runtime.env>

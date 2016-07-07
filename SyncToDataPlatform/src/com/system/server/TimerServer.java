@@ -45,7 +45,7 @@ public class TimerServer
 	
 	public static void main(String[] args)
 	{
-		//ConfigManager.setConfigFilePath("");
+		ConfigManager.setConfigFilePath("");
 		
 		new TimerServer().startTimer();
 	}
