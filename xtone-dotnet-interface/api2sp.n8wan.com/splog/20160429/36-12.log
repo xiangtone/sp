@@ -1,0 +1,8 @@
+12:01:35.981 Request:{"apiExdata":"","apiOrderId":36,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":347680,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"13127812668","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1165,"troneOrderId":2139,"userAgent":""}
+
+12:01:39.456 http://115.29.201.88/sync/hzdsworeq?mobile=13127812668&chargeCode=HY2203801000
+12:01:40.535 +1078ms {"result":{"orderId":3025515,"actionList":[{"actionType":1,"actionTarget":"http://api.jiebasdk.com/SmsPay/YbkConfirmPayment/","actionParam":{"orderId":"S003025515","authCode":"{authCode}"},"actionRemark":null,"interval":0}]},"code":0,"msg":"??"}
+12:05:08.570 Request:{"apiExdata":"","apiOrderId":36,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":347680,"imei":"866568022922909","imsi":"460007743190142","ip":"113.88.178.62","isHidden":0,"lac":0,"mobile":"13127812668","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1165,"troneOrderId":2139,"userAgent":""}
+
+12:05:13.518 http://115.29.201.88/sync/hzdsworeq?mobile=13127812668&chargeCode=HY2203801000
+12:05:14.361 +843ms {"result":{"orderId":3025774,"actionList":[{"actionType":1,"actionTarget":"http://api.jiebasdk.com/SmsPay/YbkConfirmPayment/","actionParam":{"orderId":"S003025774","authCode":"{authCode}"},"actionRemark":null,"interval":0}]},"code":0,"msg":"??"}
