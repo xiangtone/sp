@@ -1,17 +1,15 @@
 package com.system.util;
 
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
-import com.sun.org.apache.regexp.internal.recompile;
 
 
 public class StringUtil 
@@ -225,6 +223,18 @@ public class StringUtil
 		return df1.format((float)data1/(float)data2);
 	}
 	
+	public static String getPercent(float data1,float data2)
+	{
+		data2 = data2==0 ? 1 : data2;
+		return df1.format(data1/data2);
+	}
+	
+	public static String getPercent(double data1,double data2)
+	{
+		data2 = data2==0 ? 1 : data2;
+		return df1.format(data1/data2);
+	}
+	
 	public static String getDecimalFormat(float data)
 	{
 		return df2.format(data);
@@ -279,7 +289,6 @@ public class StringUtil
 		if(time.length()<=6){
 			return time;
 		}
-		System.out.println(time.length());
 		time = time.substring(2, time.length());
 		String[] list = null;
 		list = time.split("-");
@@ -351,20 +360,77 @@ public class StringUtil
         return sbu.toString();  
     }  
     
+    public static String encodeUrl(String data,String charset)
+    {
+    	try
+    	{
+    		return URLEncoder.encode(data,charset);
+    	}
+    	catch(Exception ex)
+    	{
+    		
+    	}
+    	return data;
+    }
+    
+    public static String concatStrings(String[] oriSources,int[] values,String splitor)
+    {
+    	if(oriSources==null || oriSources==null || values==null || (values.length > oriSources.length))
+    	{
+    		return "";
+    	}
+    	
+    	String result = "";
+    	
+    	try
+    	{
+    		for(int value : values)
+        	{
+        		result += oriSources[value] + splitor;
+        	}
+        	
+        	if(result.length()>1)
+        		result = result.substring(0, result.length()-1);
+    	}
+    	catch(Exception ex){}
+    	
+    	return result;
+    }
+    
+    public static String concatStrings(String[] oriSources,String[] values,String splitor)
+    {
+    	if(oriSources==null || oriSources==null || values==null || (values.length > oriSources.length))
+    	{
+    		return "";
+    	}
+    	
+    	String result = "";
+    	
+    	try
+    	{
+    		for(String value : values)
+        	{
+        		result += oriSources[getInteger(value, 0)] + splitor;
+        	}
+        	
+        	if(result.length()>1)
+        		result = result.substring(0, result.length()-1);
+    	}
+    	catch(Exception ex){}
+    	
+    	return result;
+    }
 	
 	public static void main(String[] args)
 	{
-		///List<String> list = new ArrayList<String>();
-		//list.add("1");
-		//list.add("4");
-		//list.add("5");
-		//list.add("2");
-		//System.out.println(StringUtil.stringListToString(list));
-		//StringUtil.letterToNum("A");
-		//System.out.println(getMonthEndDate());
-		//System.out.println(StringUtil.dateTimeToDateTime("2015-12-01"));
+//		String[] oriSources = {"A","b","C"};
+//		int[] values = {1,1,0};
+//		System.out.println(concatStrings(oriSources, values, "|"));
 		
-		System.out.println(StringUtil.stringToAscii("G"));
+		String[] s = "".split(",");
+		System.out.println(s.length);
+		
+		
 	}
 	
 }

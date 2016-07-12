@@ -2,14 +2,14 @@ package com.system.model;
 
 public class BaseDataShowModel
 {
-	private int title;
+	private String title;
 	private float amount;
 	
-	public int getTitle()
+	public String getTitle()
 	{
 		return title;
 	}
-	public void setTitle(int title)
+	public void setTitle(String title)
 	{
 		this.title = title;
 	}
@@ -21,5 +21,4 @@ public class BaseDataShowModel
 	{
 		this.amount = amount;
 	}
-	
 }

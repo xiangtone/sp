@@ -33,7 +33,7 @@ body {
   background: url(../images/banner.jpg)no-repeat;
   background-size: cover;
   padding: 70px 0px 70px 0px;
-  min-height: 900px;
+  /* min-height: 900px; */
   font-family: 'Roboto', sans-serif;
   font-size: 100%;
 }

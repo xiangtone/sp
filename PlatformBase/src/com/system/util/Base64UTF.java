@@ -544,7 +544,6 @@ public class Base64UTF {
         try {
             return new String(encodeToChar(s.getBytes("UTF-8"), false));
         } catch (Exception e) {
-            System.err.println("Base64 encoding error: " + e.getMessage());
         }
         return "";
     }

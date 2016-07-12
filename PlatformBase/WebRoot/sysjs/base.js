@@ -66,7 +66,7 @@ function setRadioCheck(RadioName,value)
 
 function isNullOrEmpty(strVal) 
 {
-	if (strVal == '' || strVal == null || strVal == undefined) 
+	if (strVal == null || strVal == '' ||  strVal == undefined) 
 	{
 		return true;
 	} 
@@ -81,21 +81,35 @@ function getAjaxValue(url,onSuccess)
 	$.ajax(
 	{
 		url: url,
-		type : "get",
+		type : "post",
 		async: true,
 		success:function(data)
 		{
-			onSuccess(data);
+			onSuccess(data.trim());
 		}
 	}); 
 }
 
 function isPositiveInteger(value)
 {
-	 if((/^(\+|-)?\d+$/.test(value)) && value>0 )
+	 if((/^(\+|-)?\d+$/.test(value)) && value>=0 )
 		 return true;
 	 
 	 return false;
+}
+
+String.prototype.replaceAll = function(s1,s2)
+{ 
+	return this.replace(new RegExp(s1,"gm"),s2); 
+}
+
+function ReplaceAll(str, sptr, sptr1)
+{
+    while (str.indexOf(sptr) >= 0)
+    {
+       str = str.replace(sptr, sptr1);
+    }
+    return str;
 }
 
 

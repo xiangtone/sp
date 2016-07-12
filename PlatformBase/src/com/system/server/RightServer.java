@@ -107,7 +107,7 @@ public class RightServer
 		
 		for(Menu2Model model : rightModel.getMenu2List())
 		{
-			if(model.getUrl().equalsIgnoreCase(url) || model.getActionUrl().contains(url))
+			if(model.getUrl().contains(url) || model.getActionUrl().contains(url))
 				return true;
 		}
 		return false;

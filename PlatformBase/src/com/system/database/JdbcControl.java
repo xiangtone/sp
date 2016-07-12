@@ -101,11 +101,45 @@ public class JdbcControl
 		return false;
 	}
 	
-	public boolean execute(String sql,Map<Integer,Object> param)
+	public int insertWithGenKey(String sql,Map<Integer,Object> param)
 	{
+		logParamsInfo(sql,param);
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		System.out.println("why i am here");
+		ResultSet rs = null;
+		
+		try
+		{
+			conn = ConnConfigMain.getConnection();
+			pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			for(Integer key : param.keySet())
+			{
+				pstmt.setObject(key, param.get(key));
+			}
+			pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys();
+			if(rs.next())
+			{
+				return rs.getInt(1);
+			}
+		}
+		catch(Exception ex)
+		{
+			logger.error("execute sql [" + sql + "] error:" + ex.getMessage());
+		}
+		finally
+		{
+			free(rs,pstmt,conn);
+		}
+		
+		return -1;
+	}
+	
+	public boolean execute(String sql,Map<Integer,Object> param)
+	{
+		logParamsInfo(sql,param);
+		Connection conn = null;
+		PreparedStatement pstmt = null;
 		try
 		{
 			conn = ConnConfigMain.getConnection();
@@ -130,6 +164,29 @@ public class JdbcControl
 		}
 		
 		return false;
+	}
+	
+	public void logParamsInfo(String sql,Map<Integer, Object> params)
+	{
+		try
+		{
+			sql = sql.replaceAll("\\?", "%s");
+			
+			Object[] objs = new Object[params.size()];
+			
+			for(int i=0; i<params.size(); i++)
+			{
+				objs[i] = params.get(i+1);
+			}
+			
+			sql = String.format(sql, objs);
+			
+			logger.debug(sql);
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	public void getConnection(ConnectionCallBack callBack)
@@ -160,5 +217,4 @@ public class JdbcControl
 		try{ if(stmt!=null)stmt.close(); }catch(Exception ex){}
 		try{ if(conn!=null)conn.close(); }catch(Exception ex){}
 	}
-	
 }

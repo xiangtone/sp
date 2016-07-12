@@ -47,6 +47,7 @@ public class PageUtil
 		
 		if(1!=pageCount)
 		{
+			
 			for(int i=1; i<=pageCount; i++)
 			{
 				if(i!=pageIndex)
@@ -62,7 +63,6 @@ public class PageUtil
 				else
 				{
 					result += pageIndex + "&nbsp;&nbsp;";
-					
 				}
 			}
 		}

@@ -15,7 +15,6 @@ public class MenuHeadServer
 	
 	public Map<String, Object> loadMenuHead(int pageIndex,String name,int sort)
 	{
-		System.out.println("loadMenuHead ...");
 		return new MenuHeadDao().loadMenuHead(pageIndex,name, sort);
 	}
 	
@@ -26,13 +25,11 @@ public class MenuHeadServer
 	
 	public List<String> loadMenuName(int id)
 	{
-		System.out.println("loadmenunamelist ...");
 		return new MenuHeadDao().loadMenuName(id);
 	}
 	
 	public MenuHeadModel loadMenuById(int id)
 	{
-		System.out.println("loadmenubyid ...");
 		return new MenuHeadDao().loadMenuById(id);
 	}
 	

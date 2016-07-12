@@ -44,9 +44,7 @@ public class MenuHeadDao
 	
 	public Map<String, Object> loadMenuHead(int pageIndex,String menuName,int sort)
 	{
-		System.out.println("page:"+pageIndex);
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
-		String sqlcount = " count(*) ";
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING+" from comsum_config.`tbl_menu_head` WHERE 1=1 ";
 		
 		if(!StringUtil.isNullOrEmpty(menuName))
@@ -59,8 +57,6 @@ public class MenuHeadDao
 		}
 		
 		sql += " order by sort,id asc ";
-		
-		System.out.println("sql:"+sql);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -76,8 +72,6 @@ public class MenuHeadDao
 						return 0;
 					}
 				});
-		
-		System.out.println(rowcount);
 		
 		result.put("rows", rowcount);
 		
@@ -139,14 +133,10 @@ public class MenuHeadDao
 							list.add(rs.getString(1));
 							
 						}
-						System.out.println("list:"+list);
 						return list;
 					}
 				});
 		
-		for (String string : list) {
-			System.out.println("list:"+list);
-		}
 		return list;
 	}
 	
@@ -171,7 +161,6 @@ public class MenuHeadDao
 							model.setSort(rs.getInt("sort"));
 							
 						}
-						System.out.println("model:"+model.getName());
 						return model;
 					}
 				});
@@ -199,22 +188,7 @@ public class MenuHeadDao
 	{
 		String sql = "UPDATE comsum_config.`tbl_menu_head` SET "
 				+ "sort="+sort+" WHERE id="+id;
-		System.out.println("sql:"+sql);
 		return new JdbcControl().execute(sql);
 	}
-	
-	public static void main(String[] args) {
-		MenuHeadDao dao = new MenuHeadDao();
-		
-		List<String> list = dao.loadMenuName(4);
-		
-		System.out.println(list);
-		
-		for (String string : list) {
-			System.out.println(string);
-		}
-	}
-	
-	
 	
 }
