@@ -13,9 +13,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String defaultStartDate = StringUtil.getMonthHeadDate();
+	String defaultStartDate = StringUtil.getMonthHeadDate() + " 00:00:00";
 
-	String defaultEndDate = StringUtil.getMonthEndDate();
+	String defaultEndDate = StringUtil.getMonthEndDate() + " 23:59:59";
 	
 	String startDate = StringUtil
 			.getString(request.getParameter("startdate"), defaultStartDate);
@@ -186,12 +186,12 @@
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
 						<input name="startdate"  type="text" value="<%=startDate%>" 
-							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width: 120px;">
 					</dd>
 					<dd class="dd01_me">结束日期</dd>
 					<dd class="dd03_me">
 						<input name="enddate" type="text" value="<%=endDate%>" 
-							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width: 120px;">
 					</dd>
 					<dd class="dd01_me">SP</dd>
 					<dd class="dd04_me">

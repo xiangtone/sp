@@ -363,7 +363,7 @@
 							<option value="-1">请选择结算类型</option>
 							<option value="0">对公周结</option>
 							<option value="1">对公双周结</option>
-							<option value="2">对公月结</option>
+							<option value="2">对公N+1结</option>
 							<option value="7">对公N+2结</option>
 							<option value="3">对私周结</option>
 							<option value="4">对私双周结</option>

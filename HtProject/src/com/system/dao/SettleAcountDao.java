@@ -56,7 +56,7 @@ public class SettleAcountDao
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<SpFinanceShowModel> loadCpSettleAccountData(String startDate,String endDate,int cpId)
+	public List<SpFinanceShowModel> loadCpSettleAccountData(String startDate,String endDate,int cpId,int jsType)
 	{
 		String sql = " SELECT f.id,f.short_name,h.short_name sp_name,k.name_cn,d.name,sum(a.amount) amounts,g.rate jiesuanlv ";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a  ";
@@ -75,6 +75,11 @@ public class SettleAcountDao
 		if(cpId>0)
 		{
 			sql += " and f.id = " + cpId;
+		}
+		
+		if(jsType>=0)
+		{
+			sql += " and g.js_type = " + jsType;
 		}
 		
 		sql += " group by f.id,d.id order by f.short_name,d.name";
