@@ -218,7 +218,7 @@ namespace n8wan.Public
         /// <returns></returns>
         public static string DownloadHTML(string url, string postdata, int timeout, string encode)
         {
-            return DownloadHTML(url, postdata, timeout, encode, null);
+            return DownloadHTML(url, postdata, timeout, encode, null,null);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace n8wan.Public
         /// <param name="encode">编码方式,默认utf8</param>
         /// <param name="ContentType">默认为空</param>
         /// <returns></returns>
-        public static string DownloadHTML(string url, string postdata, int timeout, string encode, string ContentType)
+        public static string DownloadHTML(string url, string postdata, int timeout, string encode, string ContentType, System.Net.CookieContainer cookies)
         {
 
             Encoding ec = null;
@@ -247,6 +247,7 @@ namespace n8wan.Public
             //web.AllowAutoRedirect = false;
             web.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
             web.ServicePoint.UseNagleAlgorithm = false;
+            web.CookieContainer = cookies;
             if (postdata != null)
             {
                 web.ServicePoint.Expect100Continue = false;
