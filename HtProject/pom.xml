@@ -76,9 +76,9 @@
 	</build>
 	<profiles>
 		<profile>
-			<id>bj</id>
+			<id>bjyd</id>
 			<properties>
-				<runtime.env>config\bj</runtime.env>
+				<runtime.env>config\bjyd</runtime.env>
 				<final.name>HtProject</final.name>
 				<ftp.server.id>BjYdFtpServer</ftp.server.id>
 				<ftp.to.url>ftp://120.26.105.75/tomcat/swap_dir/</ftp.to.url>
@@ -100,18 +100,18 @@
 			</activation>
 		</profile>
 		<profile>
-			<id>sz</id>
+			<id>szht</id>
 			<properties>
-				<runtime.env>config\sz</runtime.env>
+				<runtime.env>config\szht</runtime.env>
 				<final.name>HtProject</final.name>
 				<ftp.server.id>SzHtFtpServer</ftp.server.id>
 				<ftp.to.url>ftp://120.26.78.220/tomcat/swap_dir/</ftp.to.url>
 			</properties>
 		</profile>
 		<profile>
-			<id>sh</id>
+			<id>shhh</id>
 			<properties>
-				<runtime.env>config\sh</runtime.env>
+				<runtime.env>config\shhh</runtime.env>
 				<final.name>HtProject</final.name>
 			</properties>
 		</profile>

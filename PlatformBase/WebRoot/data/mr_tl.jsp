@@ -27,7 +27,7 @@
 	
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
-	int coId = 1;
+	int coId = 2;
 	
 	float amount = 0;
 
@@ -66,7 +66,7 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="mr_ht.jsp"  method="get" style="margin-top: 10px">
+			<form action="mr_tl.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">

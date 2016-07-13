@@ -40,12 +40,8 @@ public class ComSumAnalyServer
 			{
 				model = list.get(i);
 				
-				if(model.getTroneId()==437)
-				{
-					System.out.println(model);
-				}
-				
 				sbData.append("(" + coId + "," + model.getTroneId() + "," + model.getProvinceId() + "," + model.getDataRows() + "," + model.getAmount() + ",'" + model.getMrDate() + "'," + model.getRecordType() + "," + model.getCpId() + "),");
+				
 				if((i+1)%500==0)
 				{
 					sbData.deleteCharAt(sbData.length()-1);
@@ -97,9 +93,8 @@ public class ComSumAnalyServer
 				oriModel = oriMap.get(oriDate);
 				descModel = descMap.get(oriDate);
 				
-				if(descModel==null 
-						|| ((oriModel.getDataRows() != descModel.getDataRows()) 
-						|| oriModel.getAmount() != descModel.getAmount()))
+				//如果目标数据为空或者是两者金额不一致，就需要重新分析了
+				if(descModel==null || oriModel.getAmount() != descModel.getAmount())
 				{
 					analyDataList.add(oriDate);
 				}

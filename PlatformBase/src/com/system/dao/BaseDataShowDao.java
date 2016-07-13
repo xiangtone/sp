@@ -70,6 +70,59 @@ public class BaseDataShowDao
 		});
 	}
 	
+	
+	/***
+	 * 获取指定公司的数据，可以单选上下游
+	 * @param coId
+	 * @param spId
+	 * @param cpId
+	 * @param showType 1 按日期，2按周，3按月，4按SP，5按CP，6按SP业务线，7按CP业务线，8按SP业务名称，
+	 * 9按CP业务名称，10按SP价格通道，11按CP价格通道，12按省份,13按公司
+	 */
+	@SuppressWarnings("unchecked")
+	public List<BaseDataShowModel> loadAllData(String startDate,String endDate,int coId,int showType)
+	{
+		String[] queryType = loadQueryType(showType);
+		
+		String sql = "SELECT " + queryType[0] + " title,SUM(a.amount) amount ";
+		sql += " FROM comsum_config.`tbl_data_summer`  a";
+		sql += " LEFT JOIN comsum_config.tbl_company i on a.co_id = i.co_id";
+		sql += " LEFT JOIN comsum_config.tbl_province j on a.province_id = j.id";
+		sql += " WHERE 1=1 ";
+		
+		if(coId>0)
+		{
+			sql += " AND a.co_id = " + coId;
+		}
+		
+		sql += " AND mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		sql += " GROUP BY " + queryType[1] + " ORDER BY " + queryType[0] + " ASC";
+		sql += " LIMIT 1000";
+		
+		JdbcControl control = new JdbcControl();
+		
+		return (List<BaseDataShowModel>)control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<BaseDataShowModel> list = new ArrayList<BaseDataShowModel>();
+				
+				while(rs.next())
+				{
+					BaseDataShowModel model = new BaseDataShowModel();
+					
+					model.setTitle(rs.getString("title"));
+					model.setAmount(rs.getFloat("amount"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	
 	public String[] loadQueryType(int showType)
 	{
 		String queryType = "";

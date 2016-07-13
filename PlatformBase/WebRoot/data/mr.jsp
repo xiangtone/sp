@@ -25,13 +25,11 @@
 	
 	int showType = StringUtil.getInteger(request.getParameter("showtype"), 1);
 	
-	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
-	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int coId = StringUtil.getInteger(request.getParameter("co_id"), -1);
 	
 	float amount = 0;
 
-	List<BaseDataShowModel> list =  new BaseDataShowServer().loadShowData(startDate, endDate, coId, spId, cpId, showType);
+	List<BaseDataShowModel> list =  new BaseDataShowServer().loadAllData(startDate, endDate, coId, showType);
 	//1 按日期，2按周，3按月，4按SP，5按CP，6按SP业务线，7按CP业务线，8按SP业务名称，
 	//9按CP业务名称，10按SP价格通道，11按CP价格通道，12按省份,13按公司,14按运营商
 	String[] titles = {"日期","周数","月份","SP","CP","SP业务线","CP业务线","SP业务名称","CP业务名称","SP价格通道","CP价格通道","省份","公司","运营商"};
@@ -96,7 +94,6 @@
 							<option value="3">月份</option>
 							<option value="12">省份</option>
 							<option value="13">公司</option>
-							<option value="14">运营商</option>
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
