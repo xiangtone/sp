@@ -1,6 +1,7 @@
 ﻿#if !DEBUG
 #define DB_LOG_RECORD
 #endif
+using Shotgun.Database;
 using Shotgun.Model.Logical;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,24 @@ namespace n8wan.Public.Logical
         const string C_VIRTUAL_PORT = "virtualport";
         const string C_VIRTUAL_MSG = "virtualmsg";
         const string C_IVR_TIME = "ivr_time";
-        const string C_STATUS_KEYWORD = "status|DELIVRD|fail|success|succ|ok";//状态关键字检测
+        const string C_STATUS_KEYWORD = "status|DELIVRD|fail|success|succ|ok|stat";//状态关键字检测
 
+        /// <summary>
+        /// 未找到端口
+        /// </summary>
+        const int C_TM_NOT_Trone = -1;
+        /// <summary>
+        /// 未找到指令
+        /// </summary>
+        const int C_TM_NOT_Order = -2;
+        /// <summary>
+        /// SP传入发现状态关键字
+        /// </summary>
+        const int C_TM_STATUS_NOT_CONFIG = -3;
+        /// <summary>
+        /// SP传入价格与配置价格不一致
+        /// </summary>
+        const int C_TM_PRICE_NOT_EQUQLS = -4;
 
         /// <summary>
         /// url映射数据库字段(sql,url)
@@ -170,7 +187,7 @@ namespace n8wan.Public.Logical
         /// <returns></returns>
         protected virtual void Reset()
         {
-            _IsMo = 0;
+            //_IsMo = 0; //重置时不进行MO状态复位
             _linkId = null;
             _MoItem = null;
             _MrItem = null;
@@ -240,7 +257,7 @@ namespace n8wan.Public.Logical
                 if (!IsMo && string.IsNullOrEmpty(api.MrStatus))//MR 安全检查
                 {//MR 数据，未配置状态检查时，进行“状态”关键字检查，以防万一
                     if (CheckStatusKeywords())
-                        isms.trone_id = -3;//存在“状态”关键字
+                        isms.trone_id = C_TM_STATUS_NOT_CONFIG;//存在“状态”关键字
                 }
                 try
                 {
@@ -342,11 +359,40 @@ namespace n8wan.Public.Logical
 #endif
 
         /// <summary>
-        ///  Request
+        /// 获取配置参数的值，支持多个参数拼接
+        /// </summary>
+        /// <param name="cmbField"></param>
+        /// <returns></returns>
+        public string GetComboParamValue(string cmbField)
+        {
+
+            if (string.IsNullOrEmpty(cmbField) || !cmbField.Contains('+'))
+                return GetParamValue(cmbField);
+
+            var ptrs = cmbField.Split(new char[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
+            var value = string.Empty;
+            foreach (var p in ptrs)
+            {
+                value += GetParamValue(p.Trim());
+            }
+            return value;
+        }
+
+        /// <summary>
+        ///  获取标准的URL参数值、常数及虚拟端口
         /// </summary>
         /// <returns></returns>
         public virtual string GetParamValue(string Field)
         {
+            if (string.IsNullOrEmpty(Field))
+                return string.Empty;
+
+            if (Field.StartsWith("\'") && Field.EndsWith("\'"))
+                return Field.Substring(1, Field.Length - 2);
+
+            if (Field.StartsWith("\"") && Field.EndsWith("\""))
+                return Field.Substring(1, Field.Length - 2);
+
             var t = Request[Field];
             if (t == null)
             {
@@ -384,17 +430,26 @@ namespace n8wan.Public.Logical
             }
         }
 
+        protected virtual void FillAreaInfo(LightDataModel.tbl_mrItem m)
+        {
+            FillAreaInfo(dBase, m);
+        }
+
         /// <summary>
         /// 填充手机号归属地信息
         /// </summary>
         /// <param name="m"></param>
-        protected virtual void FillAreaInfo(LightDataModel.tbl_mrItem m)
+        public static void FillAreaInfo(IBaseDataClass2 dBase, LightDataModel.tbl_mrItem m)
         {
             var num = m.mobile;
             m.city_id = 416;
             m.province_id = 32;
-            if (num == null)
+
+            if (string.IsNullOrEmpty(num) && string.IsNullOrEmpty(m.imsi))
                 return;
+
+            if (num == null)
+                num = string.Empty;
 
             int spNum = 0;
             if (num.Length == 11 && num.StartsWith("1"))//传统手机
@@ -482,7 +537,7 @@ namespace n8wan.Public.Logical
             if (string.IsNullOrEmpty(field))
                 return 0;
             var s = field.Split(new char[] { ',' }, 3, StringSplitOptions.RemoveEmptyEntries);
-            string val = GetParamValue(s[0]);
+            string val = GetComboParamValue(s[0]);
             if (string.IsNullOrEmpty(val))
                 return 0;
             string type;
@@ -572,9 +627,9 @@ namespace n8wan.Public.Logical
             foreach (var kv in U2DMap)
             {
                 if (C_IVR_TIME.Equals(kv.Key, StringComparison.OrdinalIgnoreCase))
-                    _MrItem.ivr_time = int.Parse(GetParamValue(kv.Value));
+                    _MrItem.ivr_time = GetIVRTime(kv.Value);
                 else
-                    _MrItem[kv.Key] = GetParamValue(kv.Value);
+                    _MrItem[kv.Key] = GetComboParamValue(kv.Value);
             }
             FillAreaInfo(_MrItem);
             if (string.IsNullOrEmpty(api.MrStatus))
@@ -594,6 +649,27 @@ namespace n8wan.Public.Logical
 
         }
 
+        private int GetIVRTime(string ivrField)
+        {
+            var ars = ivrField.Split(new char[] { '|' }, 2);
+            string value = GetComboParamValue(ars[0]);
+            int type = 0;
+            if (ars.Length == 2)
+            {
+                if (!int.TryParse(ars[1], out type))
+                    return -1;//条件配置错误
+            }
+            int time;
+            if (!int.TryParse(value, out time))
+                return -2;//SP传入无法非int
+            if (type == 0)
+                return time;//默认情况，分
+            if (type == 1)//sp传入为秒(不足一分钟按一分钟)
+                return time / 60 + ((time % 60) > 0 ? 1 : 0);
+
+            return -3; //未知模式
+        }
+
         private string InsertMO()
         {
 
@@ -606,7 +682,7 @@ namespace n8wan.Public.Logical
                 //if(C_IVR_TIME.Equals(kv.Key, StringComparison.OrdinalIgnoreCase))
                 //    _MoItem.ivt
                 //else
-                _MoItem[kv.Key] = GetParamValue(kv.Value);
+                _MoItem[kv.Key] = GetComboParamValue(kv.Value);
             }
 
             return null;
@@ -653,12 +729,12 @@ namespace n8wan.Public.Logical
             if (!string.IsNullOrEmpty(api.MsgOutput))
             {
                 var ar = api.MsgOutput.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                Response.Write(ar[0]);
+                WriteMessage(ar[0]);
             }
             else
-                Response.Write("ok");
+                WriteMessage("ok");
         }
-        private void WriteExisted()
+        protected virtual void WriteExisted()
         {
             if (string.IsNullOrEmpty(api.MsgOutput))
             {
@@ -667,7 +743,7 @@ namespace n8wan.Public.Logical
             }
             var ar = api.MsgOutput.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             if (ar.Length == 3)
-                Response.Write(ar[2]);
+                WriteMessage(ar[2]);
             else
                 WriteError("linkid existed");
         }
@@ -678,12 +754,25 @@ namespace n8wan.Public.Logical
             {
                 var ar = api.MsgOutput.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
                 if (ar.Length > 2)
+                {//有配置自定义错误的，只输出自定义内容
                     pfx = ar[1];
+                    WriteMessage(pfx);
+                    return;
+                }
             }
-            Response.Write(pfx);
+            WriteMessage(pfx);
             if (string.IsNullOrEmpty(msg))
                 return;
-            Response.Write(' ');
+
+            WriteMessage(" " + msg);
+        }
+
+        /// <summary>
+        /// 所有消息的输出均由此函数输出
+        /// </summary>
+        /// <param name="msg">需要输出的完整内容</param>
+        protected virtual void WriteMessage(string msg)
+        {
             Response.Write(msg);
         }
         #endregion
@@ -715,7 +804,7 @@ namespace n8wan.Public.Logical
             if (mMsg == null)
                 mMsg = string.Empty;
 
-            m.trone_id = -2;
+            m.trone_id = C_TM_NOT_Order;
             LightDataModel.tbl_troneItem trone = null;
             foreach (var cmd in cmds)
             {
@@ -744,7 +833,7 @@ namespace n8wan.Public.Logical
                 }
                 else
                 {//精确指令
-                    if (mMsg.Equals(cMsg))
+                    if (mMsg.Equals(cMsg, StringComparison.OrdinalIgnoreCase))
                     {
                         trone = cmd;
                         break;
@@ -754,12 +843,24 @@ namespace n8wan.Public.Logical
 
             if (trone == null)
                 return null;
+            if (m.price > 0)
+            {//SP价格校验 防止配置错
+                if (trone.price != (m.price / 100m))
+                {
+                    m.trone_id = C_TM_PRICE_NOT_EQUQLS;
+                    return null;
+                }
+            }
             m.trone_id = trone.id;
 
 
-            var sp_trone = LightDataModel.tbl_sp_troneItem.GetRowById(dBase, trone.sp_trone_id, new string[] { LightDataModel.tbl_sp_troneItem.Fields.trone_type });
+            var sp_trone = LightDataModel.tbl_sp_troneItem.GetRowById(dBase, trone.sp_trone_id, null);
             if (sp_trone == null)
                 return null;
+            if (m is LightDataModel.tbl_mrItem)
+            {
+                ((LightDataModel.tbl_mrItem)m).sp_trone_id = sp_trone.id;
+            }
             m.trone_type = sp_trone.trone_type;
             return trone;//没有匹配通道
         }
@@ -824,7 +925,7 @@ namespace n8wan.Public.Logical
             if (_linkId != null)
                 return _linkId;
 
-            _linkId = GetParamValue(f);
+            _linkId = GetComboParamValue(f);
             if (_linkId == null)
                 _linkId = string.Empty;
 
@@ -889,6 +990,9 @@ namespace n8wan.Public.Logical
 
         public System.Web.Caching.Cache Cache { get { return System.Web.HttpRuntime.Cache; } }
 
+        /// <summary>
+        /// 只写字段名,表示,只要URL上出生了该参数,即视为MO
+        /// </summary>
         public bool IsMo
         {
             get
@@ -901,7 +1005,7 @@ namespace n8wan.Public.Logical
                     return false;
                 }
                 var ar = api.MoCheck.Split(new char[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries);
-                var val = GetParamValue(ar[0]);
+                var val = GetComboParamValue(ar[0]);
                 if (ar.Length == 1)//只写字段名,表示,只要URL上出生了该参数,即视为MO
                 {
                     _IsMo = val != null ? 1 : -1;

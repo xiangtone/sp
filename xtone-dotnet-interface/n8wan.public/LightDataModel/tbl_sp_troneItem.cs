@@ -37,9 +37,17 @@ namespace LightDataModel
             /// </summary>
             public const string @operator = "operator";
             /// <summary>
+            /// 产品ID，默认是 短信-短信
+            /// </summary>
+            public const string product_id = "product_id";
+            /// <summary>
             /// 业务类型，0为默认通道，1为包月，2为IVR
             /// </summary>
             public const string trone_type = "trone_type";
+            /// <summary>
+            /// 0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结
+            /// </summary>
+            public const string js_type = "js_type";
             /// <summary>
             /// 结算率
             /// </summary>
@@ -49,17 +57,31 @@ namespace LightDataModel
             /// </summary>
             public const string provinces = "provinces";
             /// <summary>
+            /// 日限
+            /// </summary>
+            public const string day_limit = "day_limit";
+            /// <summary>
+            /// 月限
+            /// </summary>
+            public const string month_limit = "month_limit";
+            /// <summary>
+            /// 用户日限
+            /// </summary>
+            public const string user_day_limit = "user_day_limit";
+            /// <summary>
+            /// 用户月限
+            /// </summary>
+            public const string user_month_limit = "user_month_limit";
+            /// <summary>
             /// tbl_sp_trone_api.id
             /// </summary>
             public const string trone_api_id = "trone_api_id";
             /// <summary>
-            /// 0停用，1启用
+            /// 0停用1启用
             /// </summary>
             public const string status = "status";
 
             public const string create_date = "create_date";
-
-            public const string sp_api_url_id = "sp_api_url_id";
 
             #endregion
 
@@ -76,9 +98,17 @@ namespace LightDataModel
         /// </summary>
         private int _operator;
         /// <summary>
+        /// 产品ID，默认是 短信-短信
+        /// </summary>
+        private int _product_id;
+        /// <summary>
         /// 业务类型，0为默认通道，1为包月，2为IVR
         /// </summary>
         private short _trone_type;
+        /// <summary>
+        /// 0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结
+        /// </summary>
+        private int _js_type;
         /// <summary>
         /// 结算率
         /// </summary>
@@ -88,17 +118,31 @@ namespace LightDataModel
         /// </summary>
         private string _provinces;
         /// <summary>
+        /// 日限
+        /// </summary>
+        private Decimal _day_limit;
+        /// <summary>
+        /// 月限
+        /// </summary>
+        private Decimal _month_limit;
+        /// <summary>
+        /// 用户日限
+        /// </summary>
+        private Decimal _user_day_limit;
+        /// <summary>
+        /// 用户月限
+        /// </summary>
+        private Decimal _user_month_limit;
+        /// <summary>
         /// tbl_sp_trone_api.id
         /// </summary>
         private int _trone_api_id;
         /// <summary>
-        /// 0停用，1启用
+        /// 0停用1启用
         /// </summary>
         private short _status;
 
         private DateTime _create_date;
-
-        private int _sp_api_url_id;
 
         #endregion
 
@@ -180,6 +224,27 @@ namespace LightDataModel
             }
         }
         /// <summary>
+        /// 产品ID，默认是 短信-短信
+        /// </summary>
+        public int product_id
+        {
+            get { return this._product_id; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.product_id);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.product_id);
+                else
+                    RemoveNullFlag(Fields.product_id);
+#endif
+
+                SetFieldHasUpdate(Fields.product_id, this._product_id, value);
+                this._product_id = value;
+            }
+        }
+        /// <summary>
         /// 业务类型，0为默认通道，1为包月，2为IVR
         /// </summary>
         public short trone_type
@@ -198,6 +263,27 @@ namespace LightDataModel
 
                 SetFieldHasUpdate(Fields.trone_type, this._trone_type, value);
                 this._trone_type = value;
+            }
+        }
+        /// <summary>
+        /// 0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结
+        /// </summary>
+        public int js_type
+        {
+            get { return this._js_type; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.js_type);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.js_type);
+                else
+                    RemoveNullFlag(Fields.js_type);
+#endif
+
+                SetFieldHasUpdate(Fields.js_type, this._js_type, value);
+                this._js_type = value;
             }
         }
         /// <summary>
@@ -243,6 +329,90 @@ namespace LightDataModel
             }
         }
         /// <summary>
+        /// 日限
+        /// </summary>
+        public Decimal day_limit
+        {
+            get { return this._day_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.day_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.day_limit);
+                else
+                    RemoveNullFlag(Fields.day_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.day_limit, this._day_limit, value);
+                this._day_limit = value;
+            }
+        }
+        /// <summary>
+        /// 月限
+        /// </summary>
+        public Decimal month_limit
+        {
+            get { return this._month_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.month_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.month_limit);
+                else
+                    RemoveNullFlag(Fields.month_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.month_limit, this._month_limit, value);
+                this._month_limit = value;
+            }
+        }
+        /// <summary>
+        /// 用户日限
+        /// </summary>
+        public Decimal user_day_limit
+        {
+            get { return this._user_day_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.user_day_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.user_day_limit);
+                else
+                    RemoveNullFlag(Fields.user_day_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.user_day_limit, this._user_day_limit, value);
+                this._user_day_limit = value;
+            }
+        }
+        /// <summary>
+        /// 用户月限
+        /// </summary>
+        public Decimal user_month_limit
+        {
+            get { return this._user_month_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.user_month_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.user_month_limit);
+                else
+                    RemoveNullFlag(Fields.user_month_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.user_month_limit, this._user_month_limit, value);
+                this._user_month_limit = value;
+            }
+        }
+        /// <summary>
         /// tbl_sp_trone_api.id
         /// </summary>
         public int trone_api_id
@@ -264,7 +434,7 @@ namespace LightDataModel
             }
         }
         /// <summary>
-        /// 0停用，1启用
+        /// 0停用1启用
         /// </summary>
         public short status
         {
@@ -304,25 +474,6 @@ namespace LightDataModel
             }
         }
 
-        public int sp_api_url_id
-        {
-            get { return this._sp_api_url_id; }
-            set
-            {
-#if true && true
-                RemoveNullFlag(Fields.sp_api_url_id);
-#elif !true
-			    if (value == null)
-                    SetNullFlag(Fields.sp_api_url_id);
-                else
-                    RemoveNullFlag(Fields.sp_api_url_id);
-#endif
-
-                SetFieldHasUpdate(Fields.sp_api_url_id, this._sp_api_url_id, value);
-                this._sp_api_url_id = value;
-            }
-        }
-
         #endregion
         #region 空值相关方法
         protected override string[] GetNullableFields()
@@ -331,13 +482,18 @@ namespace LightDataModel
 			,"sp_id"
 ,"name"
 ,"operator"
+,"product_id"
 ,"trone_type"
+,"js_type"
 ,"jiesuanlv"
 ,"provinces"
+,"day_limit"
+,"month_limit"
+,"user_day_limit"
+,"user_month_limit"
 ,"trone_api_id"
 ,"status"
 ,"create_date"
-,"sp_api_url_id"
 };
         }
         public bool Issp_idNull() { return IsNull(Fields.sp_id); }
@@ -349,15 +505,33 @@ namespace LightDataModel
         public bool IsoperatorNull() { return IsNull(Fields.@operator); }
 
         public void SetoperatorNull() { SetNull(Fields.@operator); }
+        public bool Isproduct_idNull() { return IsNull(Fields.product_id); }
+
+        public void Setproduct_idNull() { SetNull(Fields.product_id); }
         public bool Istrone_typeNull() { return IsNull(Fields.trone_type); }
 
         public void Settrone_typeNull() { SetNull(Fields.trone_type); }
+        public bool Isjs_typeNull() { return IsNull(Fields.js_type); }
+
+        public void Setjs_typeNull() { SetNull(Fields.js_type); }
         public bool IsjiesuanlvNull() { return IsNull(Fields.jiesuanlv); }
 
         public void SetjiesuanlvNull() { SetNull(Fields.jiesuanlv); }
         public bool IsprovincesNull() { return IsNull(Fields.provinces); }
 
         public void SetprovincesNull() { SetNull(Fields.provinces); }
+        public bool Isday_limitNull() { return IsNull(Fields.day_limit); }
+
+        public void Setday_limitNull() { SetNull(Fields.day_limit); }
+        public bool Ismonth_limitNull() { return IsNull(Fields.month_limit); }
+
+        public void Setmonth_limitNull() { SetNull(Fields.month_limit); }
+        public bool Isuser_day_limitNull() { return IsNull(Fields.user_day_limit); }
+
+        public void Setuser_day_limitNull() { SetNull(Fields.user_day_limit); }
+        public bool Isuser_month_limitNull() { return IsNull(Fields.user_month_limit); }
+
+        public void Setuser_month_limitNull() { SetNull(Fields.user_month_limit); }
         public bool Istrone_api_idNull() { return IsNull(Fields.trone_api_id); }
 
         public void Settrone_api_idNull() { SetNull(Fields.trone_api_id); }
@@ -367,9 +541,6 @@ namespace LightDataModel
         public bool Iscreate_dateNull() { return IsNull(Fields.create_date); }
 
         public void Setcreate_dateNull() { SetNull(Fields.create_date); }
-        public bool Issp_api_url_idNull() { return IsNull(Fields.sp_api_url_id); }
-
-        public void Setsp_api_url_idNull() { SetNull(Fields.sp_api_url_id); }
 
         #endregion
         #region 静态方法
@@ -388,20 +559,7 @@ namespace LightDataModel
         {
             return new Shotgun.Model.List.LightDataQueries<tbl_sp_troneItem>(tableName, identifyField);
         }
-        /// <summary>
-        /// 根据主键查找指定的行,返回指定字段
-        /// </summary>
-        /// <param name="dBase"></param>
-        /// <param name="id">主键值</param>
-        /// <param name="fields">返回字段</param>
-        /// <returns></returns>
-        public static tbl_sp_troneItem GetRowById(Shotgun.Database.IBaseDataClass2 dBase, int id, string[] fields)
-        {
-            var q = GetQueries(dBase);
-            q.Fields = fields;
-            q.Filter.AndFilters.Add(identifyField, id);
-            return q.GetRowByFilters();
-        }
+
 
         /// <summary>
         /// 根据主键查找指定的行,返回所有字段

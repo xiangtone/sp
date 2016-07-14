@@ -218,7 +218,7 @@ namespace n8wan.Public
         /// <returns></returns>
         public static string DownloadHTML(string url, string postdata, int timeout, string encode)
         {
-            return DownloadHTML(url, postdata, timeout, encode, null);
+            return DownloadHTML(url, postdata, timeout, encode, null,null);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace n8wan.Public
         /// <param name="encode">编码方式,默认utf8</param>
         /// <param name="ContentType">默认为空</param>
         /// <returns></returns>
-        public static string DownloadHTML(string url, string postdata, int timeout, string encode, string ContentType)
+        public static string DownloadHTML(string url, string postdata, int timeout, string encode, string ContentType, System.Net.CookieContainer cookies)
         {
 
             Encoding ec = null;
@@ -242,11 +242,12 @@ namespace n8wan.Public
             System.Net.HttpWebRequest web = null;
             Stream stm = null;
             web = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
-             
+
             web.Timeout = timeout < 1 ? 2888 : timeout;
-            web.AllowAutoRedirect = false;
+            //web.AllowAutoRedirect = false;
             web.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
             web.ServicePoint.UseNagleAlgorithm = false;
+            web.CookieContainer = cookies;
             if (postdata != null)
             {
                 web.ServicePoint.Expect100Continue = false;
@@ -256,37 +257,38 @@ namespace n8wan.Public
                     web.ContentType = ContentType;
 
                 var bin = ec.GetBytes(postdata);
-                using (  stm = web.GetRequestStream())
+                using (stm = web.GetRequestStream())
                 {
                     stm.Write(bin, 0, bin.Length);
                 }
-             stm = null;
-           }
+                stm = null;
+            }
 
             StreamReader reader = null;
-             System.Net.WebResponse rsp =  web.GetResponse();
-             try
-             {
-                 stm = rsp.GetResponseStream();
-                 {
-                     using (var rd = new System.IO.StreamReader(stm, ec))
-                         return rd.ReadToEnd();
-                 }
-             }
-             finally
-             {
-                 if (reader != null)
-                     reader.Dispose();
-                 if (stm != null)
-                     stm.Dispose();
-                 if (rsp != null){
-                     try
-                     {
-                         rsp.Close();
-                     }
-                     catch { }
-                 }
-             }
+            System.Net.WebResponse rsp = web.GetResponse();
+            try
+            {
+                stm = rsp.GetResponseStream();
+                {
+                    using (var rd = new System.IO.StreamReader(stm, ec))
+                        return rd.ReadToEnd();
+                }
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Dispose();
+                if (stm != null)
+                    stm.Dispose();
+                if (rsp != null)
+                {
+                    try
+                    {
+                        rsp.Close();
+                    }
+                    catch { }
+                }
+            }
 
         }
 

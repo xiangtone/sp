@@ -76,7 +76,7 @@
             <tr>
                 <th style="width: 110px;">SP:</th>
                 <td colspan="2">
-                    <asp:DropDownList runat="server" ID="ddlSp_id" DataTextField="full_name" DataValueField="id">
+                    <asp:DropDownList runat="server" ID="ddlSp_id" DataTextField="short_name" DataValueField="id">
                         <asp:ListItem Value="0" Text="*请选择*" />
                     </asp:DropDownList>
                 </td>

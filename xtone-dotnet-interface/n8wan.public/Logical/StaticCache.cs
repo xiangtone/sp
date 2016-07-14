@@ -166,15 +166,18 @@ namespace n8wan.Public.Logical
 
         void LoadData(object s)
         {
-            int minId = 0;
-            if (_data == null)
-                _data = new Dictionary<IDX, T>();
-            else if (_data.Count > 0)
-                minId = _data.Values.Min(e => (int)e[_idField]);
+            int maxId = 0;
+            var cData = _data;//防止在其它地方补重置为null
+
+            if (cData == null)
+                _data = cData = new Dictionary<IDX, T>();
+            else if (cData.Count > 0)
+                maxId = cData.Values.Max(e => (int)e[_idField]);
+
 
             var q = new Shotgun.Model.List.LightDataQueries<T>(_tabName, _idField, null, new T().Schema);
-            if (minId > 0)
-                q.Filter.AndFilters.Add(_idField, minId, Shotgun.Model.Filter.EM_DataFiler_Operator.More);
+            if (maxId > 0)
+                q.Filter.AndFilters.Add(_idField, maxId, Shotgun.Model.Filter.EM_DataFiler_Operator.More);
             q.SortKey.Add(_idField, Shotgun.Model.Filter.EM_SortKeyWord.asc);
             q.PageSize = 1000;
             q.dBase = CreateDBase();
@@ -189,13 +192,16 @@ namespace n8wan.Public.Logical
                 {
                     q.CurrentPage = i;
                     var items = q.GetDataList();
-                    items.ForEach(e => _data[(IDX)e[_indexField]] = e);
+                    if (items == null)
+                        break;
+                    items.ForEach(e => cData[(IDX)e[_indexField]] = e);
                 }
                 this._expired = DateTime.Now.Add(this.Expired);
                 this._satus = Static_Cache_Staus.AllLoad;
+                _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
 
             }
-            catch (System.Data.DataException ex)
+            catch (Exception ex)
             {
                 WriteLog(ex.Message);
                 _satus = Static_Cache_Staus.Idel;
@@ -350,7 +356,7 @@ namespace n8wan.Public.Logical
                 _onExpired(_data.Values);
             }
 #if !DEBUG
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteLog(ex.ToString());
             }

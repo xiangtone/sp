@@ -1,0 +1,43 @@
+14:12:18.173 http://wap.cmread.com/rdo/order?layout=9&mcpid=jy0001&orderNo=ht_20160524_0&feeCode=87000101&reqTime=20160524141218&sign=E883EFE07FA120EA515B616639E9777A&cm=J0540001
+14:12:19.707 
+<Response>                       <ResultCode>9999</ResultCode>	              <ResultMsg>无效的请求！</ResultMsg>        </Response>
+
+
+14:16:29.940 http://wap.cmread.com/rdo/order?layout=9&mcpid=jy0001&orderNo=ht_20160524_0&feeCode=87000101&reqTime=20160524141629&sign=2463668F32ADAF3152208004F78C4BB7&cm=J0540001
+14:16:30.187 
+<Response>                       <ResultCode>9999</ResultCode>	              <ResultMsg>无效的请求！</ResultMsg>        </Response>
+
+
+14:19:12.705 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_20160524_0&feeCode=87000101&reqTime=20160524141912&sign=D6BE09B598A861D275686B48F45367E1&layout=9&cm=J0540001
+14:19:13.292 
+<Response>                       <ResultCode>9999</ResultCode>	              <ResultMsg>无效的请求！</ResultMsg>        </Response>
+
+
+14:22:15.895 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_20160524nnn_0&feeCode=87000101&reqTime=20160524142215&sign=B60EB54F8DD3A2083C6B184263C42FD6&layout=9&cm=J0540001
+14:22:17.300 
+<Response>                       <ResultCode>9999</ResultCode>	              <ResultMsg>无效的请求！</ResultMsg>        </Response>
+
+
+14:22:38.954 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_20160524000_0&feeCode=87000101&reqTime=20160524142238&sign=531D0E8ADA3490D018C67D1C6C3F6C2D&layout=9&cm=J0540001
+14:22:39.107 
+<Response>                       <ResultCode>9999</ResultCode>	              <ResultMsg>无效的请求！</ResultMsg>        </Response>
+
+
+14:23:04.112 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052400_0&feeCode=87000101&reqTime=20160524142304&sign=D07EEAF383DED0F3DF4792A101226760&layout=9&cm=J0540001
+14:23:05.497 
+<Response>                       <ResultCode>9999</ResultCode>	              <ResultMsg>无效的请求！</ResultMsg>        </Response>
+
+
+14:26:26.158 jy00018700010120160524142626youxue888
+14:26:26.158 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052426_0&feeCode=87000101&reqTime=20160524142626&sign=1E7D2F3462BC971E64C3212FDAC61F18&layout=9&cm=J0540001
+14:26:26.379 
+<Response>                       <ResultCode>9999</ResultCode>	              <ResultMsg>无效的请求！</ResultMsg>        </Response>
+
+
+14:28:00.968 jy000187000101ht_2016052400_020160524142800youxue888
+14:28:00.968 http://wap.cmread.com/rdo/order?mcpid=jy0001&orderNo=ht_2016052400_0&feeCode=87000101&reqTime=20160524142800&sign=6E1773FD87F8ABCE16C0D1797441BC98&layout=9&cm=J0540001
+14:28:01.147 
+
+<Response>	                           <ResultCode>200</ResultCode>		<Order>			 <BusinessDesc>业务信息：【咪咕星宝】1元</BusinessDesc>	     	 <Price>资费：1.0元/次</Price>	    	 <VerifType>0</VerifType>	    	    	 <Submit0>	    		 <GetSMSVerifyCodeUrl>http://wap.cmread.com/rdo/order/obtvc;jsessionid=166C335E071B96FB89C771BABFB7D5DB.8ngFvPKeA.1.0?sign=6E1773FD87F8ABCE16C0D1797441BC98&amp;ln=1579_11244__2_&amp;t1=16945&amp;orderNo=ht_2016052400_0&amp;cm=J0540001&amp;feeCode=87000101&amp;reqTime=20160524142800&amp;mcpid=jy0001&amp;layout=9</GetSMSVerifyCodeUrl>    		 </Submit0>	         	    	    	     			 				</Order>	 </Response>
+
+

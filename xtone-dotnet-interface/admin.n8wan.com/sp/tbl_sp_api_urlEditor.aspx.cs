@@ -30,7 +30,7 @@ public partial class tbl_sp_api_url_Editor : Shotgun.PagePlus.ShotgunPage
         if (IsPostBack)
             return;
         var l = tbl_spItem.GetQueries(dBase);
-        l.Fields = new string[] { tbl_spItem.Fields.id, tbl_spItem.Fields.full_name };
+        l.Fields = new string[] { tbl_spItem.Fields.id, tbl_spItem.Fields.short_name };
         l.PageSize = int.MaxValue;
         l.Filter.AndFilters.Add(tbl_spItem.Fields.status, 1);
         ddlSp_id.Enabled = false;
@@ -47,7 +47,7 @@ public partial class tbl_sp_api_url_Editor : Shotgun.PagePlus.ShotgunPage
             {
                 ddlSp_id.Enabled = true;
                 ddlSp_id.AppendDataBoundItems = true;
-                l.SortKey.Add(tbl_spItem.Fields.full_name, Shotgun.Model.Filter.EM_SortKeyWord.asc);
+                l.SortKey.Add(tbl_spItem.Fields.short_name, Shotgun.Model.Filter.EM_SortKeyWord.asc);
             }
         }
         var dt = l.GetDataList();

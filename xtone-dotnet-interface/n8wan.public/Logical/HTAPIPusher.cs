@@ -60,7 +60,15 @@ namespace n8wan.Public.Logical
             SetConfig(m);//找到对应的渠道上量(相当于执行 base.LoadCPAPI())
             if (PushObject is tbl_mrItem)
             {
-                ((tbl_mrItem)PushObject).api_order_id = _apiOrder.id;
+                var mr = ((tbl_mrItem)PushObject);
+                mr.api_order_id = _apiOrder.id;
+                mr.user_md10 = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(string.Format("{0}_{1}_{2}", _apiOrder.imsi, _apiOrder.imei, _apiOrder.mobile), "MD5");
+                if (string.IsNullOrEmpty(mr.mobile) && !string.IsNullOrEmpty(_apiOrder.mobile))
+                    mr.mobile = _apiOrder.mobile;
+                if (string.IsNullOrEmpty(mr.imsi) && !string.IsNullOrEmpty(_apiOrder.imsi))
+                    mr.imsi = _apiOrder.imsi;
+                if (mr.province_id == 32 && (!string.IsNullOrEmpty(mr.mobile) || !string.IsNullOrEmpty(mr.imsi)))
+                    BaseSPCallback.FillAreaInfo(dBase, mr);
             }
             //if (!LoadCPAPI())
             //    return false;
@@ -91,10 +99,18 @@ namespace n8wan.Public.Logical
         {
             var l = tbl_api_orderItem.GetQueries(dBase);
             //l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.trone_id, TroneId);
+            string ptr;
             switch (_apiMatchAPI.match_field_E)
             {//订单匹配条件生成
-                case tbl_sp_trone_apiItem.EMathcField.Cpprams: l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.api_exdata, this.PushObject.GetValue(EPushField.cpParam)); break;
-                case tbl_sp_trone_apiItem.EMathcField.LinkId: l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.sp_linkid, this.PushObject.GetValue(EPushField.LinkID)); break;
+                case tbl_sp_trone_apiItem.EMathcField.Cpprams:
+                    ptr = this.PushObject.GetValue(EPushField.cpParam);
+                    if (string.IsNullOrEmpty(ptr))
+                        return null;//同步配置错，SP并没有回传透传
+                    l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.api_exdata, this.PushObject.GetValue(EPushField.cpParam));
+                    break;
+                case tbl_sp_trone_apiItem.EMathcField.LinkId:
+                    l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.sp_linkid, this.PushObject.GetValue(EPushField.LinkID));
+                    break;
                 case tbl_sp_trone_apiItem.EMathcField.Msg:
                     l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.msg, this.PushObject.GetValue(EPushField.Msg));
                     l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.port, this.PushObject.GetValue(EPushField.port));

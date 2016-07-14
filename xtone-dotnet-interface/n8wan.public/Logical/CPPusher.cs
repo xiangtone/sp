@@ -81,7 +81,7 @@ namespace n8wan.Public.Logical
             this._linkID = PushObject.GetValue(Logical.EPushField.LinkID);
             this._url = null;
 
-            if (PushObject.syn_flag == 1)
+            if (PushObject.syn_flag == 1 && PushObject.cp_id != 34)
             {//已经同步的数据
                 if (_cp_push_url.is_realtime)
                     SendQuery();
@@ -89,7 +89,7 @@ namespace n8wan.Public.Logical
             }
 
             //更新日月限数据
-            TroneDayLimit.UpdateDayLimit(dBase, Trone.id, _config.cp_id, Trone.price);
+            TroneDayLimit.UpdateDayLimit(dBase, Trone.sp_trone_id, _config.cp_id, Trone.price);
 
             DateTime today = DateTime.Today;
 
@@ -160,7 +160,11 @@ namespace n8wan.Public.Logical
                 return false;
             IHold_DataItem holdCfg = null;
             if (_config.hold_is_Custom)
-                holdCfg = _config;
+            {
+                var cpRate = LightDataModel.tbl_cp_trone_rateItem.QueryBySpTroneId(dBase, PushObject.sp_trone_id, _config.cp_id);
+                holdCfg = LightDataModel.ProvinceHoldConfg.LoadProvinceData(_config, cpRate, PushObject.province_id);
+                // holdCfg = _config;
+            }
             else
                 holdCfg = _cp_push_url;
 
@@ -402,9 +406,17 @@ namespace n8wan.Public.Logical
                 fi.Directory.Create();
             lock (logFileLocker)
             {
-                using (var stm = new StreamWriter(LogFile, true))
+                StreamWriter stm = null;
+                try
                 {
+                    stm = new StreamWriter(LogFile, true);
                     stm.WriteLine("{0:HH:mm:ss} {1} {2} {3} {4}", DateTime.Now, this._linkID, this._url, p, msg);
+                }
+                catch { }
+                finally
+                {
+                    if (stm != null)
+                        stm.Dispose();
                 }
             }
         }

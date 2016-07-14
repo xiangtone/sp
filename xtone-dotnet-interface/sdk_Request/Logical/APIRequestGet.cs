@@ -167,16 +167,21 @@ namespace sdk_Request.Logical
             {
                 if (_paymodel != null)
                     return _paymodel;
-                var l = LightDataModel.tbl_trone_paycodeItem.GetQueries(dBase);
-                if (OrderInfo.troneId > 0)
-                    l.Filter.AndFilters.Add(LightDataModel.tbl_trone_paycodeItem.Fields.trone_id, OrderInfo.troneId);
-                else
-                {
-                    var tf = new TableFilter(tbl_trone_paycodeItem.Fields.trone_id, tbl_trone_orderItem.tableName, tbl_trone_orderItem.Fields.trone_id);
-                    l.Filter.AndFilters.Add(tf);
-                    tf.TableFilters.AndFilters.Add(tbl_trone_orderItem.Fields.id, _aqm.tbl_trone_order_id);
-                }
-                _paymodel = l.GetRowByFilters();
+
+                _paymodel = LightDataModel.tbl_trone_paycodeItem.QueryPayCodeByTroneId(dBase, OrderInfo.troneId);
+
+
+                //var l = LightDataModel.tbl_trone_paycodeItem.GetQueries(dBase);
+                //if (OrderInfo.troneId > 0)
+                //    l.Filter.AndFilters.Add(LightDataModel.tbl_trone_paycodeItem.Fields.trone_id, OrderInfo.troneId);
+                //else
+                //{
+                //    var tf = new TableFilter(tbl_trone_paycodeItem.Fields.trone_id, tbl_trone_orderItem.tableName, tbl_trone_orderItem.Fields.trone_id);
+                //    l.Filter.AndFilters.Add(tf);
+                //    tf.TableFilters.AndFilters.Add(tbl_trone_orderItem.Fields.id, _aqm.tbl_trone_order_id);
+                //}
+                //_paymodel = l.GetRowByFilters();
+
                 if (_paymodel == null)
                 {
                     //throw new Exception("paycode 获取失败，请检查paycode是否有配置");
@@ -309,6 +314,7 @@ namespace sdk_Request.Logical
             var fi = new FileInfo(Request.MapPath(FileName));
             if (!fi.Directory.Exists)
                 fi.Directory.Create();
+            _sbLog.AppendLine();
             lock (logLocker)
             {
                 using (var stm = new StreamWriter(fi.FullName, true))
@@ -321,18 +327,41 @@ namespace sdk_Request.Logical
 
         protected void WriteLog(string msg)
         {
+            if (string.IsNullOrEmpty(msg))
+                return;
             if (_sbLog == null)
                 _sbLog = new StringBuilder();
             else if (_sbLog.Length != 0)
                 _sbLog.AppendLine();
+
+            if (msg.Length > 2048)
+            {
+                msg = msg.Substring(0, 2045) + "...";
+            }
             _sbLog.AppendFormat("{0:HH:mm:ss.fff} {1}", DateTime.Now, msg);
         }
 
 
-
         int Shotgun.Model.Logical.ILogical.lastUpdateCount { get { throw new NotImplementedException(); } }
 
-        Shotgun.Database.IBaseDataClass2 Shotgun.Model.Logical.ILogical.dBase { get { throw new NotImplementedException(); } set { throw new NotImplementedException(); } }
+        Shotgun.Database.IBaseDataClass2 Shotgun.Model.Logical.ILogical.dBase { get { return this.dBase; } set { throw new NotImplementedException(); } }
+
+        /// <summary>
+        /// 通过IMSI获取城市和省份信息
+        /// </summary>
+        /// <param name="imsi"></param>
+        /// <returns></returns>
+        public tbl_cityItem getCityByImsi(string imsi)
+        {
+            var phone = n8wan.Public.Library.GetPhoneByImsi(imsi);
+            if (string.IsNullOrEmpty(phone))
+                return null;
+            int p;
+            int.TryParse(phone, out p);
+            return tbl_phone_locateItem.GetRowByMobile(dBase, p);
+        }
+
+
         #endregion
 
         #region 远程HTML获取
@@ -346,7 +375,7 @@ namespace sdk_Request.Logical
         /// <returns></returns>
         protected string GetHTML(string url, int timeout, string encode)
         {
-            return DownloadHTML(url, null, timeout, encode,null);
+            return DownloadHTML(url, null, timeout, encode, null);
         }
 
         /// <summary>
@@ -358,7 +387,7 @@ namespace sdk_Request.Logical
         /// <returns></returns>
         protected string GetHTML(string url)
         {
-            return DownloadHTML(url, null, 0, null,null);
+            return DownloadHTML(url, null, 0, null, null);
         }
 
         /// <summary>
@@ -375,7 +404,7 @@ namespace sdk_Request.Logical
             {
                 return DownloadHTML(url, data ?? string.Empty, timeout, encode, "application/x-www-form-urlencoded");
             }
-            return DownloadHTML(url, data ?? string.Empty, timeout, encode, "application/x-www-form-urlencoded; charset="+ encode);
+            return DownloadHTML(url, data ?? string.Empty, timeout, encode, "application/x-www-form-urlencoded; charset=" + encode);
         }
 
 
@@ -396,7 +425,7 @@ namespace sdk_Request.Logical
         /// <param name="encode">可为空，默认为utf8</param>
         /// <param name="contentType">HTTP报文头，可为空</param>
         /// <returns></returns>
-        protected string DownloadHTML(string url, string postdata, int timeout, string encode,string contentType )
+        protected string DownloadHTML(string url, string postdata, int timeout, string encode, string contentType)
         {
             Stopwatch st = new Stopwatch();
             st.Start();
@@ -406,7 +435,7 @@ namespace sdk_Request.Logical
                 WriteLog(url);
                 if (!String.IsNullOrEmpty(postdata))
                     WriteLog(postdata);
-                html = n8wan.Public.Library.DownloadHTML(url, postdata, timeout, encode, contentType);
+                html = n8wan.Public.Library.DownloadHTML(url, postdata, timeout, encode, contentType, this.Cookies);
                 return html;
             }
             catch (Exception ex)
@@ -422,5 +451,7 @@ namespace sdk_Request.Logical
 
         }
         #endregion
+
+        public CookieContainer Cookies { get; set; }
     }
 }

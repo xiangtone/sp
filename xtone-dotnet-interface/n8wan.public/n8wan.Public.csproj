@@ -43,6 +43,11 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -61,6 +66,7 @@
     <Compile Include="LightDataModel\tbl_countryItem.cs" />
     <Compile Include="LightDataModel\tbl_cpItem.cs" />
     <Compile Include="LightDataModel\tbl_cp_push_urlItem.cs" />
+    <Compile Include="LightDataModel\tbl_cp_trone_rateItem.cs" />
     <Compile Include="LightDataModel\tbl_currencyItem.cs" />
     <Compile Include="LightDataModel\tbl_day_month_limitItem.cs" />
     <Compile Include="LightDataModel\tbl_groupItem.cs" />
@@ -72,14 +78,16 @@
     <Compile Include="LightDataModel\tbl_trone_paycodeItem.cs" />
     <Compile Include="LightDataModel\tbl_zyl_detailItem.cs" />
     <Compile Include="LightDataModel_manual\DynamicDataItem.cs" />
+    <Compile Include="LightDataModel_manual\ProvinceHoldConfg.cs" />
+    <Compile Include="LightDataModel_manual\ProvinceHoldData.cs" />
     <Compile Include="LightDataModel_manual\tbl_api_orderItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_api_orderItem_plus.cs" />
-    <Compile Include="LightDataModel_manual\tbl_cityItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_cityItemPlus.cs" />
     <Compile Include="LightDataModel_manual\tbl_cpItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_mrItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_mrItem_plus.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_push_urlItem.cs" />
+    <Compile Include="LightDataModel_manual\tbl_cp_trone_rateItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_day_month_limitItem_plus.cs" />
     <Compile Include="LightDataModel_manual\tbl_moItem_plus.cs" />
     <Compile Include="LightDataModel_manual\DynamicTableList.cs" />
@@ -97,6 +105,7 @@
     <Compile Include="LightDataModel_manual\tbl_request_logItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_request_logItem_plus.cs" />
     <Compile Include="LightDataModel_manual\tbl_sp_api_urlItemPlus.cs" />
+    <Compile Include="LightDataModel_manual\tbl_sp_troneItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_sp_trone_apiItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_troneItemPlus.cs" />
     <Compile Include="LightDataModel_manual\tbl_trone_orderItem.cs" />
@@ -115,14 +124,18 @@
     <Compile Include="Logical\IHold_DataItem.cs" />
     <Compile Include="Logical\IPushModel.cs" />
     <Compile Include="Logical\ISMS_DataItem.cs" />
+    <Compile Include="Logical\XmlBaseSync.cs" />
+    <Compile Include="Logical\JSonBaseSync.cs" />
     <Compile Include="Logical\MiGopBaseSync.cs" />
     <Compile Include="Logical\MMBaseSync.cs" />
     <Compile Include="Logical\AgainPusher.cs" />
+    <Compile Include="Logical\MrTestHandler.cs" />
     <Compile Include="Logical\StaticCache.cs" />
     <Compile Include="Logical\old_sp_callback_map.cs" />
     <Compile Include="Logical\AppUserFixSync.cs" />
     <Compile Include="Logical\TroneDayLimit.cs" />
     <Compile Include="Logical\UserLoginProc.cs" />
+    <Compile Include="Model\SpTroneCountInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Logical\BaseSPCallback.cs">
       <SubType>Code</SubType>

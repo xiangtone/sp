@@ -1,0 +1,14 @@
+09:49:29.410 paycode 获取失败，请检查paycode是否有配置
+09:49:29.441 paycode 获取失败，请检查paycode是否有配置
+09:49:29.441 value:szhaot01013570830935szhaot000000000020160429094929webhttp://baidu.com/szhaot0000000000866568022922909460023192787105ht0428,md5:33A6233DA18B42B5A91F1018F1C576D9
+09:49:29.441 http://123.56.91.64:8888/igameunpay/req.jsp
+09:49:29.441 merid=szhaot&goodsid=010&mobileid=13570830935&clientip=&orderid=szhaot0000000000&orderdate=20160429094929&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000000000&imei=866568022922909&imsi=460023192787105&sign=33A6233DA18B42B5A91F1018F1C576D9
+09:49:29.557 +110ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000000000","paytype":"Error","province":"","retCode":"1","retMsg":"para error!"}
+
+09:49:37.294 paycode 获取失败，请检查paycode是否有配置
+09:49:37.326 paycode 获取失败，请检查paycode是否有配置
+09:49:48.458 value:szhaot01013570830935szhaot000000000020160429094943webhttp://baidu.com/szhaot0000000000866568022922909460023192787105ht0428,md5:F033A0A445A86958E750F080FDC433B2
+09:49:50.827 http://123.56.91.64:8888/igameunpay/req.jsp
+09:49:50.827 merid=szhaot&goodsid=010&mobileid=13570830935&clientip=&orderid=szhaot0000000000&orderdate=20160429094943&platType=web&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000000000&imei=866568022922909&imsi=460023192787105&sign=F033A0A445A86958E750F080FDC433B2
+09:49:50.896 +77ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000000000","paytype":"Error","province":"","retCode":"1","retMsg":"para error!"}
+

@@ -1,0 +1,268 @@
+15:48:07.608 Request:{"apiExdata":"","apiOrderId":83,"cid":0,"cityId":392,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"","extraParams":"","fakeMobile":"","iccid":"","id":1344353,"imei":"866568022922909","imsi":"460007743190142","ip":"113.91.172.252","isHidden":0,"lac":0,"mobile":"13618029700","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1478,"troneOrderId":2685,"userAgent":""}
+15:48:49.476 http://test.hxbapi.vpclub.cn/MicroPayment/PayUrl?merchantid=1620006&username=18371144024&mobilephone=13618029700&amount=1&sign=2e3be5a526172cd022b4d1bc2238ba2d
+15:48:49.550 +74ms {"code":"0000","message":"处理成功","payurl":"http://211.136.93.21/scpay/payreq.xhtml?merId=3823\u0026userId=18371144024\u0026mobileId=13618029700\u0026orderId=201606301548506864256791620006\u0026merDate=20160630\u0026amount=100\u0026amtType=01\u0026bankType=0\u0026subMerId=38230000\u0026detail=38230000%7c201606301548506864256791620006%7c100%3b\u0026retUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fReturn%3f%2fMicroPayment%2fGoBack\u0026notifyUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fNotify\u0026expireTime=2\u0026expireTimeUnit=2\u0026gateId=\u0026merPriv=\u0026areaCode=\u0026cardType=\u0026goodsId=\u0026goodsInf=\u0026expand=\u0026version=3.0\u0026sign=RhhFFCoPOh%2bENr681%2ftUxZoQExdLRwEogmMtZwoDzgPIML6NgErWdJCcSQJ8UquQt4B5DKjemeuQOLS%2fVGQ711xLAMY5e49P7HOnmdfvQ3IK1gaJ3WOf9EJ9VSNfoSQYHOmYEQv3Y9C8lvgvxXqS%2ftVJl5s2BXATYVY0gEGUwKs%3d","sign":"2789c2b3d9c9d17ab100554fbf5b659e"}
+15:49:06.232 http://211.136.93.21/scpay/payreq.xhtml?merId=3823&userId=18371144024&mobileId=13618029700&orderId=201606301548506864256791620006&merDate=20160630&amount=100&amtType=01&bankType=0&subMerId=38230000&detail=38230000%7c201606301548506864256791620006%7c100%3b&retUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fReturn%3f%2fMicroPayment%2fGoBack&notifyUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fNotify&expireTime=2&expireTimeUnit=2&gateId=&merPriv=&areaCode=&cardType=&goodsId=&goodsInf=&expand=&version=3.0&sign=RhhFFCoPOh%2bENr681%2ftUxZoQExdLRwEogmMtZwoDzgPIML6NgErWdJCcSQJ8UquQt4B5DKjemeuQOLS%2fVGQ711xLAMY5e49P7HOnmdfvQ3IK1gaJ3WOf9EJ9VSNfoSQYHOmYEQv3Y9C8lvgvxXqS%2ftVJl5s2BXATYVY0gEGUwKs%3d
+15:49:06.444 +212ms 
+
+
+
+
+
+
+ 
+
+
+
+
+<!DOCTYPE html >
+<html lang="zh">
+<head>
+<meta  name="viewport" content="width=device-width" charset="utf-8">
+<title>订单确认</title>
+<link href="./static/css/com_cd.css" rel="stylesheet" type="text/css" />
+<link href="./static/css/public.css" rel="stylesheet" type="text/css" />
+<link href="./static/css/main.css" rel="stylesheet"  type="text/css" />
+<script language="javascript" src="./static/js/mpay/xf.js"></script>
+<script type="text/javascript" src='./static/js/glider/prototype.js' charset="utf-8"></script>
+<script language="javascript" src="./static/js/mpay/common.js"></script>
+<script language="javascript" src="./static/js/mpay/showDisplay.js"></script>
+</head>
+<body>
+	<div id="MAIN">
+		<div id="header">
+			<span  class="p_l">
+				<a href="#" onmouseout="MM_swapImgRestore()" >
+				<img src="./static/images/logo1.gif" name="Image1" width="30" height="29" border="0" id="Image1" /></a>
+			</span>
+			<span><b>收银台</b></span>
+		</div>
+			<dl>
+				<dd>手机号码：13618029700</dd>
+				<dd>订单总金额：<b class="red">1.00</b>元</dd>
+				<dd>订单号：201606301548506864256791620006</dd>
+				<dd>订单时间：20160630</dd>
+			</dl>
+			
+		<div class="whitbg">
+		<div class="tags">
+			<ul>
+				<li id="jfli" class="curt" onclick="checkmaill('jf')"  style="display: none;"  >商城豆支付</li>
+				<li id="xeli"  class="" onclick="checkmaill('xe')"  >小额话费</li>
+				<li id="wyli"  class="" onclick="checkmaill('wy')"      style="display: none;"   >网银支付</li>
+				<li id="xykli" class="" onclick="checkmaill('xyk')"     style="display: none;"  >信用卡快捷</li>
+			</ul>
+		</div>
+		
+		<div class="content" id="jfmall" style="display: none;" >
+			<dl>
+				<dd>应付商城豆：100个</dd>
+				<dd>剩余商城豆：0个</dd>
+				
+	        </dl>
+	        
+	        	<form name="integralForm" id="integralForm" action="integral.xhtml" method="post">
+	        		<input type="hidden" name="amount"   value="100"/>
+	        		<input type="hidden" name="merId_integralList"    value="3823"/>
+					<input type="hidden" name="userId_integralL...
+15:50:02.058 http://211.136.93.21/scpay/paygo.xhtml
+15:50:02.058 tradeNo=1606301549075224&bankType=5&amount=100&retUrl=http://test.hxbapi.vpclub.cn/MicroPayment/Return?/MicroPayment/GoBack
+15:50:02.460 +401ms 
+
+
+
+
+
+
+ 
+
+
+
+
+<!DOCTYPE html >
+<html lang="zh">
+<head>
+<meta  name="viewport" content="width=device-width" charset="UTF-8">
+<title>支付失败</title>
+<link href="./static/css/com_cd.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="MAIN">
+		<div id="header">
+			<span  class="p_l">
+				<a href="#" onmouseout="MM_swapImgRestore()" >
+				<img src="./static/images/logo1.gif" name="Image1" width="30" height="29" border="0" id="Image1" /></a>
+			</span>
+			<span><b>收银台</b></span>
+		</div>
+		<p><b>支付失败</b></p>
+		<div class="whitbg">
+			<dl>
+				<dd><strong>订单支付失败！</strong></dd>
+				<dd>
+					
+					
+					
+					
+						
+							
+								<dd><a href="http://test.hxbapi.vpclub.cn/MicroPayment/Return?/MicroPayment/GoBack">返回商城</a></dd>
+							
+							
+						
+					
+				</dd>
+			</dl>
+		</div>
+		
+		
+		
+		<!-- 
+		<p><b>使用须知</b></p>
+		<dl>
+			<dd>1) 本业务采用四川移动小额话费账户购买商品。</dd>
+			<dd>2) 页面本次可使用话费金额为参考金额。</dd>
+			<dd>4) 每月交易消费上限额：300元</dd>
+			<dd>5) 预付费用户每次交易帐户留底金额：20元</dd>
+			<dd>6) 新入网预付费客户，在其入网当月至次月2日前，交易后剩余预存款为50元；入网次月2日00：00后恢复20元.</dd>
+		</dl>
+		 -->
+		
+		<div id="footer" class="line_t">CopyRight © 2003-2010 <br/>
+			联动优势科技有限公司版权所有
+		</div>
+		
+	</div>
+</body>
+</html>
+
+15:50:49.228 Request:{"apiExdata":"","apiOrderId":83,"cid":0,"cityId":392,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"","extraParams":"","fakeMobile":"","iccid":"","id":1344353,"imei":"866568022922909","imsi":"460007743190142","ip":"113.91.172.252","isHidden":0,"lac":0,"mobile":"18371144024","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1478,"troneOrderId":2685,"userAgent":""}
+15:50:49.565 http://test.hxbapi.vpclub.cn/MicroPayment/PayUrl?merchantid=1620006&username=18371144024&mobilephone=18371144024&amount=1&sign=195d36ef0128c0d0e845b0bc52dcddda
+15:50:49.601 +35ms {"code":"0003","message":"未使用四川移动号码","payurl":"","sign":"09f16a63033312d7a55b5173d3fb46a1"}
+
+15:50:59.612 Request:{"apiExdata":"","apiOrderId":83,"cid":0,"cityId":392,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"","extraParams":"","fakeMobile":"","iccid":"","id":1344353,"imei":"866568022922909","imsi":"460007743190142","ip":"113.91.172.252","isHidden":0,"lac":0,"mobile":"13618029743","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1478,"troneOrderId":2685,"userAgent":""}
+15:50:59.706 http://test.hxbapi.vpclub.cn/MicroPayment/PayUrl?merchantid=1620006&username=18371144024&mobilephone=13618029743&amount=1&sign=e84c99eed49fc5321462f3bf0ea39f91
+15:50:59.730 +24ms {"code":"0000","message":"处理成功","payurl":"http://211.136.93.21/scpay/payreq.xhtml?merId=3823\u0026userId=18371144024\u0026mobileId=13618029743\u0026orderId=201606301551008661377131620006\u0026merDate=20160630\u0026amount=100\u0026amtType=01\u0026bankType=0\u0026subMerId=38230000\u0026detail=38230000%7c201606301551008661377131620006%7c100%3b\u0026retUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fReturn%3f%2fMicroPayment%2fGoBack\u0026notifyUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fNotify\u0026expireTime=2\u0026expireTimeUnit=2\u0026gateId=\u0026merPriv=\u0026areaCode=\u0026cardType=\u0026goodsId=\u0026goodsInf=\u0026expand=\u0026version=3.0\u0026sign=e%2bOX6s9DwdH9EJSfoIB93Yqy%2fUREaAqtCWsDVb%2bH3Qa7O56%2b6BZDRtmxYQbCpXfSonrkdEkbJx0AfjlipEWvgnLfgaAl3%2bbqoeeMi6z05UjrmMl4dzR1YQtOFjmJt0zajBDj99tZWPlS3u170qG5j7LgymuIHdWbSlOZ6Lpn6dA%3d","sign":"abd68cbbd76620e7aa8b1bb779e63d4f"}
+15:50:59.730 http://211.136.93.21/scpay/payreq.xhtml?merId=3823&userId=18371144024&mobileId=13618029743&orderId=201606301551008661377131620006&merDate=20160630&amount=100&amtType=01&bankType=0&subMerId=38230000&detail=38230000%7c201606301551008661377131620006%7c100%3b&retUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fReturn%3f%2fMicroPayment%2fGoBack&notifyUrl=http%3a%2f%2ftest.hxbapi.vpclub.cn%2fMicroPayment%2fNotify&expireTime=2&expireTimeUnit=2&gateId=&merPriv=&areaCode=&cardType=&goodsId=&goodsInf=&expand=&version=3.0&sign=e%2bOX6s9DwdH9EJSfoIB93Yqy%2fUREaAqtCWsDVb%2bH3Qa7O56%2b6BZDRtmxYQbCpXfSonrkdEkbJx0AfjlipEWvgnLfgaAl3%2bbqoeeMi6z05UjrmMl4dzR1YQtOFjmJt0zajBDj99tZWPlS3u170qG5j7LgymuIHdWbSlOZ6Lpn6dA%3d
+15:50:59.990 +259ms 
+
+
+
+
+
+
+ 
+
+
+
+
+<!DOCTYPE html >
+<html lang="zh">
+<head>
+<meta  name="viewport" content="width=device-width" charset="utf-8">
+<title>订单确认</title>
+<link href="./static/css/com_cd.css" rel="stylesheet" type="text/css" />
+<link href="./static/css/public.css" rel="stylesheet" type="text/css" />
+<link href="./static/css/main.css" rel="stylesheet"  type="text/css" />
+<script language="javascript" src="./static/js/mpay/xf.js"></script>
+<script type="text/javascript" src='./static/js/glider/prototype.js' charset="utf-8"></script>
+<script language="javascript" src="./static/js/mpay/common.js"></script>
+<script language="javascript" src="./static/js/mpay/showDisplay.js"></script>
+</head>
+<body>
+	<div id="MAIN">
+		<div id="header">
+			<span  class="p_l">
+				<a href="#" onmouseout="MM_swapImgRestore()" >
+				<img src="./static/images/logo1.gif" name="Image1" width="30" height="29" border="0" id="Image1" /></a>
+			</span>
+			<span><b>收银台</b></span>
+		</div>
+			<dl>
+				<dd>手机号码：13618029743</dd>
+				<dd>订单总金额：<b class="red">1.00</b>元</dd>
+				<dd>订单号：201606301551008661377131620006</dd>
+				<dd>订单时间：20160630</dd>
+			</dl>
+			
+		<div class="whitbg">
+		<div class="tags">
+			<ul>
+				<li id="jfli" class="curt" onclick="checkmaill('jf')"  style="display: none;"  >商城豆支付</li>
+				<li id="xeli"  class="" onclick="checkmaill('xe')"  >小额话费</li>
+				<li id="wyli"  class="" onclick="checkmaill('wy')"      style="display: none;"   >网银支付</li>
+				<li id="xykli" class="" onclick="checkmaill('xyk')"     style="display: none;"  >信用卡快捷</li>
+			</ul>
+		</div>
+		
+		<div class="content" id="jfmall" style="display: none;" >
+			<dl>
+				<dd>应付商城豆：100个</dd>
+				<dd>剩余商城豆：0个</dd>
+				
+	        </dl>
+	        
+	        	<form name="integralForm" id="integralForm" action="integral.xhtml" method="post">
+	        		<input type="hidden" name="amount"   value="100"/>
+	        		<input type="hidden" name="merId_integralList"    value="3823"/>
+					<input type="hidden" name="userId_integralL...
+15:51:10.318 http://211.136.93.21/scpay/paygo.xhtml
+15:51:10.318 tradeNo=1606301551005244&bankType=5&amount=100&retUrl=http://test.hxbapi.vpclub.cn/MicroPayment/Return?/MicroPayment/GoBack
+15:51:12.595 +2276ms 
+
+
+
+
+
+
+ 
+
+
+
+
+<!DOCTYPE html >
+<html lang="zh">
+<head>
+<meta  name="viewport" content="width=device-width" charset="UTF-8">
+<title>订单下单成功</title>
+<link href="./static/css/com_cd.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="MAIN">
+		<div id="header">
+			<span  class="p_l">
+				<a href="#" onmouseout="MM_swapImgRestore()" >
+				<img src="./static/images/logo1.gif" name="Image1" width="30" height="29" border="0" id="Image1" /></a>
+			</span>
+			<span><b>收银台</b></span>
+		</div>
+		<div class="whitbg">
+			<dl>
+				<dd><strong>订单下单成功！</strong></dd>
+				<dd>尊敬的用户，您使用手机话费进行支付的请求已成功受理</dd>
+				<dd>订单号: 201606301551008661377131620006</dd>
+				<dd>交易流水：1606301549024230</dd>
+				<dd>稍后10658008会下发确认扣费短信，请您按照提示回复即可。</dd>
+				
+					
+						<dd><a href="http://test.hxbapi.vpclub.cn/MicroPayment/Return?/MicroPayment/GoBack">返回商城</a></dd>
+					
+					
+				
+			</dl>
+			
+		</div>
+		
+		<p><b>使用须知</b></p>
+		<dl>
+			<dd>1) 本业务采用四川移动小额话费购买商品。</dd>
+			<dd>2) 单笔、单日消费最高上限150元，每月消费上限300元。</dd>
+			<dd>3) 预付费用户每次交易账户留底金额10元。</dd>
+			<dd>4) 新入网预付费客户，在其入网当月至次月5日前，交易后剩余预存款大于50元。入网次月5日0：00后恢复10元。</dd>
+		</dl>
+		<div id="footer" class="line_t">CopyRight © 2003-2010 <br/>
+			联动优势科技有限公司版权所有
+		</div>
+	</div>
+</body>
+</html>
+

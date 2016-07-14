@@ -24,8 +24,7 @@
 	SpTroneModel spTroneModel = new SpTroneServer().loadSpTroneById(spTroneId);
 	String query = StringUtil.getString(request.getParameter("query"), "");
 	query = PageUtil.queryFilter(query, "id");
-	if(spTroneModel==null)
-	{
+	if (spTroneModel == null) {
 		response.sendRedirect("sptrone.jsp?" + query);
 		return;
 	}
@@ -34,7 +33,6 @@
 	List<SpTroneApiModel> spTroneApiList = new SpTroneApiServer().loadSpTroneApi();
 	List<List<ServiceCodeModel>> serviceCodeList = new ServiceCodeServer().loadServiceCode();
 	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
-	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -53,24 +51,14 @@
 
 	var provinceList = new Array();
 	
-	<%
-	for(ProvinceModel proModel : provinceList)
-	{
-		%>
-		provinceList.push(new joSelOption(<%= proModel.getId() %>,1,'<%= proModel.getName() %>'));
-		<%
-	}
-	%>
+	<%for (ProvinceModel proModel : provinceList) {%>
+		provinceList.push(new joSelOption(<%=proModel.getId()%>,1,'<%=proModel.getName()%>'));
+		<%}%>
 
 	var spList = new Array();
-	<%
-	for(SpModel spModel : spList)
-	{
-		%>
-		spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
-		<%
-	}
-	%>
+	<%for (SpModel spModel : spList) {%>
+		spList.push(new joSelOption(<%=spModel.getId()%>,1,'<%=spModel.getShortName()%>'));
+		<%}%>
 	
 	function onDataSelect(joData) 
 	{
@@ -107,7 +95,7 @@
 		
 		if(isNaN(rate) || rate>=1 || rate<=0)
 		{
-			alert("<%= jiuSuanName %>只能介于0和1之间");
+			alert("<%=jiuSuanName%>只能介于0和1之间");
 			$("#input_jiesuanlv").focus();
 			return;
 		}
@@ -161,47 +149,48 @@
 	
 	function resetForm()
 	{
-		$("#sel_sp").val("<%= spTroneModel.getSpId() %>");
-		$("#sel_operator").val("<%= spTroneModel.getOperator() %>");
-		$("#input_sp_trone_name").val("<%= spTroneModel.getSpTroneName() %>");
-		$("#input_jiesuanlv").val("<%= spTroneModel.getJieSuanLv() %>");
-		$("#sel_sp_trone_api").val("<%= spTroneModel.getTroneApiId() %>");
+		$("#sel_sp").val("<%=spTroneModel.getSpId()%>");
+		$("#sel_operator").val("<%=spTroneModel.getOperator()%>");
+		$("#input_sp_trone_name").val("<%=spTroneModel.getSpTroneName()%>");
+		$("#input_jiesuanlv").val("<%=spTroneModel.getJieSuanLv()%>");
+		$("#sel_sp_trone_api").val("<%=spTroneModel.getTroneApiId()%>");
 		
-		$("#sel_service_code").val("<%= spTroneModel.getServiceCodeId() %>");
-		$("#sel_js_type").val("<%= spTroneModel.getJsTypes() %>");
+		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
+		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
 		
-		var provinceIds = "<%= spTroneModel.getProvinces() %>";
+		var provinceIds = "<%=spTroneModel.getProvinces()%>
+	";
 		var provinces = provinceIds.split(",");
-		setRadioCheck("trone_type",<%= spTroneModel.getTroneType() %>);
-		setRadioCheck("status",<%= spTroneModel.getStatus() %>);
+		setRadioCheck("trone_type",
+<%=spTroneModel.getTroneType()%>
+	);
+		setRadioCheck("status",
+<%=spTroneModel.getStatus()%>
+	);
 		unAllCkb();
 		$('[name=area[]]:checkbox').each(function() {
-			
-				for(k=0; k<provinces.length; k++)
-				{
-					if(provinces[k]==this.value)
-					{
-						this.checked = true;
-						break;
-					}
+
+			for (k = 0; k < provinces.length; k++) {
+				if (provinces[k] == this.value) {
+					this.checked = true;
+					break;
 				}
+			}
 		});
 	}
-	
-	function getProvinceCount(items)
-	{
+
+	function getProvinceCount(items) {
 		var i = 0;
 		$('[name=' + items + ']:checkbox').each(function() {
-			if(this.checked)
+			if (this.checked)
 				i++;
 		});
 		return i;
 	}
-	
+
 	//声明整数的正则表达式
-	function isNum(a)
-	{
-		var reg=/^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i;
+	function isNum(a) {
+		var reg = /^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i;
 		return reg.test(a);
 	}
 
@@ -218,65 +207,60 @@
 			this.checked = !this.checked;
 		});
 	}
-	
-	function importProvince()
-	{
+
+	function importProvince() {
 		var tmpPro = prompt("请输入省份", "");
-		
-		if ( tmpPro == null || "" == tmpPro )
+
+		if (tmpPro == null || "" == tmpPro)
 			return;
 
-		$('[name=area[]]:checkbox').each(function() 
-		{
-			if(tmpPro.indexOf(this.title) != -1)
-			{
+		$('[name=area[]]:checkbox').each(function() {
+			if (tmpPro.indexOf(this.title) != -1) {
 				this.checked = true;
 				tmpPro = tmpPro.replace(this.title, "");
 			}
 		});
-		
-		if(tmpPro!="")
+
+		if (tmpPro != "")
 			alert(tmpPro);
 	}
-	
-	function exportProvince()
-	{
+
+	function exportProvince() {
 		var exportData = "";
-		
-		$('[name=area[]]:checkbox').each(function() 
-		{
-			if(this.checked)
-			{
-				exportData += this.title + ",";	
+
+		$('[name=area[]]:checkbox').each(function() {
+			if (this.checked) {
+				exportData += this.title + ",";
 			}
 		});
-		
-		if(""!=exportData)
-		{
-			exportData = exportData.substring(0, exportData.length -1);
-			prompt("已选择省份", exportData);	
+
+		if ("" != exportData) {
+			exportData = exportData.substring(0, exportData.length - 1);
+			prompt("已选择省份", exportData);
 		}
 	}
-	
 </script>
 <body>
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
-				<form action="sptroneaction.jsp?query=<%= query %>" method="post" id="addform">
+				<form action="sptroneaction.jsp?query=<%=query%>" method="post"
+					id="addform">
 					<table>
 						<thead>
 							<td style="text-align: left">修改SP业务</td>
-							<input type="hidden" value="<%= spTroneModel.getId() %>" name="id" />
+							<input type="hidden" value="<%=spTroneModel.getId()%>"
+								name="id" />
 						</thead>
 					</table>
 					<dd class="dd01_me">SP名称</dd>
 					<dd class="dd04_me">
-						<select name="sp_id_1" id="sel_sp" title="选择SP" style="width: 200px" onclick="namePicker(this,spList,onDataSelect)">
+						<select name="sp_id_1" id="sel_sp" title="选择SP"
+							style="width: 200px"
+							onclick="namePicker(this,spList,onDataSelect)">
 							<option value="-1">请选择SP名称</option>
 							<%
-								for (SpModel sp : spList)
-								{
+								for (SpModel sp : spList) {
 							%>
 							<option value="<%=sp.getId()%>"><%=sp.getShortName()%></option>
 							<%
@@ -285,42 +269,37 @@
 						</select>
 					</dd>
 
-					<br />
-					<br />
-					<br />
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">业务线</dd>
 					<dd class="dd04_me">
-						<select name="service_code" id="sel_service_code" 
+						<select name="service_code" id="sel_service_code"
 							style="width: 200px">
 							<option value="-1">请选择业务线</option>
 							<optgroup label="移动">
 								<%
-									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(0))
-									{
-										%>
-								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
-										<%
+									for (ServiceCodeModel serviceCodeModel : serviceCodeList.get(0)) {
+								%>
+								<option value="<%=serviceCodeModel.getId()%>"><%=serviceCodeModel.getServiceName()%></option>
+								<%
 									}
 								%>
 							</optgroup>
 							<optgroup label="联通">
 								<%
-									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(1))
-									{
-										%>
-								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
-										<%
+									for (ServiceCodeModel serviceCodeModel : serviceCodeList.get(1)) {
+								%>
+								<option value="<%=serviceCodeModel.getId()%>"><%=serviceCodeModel.getServiceName()%></option>
+								<%
 									}
 								%>
 							</optgroup>
 							<optgroup label="电信">
 								<%
-									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(2))
-									{
-										%>
-								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
-										<%
+									for (ServiceCodeModel serviceCodeModel : serviceCodeList.get(2)) {
+								%>
+								<option value="<%=serviceCodeModel.getId()%>"><%=serviceCodeModel.getServiceName()%></option>
+								<%
 									}
 								%>
 							</optgroup>
@@ -340,26 +319,23 @@
 							<option value="2">电信</option>
 							<option value="3">移动</option>
 							-->
-							
+
 						</select>
 					</dd>
 
-					<br />
-					<br />
-					<br />
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">业务名称</dd>
 					<dd class="dd03_me">
-						<input type="text" name="sp_trone_name_1" title="业务名称" id="input_sp_trone_name"
-							style="width: 200px">
+						<input type="text" name="sp_trone_name_1" title="业务名称"
+							id="input_sp_trone_name" style="width: 200px">
 					</dd>
-					
-					<br />
-					<br />
-					<br />
+
+					<br /> <br /> <br />
 					<dd class="dd01_me">结算类型</dd>
 					<dd class="dd04_me">
-						<select name="js_type" id="sel_js_type" title="结算类型" style="width: 200px" >
+						<select name="js_type" id="sel_js_type" title="结算类型"
+							style="width: 200px">
 							<option value="-1">请选择结算类型</option>
 							<option value="0">对公周结</option>
 							<option value="1">对公双周结</option>
@@ -371,118 +347,105 @@
 							<option value="6">见帐单结</option>
 						</select>
 					</dd>
-					
-					<br />
-					<br />
-					<br />
+
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me"><%= jiuSuanName %></dd>
+					<dd class="dd01_me"><%=jiuSuanName%></dd>
 					<dd class="dd03_me">
-						<input type="text" name="jiesuanlv"  id="input_jiesuanlv"
+						<input type="text" name="jiesuanlv" id="input_jiesuanlv"
 							style="width: 200px">
 					</dd>
-					
-					<br />
-					<br />
-					<br />
+
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">业务API</dd>
 					<dd class="dd04_me">
-						<select name="sp_trone_api" id="sel_sp_trone_api" title="选择业务API" style="width: 200px">
+						<select name="sp_trone_api" id="sel_sp_trone_api" title="选择业务API"
+							style="width: 200px">
 							<option value="-1">请选择业务API</option>
 							<%
-								for (SpTroneApiModel spTroneApiModel : spTroneApiList)
-								{
+								for (SpTroneApiModel spTroneApiModel : spTroneApiList) {
 							%>
-							<option value="<%=spTroneApiModel.getId()%>"><%= spTroneApiModel.getName() %></option>
+							<option value="<%=spTroneApiModel.getId()%>"><%=spTroneApiModel.getName()%></option>
 							<%
 								}
 							%>
 						</select>
 					</dd>
-					
-					<br />
-					<br />
-					<br />
+
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">数据类型</dd>
 					<dd class="dd03_me" style="background: none">
-						<input type="radio" name="trone_type" style="width: 35px;float:left" value="0" checked="checked" >
-						<label style="font-size: 14px;float:left">实时</label>
-						<input type="radio" name="trone_type" style="width: 35px;float:left" value="1" >
-						<label style="font-size: 14px;float:left">隔天</label>
-						<input type="radio" name="trone_type" style="width: 35px;float:left" value="2" >
-						<label style="font-size: 14px;float:left">IVR</label>
+						<input type="radio" name="trone_type"
+							style="width: 35px; float: left" value="0" checked="checked">
+						<label style="font-size: 14px; float: left">实时</label> <input
+							type="radio" name="trone_type" style="width: 35px; float: left"
+							value="1"> <label style="font-size: 14px; float: left">隔天</label>
+						<input type="radio" name="trone_type"
+							style="width: 35px; float: left" value="2"> <label
+							style="font-size: 14px; float: left">IVR</label>
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="3" >
 						<label style="font-size: 14px;float:left">第三方支付</label>
 					</dd>
 
-					<br />
-					<br />
-					<br />
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">状态</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="status" style="width: 35px;float:left" value="1" >
-						<label style="font-size: 14px;float:left">开启</label>
-						<input type="radio" name="status" style="width: 35px;float:left" value="0" >
-						<label style="font-size: 14px;float:left">关闭</label>
+						<input type="radio" name="status" style="width: 35px; float: left"
+							value="1"> <label style="font-size: 14px; float: left">开启</label>
+						<input type="radio" name="status" style="width: 35px; float: left"
+							value="0"> <label style="font-size: 14px; float: left">关闭</label>
 					</dd>
-					
-					<br />
-					<br />
-					<br />
+
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">通道日限</dd>
 					<dd class="dd03_me">
-						<input type="text" name="day_limit" value="<%= spTroneModel.getDayLimit() %>" id="input_day_limit"
-							style="width: 200px">
-					</dd>
-					
-					<br />
-					<br />
-					<br />
-					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">通道月限</dd>
-					<dd class="dd03_me">
-						<input type="text" name="month_limit" value="<%= spTroneModel.getMonthLimit() %>" id="input_month_limit"
-							style="width: 200px">
-					</dd>
-					
-					<br />
-					<br />
-					<br />
-					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">用户日限</dd>
-					<dd class="dd03_me">
-						<input type="text" name="user_day_limit" value="<%= spTroneModel.getUserDayLimit() %>" id="input_user_day_limit"
-							style="width: 200px">
-					</dd>
-					
-					<br />
-					<br />
-					<br />
-					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">用户月限</dd>
-					<dd class="dd03_me">
-						<input type="text" name="user_month_limit"  value="<%= spTroneModel.getUserMonthLimit() %>" id="input_user_month_limit"
+						<input type="text" name="day_limit"
+							value="<%=spTroneModel.getDayLimit()%>" id="input_day_limit"
 							style="width: 200px">
 					</dd>
 
-					<br />
-					<br />
-					<br />
+					<br /> <br /> <br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">通道月限</dd>
+					<dd class="dd03_me">
+						<input type="text" name="month_limit"
+							value="<%=spTroneModel.getMonthLimit()%>"
+							id="input_month_limit" style="width: 200px">
+					</dd>
+
+					<br /> <br /> <br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">用户日限</dd>
+					<dd class="dd03_me">
+						<input type="text" name="user_day_limit"
+							value="<%=spTroneModel.getUserDayLimit()%>"
+							id="input_user_day_limit" style="width: 200px">
+					</dd>
+
+					<br /> <br /> <br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">用户月限</dd>
+					<dd class="dd03_me">
+						<input type="text" name="user_month_limit"
+							value="<%=spTroneModel.getUserMonthLimit()%>"
+							id="input_user_month_limit" style="width: 200px">
+					</dd>
+
+					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">省份</dd>
 					<div style="margin-left: 95px; width: 580px;" id="pro">
 
 						<%
-							for (ProvinceModel province : provinceList)
-							{
+							for (ProvinceModel province : provinceList) {
 						%>
 						<dd class="dd01"><%=province.getName()%>
-							<input style="" type="checkbox" title="<%= province.getName() %>" class="chpro" name="area[]"
-								value="<%=province.getId()%>">
+							<input style="" type="checkbox" title="<%=province.getName()%>"
+								class="chpro" name="area[]" value="<%=province.getId()%>">
 						</dd>
 						<%
 							}
@@ -491,17 +454,14 @@
 							style="horve: point;" value="全　选" /> <input type="button"
 							onclick="unAllCkb()" style="padding-top: 10px;" value="全不选" /> <input
 							type="button" onclick="inverseCkb('area[]')"
-							style="padding-top: 10px;" value="反　选" />
-							<input
-							type="button" onclick="importProvince()" style="padding-top: 10px;" value="导　入" />
-							
-							<input
-							type="button" onclick="exportProvince()" style="padding-top: 10px;" value="导　出" />
+							style="padding-top: 10px;" value="反　选" /> <input type="button"
+							onclick="importProvince()" style="padding-top: 10px;" value="导　入" />
+
+						<input type="button" onclick="exportProvince()"
+							style="padding-top: 10px;" value="导　出" />
 					</div>
 
-					<br />
-					<br />
-					<br />
+					<br /> <br /> <br />
 					<dd class="dd00"></dd>
 					<dd class="dd00_me"></dd>
 					<dd class="ddbtn" style="margin-left: 100px; margin-top: 10px">
@@ -512,6 +472,9 @@
 					</dd>
 					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
 						<input type="button" value="返 回" onclick="history.go(-1)">
+					</dd>
+					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
+						<input type="button" value="通知渠道"  onclick="window.open('../email/troneprovincenotices.jsp?id=<%=spTroneId %>','_self');">
 					</dd>
 				</form>
 			</dl>

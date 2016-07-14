@@ -10,13 +10,14 @@ namespace LightDataModel
     {
         static StaticCache<tbl_trone_paycodeItem, int> cache = new StaticCache<tbl_trone_paycodeItem, int>() { Expired = new TimeSpan(0, 15, 0) };
 
-        public tbl_trone_paycodeItem QueryPayCodeByTroneId(Shotgun.Database.IBaseDataClass2 dBase, int troneId)
+        public static tbl_trone_paycodeItem QueryPayCodeByTroneId(Shotgun.Database.IBaseDataClass2 dBase, int troneId)
         {
-            var data = cache.FindFirstData(e => e.trone_id == trone_id);
-            if (data == null)
+            var data = cache.FindFirstData(e => e.trone_id == troneId);
+            if (data != null)
                 return data;
+
             var q = GetQueries(dBase);
-            q.Filter.AndFilters.Add(Fields.trone_id, trone_id);
+            q.Filter.AndFilters.Add(Fields.trone_id, troneId);
             data = q.GetRowByFilters();
             if (data != null)
                 cache.InsertItem(data);

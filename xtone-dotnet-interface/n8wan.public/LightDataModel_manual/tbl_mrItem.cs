@@ -6,7 +6,7 @@ using System.Text;
 namespace LightDataModel
 {
     /// <summary>
-    /// tbl_mr_201603数据模型
+    /// tbl_mr_201604数据模型
     /// </summary>
     public partial class tbl_mrItem : Shotgun.Model.Logical.DynamicDataItem
     {
@@ -37,6 +37,10 @@ namespace LightDataModel
             /// </summary>
             public const string mobile = "mobile";
             /// <summary>
+            /// 用户唯一标识码
+            /// </summary>
+            public const string user_md10 = "user_md10";
+            /// <summary>
             /// 国家码
             /// </summary>
             public const string mcc = "mcc";
@@ -48,6 +52,10 @@ namespace LightDataModel
             /// 城市id
             /// </summary>
             public const string city_id = "city_id";
+            /// <summary>
+            /// 业务ID
+            /// </summary>
+            public const string sp_trone_id = "sp_trone_id";
             /// <summary>
             /// 通道ID
             /// </summary>
@@ -150,6 +158,10 @@ namespace LightDataModel
         /// </summary>
         private string _mobile;
         /// <summary>
+        /// 用户唯一标识码
+        /// </summary>
+        private string _user_md10;
+        /// <summary>
         /// 国家码
         /// </summary>
         private string _mcc;
@@ -161,6 +173,10 @@ namespace LightDataModel
         /// 城市id
         /// </summary>
         private int _city_id;
+        /// <summary>
+        /// 业务ID
+        /// </summary>
+        private int _sp_trone_id;
         /// <summary>
         /// 通道ID
         /// </summary>
@@ -324,6 +340,27 @@ namespace LightDataModel
             }
         }
         /// <summary>
+        /// 用户唯一标识码
+        /// </summary>
+        public string user_md10
+        {
+            get { return this._user_md10; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.user_md10);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.user_md10);
+                else
+                    RemoveNullFlag(Fields.user_md10);
+#endif
+
+                SetFieldHasUpdate(Fields.user_md10, this._user_md10, value);
+                this._user_md10 = value;
+            }
+        }
+        /// <summary>
         /// 国家码
         /// </summary>
         public string mcc
@@ -384,6 +421,27 @@ namespace LightDataModel
 
                 SetFieldHasUpdate(Fields.city_id, this._city_id, value);
                 this._city_id = value;
+            }
+        }
+        /// <summary>
+        /// 业务ID
+        /// </summary>
+        public int sp_trone_id
+        {
+            get { return this._sp_trone_id; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.sp_trone_id);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.sp_trone_id);
+                else
+                    RemoveNullFlag(Fields.sp_trone_id);
+#endif
+
+                SetFieldHasUpdate(Fields.sp_trone_id, this._sp_trone_id, value);
+                this._sp_trone_id = value;
             }
         }
         /// <summary>
@@ -853,9 +911,11 @@ namespace LightDataModel
 			,"imei"
 ,"imsi"
 ,"mobile"
+,"user_md10"
 ,"mcc"
 ,"province_id"
 ,"city_id"
+,"sp_trone_id"
 ,"trone_id"
 ,"trone_order_id"
 ,"ori_trone"
@@ -887,6 +947,9 @@ namespace LightDataModel
         public bool IsmobileNull() { return IsNull(Fields.mobile); }
 
         public void SetmobileNull() { SetNull(Fields.mobile); }
+        public bool Isuser_md10Null() { return IsNull(Fields.user_md10); }
+
+        public void Setuser_md10Null() { SetNull(Fields.user_md10); }
         public bool IsmccNull() { return IsNull(Fields.mcc); }
 
         public void SetmccNull() { SetNull(Fields.mcc); }
@@ -896,6 +959,9 @@ namespace LightDataModel
         public bool Iscity_idNull() { return IsNull(Fields.city_id); }
 
         public void Setcity_idNull() { SetNull(Fields.city_id); }
+        public bool Issp_trone_idNull() { return IsNull(Fields.sp_trone_id); }
+
+        public void Setsp_trone_idNull() { SetNull(Fields.sp_trone_id); }
         public bool Istrone_idNull() { return IsNull(Fields.trone_id); }
 
         public void Settrone_idNull() { SetNull(Fields.trone_id); }
