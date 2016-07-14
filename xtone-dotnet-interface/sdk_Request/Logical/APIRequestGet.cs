@@ -167,16 +167,21 @@ namespace sdk_Request.Logical
             {
                 if (_paymodel != null)
                     return _paymodel;
-                var l = LightDataModel.tbl_trone_paycodeItem.GetQueries(dBase);
-                if (OrderInfo.troneId > 0)
-                    l.Filter.AndFilters.Add(LightDataModel.tbl_trone_paycodeItem.Fields.trone_id, OrderInfo.troneId);
-                else
-                {
-                    var tf = new TableFilter(tbl_trone_paycodeItem.Fields.trone_id, tbl_trone_orderItem.tableName, tbl_trone_orderItem.Fields.trone_id);
-                    l.Filter.AndFilters.Add(tf);
-                    tf.TableFilters.AndFilters.Add(tbl_trone_orderItem.Fields.id, _aqm.tbl_trone_order_id);
-                }
-                _paymodel = l.GetRowByFilters();
+
+                _paymodel = LightDataModel.tbl_trone_paycodeItem.QueryPayCodeByTroneId(dBase, OrderInfo.troneId);
+
+
+                //var l = LightDataModel.tbl_trone_paycodeItem.GetQueries(dBase);
+                //if (OrderInfo.troneId > 0)
+                //    l.Filter.AndFilters.Add(LightDataModel.tbl_trone_paycodeItem.Fields.trone_id, OrderInfo.troneId);
+                //else
+                //{
+                //    var tf = new TableFilter(tbl_trone_paycodeItem.Fields.trone_id, tbl_trone_orderItem.tableName, tbl_trone_orderItem.Fields.trone_id);
+                //    l.Filter.AndFilters.Add(tf);
+                //    tf.TableFilters.AndFilters.Add(tbl_trone_orderItem.Fields.id, _aqm.tbl_trone_order_id);
+                //}
+                //_paymodel = l.GetRowByFilters();
+
                 if (_paymodel == null)
                 {
                     //throw new Exception("paycode 获取失败，请检查paycode是否有配置");
@@ -322,10 +327,17 @@ namespace sdk_Request.Logical
 
         protected void WriteLog(string msg)
         {
+            if (string.IsNullOrEmpty(msg))
+                return;
             if (_sbLog == null)
                 _sbLog = new StringBuilder();
             else if (_sbLog.Length != 0)
                 _sbLog.AppendLine();
+
+            if (msg.Length > 2048)
+            {
+                msg = msg.Substring(0, 2045) + "...";
+            }
             _sbLog.AppendFormat("{0:HH:mm:ss.fff} {1}", DateTime.Now, msg);
         }
 
@@ -423,7 +435,7 @@ namespace sdk_Request.Logical
                 WriteLog(url);
                 if (!String.IsNullOrEmpty(postdata))
                     WriteLog(postdata);
-                html = n8wan.Public.Library.DownloadHTML(url, postdata, timeout, encode, contentType);
+                html = n8wan.Public.Library.DownloadHTML(url, postdata, timeout, encode, contentType, this.Cookies);
                 return html;
             }
             catch (Exception ex)
@@ -439,5 +451,7 @@ namespace sdk_Request.Logical
 
         }
         #endregion
+
+        public CookieContainer Cookies { get; set; }
     }
 }
