@@ -46,9 +46,9 @@
 	</build>
 	<profiles>
 		<profile>
-			<id>bj</id>
+			<id>bjyd</id>
 			<properties>
-				<runtime.env>config\bj</runtime.env>
+				<runtime.env>config\bjyd</runtime.env>
 				<final.name>credit</final.name>
 			</properties>
 			<activation>
@@ -56,16 +56,16 @@
 			</activation>
 		</profile>
 		<profile>
-			<id>sz</id>
+			<id>szht</id>
 			<properties>
-				<runtime.env>config\sz</runtime.env>
+				<runtime.env>config\szht</runtime.env>
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
 		<profile>
-			<id>sh</id>
+			<id>shhh</id>
 			<properties>
-				<runtime.env>config\sh</runtime.env>
+				<runtime.env>config\shhh</runtime.env>
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
