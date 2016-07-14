@@ -12,7 +12,6 @@
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
 	GroupModel model = new GroupServer().loadGroupById(id);
 	String name = StringUtil.getString(request.getParameter("encodeStr"), "");
-	System.out.println("name:" + name);
 	//String encodeStr = URLEncoder.encode(name,"GBK"); 
 	String query = request.getQueryString();
 	
@@ -65,7 +64,7 @@
 		<div class="content" style="margin-top: 10px">
 			<dl>
 				<dd class="ddbtn" >
-				<label>增加组别</label>
+				<label>角色修改</label>
 				</dd>
 			</dl>
 			<br />	<br />

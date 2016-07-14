@@ -33,7 +33,7 @@
 		<div class="content" style="margin-top: 10px">
 			<dl>
 				<dd class="ddbtn" >
-				<label>增加组别</label>
+				<label>增加角色</label>
 				</dd>
 			</dl>
 			<br />	<br />

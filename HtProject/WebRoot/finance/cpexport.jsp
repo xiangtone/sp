@@ -16,7 +16,7 @@
 	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
 	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
-	int dateType = StringUtil.getInteger(request.getParameter("datetype"), 1);
+	int dateType = StringUtil.getInteger(request.getParameter("datetype"), -1);
 	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
 	boolean isExport = StringUtil.getInteger(request.getParameter("export"), -1) == 1 ;
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -67,7 +67,7 @@
 	else
 	{
 		if(isNotFirstLoad)
-			map = new SettleAccountServer().loadCpSettleAccountData(startDate, endDate,cpId);
+			map = new SettleAccountServer().loadCpSettleAccountData(startDate, endDate,cpId,dateType);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -153,10 +153,14 @@
 					<dd class="dd04_me">
 						<select name="datetype" id="sel_date_type" title="选择结算类型" style="width:100px">
 							<option value="-1">请选择</option>
-							<option value="1">周结</option>
-							<option value="2">双周结</option>
-							<option value="3">月结</option>
-							<option value="4">自定义</option>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公N+1结</option>
+							<option value="7">对公N+2结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
 						</select>
 					</dd>
 

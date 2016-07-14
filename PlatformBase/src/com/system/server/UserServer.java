@@ -60,6 +60,11 @@ public class UserServer
 		return new UserDao().loadUserGroup(id);
 	}
 	
+	public List<UserModel> loadUserByGroupId(int groupId)
+	{
+		return new UserDao().loadUserByGroupId(groupId);
+	}
+	
 	public void updateUserGroup(int userId,List<Integer> group)
 	{
 		UserDao dao = new UserDao();

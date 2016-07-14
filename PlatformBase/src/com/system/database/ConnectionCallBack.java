@@ -6,5 +6,5 @@ import java.sql.Statement;
 
 public interface ConnectionCallBack
 {
-	void onConnectionCallBack(Statement stmt,ResultSet rs)throws SQLException;
+	void onConnectionCallBack(Statement stmt,ResultSet rs) throws SQLException;
 }

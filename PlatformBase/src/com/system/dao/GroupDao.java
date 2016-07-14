@@ -18,9 +18,85 @@ public class GroupDao
 	@SuppressWarnings("unchecked")
 	public List<GroupModel> loadAllGroup()
 	{
-		String sql = "select * from comsum_config.tbl_group";
+		String sql = "select * from comsum_config.tbl_group"+ " order by convert(name using gbk) asc ";
 		
 		return (List<GroupModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<GroupModel> list = new ArrayList<GroupModel>();
+				 
+				while(rs.next())
+				{
+					GroupModel model = new GroupModel();
+					model.setId(rs.getInt("id"));
+					model.setName(StringUtil.getString(rs.getString("name"),""));
+					model.setRemark(StringUtil.getString(rs.getString("remark"),""));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+		
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<GroupModel> loadRightGroupByUserId(int userId)
+	{
+		
+		String sql = " SELECT b.`group_list` FROM comsum_config.`tbl_group_user` a";
+		sql += " LEFT JOIN comsum_config.`tbl_group_group` b ON a.`group_id` = b.`group_id`";
+		sql += " WHERE user_id = " + userId;
+		
+		JdbcControl control = new JdbcControl();
+		
+		final List<Integer> list = new ArrayList<Integer>();
+		
+		control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				String groupList = "";
+				while(rs.next())
+				{
+					groupList = rs.getString("group_list");
+					if(!StringUtil.isNullOrEmpty(groupList))
+					for(String str : groupList.split(","))
+					{
+						int groupId = StringUtil.getInteger(str, 0);
+						if(groupId>0)
+						{
+							if(!list.contains(groupId))
+							{
+								list.add(groupId);
+							}
+						}
+					}
+				}
+				return null;
+			}
+		});
+		
+		if(list.isEmpty())
+			return new ArrayList<GroupModel>();
+		
+		String groups = "";
+		
+		for(Integer groupId : list)
+		{
+			groups +=  groupId + ",";
+		}
+		
+		groups = groups.substring(0,groups.length()-1);
+		
+		String sql2 = "select * from comsum_config.tbl_group where id in ("+ groups +") order by convert(name using gbk) asc ";
+		
+		return (List<GroupModel>)new JdbcControl().query(sql2, new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
@@ -212,15 +288,21 @@ public class GroupDao
 	
 	public void addGroupRight(int groupId,List<Integer> list)
 	{
-		String sql = "insert into comsum_config.tbl_group_right(group_id,menu_2_id) value("+ groupId +",?)";
-		List<Map<Integer, Object>> dataParams = new ArrayList<Map<Integer,Object>>();
+		String sql = "insert into comsum_config.tbl_group_right(group_id,menu_2_id) values ";
+		
+		String values = "";
+		
 		for(int i=0; i <list.size(); i++)
 		{
-			Map<Integer, Object> map = new HashMap<Integer, Object>();
-			map.put(1, list.get(i));
-			dataParams.add(map);
+			values += "("+ groupId +","+ list.get(i) +"),";
 		}
-		new JdbcControl().executeMulData(sql, dataParams);
+		
+		if(!StringUtil.isNullOrEmpty(values))
+		{
+			values = values.substring(0,values.length()-1);
+			values += ";";
+			new JdbcControl().execute(sql + values);
+		}
 	}
 	
 }

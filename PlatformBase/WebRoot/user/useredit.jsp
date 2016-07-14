@@ -14,6 +14,7 @@
 	{
 		response.sendRedirect("user.jsp");
 	}
+	String query = StringUtil.getString(request.getParameter("query"),"");
 %>	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -77,7 +78,7 @@
 			</dl>
 			<br />	<br />
 			<dl>
-				<form action="action.jsp" method="post" id="addform">
+				<form action="action.jsp?query=<%= query %>" method="post" id="addform">
 				<input type="hidden" value="5" name="type">
 				<input type="hidden" value="<%= userId %>" name="id" />
 				<input type="hidden" value="<%= model.getPassword() %>" name="old_pwd">

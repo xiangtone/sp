@@ -35,7 +35,6 @@
 	String name = StringUtil.getString(request.getParameter("name"), "");
 	String query = request.getQueryString();
 	//String encodeStr = URLEncoder.encode(name,"GBK"); 
-	System.out.println("name:"+name);
 	
 	GroupModel model = new GroupModel();
 	model.setId(id);

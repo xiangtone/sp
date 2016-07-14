@@ -54,9 +54,9 @@ public class SettleAccountServer
 	}
 	
 	
-	public Map<String, List<SpFinanceShowModel>> loadCpSettleAccountData(String startDate,String endDate,int cpId)
+	public Map<String, List<SpFinanceShowModel>> loadCpSettleAccountData(String startDate,String endDate,int cpId,int jsType)
 	{
-		List<SpFinanceShowModel> list = new SettleAcountDao().loadCpSettleAccountData(startDate, endDate,cpId);
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadCpSettleAccountData(startDate, endDate,cpId,jsType);
 		
 		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
 		
@@ -85,17 +85,29 @@ public class SettleAccountServer
 		
 		switch(dateType)
 		{
+			case 0:
+				dateTypeValue = "对公周结";
+				break;
 			case 1:
-				dateTypeValue = "周结";
+				dateTypeValue = "对公双周结";
 				break;
 			case 2:
-				dateTypeValue = "双周结";
+				dateTypeValue = "对公N+1结";
 				break;
 			case 3:
-				dateTypeValue = "月结";
+				dateTypeValue = "对私周结";
 				break;
 			case 4:
-				dateTypeValue = "自定义";
+				dateTypeValue = "对私双周结";
+				break;
+			case 5:
+				dateTypeValue = "对私月结";
+				break;
+			case 6:
+				dateTypeValue = "见帐单结";
+				break;
+			case 7:
+				dateTypeValue = "对公N+2结";
 				break;
 			default:
 				break;

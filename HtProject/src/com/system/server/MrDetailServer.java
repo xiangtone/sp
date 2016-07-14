@@ -21,7 +21,9 @@ public class MrDetailServer
 	
 	public List<DetailDataVo> loadDetailDataByCondition(String startDate,String endDate,int spId,int cpId,int spTroneId,int synType)
 	{
-		String table = StringUtil.getMonthFormat(startDate);
+		String table = StringUtil.getMonthFormat(startDate.substring(0,10));
 		return new MrDetailDataDao().loadDetailDataByCondition(table, startDate, endDate, spId, cpId, spTroneId, synType);
 	}
+	
+	
 }

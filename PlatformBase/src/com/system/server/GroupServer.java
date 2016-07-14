@@ -23,6 +23,11 @@ public class GroupServer
 		return new GroupDao().loadAllGroup();
 	}
 	
+	public List<GroupModel> loadRightGroupByUserId(int userId)
+	{
+		return new GroupDao().loadRightGroupByUserId(userId);
+	}
+	
 	public GroupModel loadGroupById(int id)
 	{
 		return new GroupDao().loadGroupById(id);

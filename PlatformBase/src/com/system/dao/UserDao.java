@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
@@ -17,8 +15,6 @@ import com.system.util.StringUtil;
 
 public class UserDao
 {
-	private final static Logger LOG = Logger.getLogger("UserDao.class");
-	
 	public Map<String, Object> loadUser(int pageIndex,int groupId)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
@@ -82,7 +78,7 @@ public class UserDao
 	
 	public Map<String, Object> loadUser(int pageIndex,int groupId,String userName,String nickName)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` left join comsum_config.tbl_user c on b.create_user = c.id where 1=1 ";
 		
 		String query = "";
 		
@@ -93,12 +89,18 @@ public class UserDao
 		
 		if(!StringUtil.isNullOrEmpty(userName))
 		{
-			query += " AND name LIKE '%"+userName+"%' ";
+			if(groupId>0)
+				query += " AND b.name LIKE '%"+userName+"%' ";
+			else
+				query += " AND a.name LIKE '%"+userName+"%' ";
 		}
 		
 		if(!StringUtil.isNullOrEmpty(nickName))
 		{
-			query += " AND nick_name LIKE '%"+nickName+"%' ";
+			if(groupId>0)
+				query += " AND b.nick_name LIKE '%"+nickName+"%' ";
+			else
+				query += " AND a.nick_name LIKE '%"+nickName+"%' ";
 		}
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
@@ -118,7 +120,7 @@ public class UserDao
 		
 		String order = " order by a.id desc ";
 		
-		map.put("list", new JdbcControl().query((groupId>0 ? sql :sql2).replace(Constant.CONSTANT_REPLACE_STRING, (groupId>0 ? " a.group_id,b.* " : " a.*,b.`nick_name` group_name ")) + query + order + limit, new QueryCallBack()
+		map.put("list", new JdbcControl().query((groupId>0 ? sql :sql2).replace(Constant.CONSTANT_REPLACE_STRING, (groupId>0 ? " a.group_id,b.*,c.`nick_name` create_user_name " : " a.*,b.`nick_name` create_user_name ")) + query + order + limit, new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
@@ -137,7 +139,7 @@ public class UserDao
 					model.setQq(StringUtil.getString(rs.getString("qq"),""));
 					model.setPhone(StringUtil.getString(rs.getString("phone"),""));
 					model.setStatus(rs.getInt("status"));
-					model.setCreateUser(rs.getString("group_name"));
+					model.setCreateUser(StringUtil.getString(rs.getString("create_user_name"),""));
 					
 					if(model.getId()>0)
 						list.add(model);
@@ -150,29 +152,48 @@ public class UserDao
 		return map;
 	}
 	
-	//
+	/**
+	 * LOAD指定的用户出来
+	 * @param pageIndex
+	 * @param groupId
+	 * @param userName
+	 * @param nickName
+	 * @param userId
+	 * @return
+	 */
 	public Map<String, Object> loadUser(int pageIndex,int groupId,String userName,String nickName,int userId)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM  comsum_config.`tbl_group_user` a LEFT JOIN  comsum_config.tbl_user b ON a.`user_id` = b.`id` left join comsum_config.tbl_user c on b.create_user = c.id where 1=1 ";
 		
 		String query = "";
 		
-		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM comsum_config.tbl_user where 1=1 ";
+		String sql2 = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM comsum_config.tbl_user a LEFT JOIN comsum_config.`tbl_user` b ON b.`id`=a.`create_user` where 1=1 ";
 		
 		if(groupId>0)
 			query += " and group_id =" + groupId;
 		
 		if(userId>0)
-			query += " and create_user = " + userId;
+		{
+			if(groupId>0)
+				query += " AND b.create_user = " + userId;
+			else
+				query += " AND a.create_user = " + userId;
+		}
 		
 		if(!StringUtil.isNullOrEmpty(userName))
 		{
-			query += " AND name LIKE '%"+userName+"%' ";
+			if(groupId>0)
+				query += " AND b.name LIKE '%"+userName+"%' ";
+			else
+				query += " AND a.name LIKE '%"+userName+"%' ";
 		}
 		
 		if(!StringUtil.isNullOrEmpty(nickName))
 		{
-			query += " AND nick_name LIKE '%"+nickName+"%' ";
+			if(groupId>0)
+				query += " AND b.nick_name LIKE '%"+nickName+"%' ";
+			else
+				query += " AND a.nick_name LIKE '%"+nickName+"%' ";
 		}
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
@@ -190,9 +211,9 @@ public class UserDao
 			}
 		}));
 		
-		String order = " order by id desc ";
+		String order = " order by a.id desc ";
 		
-		map.put("list", new JdbcControl().query((groupId>0 ? sql :sql2).replace(Constant.CONSTANT_REPLACE_STRING, (groupId>0 ? " a.group_id,b.* " : " * ")) + query + order + limit, new QueryCallBack()
+		map.put("list", new JdbcControl().query((groupId>0 ? sql :sql2).replace(Constant.CONSTANT_REPLACE_STRING, (groupId>0 ? " a.group_id,b.*,c.`nick_name` create_user_name " : " a.*,b.`nick_name` create_user_name ")) + query + order + limit, new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
@@ -211,6 +232,7 @@ public class UserDao
 					model.setQq(StringUtil.getString(rs.getString("qq"),""));
 					model.setPhone(StringUtil.getString(rs.getString("phone"),""));
 					model.setStatus(rs.getInt("status"));
+					model.setCreateUser(StringUtil.getString(rs.getString("create_user_name"),""));
 					
 					if(model.getId()>0)
 						list.add(model);
@@ -221,6 +243,37 @@ public class UserDao
 		}));
 		
 		return map;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserModel> loadUserByGroupId(int groupId)
+	{
+		String sql = "SELECT b.* FROM comsum_config.`tbl_group_user` a LEFT JOIN comsum_config.tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` = " + groupId + " order by b.name asc" ;
+		
+		return (List<UserModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<UserModel> list = new ArrayList<UserModel>();
+				UserModel model = null;
+				while(rs.next())
+				{
+					model = new UserModel();
+					
+					model.setId(rs.getInt("id"));
+					model.setName(StringUtil.getString(rs.getString("name"),""));
+					model.setPassword(StringUtil.getString(rs.getString("pwd"),""));
+					model.setNickName(StringUtil.getString(rs.getString("nick_name"),""));
+					model.setMail(StringUtil.getString(rs.getString("mail"),""));
+					model.setQq(StringUtil.getString(rs.getString("qq"),""));
+					model.setPhone(StringUtil.getString(rs.getString("phone"),""));
+					
+					list.add(model);
+				}
+				return list;
+			}
+		});
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -317,7 +370,7 @@ public class UserDao
 	
 	public void addUser(UserModel model)
 	{
-		String sql = "insert into comsum_config.tbl_user(name,pwd,nick_name,mail,qq,phone) value(?,?,?,?,?,?)";
+		String sql = "insert into comsum_config.tbl_user(name,pwd,nick_name,mail,qq,phone,create_user) value(?,?,?,?,?,?,?)";
 		
 		Map<Integer, Object> param = new HashMap<Integer, Object>();
 		
@@ -327,6 +380,7 @@ public class UserDao
 		param.put(4, model.getMail());
 		param.put(5, model.getQq());
 		param.put(6, model.getPhone());
+		param.put(7, model.getCreateUserId());
 		
 		new JdbcControl().execute(sql, param);
 	}
@@ -362,15 +416,22 @@ public class UserDao
 	
 	public void updateUserGroup(List<Integer> list,int userId)
 	{
-		String sql = "insert into comsum_config.tbl_group_user(user_id,group_id) value("+ userId +",?)";
-		List<Map<Integer, Object>> dataParams = new ArrayList<Map<Integer,Object>>();
+		String sql = "insert into comsum_config.tbl_group_user(user_id,group_id) values ";
+		
+		String values = "";
+		
 		for(int i=0; i <list.size(); i++)
 		{
-			Map<Integer, Object> map = new HashMap<Integer, Object>();
-			map.put(1, list.get(i));
-			dataParams.add(map);
+			values += "("+ userId +","+ list.get(i) +"),";
 		}
-		new JdbcControl().executeMulData(sql, dataParams);
+		
+		if(!StringUtil.isNullOrEmpty(values))
+		{
+			values = values.substring(0,values.length()-1);
+			values += ";";
+			new JdbcControl().execute(sql + values);
+		}
+		
 	}
 	
 	

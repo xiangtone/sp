@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import org.apache.log4j.Logger;
-
 import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
@@ -16,9 +14,6 @@ import com.system.model.GroupRightModel;
 import com.system.util.StringUtil;
 
 public class GroupRightDao {
-	
-	//private final static Logger LOG = Logger.getLogger("GroupRightDao.class");
-	
 	
 	public Map<String, Object> load(int pageIndex,String group){
 		

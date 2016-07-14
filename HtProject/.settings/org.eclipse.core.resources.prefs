@@ -1,8 +1,9 @@
 eclipse.preferences.version=1
 encoding//WebRoot/thirdpay/list.jsp=UTF-8
-encoding//config/bj/config.properties=UTF-8
-encoding//config/sh/config.properties=UTF-8
-encoding//config/sz/config.properties=UTF-8
+encoding//config/bjtl/config.properties=UTF-8
+encoding//config/bjyd/config.properties=UTF-8
+encoding//config/shhh/config.properties=UTF-8
+encoding//config/szht/config.properties=UTF-8
 encoding//src/com/system/vmodel/FinancialSpCpDataShowModel.java=UTF-8
 encoding//src/config.properties=UTF-8
 encoding/<project>=UTF-8

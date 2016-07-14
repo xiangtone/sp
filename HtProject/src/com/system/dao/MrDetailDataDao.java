@@ -191,7 +191,7 @@ public class MrDetailDataDao
 		sql += " LEFT JOIN daily_config.`tbl_cp` f ON c.`cp_id` = f.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_province` g ON a.`province_id` = g.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_city` h ON a.`city_id` = h.`id`";
-		sql += " WHERE a.create_date >= '" + startDate + " 00:00:00' and a.create_date <= '" + endDate + " 23:59:59'";
+		sql += " WHERE a.create_date >= '" + startDate + "' and a.create_date <= '" + endDate + "'";
 		
 		
 		if(spId>0)

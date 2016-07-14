@@ -1,3 +1,4 @@
+<%@page import="com.system.util.Base64UTF"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="com.system.server.RightServer"%>
@@ -8,6 +9,8 @@
 	pageEncoding="UTF-8"%>
 <%
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
+
+	String query = StringUtil.getString(request.getParameter("query"),"");
 
 	int userId = StringUtil.getInteger(request.getParameter("id"), -1);
 	
@@ -33,7 +36,7 @@
 		
 		new UserServer().updateUserGroup(userId, list);
 		
-		response.sendRedirect("usergroup.jsp?msg=1&id=" + userId);
+		response.sendRedirect("usergroup.jsp?id=" + userId + "&msg=1&query=" + query);
 		
 		return;
 	}
@@ -104,8 +107,12 @@
 	
 	if(type==4)
 	{
+		int curUserId = ((UserModel)session.getAttribute("user")).getId();
+		
+		model.setCreateUserId(curUserId);
+		
 		new UserServer().addUser(model);
-		response.sendRedirect("user.jsp");
+		response.sendRedirect("user.jsp?" + Base64UTF.decode(query));
 		return;
 	}
 	
@@ -122,7 +129,7 @@
 		
 		new UserServer().updateUser(model);
 		
-		response.sendRedirect("user.jsp");
+		response.sendRedirect("user.jsp?" + Base64UTF.decode(query));
 		
 		return;
 	}

@@ -72,9 +72,6 @@
 		{
 			document.getElementById("menuid_" + rightArr[i]).checked = true;	
 		}
-		
-		console.log("<%=name%>");
-		
 	}
 	
 	function goToMain()
@@ -112,13 +109,18 @@
 					<dd class="dd01_me"><%=menu1Model.getName()%></dd>
 					<dd class="ddtxt02">			
 					<%	
+								int rowCount = 0;
 								for(Menu2Model menu2Model : menu2List)
 								{
+									
 									if(menu2Model.getMenu1Id() == menu1Model.getId())
 									{
+										rowCount++;
 					%>
-										<input type="checkbox" name="menu2id" id="menuid_<%= menu2Model.getId() %>" value="<%= menu2Model.getId() %>"  /><%= menu2Model.getName() %>
+										<label><input type="checkbox" name="menu2id" id="menuid_<%= menu2Model.getId() %>" value="<%= menu2Model.getId() %>"  /><%= menu2Model.getName() %></label>
 					<%
+										if(rowCount%10==0)
+											out.print("</dd><dd class=\"dd00\"></dd><dd class=\"ddtxt03\"></dd><dd class=\"dd01_me\">&nbsp;&nbsp;</dd><dd class=\"ddtxt02\">");
 									}
 								}
 					%>

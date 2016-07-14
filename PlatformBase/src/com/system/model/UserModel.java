@@ -11,6 +11,7 @@ public class UserModel
 	private String phone;
 	private int status;
 	private String createUser;
+	private int createUserId;
 	
 	public int getId()
 	{
@@ -99,6 +100,14 @@ public class UserModel
 	}
 	public void setCreateUser(String createUser) {
 		this.createUser = createUser;
+	}
+	public int getCreateUserId()
+	{
+		return createUserId;
+	}
+	public void setCreateUserId(int createUserId)
+	{
+		this.createUserId = createUserId;
 	}
 	
 }

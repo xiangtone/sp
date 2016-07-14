@@ -15,9 +15,6 @@
 	
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
 	
-	System.out.println("groupname:"+name);
-	
-
 	//Map<String, Object> map =  new GroupServer().loadGroup(pageIndex);
 	
 	Map<String, Object> map =  new GroupServer().loadGroup(pageIndex,name);
