@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.system.dao.BaseDataDao;
 import com.system.model.CpModel;
+import com.system.model.CpSpTroneModel;
 import com.system.model.SpModel;
 import com.system.model.SpTroneModel;
 import com.system.model.TroneModel;
@@ -22,6 +23,7 @@ public class BaseDataAnalyServer
 		analyBaseCpData();
 		analyBaseSpTroneData();
 		analyBaseTroneData();
+		analyCpSpTroneData();
 	}
 	
 	private void analyBaseSpData()
@@ -222,5 +224,61 @@ public class BaseDataAnalyServer
 				dao.updateTroneData(i, updateList);
 			}
 		}
+	}
+	
+	private void analyCpSpTroneData()
+	{
+		BaseDataDao dao = new BaseDataDao();
+		
+		CpSpTroneModel oriModel = null;
+		CpSpTroneModel descModel = null;
+		
+		List<CpSpTroneModel> addList = new ArrayList<CpSpTroneModel>();
+		List<CpSpTroneModel> updateList = new ArrayList<CpSpTroneModel>();
+		
+		for(int i=1; i<=3; i++)
+		{
+			Map<Integer, CpSpTroneModel> oriSource = dao.loadOriCpSpTroneData(i);
+			Map<Integer, CpSpTroneModel> descSource = dao.loadDescCpSpTroneData(i);
+			
+			addList.clear();
+			updateList.clear();
+			
+			for(int cpId : oriSource.keySet())
+			{
+				oriModel = oriSource.get(cpId);
+				descModel = descSource.get(cpId);
+				
+				if(descModel==null)
+				{
+					addList.add(oriModel);
+				}
+				else
+				{
+					if(!oriModel.equals(descModel))
+					{
+						updateList.add(oriModel);
+					}
+				}
+			}
+			
+			if(!addList.isEmpty())
+			{
+				logger.info("增加CpSpTrone数据:" + i + "->size:" + addList.size());
+				dao.addCpSpTroneData(i, addList);
+			}
+			
+			if(!updateList.isEmpty())
+			{
+				logger.info("更新CpSpTrone数据:" + i + "->size:" + updateList.size());
+				dao.updateCpSpTroneData(i, updateList);
+			}
+		}
+	}
+	
+	
+	public static void main(String[] args)
+	{
+		new BaseDataAnalyServer().startAnalyBaseData();
 	}
 }

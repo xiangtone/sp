@@ -14,6 +14,7 @@ import com.system.database.QueryCallBack;
 import com.system.database.TlJdbcControl;
 import com.system.database.YdJdbcControl;
 import com.system.model.CpModel;
+import com.system.model.CpSpTroneModel;
 import com.system.model.SpModel;
 import com.system.model.SpTroneModel;
 import com.system.model.TroneModel;
@@ -167,6 +168,43 @@ public class BaseDataDao
 	}
 	
 	@SuppressWarnings("unchecked")
+	public Map<Integer, CpSpTroneModel> loadOriCpSpTroneData(int coId)
+	{
+		IJdbcControl control = getCoControl(coId);
+		
+		String sql = "SELECT id,cp_id,sp_trone_id,rate,js_type FROM daily_config.`tbl_cp_trone_rate`";
+		
+		if(control!=null)
+		{
+			return (Map<Integer, CpSpTroneModel>)control.query(sql, new QueryCallBack()
+			{
+				@Override
+				public Object onCallBack(ResultSet rs) throws SQLException
+				{
+					Map<Integer, CpSpTroneModel> map = new HashMap<Integer, CpSpTroneModel>();
+					
+					while(rs.next())
+					{
+						CpSpTroneModel model = new CpSpTroneModel();
+						
+						model.setCpSpTroneId(rs.getInt("id"));
+						model.setCpId(rs.getInt("cp_id"));
+						model.setSpTroneId(rs.getInt("sp_trone_id"));
+						model.setRate(rs.getFloat("rate"));
+						model.setJsType(rs.getInt("js_type"));
+						
+						map.put(model.getCpSpTroneId(), model);
+					}
+					
+					return map;
+				}
+			});
+		}
+		
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public Map<Integer, SpModel> loadDescSpData(int coId)
 	{
 		String sql = "SELECT sp_id,short_name,full_name,STATUS FROM comsum_config.tbl_sp where co_id = " + coId;
@@ -283,6 +321,36 @@ public class BaseDataDao
 		});
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Map<Integer, CpSpTroneModel> loadDescCpSpTroneData(int coId)
+	{
+		String sql = "SELECT cp_sp_trone_id,cp_id,sp_trone_id,rate,js_type FROM comsum_config.`tbl_cp_trone_rate` WHERE  co_id = " + coId;
+		
+		return (Map<Integer, CpSpTroneModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				Map<Integer, CpSpTroneModel> map = new HashMap<Integer, CpSpTroneModel>();
+				
+				while(rs.next())
+				{
+					CpSpTroneModel model = new CpSpTroneModel();
+					
+					model.setCpId(rs.getInt("cp_id"));
+					model.setCpSpTroneId(rs.getInt("cp_sp_trone_id"));
+					model.setSpTroneId(rs.getInt("sp_trone_id"));
+					model.setRate(rs.getFloat("rate"));
+					model.setJsType(rs.getInt("js_type"));
+					
+					map.put(model.getCpSpTroneId(), model);
+				}
+				
+				return map;
+			}
+		});
+	}
+	
 	public void addSpData(int coId,List<SpModel> list)
 	{
 		if(list==null || list.isEmpty())
@@ -353,6 +421,23 @@ public class BaseDataDao
 					+ model.getSpTroneId() + ",'" + model.getTroneName() + "',"
 					+ model.getPrice() + "," 
 					+ model.getStatus() + "),");
+		}
+		
+		new JdbcControl().execute(sb.toString().substring(0,sb.length()-1));
+	}
+	
+	public void addCpSpTroneData(int coId,List<CpSpTroneModel> list)
+	{
+		if(list==null || list.isEmpty())
+			return;
+			
+		StringBuffer sb = new StringBuffer(256);
+		
+		sb.append("INSERT INTO comsum_config.tbl_cp_trone_rate(co_id,cp_sp_trone_id,cp_id,sp_trone_id,rate,js_type) VALUES ");
+		
+		for(CpSpTroneModel model : list)
+		{
+			sb.append("(" + coId + "," + model.getCpSpTroneId() + "," + model.getCpId() + "," + model.getSpTroneId() + "," + model.getRate() +  "," + model.getJsType() + "),");
 		}
 		
 		new JdbcControl().execute(sb.toString().substring(0,sb.length()-1));
@@ -461,6 +546,33 @@ public class BaseDataDao
 			map.put(3, model.getPrice());
 			map.put(4, model.getStatus());
 			map.put(5, model.getTroneId());
+			
+			paramList.add(map);
+		}
+		
+		control.executeWithParam(sql, paramList);
+	}
+	
+	public void updateCpSpTroneData(final int coId,final List<CpSpTroneModel> list)
+	{
+		if(list==null || list.isEmpty())
+			return;
+		
+		String sql = "UPDATE comsum_config.`tbl_cp_trone_rate` SET sp_trone_id = ? , cp_id = ? , rate = ? , js_type = ?  WHERE co_id = " + coId + " AND cp_sp_trone_id = ? ";
+		
+		JdbcControl control = new JdbcControl();
+		
+		List<Map<Integer,Object>> paramList = new ArrayList<Map<Integer,Object>>();
+		
+		for(CpSpTroneModel model : list)
+		{
+			Map<Integer,Object> map = new HashMap<Integer, Object>();
+			
+			map.put(1, model.getSpTroneId());
+			map.put(2, model.getCpId());
+			map.put(3, model.getRate());
+			map.put(4, model.getJsType());
+			map.put(5, model.getCpSpTroneId());
 			
 			paramList.add(map);
 		}
