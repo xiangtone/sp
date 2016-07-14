@@ -185,7 +185,7 @@ public class TroneOrderDao
 		});
 	}
 	
-	public Map<String, Object> loadTroneOrder(int status,int pageIndex,String keyWord)
+	public Map<String, Object> loadTroneOrder(int spId,int spTroneId,int cpId, int status,int pageIndex,String keyWord)
 	{
 		String query = " b.sp_trone_id,c.`name` sp_trone_name,a.*, b.price,d.id sp_id, b.`trone_name`,d.`short_name` sp_name,e.`short_name` cp_name ";
 		
@@ -198,6 +198,12 @@ public class TroneOrderDao
 		
 		String wheres = "";
 		
+		if(spId>0)
+			wheres += " and d.id = " + spId;
+		if(spTroneId>0)
+			wheres += " and c.id = " + spTroneId;
+		if(cpId>0)
+			wheres += " and e.id = " + cpId;
 		if(status>=0)
 			wheres += " and a.disable = " + status;
 		
