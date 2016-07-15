@@ -21,6 +21,8 @@ public class Constant
 	public static final int SP_TRONE_CITY_OVER_MONTH_LIMIT = 1018; //SP业务城市月限已超
 	public static final int SP_TRONE_CITY_OVER_DAY_LIMIT = 1019; //SP业务城市日限已超
 	
+	public static final int SP_BLACK_PHONE_NUM = 1027; //黑名单用户
+	
 	//再往下加要往1100起
 	
 	public static final int CP_BASE_PARAMS_ERROR = 1008;//基础参数没匹配上
