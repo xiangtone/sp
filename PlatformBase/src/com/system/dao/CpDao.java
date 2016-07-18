@@ -7,27 +7,27 @@ import java.util.List;
 
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
-import com.system.model.SpModel;
+import com.system.model.CpModel;
 import com.system.util.StringUtil;
 
-public class SpDao
+public class CpDao
 {
 	@SuppressWarnings("unchecked")
-	public List<SpModel> loadSpData(int coId)
+	public List<CpModel> loadCpData(int coId)
 	{
-		String sql = "select * from tbl_sp where co_id = " + coId + " order by CONVERT(short_name USING gbk)";
-		return (List<SpModel>)new JdbcControl().query(sql, new QueryCallBack()
+		String sql = "select * from tbl_cp where co_id = " + coId + " order by CONVERT(short_name USING gbk)";
+		return (List<CpModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
 			{
-				List<SpModel> list = new ArrayList<SpModel>();
+				List<CpModel> list = new ArrayList<CpModel>();
 				
 				while(rs.next())
 				{
-					SpModel model = new SpModel();
+					CpModel model = new CpModel();
 					
-					model.setSpId(rs.getInt("sp_id"));
+					model.setCpId(rs.getInt("cp_id"));
 					model.setShortName(StringUtil.getString(rs.getString("short_name"), ""));
 					model.setFullName(StringUtil.getString(rs.getString("full_name"), ""));
 					
@@ -37,4 +37,4 @@ public class SpDao
 			}
 		});
 	}
-}
+}	

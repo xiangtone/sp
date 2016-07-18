@@ -158,8 +158,7 @@
 		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
 		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
 		
-		var provinceIds = "<%=spTroneModel.getProvinces()%>
-	";
+		var provinceIds = "<%=spTroneModel.getProvinces()%>";
 		var provinces = provinceIds.split(",");
 		setRadioCheck("trone_type",
 <%=spTroneModel.getTroneType()%>
