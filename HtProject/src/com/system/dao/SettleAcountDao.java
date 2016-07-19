@@ -152,7 +152,7 @@ public class SettleAcountDao
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate)
+	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate,int dateType)
 	{
 		String sql = "SELECT c.`name`,k.`name_cn`,SUM(a.amount) total_amount,f.rate jiesuanlv";
 			sql += " FROM daily_log.`tbl_cp_mr_summer` a";
@@ -166,6 +166,7 @@ public class SettleAcountDao
 			sql += " left join daily_config.tbl_operator k on j.operator_id = k.id ";
 			
 			sql += " where a.`cp_id` =  " + cpId;
+			sql += " and f.js_type = " + dateType;
 			sql += " and a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
 			sql += " group by c.id";
 		

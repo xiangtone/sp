@@ -25,7 +25,7 @@
 	if (isExport) 
 	{
 		SettleAccountServer accountServer = new SettleAccountServer();
-		List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(cpId, startDate, endDate);
+		List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(cpId, startDate, endDate,dateType);
 		if (list != null && list.size() > 0) 
 		{
 			String cpName = "";

@@ -23,9 +23,9 @@ public class SettleAccountServer
 		return list;
 	}
 	
-	public List<SettleAccountModel> loadCpSettleAccountList(int cpId,String startDate,String endDate)
+	public List<SettleAccountModel> loadCpSettleAccountList(int cpId,String startDate,String endDate,int dateType)
 	{
-		List<SettleAccountModel> list = new SettleAcountDao().loadCpSettleAccountData(cpId, startDate, endDate);
+		List<SettleAccountModel> list = new SettleAcountDao().loadCpSettleAccountData(cpId, startDate, endDate,dateType);
 		//List<SettleAccountModel> list = loadSpSettleAccountFromFile("c:/duizhangdan.txt");
 		return list;
 	}
