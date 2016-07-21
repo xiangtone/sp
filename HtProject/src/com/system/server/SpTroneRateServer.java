@@ -15,21 +15,24 @@ public class SpTroneRateServer
 	public void addSpTroneRate(SpTroneRateModel model)
 	{
 		new SpTroneRateDao().addSpTroneRate(model);
-		new MrServer().updateMrRate(model.getSpTroneId(), model.getRate(), model.getStartDate(), model.getEndDate());
+		//暂时把更新MR表结算率的功能先停掉
+		//new MrServer().updateMrRate(model.getSpTroneId(), model.getRate(), model.getStartDate(), model.getEndDate());
 	}
 	
 	public void updateSpTroneRate(SpTroneRateModel model)
 	{
 		SpTroneRateDao dao = new SpTroneRateDao();
-		SpTroneRateModel oriModel = dao.loadSpTroneRateById(model.getId());
 		dao.updateSpTroneRate(model);
-		new MrServer().updateMrRate(oriModel.getSpTroneId(), model.getRate(), oriModel.getStartDate(), oriModel.getEndDate());
+		//暂时把更新MR表结算率的功能先停掉
+		//SpTroneRateModel oriModel = dao.loadSpTroneRateById(model.getId());
+		//new MrServer().updateMrRate(oriModel.getSpTroneId(), model.getRate(), oriModel.getStartDate(), oriModel.getEndDate());
 	}
 	
 	public void delSpTroneRate(SpTroneRateModel model)
 	{
 		new SpTroneRateDao().delSpTroneRate(model);
-		new MrServer().updateMrRate(model.getSpTroneId(), model.getDefaultRate(), model.getStartDate(), model.getEndDate());
+		//暂时把更新MR表结算率的功能先停掉
+		//new MrServer().updateMrRate(model.getSpTroneId(), model.getDefaultRate(), model.getStartDate(), model.getEndDate());
 	}
 	
 	public boolean isRateDateCross(int spTroneId,String startDate,String endDate)
