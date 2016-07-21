@@ -98,7 +98,7 @@
 					for (MenuHeadModel headModel : headList)
 					{
 					%>
-					<dd class="dd01_me"><%=headModel.getName()%></dd>
+					<dd class="dd01_me" ><%=headModel.getName()%></dd>
 					<%
 						for(Menu1Model menu1Model : menu1List)
 						{
@@ -121,7 +121,7 @@
 										<label><input type="checkbox" name="menu2id" id="menuid_<%= menu2Model.getId() %>" value="<%= menu2Model.getId() %>"  /><%= menu2Model.getName() %></label>
 					<%
 										if(rowCount%10==0)
-											out.print("</dd><dd class=\"dd00\"></dd><dd class=\"ddtxt03\"></dd><dd class=\"dd01_me\">&nbsp;&nbsp;</dd><dd class=\"ddtxt02\">");
+											out.print("</dd><dd class=\"dd00\"></dd><dd class=\"ddtxt03\"></dd><dd style=\"background: transparent;\" class=\"dd01_me\">&nbsp;&nbsp;</dd><dd class=\"ddtxt02\">");
 									}
 								}
 					%>
@@ -130,7 +130,7 @@
 							}
 						}
 					%>
-					<br /><br />
+					<div style="clear: both;"><br /></div>
 					<%
 					}
 					%>
