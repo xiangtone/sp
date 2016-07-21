@@ -25,13 +25,31 @@ public class BlackServer {
 	}
 	/**
 	 * 
-	 * @param model
-	 * @param cyType
-	 * @return
+	 * @param model 实例
+	 * @param cyType 添加类型
 	 */
 	public void addBlack(BlackModel model,int cyType){
-	      new BlackDao().addBlack(model,cyType);
-		
+		String plData=model.getPlData();
+		String remark=model.getRemark();
+		String[] strings=null;
+		if(plData.contains(",")){
+			strings=plData.split(",");
+		}
+		if(plData.contains("\r\n")){
+			strings=plData.split("\r\n");
+		}
+		String colName="phone";
+		if(cyType==1){
+			colName="phone";
+		}
+		if(cyType==2){
+			colName="imei";
+		}
+		if(cyType==3){
+			colName="imsi";
+		}
+			new BlackDao().addBlack(model,strings,colName);
+	      	
 	}
 	public boolean delete(int id){
 		return new BlackDao().delete(id);

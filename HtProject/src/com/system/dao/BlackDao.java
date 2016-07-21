@@ -223,56 +223,21 @@ public class BlackDao {
 				
 		return new JdbcControl().execute(sql);
 	}
-	
-	public void addBlack(BlackModel model,int cyType){
-		String plData=model.getPlData();
-		String remark=model.getRemark();
-		String[] strings=null;
-		if(plData.contains(",")){
-			strings=plData.split(",");
-		}
-		if(plData.contains("\r\n")){
-			strings=plData.split("\r\n");
-		}
-		if(strings==null){
-			String sql="";
-			if(cyType==1){ //电话
-			sql="insert into daily_config.tbl_black(phone,remark) value('"+plData+"','"+remark+"')";
-			new JdbcControl().execute(sql);
-			}
-			if(cyType==2){//IMEI
-				sql="insert into daily_config.tbl_black(imei,remark) value('"+plData+"','"+remark+"')";
-				new JdbcControl().execute(sql);
-				
-			}
-			if(cyType==3){//IMSI
-				sql="insert into daily_config.tbl_black(imsi,remark) value('"+plData+"','"+remark+"')";
-				new JdbcControl().execute(sql);
-			}
+	public void addBlack(BlackModel model,String[] strs,String colName){
+		StringBuffer sql=new StringBuffer();
+		sql.append("insert into daily_config.tbl_black("+colName+", remark)");
+		if(strs==null){
+		    sql.append("value('"+model.getPlData()+"','"+model.getRemark()+"')");
 		}else{
-			String sql="";
-			if(cyType==1){
-				for(String phone:strings){
-					sql="insert into daily_config.tbl_black(phone,remark) value('"+phone+"','"+remark+"')";
-					new JdbcControl().execute(sql);
-				}
+			sql.append(" values");
+			for(int i=0;i<strs.length-1;i++){
+				sql.append("('"+strs[i]+"','"+model.getRemark()+"'),");
 			}
-			if(cyType==2){
-				for(String imei:strings){
-					sql="insert into daily_config.tbl_black(imei,remark) value('"+imei+"','"+remark+"')";
-					new JdbcControl().execute(sql);
-				}
-			}
-			if(cyType==3){
-				for(String imsi:strings){
-					sql="insert into daily_config.tbl_black(imsi,remark) value('"+imsi+"','"+remark+"')";
-					new JdbcControl().execute(sql);
-				}
-			}
-			
+			sql.append("('"+strs[strs.length-1]+"','"+model.getRemark()+"')");
 		}
-	
+		new JdbcControl().execute(sql.toString());
 	}
+
 
 	public boolean updateBlack(BlackModel model)
 	{
