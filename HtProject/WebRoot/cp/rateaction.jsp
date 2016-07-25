@@ -42,7 +42,7 @@
 	{
 		new SingleCpSpTroneRateServer().addSingleRate(model);
 		
-		response.sendRedirect("ratelist.jsp?" + Base64UTF.decode(query2));
+		response.sendRedirect("ratelist.jsp?id=" + cpTroneRateId + "&" + Base64UTF.decode(query2));
 	}
 	else if(type==3) //检查同一时间段内有没有重复的
 	{

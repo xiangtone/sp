@@ -58,7 +58,7 @@ public class SettleAcountDao
 	@SuppressWarnings("unchecked")
 	public List<SpFinanceShowModel> loadCpSettleAccountData(String startDate,String endDate,int cpId,int jsType)
 	{
-		String sql = " SELECT f.id,f.short_name,h.short_name sp_name,k.name_cn,d.name,sum(a.amount) amounts,g.rate jiesuanlv ";
+		String sql = " SELECT f.id,f.short_name,h.short_name sp_name, CONCAT(k.`name_cn`,'-',j.name) name_cn,d.name,sum(a.amount) amounts,g.rate jiesuanlv ";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a  ";
 		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id`";
 		sql += " Left join daily_config.tbl_trone c on b.trone_id = c.id ";
@@ -154,7 +154,7 @@ public class SettleAcountDao
 	@SuppressWarnings("unchecked")
 	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate,int dateType)
 	{
-		String sql = "SELECT c.`name`,k.`name_cn`,SUM(a.amount) total_amount,f.rate jiesuanlv";
+		String sql = "SELECT c.`name`,CONCAT(k.`name_cn`,'-',j.name) name_cn,SUM(a.amount) total_amount,f.rate jiesuanlv";
 			sql += " FROM daily_log.`tbl_cp_mr_summer` a";
 			sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
 			sql += " LEFT JOIN daily_config.tbl_trone e ON b.`trone_id` = e.`id`";
