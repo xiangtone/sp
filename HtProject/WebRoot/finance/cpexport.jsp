@@ -176,7 +176,7 @@
 				<thead>
 					<tr>
 						<td>CP名称</td>
-						<td>运营商</td>
+						<td>业务线</td>
 						<td>SP业务名称</td>
 						<td>金额</td>
 						<td>结算率</td>

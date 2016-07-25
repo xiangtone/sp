@@ -62,7 +62,7 @@
 	{
 		if(confirm('真的要删除吗？'))
 		{
-			window.location.href = "rateaction.jsp?type=5&id=" + id + "&query=<%= query2 %>";	
+			window.location.href = "rateaction.jsp?type=5&cpsptroneid=<%= id %>&id=" + id + "&query=<%= query2 %>";	
 		}
 	}
 	
