@@ -144,8 +144,75 @@
 	
 	$(function() 
 	{
+	<%
+	if(spTroneModel.getApiStatus()==1){
+	%>
+	$("#div_sp_trone_api").show();
+	<%}%>
 		resetForm();
+		$("input[name=api_status]").click(function(){
+			 apiStatus();
+			 });
 	});
+	
+	function apiStatus(){
+		 switch($("input[name=api_status]:checked").attr("id")){
+		  case "api_status_1":
+		   //alert("one");
+		   $("#div_sp_trone_api").show();
+		   
+		   break;
+		  case "api_status_0":
+			$("#div_sp_trone_api").hide();
+		   break;
+		  default:
+		   break;
+		 }
+	}
+	
+	function resetFormTwo()
+	{
+		$("#sel_sp").val("<%=spTroneModel.getSpId()%>");
+		$("#sel_operator").val("<%=spTroneModel.getOperator()%>");
+		$("#input_sp_trone_name").val("<%=spTroneModel.getSpTroneName()%>");
+		$("#input_jiesuanlv").val("<%=spTroneModel.getJieSuanLv()%>");
+		$("#sel_sp_trone_api").val("<%=spTroneModel.getTroneApiId()%>");
+		
+		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
+		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
+		$("#remark").val("<%=spTroneModel.getRemark()%>");
+		$("#input_shield_start").val("<%=spTroneModel.getShieldStart()%>");
+		$("#input_shield_end").val("<%=spTroneModel.getShieldEnd()%>");
+		<%
+		if(spTroneModel.getApiStatus()==1){
+		%>
+		$("#div_sp_trone_api").show();
+		<%}else{%>
+		$("#div_sp_trone_api").hidden();
+		<%}%>
+		
+		var provinceIds = "<%=spTroneModel.getProvinces()%>";
+		var provinces = provinceIds.split(",");
+		setRadioCheck("trone_type",
+<%=spTroneModel.getTroneType()%>
+	);
+		setRadioCheck("status",
+<%=spTroneModel.getStatus()%>
+	);
+		setRadioCheck("api_status",
+				<%=spTroneModel.getApiStatus()%>
+					);
+		unAllCkb();
+		$('[name=area[]]:checkbox').each(function() {
+
+			for (k = 0; k < provinces.length; k++) {
+				if (provinces[k] == this.value) {
+					this.checked = true;
+					break;
+				}
+			}
+		});
+	}
 	
 	function resetForm()
 	{
@@ -157,6 +224,10 @@
 		
 		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
 		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
+		$("#remark").val("<%=spTroneModel.getRemark()%>");
+		$("#input_shield_start").val("<%=spTroneModel.getShieldStart()%>");
+		$("#input_shield_end").val("<%=spTroneModel.getShieldEnd()%>");
+		
 		
 		var provinceIds = "<%=spTroneModel.getProvinces()%>";
 		var provinces = provinceIds.split(",");
@@ -166,6 +237,9 @@
 		setRadioCheck("status",
 <%=spTroneModel.getStatus()%>
 	);
+		setRadioCheck("api_status",
+				<%=spTroneModel.getApiStatus()%>
+					);
 		unAllCkb();
 		$('[name=area[]]:checkbox').each(function() {
 
@@ -355,22 +429,7 @@
 							style="width: 200px">
 					</dd>
 
-					<br /> <br /> <br />
-					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">业务API</dd>
-					<dd class="dd04_me">
-						<select name="sp_trone_api" id="sel_sp_trone_api" title="选择业务API"
-							style="width: 200px">
-							<option value="-1">请选择业务API</option>
-							<%
-								for (SpTroneApiModel spTroneApiModel : spTroneApiList) {
-							%>
-							<option value="<%=spTroneApiModel.getId()%>"><%=spTroneApiModel.getName()%></option>
-							<%
-								}
-							%>
-						</select>
-					</dd>
+					
 
 					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
@@ -397,6 +456,54 @@
 						<input type="radio" name="status" style="width: 35px; float: left"
 							value="0"> <label style="font-size: 14px; float: left">关闭</label>
 					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">代码池</dd>
+					<dd class="dd03_me">
+						<input type="radio" name="api_status" id="api_status_1" style="width: 35px;float:left" value="1"  >
+						<label style="font-size: 14px;float:left">是</label>
+						<input type="radio" name="api_status" id="api_status_0" style="width: 35px;float:left" value="0" checked="checked">
+						<label style="font-size: 14px;float:left">否</label>
+					</dd>
+				<div  id="div_sp_trone_api"  style="display: none"> <!--API状态相关表单-->
+					<br /> <br /> <br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">业务API</dd>
+					<dd class="dd04_me">
+						<select name="sp_trone_api" id="sel_sp_trone_api" title="选择业务API"
+							style="width: 200px">
+							<option value="-1">请选择业务API</option>
+							<%
+								for (SpTroneApiModel spTroneApiModel : spTroneApiList) {
+							%>
+							<option value="<%=spTroneApiModel.getId()%>"><%=spTroneApiModel.getName()%></option>
+							<%
+								}
+							%>
+						</select>
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">屏蔽起始时间</dd>
+					<dd class="dd03_me">
+						<input type="text" name="shield_start" value="<%=spTroneModel.getShieldStart()%>" id="input_shield_start" style="width: 200px" onclick="WdatePicker({dateFmt:'HH:mm',isShowClear:false,readOnly:true})">
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">屏蔽结束时间</dd>
+					<dd class="dd03_me">
+						<input type="text" name="shield_end" value="<%=spTroneModel.getShieldEnd()%>" id="input_shield_end" style="width: 200px" onclick="WdatePicker({dateFmt:'HH:mm',isShowClear:false,readOnly:true})">
+					</dd>
+				
 
 					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
@@ -433,7 +540,7 @@
 							value="<%=spTroneModel.getUserMonthLimit()%>"
 							id="input_user_month_limit" style="width: 200px">
 					</dd>
-
+</div>
 					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">省份</dd>
@@ -459,6 +566,23 @@
 						<input type="button" onclick="exportProvince()"
 							style="padding-top: 10px;" value="导　出" />
 					</div>
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">备注</dd>
+					<dd class="dd03_me"></dd>
+					&nbsp;
+					&nbsp;
+					<textarea name="remark"   style="border:solid 1px black;" overflow-y="auto" overflow-x="hidden" maxlength="1000" cols="45" rows="10"  id="remark" ></textarea>
 
 					<br /> <br /> <br />
 					<dd class="dd00"></dd>
@@ -467,7 +591,7 @@
 						<input type="button" value="提 交" onclick="subForm()">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
-						<input type="button" value="重 置" onclick="resetForm()">
+						<input type="button" value="重 置" onclick="resetFormTwo()">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
 						<input type="button" value="返 回" onclick="history.go(-1)">

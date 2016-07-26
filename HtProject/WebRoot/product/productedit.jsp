@@ -18,7 +18,8 @@
 		return;
 	}
 	List<ProductModel> list = new ProductServer().loadProductList();
-	List<ProductModel> linelist = new ProductServer().loadProductLineList();
+	List<ProductModel> linelist = new ProductServer().loadProductLineListByFlag(model.getFlag());
+	List<ProductModel> linelistAll = new ProductServer().loadProductLineList();
 	String query = StringUtil.getString(request.getParameter("query"), "");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -41,7 +42,7 @@ function joProductLine(id,operflag,name)
 	return obj;
 }
 var productline=new Array();
-<%for(ProductModel productLine : linelist){%>
+<%for(ProductModel productLine : linelistAll){%>
 productline.push(new joProductLine(<%= productLine.getProductLineId() %>,<%= productLine.getOperFlag() %>,'<%=productLine.getProductLineName()%>'));<%}%>
 function operatorChange()
 {

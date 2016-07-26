@@ -36,6 +36,13 @@
 	
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
 	
+	//增加的4个字段
+	int apiStatus=StringUtil.getInteger(request.getParameter("api_status"), 0);
+	String shieldStart=StringUtil.getString(request.getParameter("shield_start"), "");
+	String shieldEnd=StringUtil.getString(request.getParameter("shield_end"), "");
+	String remark=StringUtil.getString(request.getParameter("remark"), "");
+
+	
 	//更新SP业务默认结算率
 	if(type==1)
 	{
@@ -59,6 +66,11 @@
 	model.setUserMonthLimit(userMonthLimit);
 	model.setServiceCodeId(serviceCodeId);
 	model.setJsTypes(jsType);
+	//增加的4个字段
+	model.setApiStatus(apiStatus);
+	model.setShieldStart(shieldStart);
+	model.setShieldEnd(shieldEnd);
+	model.setRemark(remark);
 	
 	if(id==-1)
 		new SpTroneServer().addSpTrone(model); 

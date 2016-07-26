@@ -37,7 +37,6 @@ public class ProductDao {
 		
 		sql += " order by cp.id desc ";
 		JdbcControl control = new JdbcControl();
-		System.out.println(sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"));
 		map.put("rows",control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"), new QueryCallBack()
 		{
 			@Override
@@ -49,7 +48,6 @@ public class ProductDao {
 				return 0;
 			}
 		}));
-		System.out.println(sql.replace(Constant.CONSTANT_REPLACE_STRING, " cp.*,op.name_cn,pp.name AS name_line "));
 
 		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " cp.id as productid,cp.*,op.name_cn,pp.name AS name_line ") + limit, new QueryCallBack()
 		{
@@ -61,9 +59,9 @@ public class ProductDao {
 				{
 					ProductModel model = new ProductModel();
 					model.setChildProductId(rs.getInt("productid"));
-					model.setCnName(rs.getString("name_cn"));
-					model.setProductLineName(rs.getString("name_line"));
-					model.setChildProductName(rs.getString("name"));
+					model.setCnName(StringUtil.getString(rs.getString("name_cn"), ""));
+					model.setProductLineName(StringUtil.getString(rs.getString("name_line"), ""));
+					model.setChildProductName(StringUtil.getString(rs.getString("name"), ""));
 					
 					list.add(model);
 				}
@@ -105,7 +103,6 @@ public class ProductDao {
 				return 0;
 			}
 		}));
-		System.out.println(sql.replace(Constant.CONSTANT_REPLACE_STRING, " op.name_cn,pp.name AS name_line "));
 
 		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " pp.id AS lineid,pp.operator_id,pp.name,op.id AS opid,op.flag,op.name_en,op.name_cn,op.bj_flag ") + limit, new QueryCallBack()
 		{
@@ -117,8 +114,8 @@ public class ProductDao {
 				{
 					ProductModel model = new ProductModel();
 					model.setProductLineId(rs.getInt("lineid"));
-					model.setProductLineName(rs.getString("name"));
-					model.setCnName(rs.getString("name_cn"));
+					model.setProductLineName(StringUtil.getString(rs.getString("name"), ""));
+					model.setCnName(StringUtil.getString(rs.getString("name_cn"), ""));
 					
 					list.add(model);
 				}
@@ -150,11 +147,11 @@ public class ProductDao {
 					ProductModel model = new ProductModel();
 					model.setChildProductId(rs.getInt("productid"));
 					model.setChildLineId(rs.getInt("product_1_id"));
-					model.setChildProductName(rs.getString("productname"));
+					model.setChildProductName(StringUtil.getString(rs.getString("productname"),""));
 					model.setProductLineId(rs.getInt("productlineid"));
-					model.setProductLineName(rs.getString("name"));
+					model.setProductLineName(StringUtil.getString(rs.getString("name"), ""));
 					model.setFlag(rs.getInt("flag"));
-					model.setCnName(rs.getString("name_cn"));
+					model.setCnName(StringUtil.getString(rs.getString("name_cn"), ""));
 					
 					return model;
 				}
@@ -180,9 +177,9 @@ public class ProductDao {
 				{
 					ProductModel model = new ProductModel();
 					model.setProductLineId(rs.getInt("id"));
-					model.setProductLineName(rs.getString("name"));
+					model.setProductLineName(StringUtil.getString(rs.getString("name"), ""));
 					model.setFlag(rs.getInt("flag"));
-					model.setCnName(rs.getString("name_cn"));
+					model.setCnName(StringUtil.getString(rs.getString("name_cn"), ""));
 					
 					return model;
 				}
@@ -241,6 +238,7 @@ public class ProductDao {
 	 * 展示运营商
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<ProductModel>loadProductList(){
 		String sql = "select * from daily_config.tbl_operator order by id asc";
 		return (List<ProductModel>)new JdbcControl().query(sql, new QueryCallBack()
@@ -257,8 +255,8 @@ public class ProductDao {
 					
 					model.setOpratorId(rs.getInt("id"));
 					model.setFlag(rs.getInt("flag"));
-					model.setEnName(rs.getString("name_en"));
-					model.setCnName(rs.getString("name_cn"));
+					model.setEnName(StringUtil.getString(rs.getString("name_en"), ""));
+					model.setCnName(StringUtil.getString(rs.getString("name_cn"), ""));
 					model.setBjflag(rs.getInt("bj_flag"));
 					list.add(model);
 				}
@@ -272,6 +270,7 @@ public class ProductDao {
 	 * 展示产品线
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<ProductModel>loadProductLineList(){
 		String sql = "select * from daily_config.tbl_product_1 order by id asc";
 		return (List<ProductModel>)new JdbcControl().query(sql, new QueryCallBack()
@@ -288,7 +287,36 @@ public class ProductDao {
 					
 					model.setProductLineId(rs.getInt("id"));
 					model.setOperFlag(rs.getInt("operator_id"));
-					model.setProductLineName(rs.getString("name"));
+					model.setProductLineName(StringUtil.getString(rs.getString("name"), ""));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	/**
+	 * 展示产品线
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ProductModel>loadProductLineListByFlag(int flag){
+		String sql = "select * from daily_config.tbl_product_1 where operator_id="+flag+" order by id asc";
+		return (List<ProductModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<ProductModel> list = new ArrayList<ProductModel>();
+				
+				while(rs.next())
+				{
+					ProductModel model = new ProductModel();
+					
+					model.setProductLineId(rs.getInt("id"));
+					model.setOperFlag(rs.getInt("operator_id"));
+					model.setProductLineName(StringUtil.getString(rs.getString("name"), ""));
 					list.add(model);
 				}
 				

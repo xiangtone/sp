@@ -414,7 +414,11 @@ public class SpTroneDao
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
 					model.setJsTypes(rs.getInt("js_type"));
-					
+					//增加4个字段
+					model.setApiStatus(rs.getInt("is_on_api"));
+					model.setShieldStart(StringUtil.getString(rs.getString("shield_start_hour"),"00:00"));
+					model.setShieldEnd(StringUtil.getString(rs.getString("shield_end_hour"),"00:00"));
+					model.setRemark(StringUtil.getString(rs.getString("ramark"), ""));
 					return model;
 				}
 				
@@ -425,11 +429,11 @@ public class SpTroneDao
 	
 	public boolean addSpTrone(SpTroneModel model)
 	{
-		String sql = "insert into daily_config.tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,day_limit,month_limit,user_day_limit,user_month_limit,product_id,js_type) values("
+		String sql = "insert into daily_config.tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,day_limit,month_limit,user_day_limit,user_month_limit,product_id,js_type,is_on_api,shield_start_hour,shield_end_hour,ramark) values("
 				+ model.getSpId() + ",'" + model.getSpTroneName() + "',"
 				+ model.getOperator() + "," + model.getJieSuanLv() + ",'"
 				+ model.getProvinces() + "',now()," + model.getTroneType() + ","+ model.getTroneApiId() +","+ model.getStatus() +"," + model.getDayLimit() + "," 
-				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ")";
+				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ","+model.getApiStatus()+",'"+model.getShieldStart()+"','"+model.getShieldEnd()+"','"+model.getRemark()+"' )";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -441,7 +445,8 @@ public class SpTroneDao
 				+ model.getJieSuanLv() + ",provinces = '" + model.getProvinces()
 				+ "',trone_type = " + model.getTroneType() + ",trone_api_id = " 
 				+ model.getTroneApiId() + ",status = " + model.getStatus() + ",day_limit=" + model.getDayLimit() + ",month_limit=" + model.getMonthLimit() + ",user_day_limit=" 
-				+ model.getUserDayLimit() + ",user_month_limit=" + model.getUserMonthLimit() + ", product_id = " + model.getServiceCodeId() + ",js_type = " + model.getJsTypes() + " where id =" + model.getId();
+				+ model.getUserDayLimit() + ",user_month_limit=" + model.getUserMonthLimit() + ", product_id = " + model.getServiceCodeId() + ",js_type = " + model.getJsTypes() + ",is_on_api="+model.getApiStatus()+""
+				+ ",shield_start_hour='"+model.getShieldStart()+"',shield_end_hour='"+model.getShieldEnd()+"',ramark='"+model.getRemark()+"' where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}
