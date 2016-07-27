@@ -11,6 +11,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.SpTroneModel;
+import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
 public class SpTroneDao
@@ -433,7 +434,7 @@ public class SpTroneDao
 				+ model.getSpId() + ",'" + model.getSpTroneName() + "',"
 				+ model.getOperator() + "," + model.getJieSuanLv() + ",'"
 				+ model.getProvinces() + "',now()," + model.getTroneType() + ","+ model.getTroneApiId() +","+ model.getStatus() +"," + model.getDayLimit() + "," 
-				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ","+model.getApiStatus()+",'"+model.getShieldStart()+"','"+model.getShieldEnd()+"','"+model.getRemark()+"' )";
+				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ","+model.getApiStatus()+",'"+model.getShieldStart()+"','"+model.getShieldEnd()+"','"+SqlUtil.sqlEncode(model.getRemark())+"' )";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -446,7 +447,7 @@ public class SpTroneDao
 				+ "',trone_type = " + model.getTroneType() + ",trone_api_id = " 
 				+ model.getTroneApiId() + ",status = " + model.getStatus() + ",day_limit=" + model.getDayLimit() + ",month_limit=" + model.getMonthLimit() + ",user_day_limit=" 
 				+ model.getUserDayLimit() + ",user_month_limit=" + model.getUserMonthLimit() + ", product_id = " + model.getServiceCodeId() + ",js_type = " + model.getJsTypes() + ",is_on_api="+model.getApiStatus()+""
-				+ ",shield_start_hour='"+model.getShieldStart()+"',shield_end_hour='"+model.getShieldEnd()+"',ramark='"+model.getRemark()+"' where id =" + model.getId();
+				+ ",shield_start_hour='"+model.getShieldStart()+"',shield_end_hour='"+model.getShieldEnd()+"',ramark='"+SqlUtil.sqlEncode(model.getRemark())+"' where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}

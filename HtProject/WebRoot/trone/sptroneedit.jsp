@@ -180,9 +180,14 @@
 		
 		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
 		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
-		$("#remark").val("<%=spTroneModel.getRemark()%>");
+		
 		$("#input_shield_start").val("<%=spTroneModel.getShieldStart()%>");
 		$("#input_shield_end").val("<%=spTroneModel.getShieldEnd()%>");
+		
+		$("#input_day_limit").val("<%=spTroneModel.getDayLimit()%>");
+		$("#input_month_limit").val("<%=spTroneModel.getMonthLimit()%>");
+		$("#input_user_day_limit").val("<%=spTroneModel.getUserDayLimit()%>");
+		$("#input_user_month_limit").val("<%=spTroneModel.getUserMonthLimit()%>");
 		<%
 		if(spTroneModel.getApiStatus()==1){
 		%>
@@ -216,6 +221,7 @@
 	
 	function resetForm()
 	{
+		debugger;
 		$("#sel_sp").val("<%=spTroneModel.getSpId()%>");
 		$("#sel_operator").val("<%=spTroneModel.getOperator()%>");
 		$("#input_sp_trone_name").val("<%=spTroneModel.getSpTroneName()%>");
@@ -224,7 +230,7 @@
 		
 		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
 		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
-		$("#remark").val("<%=spTroneModel.getRemark()%>");
+	
 		$("#input_shield_start").val("<%=spTroneModel.getShieldStart()%>");
 		$("#input_shield_end").val("<%=spTroneModel.getShieldEnd()%>");
 		
@@ -463,10 +469,10 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">代码池</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="api_status" id="api_status_1" style="width: 35px;float:left" value="1"  >
-						<label style="font-size: 14px;float:left">是</label>
 						<input type="radio" name="api_status" id="api_status_0" style="width: 35px;float:left" value="0" checked="checked">
 						<label style="font-size: 14px;float:left">否</label>
+						<input type="radio" name="api_status" id="api_status_1" style="width: 35px;float:left" value="1"  >
+						<label style="font-size: 14px;float:left">是</label>
 					</dd>
 				<div  id="div_sp_trone_api"  style="display: none"> <!--API状态相关表单-->
 					<br /> <br /> <br />
@@ -567,22 +573,13 @@
 							style="padding-top: 10px;" value="导　出" />
 					</div>
 					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
+					<div style="clear: both;"><br /></div>
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">备注</dd>
 					<dd class="dd03_me"></dd>
 					&nbsp;
 					&nbsp;
-					<textarea name="remark"   style="border:solid 1px black;" overflow-y="auto" overflow-x="hidden" maxlength="1000" cols="45" rows="10"  id="remark" ></textarea>
+					<textarea name="remark"   style="border:solid 1px black;" overflow-y="auto" overflow-x="hidden" maxlength="1000" cols="91" rows="10"  id="remark" ><%=spTroneModel.getRemark()%></textarea>
 
 					<br /> <br /> <br />
 					<dd class="dd00"></dd>

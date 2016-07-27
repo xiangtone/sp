@@ -370,10 +370,10 @@ $(function()
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">代码池</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="api_status" id="api_status_1" style="width: 35px;float:left" value="1"  >
-						<label style="font-size: 14px;float:left">是</label>
 						<input type="radio" name="api_status" id="api_status_0" style="width: 35px;float:left" value="0" checked="checked">
 						<label style="font-size: 14px;float:left">否</label>
+						<input type="radio" name="api_status" id="api_status_1" style="width: 35px;float:left" value="1"  >
+						<label style="font-size: 14px;float:left">是</label>
 					</dd>
 			<div  id="div_sp_trone_api"  style="display: none"> <!--API状态相关表单-->
 										<br />
@@ -486,7 +486,7 @@ $(function()
 					<dd class="dd03_me"></dd>
 					&nbsp;
 					&nbsp;
-					<textarea name="remark"  style="border:solid 1px black;" overflow-y="auto" overflow-x="hidden" maxlength="1000" cols="45" rows="10"  id="remark" ></textarea>
+					<textarea name="remark"  style="border:solid 1px black;" overflow-y="auto" overflow-x="hidden" maxlength="1000" cols="91" rows="10"  id="remark" ></textarea>
 					
 
 					<br />

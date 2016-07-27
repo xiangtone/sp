@@ -20,23 +20,13 @@ public class SpTroneServer
 	
 	public void addSpTrone(SpTroneModel model)
 	{
-		String remark=model.getRemark();
-		if(remark.contains("\r\n")){
-			remark=remark.replace("\r\n","");
-			
-		}
-		model.setRemark(remark);
+
 		new SpTroneDao().addSpTrone(model);
 	}
 	
 	public void updateSpTrone(SpTroneModel model)
 	{
-		String remark=model.getRemark();
-		if(remark.contains("\r\n")){
-			remark=remark.replace("\r\n","");
-			
-		}
-		model.setRemark(remark);
+
 		new SpTroneDao().updateSpTroneModel(model);
 	}
 	
