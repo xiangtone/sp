@@ -115,5 +115,11 @@ public class ProductServer {
 	public boolean deleteLineProduct(int lineId){
 		return new ProductDao().deleteLineProduct(lineId);
 	}
+	/**
+	 * 
+	 */
+	public List<ProductModel> loadProductLineListByFlag(int id){
+		return new ProductDao().loadProductLineListByFlag(id);
+	}
 
 }

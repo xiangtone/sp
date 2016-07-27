@@ -11,7 +11,7 @@
 
 if(type==-1){//添加或修改
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
-System.out.println("id"+id);
+
 	int flag=StringUtil.getInteger(request.getParameter("operator"), -1);
 	String name=StringUtil.getString(request.getParameter("productline_name"), "");
 	ProductModel model = new ProductModel();

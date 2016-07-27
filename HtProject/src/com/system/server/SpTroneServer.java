@@ -20,11 +20,13 @@ public class SpTroneServer
 	
 	public void addSpTrone(SpTroneModel model)
 	{
+
 		new SpTroneDao().addSpTrone(model);
 	}
 	
 	public void updateSpTrone(SpTroneModel model)
 	{
+
 		new SpTroneDao().updateSpTroneModel(model);
 	}
 	
