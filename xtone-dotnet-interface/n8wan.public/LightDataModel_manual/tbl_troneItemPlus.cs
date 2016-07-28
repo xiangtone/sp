@@ -63,21 +63,24 @@ namespace LightDataModel
         /// <returns></returns>
         public static IEnumerable<tbl_troneItem> QueryTronesByPort(Shotgun.Database.IBaseDataClass2 dBase, int apiId, string port)
         {
+            IEnumerable<tbl_troneItem> cmds;
             var tTrones = cache.GetCacheData(true);
             if (tTrones != null)
             {
-                return from t in tTrones where t.sp_api_url_id == apiId && t.trone_num == port && t.status == 1 select t;
+                cmds = from t in tTrones where t.sp_api_url_id == apiId && t.trone_num == port && t.status == 1 select t;
+                return cmds;
             }
             var csl = GetQueries(dBase);
             csl.Filter.AndFilters.Add(Fields.sp_api_url_id, apiId);
             csl.Filter.AndFilters.Add(Fields.trone_num, port);
             csl.Filter.AndFilters.Add(Fields.status, 1);
 
-            csl.Fields = new string[] { Fields.id, Fields.trone_num, Fields.orders, Fields.is_dynamic, Fields.price, Fields.match_price, Fields.sp_trone_id };
+            //csl.Fields = new string[] { Fields.id, Fields.trone_num, Fields.orders, Fields.is_dynamic, Fields.price, Fields.match_price, Fields.sp_trone_id };
 
             csl.PageSize = int.MaxValue;
 
-            return csl.GetDataList();
+            cmds = csl.GetDataList();
+            return cmds;
         }
 
 

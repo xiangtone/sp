@@ -1,0 +1,24 @@
+10:32:48.501 md5 source:apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&appsecret=38ae23be50c14776bc1cec9bb4b21e76&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468981968
+10:32:48.501 http://oubp.ihou.com/order/create
+10:32:48.501 apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&appsecret=38ae23be50c14776bc1cec9bb4b21e76&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468981968&sign2CBB40B7B9278A93DA84AE8473023D7E
+10:32:48.616 远程服务器返回错误: (500) 内部服务器错误。
+10:32:48.616 +120ms 
+
+10:34:13.923 md5 source:apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&appsecret=38ae23be50c14776bc1cec9bb4b21e76&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468982053
+10:34:13.923 http://oubp.ihou.com/order/create
+10:34:13.923 apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&appsecret=38ae23be50c14776bc1cec9bb4b21e76&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468982053&sign=0E0ADD5B77B1C2E877A19581641D7DB8
+10:34:14.001 远程服务器返回错误: (500) 内部服务器错误。
+10:34:14.001 +77ms 
+
+10:38:17.144 md5 source:apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468982297144&appsecret=38ae23be50c14776bc1cec9bb4b21e76&
+10:38:17.144 http://oubp.ihou.com/order/create
+10:38:17.144 apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468982297144&appsecret=38ae23be50c14776bc1cec9bb4b21e76&&sign=4ea25470c8ea7d8c730b03a507ecee50
+10:38:17.260 远程服务器返回错误: (500) 内部服务器错误。
+10:38:17.260 +110ms 
+
+10:38:46.503 md5 source:apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468982326503&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+10:38:46.503 http://oubp.ihou.com/order/create
+10:38:46.503 apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&signtype=md5&timestamp=1468982326503&appsecret=38ae23be50c14776bc1cec9bb4b21e76&sign=0e61cf8f5e1e95fdee49cab40914c939
+10:38:46.587 远程服务器返回错误: (500) 内部服务器错误。
+10:38:46.587 +76ms 
+

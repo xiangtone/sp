@@ -29,7 +29,7 @@
             }
             var ajax = new ajax2();
             ajax.onload = ajax_callback;
-            ajax.GET(batchLnks[batchIdx].href,true);
+            ajax.GET(batchLnks[batchIdx].href, true);
         }
 
         function ajax_callback(xml, code) {
@@ -56,7 +56,8 @@
                 </ItemTemplate>
             </asp:Repeater>
         </select>
-        <input type="submit" value="确定" /> <a href="javascript:;" onclick="batch_remath();this.style.display='none';">批量重匹对</a>
+        <input type="submit" value="确定" />
+        <a href="javascript:;" onclick="batch_remath();this.style.display='none';">批量重匹对</a>
     </form>
 
     <table class="datagrid">
@@ -65,25 +66,31 @@
             <th>SP</th>
             <th>同步URL</th>
             <th>通道名称</th>
+            <th>LinkId</th>
             <th>端口</th>
             <th>指令</th>
             <th>手机</th>
             <th>CPID</th>
+            <th>透参</th>
+            <th>source_ip</th>
             <th>时间</th>
             <th>操作</th>
         </tr>
         <asp:Repeater runat="server" ID="rpList">
             <ItemTemplate>
-                <tr style="text-align:center">
+                <tr style="text-align: center">
                     <td>
                         <input type="checkbox" name="id" value="<%#Eval("id") %>" /><%#Eval("id") %></td>
                     <td><%#GetTB_SP((int) Eval("sp_id") ) %></td>
                     <td><a href="/sp/tbl_troneList.aspx?urlId=<%#Eval("sp_api_url_id") %>"><%#GetTB((int) Eval("sp_api_url_id") ) %></a></td>
                     <td><%#GetTB_TD((int) Eval("trone_id") ) %></td>
+                    <td><%#Eval("linkid") %></td>
                     <td><%#Eval("ori_trone") %></td>
                     <td><%#Eval("ori_order") %></td>
                     <td><%#Eval("mobile") %></td>
                     <td><%#Eval("cp_id") %></td>
+                    <td><%#Eval("cp_param") %></td>
+                    <td><%#Eval("ip")%></td>
                     <td><%#Eval("create_date") %></td>
                     <td><a href="../cp/tbl_trone_orderEditor.aspx?trone_id=<%#Eval(LightDataModel.tbl_mrItem.Fields.trone_id) %>">分配到CP</a>
                         <a href="../ajax/ReMatch.ashx?id=<%#Eval("id") %>" name="rm_lnk" onclick="rematch_link(this);return false;">重新匹对</a>

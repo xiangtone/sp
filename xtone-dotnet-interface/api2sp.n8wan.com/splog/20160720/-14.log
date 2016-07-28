@@ -1,0 +1,66 @@
+14:09:26.256 md5 source:apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=md5&timestamp=1468994966256&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:09:26.256 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=md5&timestamp=1468994966256&sign=b7004a192d46a4581936480f7d5fcddb
+14:09:26.256 apntype=mobile&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms
+14:09:26.372 +117ms <html><head><title>Apache Tomcat/7.0.64 - Error report</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}--></style> </head><body><h1>HTTP Status 403 - 签名串不正确</h1><HR size="1" noshade="noshade"><p><b>type</b> Status report</p><p><b>message</b> <u>签名串不正确</u></p><p><b>description</b> <u>Access to the specified resource has been forbidden.</u></p><HR size="1" noshade="noshade"><h3>Apache Tomcat/7.0.64</h3></body></html>
+
+
+14:15:52.525 md5 source:apntype=mobile&appkey=163e57c409204bfa8284f3142c1f6601&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468995352525&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:15:52.525 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468995352525&sign=110965d0fb92bb7a4a8e000c6df13c85
+14:15:52.525 apntype=mobile&custom={"imei":"866568022922909", "imsi":"460007743190142"}&feecode=10000010&feetype=sms
+14:15:52.640 +113ms <html><head><title>Apache Tomcat/7.0.64 - Error report</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}--></style> </head><body><h1>HTTP Status 403 - 签名串不正确</h1><HR size="1" noshade="noshade"><p><b>type</b> Status report</p><p><b>message</b> <u>签名串不正确</u></p><p><b>description</b> <u>Access to the specified resource has been forbidden.</u></p><HR size="1" noshade="noshade"><h3>Apache Tomcat/7.0.64</h3></body></html>
+
+
+14:26:28.532 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468995988532&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:26:28.532 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468995988532&sign=cabd86f9b654d6f7d41e7cd9f06d58cc
+14:26:28.532 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:26:31.450 操作超时
+14:26:31.450 +2915ms 
+
+14:27:08.159 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468996028159&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:27:08.160 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468996028159&sign=d253776d9d5eaad78ce74187e179e7dd
+14:27:08.160 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:27:08.241 +89ms <html><head><title>Apache Tomcat/7.0.64 - Error report</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}--></style> </head><body><h1>HTTP Status 403 - 唯一串已失效</h1><HR size="1" noshade="noshade"><p><b>type</b> Status report</p><p><b>message</b> <u>唯一串已失效</u></p><p><b>description</b> <u>Access to the specified resource has been forbidden.</u></p><HR size="1" noshade="noshade"><h3>Apache Tomcat/7.0.64</h3></body></html>
+
+
+14:27:37.997 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468996057997&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:27:37.997 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=eb2696d1faeca44c1942d07c725408ae&signtype=MD5&timestamp=1468996057997&sign=7a1746b8e9b64b90471c52efb1cab22b
+14:27:37.997 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:27:38.097 +106ms <html><head><title>Apache Tomcat/7.0.64 - Error report</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}--></style> </head><body><h1>HTTP Status 403 - 唯一串已失效</h1><HR size="1" noshade="noshade"><p><b>type</b> Status report</p><p><b>message</b> <u>唯一串已失效</u></p><p><b>description</b> <u>Access to the specified resource has been forbidden.</u></p><HR size="1" noshade="noshade"><h3>Apache Tomcat/7.0.64</h3></body></html>
+
+
+14:28:44.781 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=9e671c375724d81ef8c26ede160b7614&signtype=MD5&timestamp=1468996124781&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:28:44.781 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=9e671c375724d81ef8c26ede160b7614&signtype=MD5&timestamp=1468996124781&sign=8632cf54b19f2d92ea0985d413c5c9c5
+14:28:44.781 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:28:45.143 +370ms {"code":"0000","desc":"成功","data":{"orderNo":"2dpcWZuC59EjSOP1","apnType":"mobile","feeCode":"10000010","feeType":"sms","price":10,"port":"1065842230","message":"0001155586Q568/%29229094f00a7743MH0q42W6cxT46WfNVXirpdPl+Bm8==ahhhsxx51u3jAe)T20)Rm220e42845cM000|0H00000LVJTRxR:hJSuEv9upAiiDHM]V8O>"}}
+
+
+14:29:01.161 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=9e671c375724d81ef8c26ede160b7614&signtype=MD5&timestamp=1468996141161&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:29:01.161 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=9e671c375724d81ef8c26ede160b7614&signtype=MD5&timestamp=1468996141161&sign=1dede445371ad1f5c0982ef76825cc2c
+14:29:01.161 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:29:01.245 +80ms <html><head><title>Apache Tomcat/7.0.64 - Error report</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}--></style> </head><body><h1>HTTP Status 403 - 唯一串已失效</h1><HR size="1" noshade="noshade"><p><b>type</b> Status report</p><p><b>message</b> <u>唯一串已失效</u></p><p><b>description</b> <u>Access to the specified resource has been forbidden.</u></p><HR size="1" noshade="noshade"><h3>Apache Tomcat/7.0.64</h3></body></html>
+
+
+14:32:22.814 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=0000636046219428142669&signtype=MD5&timestamp=1468996342814&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:32:22.814 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=0000636046219428142669&signtype=MD5&timestamp=1468996342814&sign=2712c273e9fc85ef88f8e35f02b9dc4e
+14:32:22.814 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:32:25.730 操作超时
+14:32:25.730 +2910ms 
+
+14:32:40.099 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=0000636046219600997358&signtype=MD5&timestamp=1468996360099&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:32:40.099 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=0000636046219600997358&signtype=MD5&timestamp=1468996360099&sign=e276efa8869cf1ab2ed192a860b4dfa7
+14:32:40.099 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:32:41.502 +1403ms {"code":"0000","desc":"成功","data":{"orderNo":"2SAgOFarIUjbOSUL","apnType":"mobile","feeCode":"10000010","feeType":"sms","price":10,"port":"1065842230","message":"0001155586Q568/%29229094f00a7743MH0q42iE5SvixAYKwQalYLAUaWb(==53{^js;xyKSn8ri120)Rm220e43241cM000|0H00000xq,0Yb{;rmM=Snf1>5x6Rg0NrzG>"}}
+
+
+14:33:41.225 md5 source:=38ae23be50c14776bc1cec9bb4b21e76
+14:33:41.225 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=0000636046220212257107&signtype=MD5&timestamp=1468996421225&sign=d2621dc7b05b91c5d1846373afdc0f5b
+14:33:41.225 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:33:41.641 +419ms {"code":"0000","desc":"成功","data":{"orderNo":"2U6VpQ5Wvi5RFqmC","apnType":"mobile","feeCode":"10000010","feeType":"sms","price":10,"port":"1065842230","message":"0001155586Q568/%29229094f00a7743MH0q42vny,AAgTF7j9p;XK{5yiSw==a&~[gd*ypqFhC7iK20)Rm220e43342cM000|0H000000x|aTx)gIRa#almi4SCeN4Zlt/O>"}}
+
+
+14:41:59.612 md5 source:appkey=163e57c409204bfa8284f3142c1f6601&nonce=0000636046225196121472&signtype=MD5&timestamp=1468996919612&appsecret=38ae23be50c14776bc1cec9bb4b21e76
+14:41:59.612 http://oubp.ihou.com/order/create?appkey=163e57c409204bfa8284f3142c1f6601&nonce=0000636046225196121472&signtype=MD5&timestamp=1468996919612&sign=afd9caa1f44f5c53e4bf850c9b30c832
+14:41:59.612 apntype=mobile&feetype=sms&feecode=10000010&custom={"imei":"866568022922909", "imsi":"460007743190142"}
+14:42:00.050 +436ms {"code":"0000","desc":"成功","data":{"orderNo":"2UlVIITnjQKjoGq9","apnType":"mobile","feeCode":"10000010","feeType":"sms","price":10,"port":"1065842230","message":"0001155586Q568/%29229094f00a7743MH0q42^wT0Y\\CBGSJKN~wl>r4b4w==8/8zan$ 6dDy3slA20)Rm220e44200cM000|0H000007;)TReZ9V983duEsoOme96B]jTy>"}}
+
+

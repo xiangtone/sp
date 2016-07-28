@@ -46,12 +46,12 @@ namespace n8wan.Public.Logical
         void FlushDebug()
         {
 #if !DEBUG
-                return;
+            return;
 #endif
             if (_bugLog == null || _bugLog.Length == 0)
                 return;
             WriteDebug("Done");
-            Shotgun.Library.SimpleLogRecord.WriteLog(Request.MapPath(string.Format("~/pushlog/R_{0:yyyy-MM-dd}.log", DateTime.Now)), _bugLog.ToString());
+            Shotgun.Library.SimpleLogRecord.WriteLog(Request.MapPath(string.Format("~/log/R_{0:yyyy-MM-dd}.log", DateTime.Now)), _bugLog.ToString());
             _bugLog.Clear();
         }
     }

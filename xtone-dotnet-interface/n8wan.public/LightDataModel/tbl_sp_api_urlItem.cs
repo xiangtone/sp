@@ -84,6 +84,10 @@ namespace LightDataModel
             /// 传入价格字段,格式:urlField,0/urlField,1/urlField,2,1a?:100,2a*:200
             /// </summary>
             public const string MoPrice = "MoPrice";
+            /// <summary>
+            /// SP服务器IP,多个IP以逗号分割
+            /// </summary>
+            public const string sp_server_ips = "sp_server_ips";
 
             #endregion
 
@@ -149,6 +153,10 @@ namespace LightDataModel
         /// 传入价格字段,格式:urlField,0/urlField,1/urlField,2,1a?:100,2a*:200
         /// </summary>
         private string _MoPrice;
+        /// <summary>
+        /// SP服务器IP,多个IP以逗号分割
+        /// </summary>
+        private string _sp_server_ips;
 
         #endregion
 
@@ -273,7 +281,7 @@ namespace LightDataModel
             get { return this._MrLink; }
             set
             {
-#if false && false
+#if false && true
 				RemoveNullFlag(Fields.MrLink);
 #elif !false
                 if (value == null)
@@ -420,8 +428,8 @@ namespace LightDataModel
             get { return this._Disable; }
             set
             {
-#if true && false
-				RemoveNullFlag(Fields.Disable);
+#if true && true
+                RemoveNullFlag(Fields.Disable);
 #elif !true
 			    if (value == null)
                     SetNullFlag(Fields.Disable);
@@ -515,6 +523,27 @@ namespace LightDataModel
                 this._MoPrice = value;
             }
         }
+        /// <summary>
+        /// SP服务器IP,多个IP以逗号分割
+        /// </summary>
+        public string sp_server_ips
+        {
+            get { return this._sp_server_ips; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.sp_server_ips);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.sp_server_ips);
+                else
+                    RemoveNullFlag(Fields.sp_server_ips);
+#endif
+
+                SetFieldHasUpdate(Fields.sp_server_ips, this._sp_server_ips, value);
+                this._sp_server_ips = value;
+            }
+        }
 
         #endregion
         #region 空值相关方法
@@ -525,16 +554,19 @@ namespace LightDataModel
 ,"phy_file"
 ,"MoCheck"
 ,"MoLink"
+,"MrLink"
 ,"MoToMr"
 ,"MoFieldMap"
 ,"MrFidldMap"
 ,"MoStatus"
 ,"MrStatus"
 ,"MsgOutput"
+,"Disable"
 ,"name"
 ,"urlPath"
 ,"MrPrice"
 ,"MoPrice"
+,"sp_server_ips"
 };
         }
         public bool Isvirtual_pageNull() { return IsNull(Fields.virtual_page); }
@@ -549,6 +581,9 @@ namespace LightDataModel
         public bool IsMoLinkNull() { return IsNull(Fields.MoLink); }
 
         public void SetMoLinkNull() { SetNull(Fields.MoLink); }
+        public bool IsMrLinkNull() { return IsNull(Fields.MrLink); }
+
+        public void SetMrLinkNull() { SetNull(Fields.MrLink); }
         public bool IsMoToMrNull() { return IsNull(Fields.MoToMr); }
 
         public void SetMoToMrNull() { SetNull(Fields.MoToMr); }
@@ -567,6 +602,9 @@ namespace LightDataModel
         public bool IsMsgOutputNull() { return IsNull(Fields.MsgOutput); }
 
         public void SetMsgOutputNull() { SetNull(Fields.MsgOutput); }
+        public bool IsDisableNull() { return IsNull(Fields.Disable); }
+
+        public void SetDisableNull() { SetNull(Fields.Disable); }
         public bool IsnameNull() { return IsNull(Fields.name); }
 
         public void SetnameNull() { SetNull(Fields.name); }
@@ -579,6 +617,9 @@ namespace LightDataModel
         public bool IsMoPriceNull() { return IsNull(Fields.MoPrice); }
 
         public void SetMoPriceNull() { SetNull(Fields.MoPrice); }
+        public bool Issp_server_ipsNull() { return IsNull(Fields.sp_server_ips); }
+
+        public void Setsp_server_ipsNull() { SetNull(Fields.sp_server_ips); }
 
         #endregion
         #region 静态方法
@@ -597,20 +638,7 @@ namespace LightDataModel
         {
             return new Shotgun.Model.List.LightDataQueries<tbl_sp_api_urlItem>(tableName, identifyField);
         }
-        /// <summary>
-        /// 根据主键查找指定的行,返回指定字段
-        /// </summary>
-        /// <param name="dBase"></param>
-        /// <param name="id">主键值</param>
-        /// <param name="fields">返回字段</param>
-        /// <returns></returns>
-        public static tbl_sp_api_urlItem GetRowById(Shotgun.Database.IBaseDataClass2 dBase, int id, string[] fields)
-        {
-            var q = GetQueries(dBase);
-            q.Fields = fields;
-            q.Filter.AndFilters.Add(identifyField, id);
-            return q.GetRowByFilters();
-        }
+
 
         /// <summary>
         /// 根据主键查找指定的行,返回所有字段

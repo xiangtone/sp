@@ -1,6 +1,7 @@
 ﻿#if !DEBUG
 #define DB_LOG_RECORD
 #endif
+
 using Shotgun.Database;
 using Shotgun.Model.Logical;
 using System;
@@ -20,7 +21,7 @@ namespace n8wan.Public.Logical
         const string C_VIRTUAL_PORT = "virtualport";
         const string C_VIRTUAL_MSG = "virtualmsg";
         const string C_IVR_TIME = "ivr_time";
-        const string C_STATUS_KEYWORD = "status|DELIVRD|fail|success|succ|ok|stat";//状态关键字检测
+        const string C_STATUS_KEYWORD = "status|DELIVRD|fail|success|succ|ok|stat|statu";//状态关键字检测
 
         /// <summary>
         /// 未找到端口
@@ -38,6 +39,11 @@ namespace n8wan.Public.Logical
         /// SP传入价格与配置价格不一致
         /// </summary>
         const int C_TM_PRICE_NOT_EQUQLS = -4;
+
+        /// <summary>
+        /// SP传入IP未被确认（非正常SP数据同步）
+        /// </summary>
+        const int C_TM_SERVER_IP_ERROR = -5;
 
         /// <summary>
         /// url映射数据库字段(sql,url)
@@ -184,14 +190,27 @@ namespace n8wan.Public.Logical
         /// <summary>
         /// 重置变量数据，多次同步模式时需要使用
         /// </summary>
+        /// <param name="all">是否重置所有数据</param>
         /// <returns></returns>
-        protected virtual void Reset()
+        protected void Reset(bool all)
         {
+            if (all)
+                _IsMo = 0;
             //_IsMo = 0; //重置时不进行MO状态复位
             _linkId = null;
             _MoItem = null;
             _MrItem = null;
         }
+
+        /// <summary>
+        /// 重置变量数据，多次同步模式时需要使用，不重置MO标记
+        /// </summary>
+        protected virtual void Reset()
+        {
+            Reset(false);
+        }
+
+
 
         protected virtual void StartPorcess()
         {
@@ -261,7 +280,12 @@ namespace n8wan.Public.Logical
                 }
                 try
                 {
-                    if (isms.trone_id == 0)
+
+                    if (!IsSpServerBack(isms))
+                    {//非正常SP服务的回传
+                        isms.trone_id = C_TM_SERVER_IP_ERROR;
+                    }
+                    else if (isms.trone_id == 0)
                         trone = FillToneId(dBase, isms);
                 }
 #if !DEBUG
@@ -314,6 +338,23 @@ namespace n8wan.Public.Logical
             }
             WriteDebug(db3.PerformanceReport());
             WriteDebug("ALL done", true);
+        }
+
+        /// <summary>
+        /// 校验SP回传服务器IP地址
+        /// </summary>
+        /// <returns></returns>
+        private bool IsSpServerBack(ISMS_DataItem isms)
+        {
+            if (string.IsNullOrEmpty(api.sp_server_ips))
+                return true;//未设置校验
+            var ar = api.sp_server_ips.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var s in ar)
+            {
+                if (s.TrimEnd().Equals(isms.ip))
+                    return true;
+            }
+            return false;
         }
 
 
@@ -371,9 +412,13 @@ namespace n8wan.Public.Logical
 
             var ptrs = cmbField.Split(new char[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
             var value = string.Empty;
+
             foreach (var p in ptrs)
             {
-                value += GetParamValue(p.Trim());
+                var t = GetParamValue(p.Trim());
+                if (string.IsNullOrEmpty(t))
+                    continue;
+                value += t;
             }
             return value;
         }

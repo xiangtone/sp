@@ -39,5 +39,18 @@ namespace LightDataModel
             cache.InsertItem(m);
             return m.Disable ? null : m;
         }
+
+        /// <summary>
+        /// 根据主键查找指定的行,返回指定字段
+        /// </summary>
+        /// <param name="dBase"></param>
+        /// <param name="id">主键值</param>
+        /// <param name="fields">返回字段</param>
+        /// <returns></returns>
+        public static tbl_sp_api_urlItem GetRowById(Shotgun.Database.IBaseDataClass2 dBase, int id, string[] fields)
+        {
+            return QueryById(dBase, id);
+        }
+
     }
 }

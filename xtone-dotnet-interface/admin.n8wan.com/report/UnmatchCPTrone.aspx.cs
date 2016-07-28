@@ -81,12 +81,38 @@ public partial class report_UnmatchCPTrone : Shotgun.PagePlus.ShotgunPage
     }
     public string GetTB_TD(int Id)
     {
-        #region
+
+        /// <summary>
+        /// 未找到端口
+        /// </summary>
+        const int C_TM_NOT_Trone = -1;
+        /// <summary>
+        /// 未找到指令
+        /// </summary>
+        const int C_TM_NOT_Order = -2;
+        /// <summary>
+        /// SP传入发现状态关键字
+        /// </summary>
+        const int C_TM_STATUS_NOT_CONFIG = -3;
+        /// <summary>
+        /// SP传入价格与配置价格不一致
+        /// </summary>
+        const int C_TM_PRICE_NOT_EQUQLS = -4;
+
+        /// <summary>
+        /// SP传入IP未被确认（非正常SP数据同步）
+        /// </summary>
+        const int C_TM_SERVER_IP_ERROR = -5;
+
+
+        
         switch (Id)
         {
-            case -1: return "没有可用通道";
-            case -2: return "没有匹配通道";
-            case -3: return "发现同步状态";
+            case C_TM_NOT_Trone: return "未找到端口";
+            case C_TM_NOT_Order: return "指令匹配失败";
+            case C_TM_STATUS_NOT_CONFIG: return "状态报告未配置";
+            case C_TM_PRICE_NOT_EQUQLS: return "价格配置错误";
+            case C_TM_SERVER_IP_ERROR: return "IP鉴权错误";
             case 0: return "未指定";
             default:
                 var item = urls_td.Find(x => x.id == Id);
@@ -94,7 +120,7 @@ public partial class report_UnmatchCPTrone : Shotgun.PagePlus.ShotgunPage
                     return Id.ToString();
                 return item.trone_name;
         }
-        #endregion
+       
         //if (Id == -1)
         //    return "没有可用通道";
         //if (Id == -2)
