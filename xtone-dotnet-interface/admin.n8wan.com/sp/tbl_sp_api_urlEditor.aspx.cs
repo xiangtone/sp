@@ -91,6 +91,7 @@ public partial class tbl_sp_api_url_Editor : Shotgun.PagePlus.ShotgunPage
         txtMr_price.Text = Row.MrPrice;
         txtMo_price.Text = Row.MoPrice;
         txtName.Text = Row.name;
+        txtsp_server_ips.Text = Row.sp_server_ips;
         this.chkDisable.Checked = Row.Disable;
 
 
@@ -134,7 +135,7 @@ public partial class tbl_sp_api_url_Editor : Shotgun.PagePlus.ShotgunPage
                 //Response.Write(uf);
                 continue;
             }
-            tBox.Text = uf;
+            tBox.Text = uf.Replace('|', ',');
         }
     }
 
@@ -163,6 +164,8 @@ public partial class tbl_sp_api_url_Editor : Shotgun.PagePlus.ShotgunPage
         Row.name = txtName.Text;
         Row.MoPrice = txtMo_price.Text;
         Row.MrPrice = txtMr_price.Text;
+        Row.sp_server_ips = txtsp_server_ips.Text.Trim();
+
         if (!string.IsNullOrEmpty(Row.MoCheck))
         {
             if (string.IsNullOrEmpty(Row.MoLink))
@@ -236,7 +239,7 @@ public partial class tbl_sp_api_url_Editor : Shotgun.PagePlus.ShotgunPage
             var tBox = FindTextBox(isMr, f);
             if (tBox == null || string.IsNullOrEmpty(tBox.Text))
                 continue;
-            maps += "," + tBox.Text + ":" + f;
+            maps += "," + tBox.Text.Replace(',', '|') + ":" + f;
         }
 
         if (string.IsNullOrEmpty(maps))

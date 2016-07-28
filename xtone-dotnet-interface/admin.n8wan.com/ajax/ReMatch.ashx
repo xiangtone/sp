@@ -17,6 +17,7 @@ public class ReMatch : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySql
             trone = n8wan.Public.Logical.BaseSPCallback.FillToneId(dBase, m);
             if (trone == null)
             {
+                dBase.SaveData(m);
                 Ajax.message = "匹对失败";
                 return;
             }

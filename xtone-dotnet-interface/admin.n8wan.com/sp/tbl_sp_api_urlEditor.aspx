@@ -62,9 +62,6 @@
                 alert("配置错误!\nMO的" + sender.innerHTML + "同步未配置");
                 return;
             }
-
-
-
         }
 
 
@@ -250,6 +247,13 @@
                 <td>
                     <asp:TextBox ID="txtMsgOutput" runat="server" /></td>
                 <td>同步结果输出:格式:ok/error/existed</td>
+            </tr>
+
+            <tr>
+                <th>SP服务器IP:</th>
+                <td>
+                    <asp:TextBox ID="txtsp_server_ips" runat="server" /></td>
+                <td>SP服务器IP，用于IP鉴权。多个IP，用英文逗号分割</td>
             </tr>
 
             <tr>

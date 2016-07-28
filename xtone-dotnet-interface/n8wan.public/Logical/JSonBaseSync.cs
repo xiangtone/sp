@@ -67,12 +67,17 @@ namespace n8wan.Public.Logical
 
             if (jtk != null)
             {
+                object objValue = null;
+
                 if (jtk is JValue)
-                    return ((JValue)jtk).Value.ToString();
+                    objValue = ((JValue)jtk).Value;
                 else if (jtk is JProperty)
-                {
-                    return ((JProperty)jtk).Value.ToString();
-                }
+                    objValue = ((JProperty)jtk).Value;
+
+                if (objValue == null)
+                    return null;
+                return objValue.ToString();
+
             }
 
             return base.GetParamValue(Field);

@@ -17,10 +17,10 @@ namespace sdk_Request.Model
         private string _descripton;
 
         [IgnoreDataMember]
-        public API_ERROR status;
+        public API_ERROR status { get; set; }
 
         [DataMember]
-        public E_SMS_TYPE SMSType;
+        public E_SMS_TYPE SMSType { get; set; }
 
         public SP_RESULT()
         {
@@ -50,6 +50,7 @@ namespace sdk_Request.Model
     /// <summary>
     /// 二次短信
     /// </summary>
+    [Obsolete("使用SP_2SMS_ResultV2替换")]
     public class SP_2SMS_Result : SP_SMS_Result
     {
         [DataMember]
@@ -62,6 +63,30 @@ namespace sdk_Request.Model
         [DataMember]
         public int interval;
     }
+
+    /// <summary>
+    /// 二次短信
+    /// </summary>
+    public class SP_2SMS_ResultV2 : SP_SMS_Result
+    {
+        [DataMember]
+        public string port2 { get; set; }
+        [DataMember]
+        public string msg2 { get; set; }
+        /// <summary>
+        /// 两条指令间隔时间(秒)
+        /// </summary>
+        [DataMember]
+        public int interval { get; set; }
+
+        /// <summary>
+        /// 短信2类型
+        /// </summary>
+        [DataMember]
+        public E_SMS_TYPE SMSType2 { get; set; }
+
+    }
+
 
     /// <summary>
     /// 一次短信
