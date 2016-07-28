@@ -12,6 +12,8 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.MrReportModel;
+import com.system.util.SqlUtil;
+import com.system.util.StringUtil;
 
 public class MrDao
 {
@@ -1206,6 +1208,87 @@ public class MrDao
 		System.out.println(map.get("amount"));
 		System.out.println(map.get("showamount"));
 		
+	}
+	/**
+	 * 当日数据增加业务和指令查询
+	 * @param tableName
+	 * @param startDate
+	 * @param userId
+	 * @param spTroneId
+	 * @return
+	 */
+	public Map<String,Object> getCpMrTodayShowData(String tableName,String startDate,int userId,int spTroneId,int showType)
+	{
+		tableName=SqlUtil.sqlEncode(tableName);
+		startDate=SqlUtil.sqlEncode(startDate);
+		final Map<String, Object> map = new HashMap<String, Object>();
+		map.put("all_data_rows",0);
+		map.put("all_amount",0f);
+		map.put("showType",showType);
+		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING;
+		sql += " FROM daily_log.`tbl_cp_mr_" + tableName + "` a";
+		sql += " LEFT JOIN daily_config.`tbl_trone_order` b ON a.`trone_order_id` = b.`id`";
+		sql += " LEFT JOIN daily_config.`tbl_trone` d ON b.trone_id = d.id";
+		sql += " LEFT JOIN daily_config.`tbl_cp` c ON b.`cp_id` = c.`id`";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` e ON d.sp_trone_id = e.id ";
+		sql += " WHERE a.`create_date` >= '" + startDate + " 00:00:00' AND a.`create_date` <= '" + startDate + " 23:59:59'";
+		sql += " AND c.user_id = " + userId;
+		
+		if(spTroneId>0)
+		{
+			sql += " AND e.id = " + spTroneId;
+		}
+		
+		JdbcControl control = new JdbcControl();
+		
+		control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, "COUNT(*) all_data_rows,SUM(d.price) all_amount"), new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+				{
+					map.put("all_data_rows", rs.getInt("all_data_rows"));
+					map.put("all_amount", rs.getFloat("all_amount"));
+				}
+				return null;
+			}
+		});
+		
+		if(showType==3){//业务
+			sql=sql.replace(Constant.CONSTANT_REPLACE_STRING,"COUNT(*) show_data_rows,SUM(d.price) show_amount,e.name");
+			sql+=" group by e.name";
+
+		}
+		if(showType==4){//指令
+			sql=sql.replace(Constant.CONSTANT_REPLACE_STRING,"COUNT(*) show_data_rows,SUM(d.price) show_amount,concat(e.name,'-',d.orders) name");
+			sql+=" group by d.orders";
+		} 
+		
+		map.put("list",new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<MrReportModel> list=new ArrayList<MrReportModel>();
+				while(rs.next())
+				{
+					MrReportModel model=new MrReportModel();
+					
+					model.setTitle1(StringUtil.getString(rs.getString("name"),""));
+					
+					model.setShowAmount(rs.getFloat("show_amount"));
+					
+					model.setShowDataRows(rs.getInt("show_data_rows"));
+
+					list.add(model);
+				}
+				
+				return list;
+			}
+		}));
+
+		return map;
 	}
 	
 }

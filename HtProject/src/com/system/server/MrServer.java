@@ -116,4 +116,18 @@ public class MrServer
 	{
 		new MrDao().updateCpMrRate(cpId,spTroneId, rate, startDate, endDate);
 	}
+	/**
+	 * 当日数据添加业务和指令查询
+	 * @param userId
+	 * @param spTroneId
+	 * @param showType
+	 * @return
+	 */
+	public Map<String,Object> getCpMrTodayShowData(int userId,int spTroneId,int showType)
+	{
+		String tableName = StringUtil.getMonthFormat();
+		String startDate = StringUtil.getDefaultDate();
+
+		return new MrDao().getCpMrTodayShowData(tableName, startDate, userId,spTroneId,showType);
+	}
 }
