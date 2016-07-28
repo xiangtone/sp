@@ -1,0 +1,6 @@
+szpwd=http://59.151.28.55/web/moHTTP30TLNTLT
+sjnz=http://59.33.38.61:8000/get_sms_mo.aspx
+xt=http://localhost:8888ddddddddddddd
+xmzs=http://123.123.123.111:8888
+szcs=http://localhost:8080
+cs=http://192.168.1.53:8080

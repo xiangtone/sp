@@ -1,0 +1,256 @@
+import java.sql.*;
+import java.io.*;
+import com.xiangtone.util.*;
+
+public class mysqldb
+{
+
+	 String sDBDriver="org.gjt.mm.mysql.Driver";
+	 Connection conn=null;
+     Connection conn2=null;
+	 ResultSet  rs=null;
+	 ResultSet   rs2 = null;
+	 Statement  stmt=null;
+	 Statement  stmt2=null;
+
+	 String sDBCon="";
+     String strDate = "";
+     String sDBCon2="";
+   
+
+    public mysqldb(String dbip1,int dbport1,String dbname1,String dbuser1,String dbpwd1,String dbip2,int dbport2,String dbname2,String dbuser2,String dbpwd2)
+    {
+    	try
+		{
+			
+			Class.forName(sDBDriver);
+		}
+		catch(java.lang.ClassNotFoundException e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		sDBCon = "jdbc:mysql://" + dbip1 +":"+dbport1+"/" + dbname1+ "?user=" + dbuser1 +"&password="+dbpwd1;
+		sDBCon+= "&useUnicode=true&characterEncoding=GBK";
+		
+		sDBCon2 = "jdbc:mysql://" + dbip2 +":"+dbport2+"/" + dbname2+ "?user=" + dbuser2 +"&password="+dbpwd2;
+		sDBCon2+= "&useUnicode=true&characterEncoding=GBK";
+		System.out.println(sDBCon2);
+		
+				
+    }
+    public mysqldb(String dbip1,String dbport1,String dbname1,String dbuser1,String dbpwd1)
+    {
+    	try
+		{
+			
+			Class.forName(sDBDriver);
+		}
+		catch(java.lang.ClassNotFoundException e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		sDBCon = "jdbc:mysql://" + dbip1 +":"+dbport1+"/" + dbname1+ "?user=" + dbuser1 +"&password="+dbpwd1;
+		sDBCon+= "&useUnicode=true&characterEncoding=GBK";
+		
+		
+				
+    }
+
+    //系统默认的方法
+	public mysqldb()
+	{
+		try
+		{
+			
+			Class.forName(sDBDriver);
+		}
+		catch(java.lang.ClassNotFoundException e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		String w_dbip_public   = (String)ConfigManager.getInstance().getConfigItem("w_dbip_public","w_dbip_public not found!");
+	    String w_dbport_public = (String)ConfigManager.getInstance().getConfigItem("w_dbport_public","w_dbport_public not found!");
+		String w_dbname_public = (String)ConfigManager.getInstance().getConfigItem("w_dbname_public","w_dbname_public not found!");
+		String w_dbuser_public = (String)ConfigManager.getInstance().getConfigItem("w_dbuser_public","w_dbuser_public not found!");
+		String w_dbpwd_public  = (String)ConfigManager.getInstance().getConfigItem("w_dbpwd_public","w_dbpwd_public not found!");
+		String r_dbip_public   = (String)ConfigManager.getInstance().getConfigItem("r_dbip_public","r_dbip_public not found!");
+		String r_dbport_public = (String)ConfigManager.getInstance().getConfigItem("r_dbport_public","r_dbport_public not found!");
+		String r_dbname_public = (String)ConfigManager.getInstance().getConfigItem("r_dbname_public","r_dbname_public not found!");
+		String r_dbuser_public = (String)ConfigManager.getInstance().getConfigItem("r_dbuser_public","r_dbuser_public not found!");
+		String r_dbpwd_public  = (String)ConfigManager.getInstance().getConfigItem("r_dbpwd_public","r_dbpwd_public not found!");
+
+		
+	    // sDBCon
+		//sDBCon = "jdbc:mysql://" + SMSIsmgInfo.dbip +":"+SMSIsmgInfo.dbport+"/" + SMSIsmgInfo.dbname+ "?user=" + SMSIsmgInfo.dbuser +"&password="+SMSIsmgInfo.dbpwd;
+		//sDBCon+= "&useUnicode=true&characterEncoding=GBK";
+		
+		sDBCon = "jdbc:mysql://"+w_dbip_public+":"+w_dbport_public+"/"+w_dbname_public;
+		sDBCon+= "?user="+w_dbuser_public+"&password="+w_dbpwd_public+"&useUnicode=true&characterEncoding=GBK";
+		
+		sDBCon2 = "jdbc:mysql://"+r_dbip_public+":"+r_dbport_public+"/"+r_dbname_public;
+		sDBCon2+= "?user="+r_dbuser_public+"&password="+r_dbpwd_public+"&useUnicode=true&characterEncoding=GBK";
+		
+		
+		//sDBCon2 = "jdbc:mysql://" + SMSIsmgInfo.rd_dbip+":"+SMSIsmgInfo.rd_dbport+"/" + SMSIsmgInfo.rd_dbname+ "?user=" + SMSIsmgInfo.rd_dbuser +"&password="+SMSIsmgInfo.rd_dbpwd;
+		//sDBCon2+= "&useUnicode=true&characterEncoding=GBK";
+		
+		//this.sDBCon="jdbc:mysql://localhost/sms_public?user=&password=&useUnicode=true&characterEncoding=GBK";
+		//this.sDBCon2="jdbc:mysql://localhost/sms_public?user=&password=&useUnicode=true&characterEncoding=GBK";
+
+	    //System.out.println(sDBCon);
+	  
+	}
+	
+	
+	/*public boolean connect() throws Exception 
+	{
+		try{
+			conn=DriverManager.getConnection(sDBCon); 
+			stmt=conn.createStatement();
+		}
+		catch(SQLException ex) 
+		{
+			System.out.println("error:not connect db!");
+			System.out.println(ex.toString());
+			return false;
+		}
+		
+		return true;
+	}
+	*/
+	/**
+	*
+	*
+	*/
+	
+	public void execUpdate(String sql)
+	{
+	
+		try
+		{
+			conn=DriverManager.getConnection(sDBCon);
+			stmt=conn.createStatement();
+	     	stmt.executeUpdate(sql);
+	     	conn.close();
+	    }
+	    catch(SQLException ex) 
+	    {
+          System.out.println(ex.toString());
+	    }
+	    
+	    return;
+	}
+	
+	public ResultSet execQuery(String sql)
+	{
+		rs = null;
+		try
+		{
+			conn=DriverManager.getConnection(sDBCon);
+			stmt=conn.createStatement();
+		  	rs=stmt.executeQuery(sql);
+		  	conn.close();
+		  	
+		}
+		catch(SQLException ex)
+		{
+		 	System.out.println("error:"+sql);
+		 	System.out.println(ex.toString());
+			System.out.println("execQuery:"+stmt);  
+		}
+		return rs;
+	}
+	
+	public ResultSet execQuery2(String sql)
+	{
+		rs = null;
+		try
+		{
+			conn=DriverManager.getConnection(sDBCon2);
+			stmt=conn.createStatement();
+		  	rs=stmt.executeQuery(sql);
+		  	conn.close();
+		  	
+		}
+		catch(SQLException ex)
+		{
+		 	System.out.println("error:"+sql);
+		 	System.out.println(ex.toString());
+			System.out.println("execQuery:"+stmt);  
+		}
+		return rs;
+	}
+	
+	public void setBin(String sql, byte[] ndata,int len)
+	{
+		if(len >140 )
+			len=140;
+		java.sql.PreparedStatement pstm=null;
+	   try 
+	   {
+	     	pstm = conn.prepareStatement(sql);
+			ByteArrayInputStream in= new ByteArrayInputStream(ndata);
+			pstm.setBinaryStream(1,in,len);
+			int rows = pstm.executeUpdate();
+	     	System.out.println("rows:"+rows);
+	     	pstm.close();
+	   }catch(SQLException ex) {
+	    	System.err.println("aq.executeDelete:" + ex.getMessage());
+	    	System.err.println("aq.executeDelete: " + sql);
+	   }
+	}
+	
+	  
+	public void close() throws Exception 
+	{
+			if (stmt != null)
+			{
+				stmt.close();
+				stmt = null;
+			}
+			
+			if(conn != null){
+				conn.close();
+				conn = null;
+			}	
+			if (stmt2 != null)
+			{
+				stmt2.close();
+				stmt2 = null;
+			}
+			
+			if(conn2 != null){
+				conn2.close();
+				conn2 = null;
+			}
+	}
+	
+	public String str_replace(String str)
+	{
+	   char ch='\'';
+	   String strResult = "";
+	   int n1=-1,n2=0;
+	   while(true){
+	       n1 = str.indexOf(ch,n2);
+	       //System.out.println("n1:"+n1);
+	       if( n1 == -1){
+	           strResult += str.substring(n2);
+	           break;
+	       }else{
+	           strResult += str.substring(n2,n1)+'\\'+ch;
+	       }
+	       n2 = n1+1;
+	   }
+	   
+	   //if( strResult.substring(strResult.length()-1).equals("\\") )
+	    //   strResult+="\\";
+	   
+	   return strResult;
+	}	
+	
+   
+		
+ }  

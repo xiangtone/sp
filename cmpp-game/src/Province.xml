@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd"> 
+<sqlMap namespace="Province">
+	<select id="selectundepartcpn" resultClass="cpnprovince.Province">
+		<![CDATA[
+			select cpn
+			from tempcompany_mt 
+			where province=''
+			group by cpn
+		]]>
+	</select>
+	<select id="checkprovbycpn" parameterClass="cpnprovince.Province" resultClass="cpnprovince.Province">
+		<![CDATA[
+			select province,city,postcode,miscid 
+			from mobile_miscid_cmcc
+			where  mobile=#mobile#
+		]]>
+	</select>
+	<select id="checkprovstrbycpn" parameterClass="cpnprovince.Province" resultClass="String">
+		<![CDATA[
+			select postcode,miscid 
+			from mobile_miscid_cmcc
+			where  mobile=#mobile#
+		]]>
+	</select>
+	<select id="checkprovswitch" parameterClass="String" resultClass="Integer">
+		<![CDATA[
+			select sendflag 
+			from provinceid
+			where  miscid=#provId#
+		]]>
+	</select>
+	<update id="updateprovince" parameterClass="cpnprovince.Province">
+		<![CDATA[
+			update tempcompany_mt
+			set province=#miscid#,
+			postcode=#postcode#
+			where cpn=#cpn#
+		]]>
+	</update>
+	<select id="selecttableundepartcpn" resultClass="cpnprovince.Province">
+		<![CDATA[
+			select cpn
+			from 20100723company_mt 
+			where province=''
+			group by cpn
+		]]>
+	</select>
+		<update id="updatetableprovince" parameterClass="cpnprovince.Province">
+		<![CDATA[
+			update 20100723company_mt
+			set province=#miscid#
+			where cpn=#cpn#
+		]]>
+	</update>
+</sqlMap>
