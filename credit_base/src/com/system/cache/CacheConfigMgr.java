@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.system.dao.BlackDao;
 import com.system.dao.CpDataDao;
 import com.system.dao.DayMonthLimitDao;
 import com.system.dao.LocateDao;
@@ -39,6 +40,7 @@ public class CacheConfigMgr
 		refreshCityCache();
 		refreshCpSpTroneCache();
 		refreshDayMonthLimitCache();
+		refreshBlackCache();
 	}
 	
 	public static void refreshAllTroneCache()
@@ -55,6 +57,7 @@ public class CacheConfigMgr
 		refreshPhoneLocateCache();
 		refreshProvinceCache();
 		refreshCityCache();
+		refreshBlackCache();
 	}
 	
 	public static void refreshCpSpTroneCache()
@@ -125,6 +128,22 @@ public class CacheConfigMgr
 		DayMonthLimitCache.setSpTroneMonthLimit(dao.loadSpTroneMonthMap(startDate));
 		DayMonthLimitCache.setSpTroneDayLimit(dao.loadSpTroneDayLimit(startDate));
 		logger.info("refreshDayMonthLimitCache finish");
+	}
+	
+	public static void refreshBlackCache()
+	{
+		BlackDao dao = new BlackDao();
+		
+		List<String> blackPhoneList = dao.loadblackPhoneList();
+		List<String> blackImsiList = dao.loadblackImsiList();
+		List<String> blackImeiList = dao.loadblackImeiList();
+		
+		BlackConfigCache.setBlackPhoneList(blackPhoneList);
+		BlackConfigCache.setBlackImsiList(blackImsiList);
+		BlackConfigCache.setBlackImeiList(blackImeiList);
+		
+		logger.info("refreshBlackCache finish");
+		
 	}
 	
 	public static void init(){}

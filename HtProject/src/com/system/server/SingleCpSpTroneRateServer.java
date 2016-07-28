@@ -49,9 +49,10 @@ public class SingleCpSpTroneRateServer
 		return new SingleCpSpTroneRateDao().isRateDateCross(cpTroneRateId, startDate, endDate);
 	}
 	
+	//暂时把更新CP MR表结算率的功能先停掉
 	private void updateCpMrRate(int cpId,int spTroneId,float rate,String startDate,String endDate)
 	{
-		new MrServer().updateCpMrRate(cpId, spTroneId, rate, startDate, endDate);
+		//new MrServer().updateCpMrRate(cpId, spTroneId, rate, startDate, endDate);
 	}
 	
 }

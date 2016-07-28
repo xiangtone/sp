@@ -115,7 +115,7 @@ public class BaseDataDao
 						model.setSpTroneId(rs.getInt("id"));
 						model.setName(StringUtil.getString(rs.getString("name"), ""));
 						model.setTroneType(rs.getInt("trone_type"));
-						model.setJsType(rs.getInt("jiesuanlv"));
+						model.setJieSuanLv(rs.getFloat("jiesuanlv"));
 						model.setStatus(rs.getInt("status"));
 						model.setJsType(rs.getInt("js_type"));
 						

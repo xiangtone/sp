@@ -1,5 +1,6 @@
 package com.system.server;
 
+import com.system.cache.BlackConfigCache;
 import com.system.cache.CpDataCache;
 import com.system.cache.DayMonthLimitCache;
 import com.system.cache.LocateCache;
@@ -37,6 +38,13 @@ public class RequestServerV1
 		if(model.getTroneOrderId()<0)
 		{
 			joresult.accumulate("description", "没有这个业务");
+			return StringUtil.getJsonFormObject(response);
+		}
+		
+		if(BlackConfigCache.isInBlack(model.getMobile(), model.getImsi(), model.getImsi()))
+		{
+			response.setStatus(Constant.SP_BLACK_PHONE_NUM);
+			joresult.accumulate("description", "黑名单用户");
 			return StringUtil.getJsonFormObject(response);
 		}
 		

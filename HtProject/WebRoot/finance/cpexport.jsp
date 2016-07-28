@@ -25,7 +25,7 @@
 	if (isExport) 
 	{
 		SettleAccountServer accountServer = new SettleAccountServer();
-		List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(cpId, startDate, endDate);
+		List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(cpId, startDate, endDate,dateType);
 		if (list != null && list.size() > 0) 
 		{
 			String cpName = "";
@@ -176,7 +176,7 @@
 				<thead>
 					<tr>
 						<td>CP名称</td>
-						<td>运营商</td>
+						<td>业务线</td>
 						<td>SP业务名称</td>
 						<td>金额</td>
 						<td>结算率</td>

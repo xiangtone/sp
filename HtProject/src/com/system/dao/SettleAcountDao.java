@@ -55,10 +55,13 @@ public class SettleAcountDao
 		});
 	}
 	
+	//2016.07.25 废弃BY ANDY.CHEN 因为一个简单的查询就接近一分钟，优化后，查询不到一秒
+	/*
+	 *
 	@SuppressWarnings("unchecked")
 	public List<SpFinanceShowModel> loadCpSettleAccountData(String startDate,String endDate,int cpId,int jsType)
 	{
-		String sql = " SELECT f.id,f.short_name,h.short_name sp_name,k.name_cn,d.name,sum(a.amount) amounts,g.rate jiesuanlv ";
+		String sql = " SELECT f.id,f.short_name,h.short_name sp_name, CONCAT(k.`name_cn`,'-',j.name) name_cn,d.name,sum(a.amount) amounts,g.rate jiesuanlv ";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a  ";
 		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id`";
 		sql += " Left join daily_config.tbl_trone c on b.trone_id = c.id ";
@@ -99,6 +102,65 @@ public class SettleAcountDao
 					model.setSpId(rs.getInt("id"));
 					model.setShortName(StringUtil.getString(rs.getString("short_name"), ""));
 					model.setSpTroneName(StringUtil.getString(rs.getString("sp_name") + "-" + rs.getString("name"), ""));
+					model.setOperatorName(StringUtil.getString(rs.getString("name_cn"), ""));
+					model.setAmount(rs.getFloat("amounts"));
+					model.setJiesuanlv(rs.getFloat("jiesuanlv"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	*/
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<SpFinanceShowModel> loadCpSettleAccountData(String startDate,String endDate,int cpId,int jsType)
+	{
+		String sql = " SELECT a.*,g.`rate` jiesuanlv,CONCAT(j.`name_cn`,'-',i.name) name_cn ";
+		
+		sql += " FROM ( ";
+		sql += " SELECT  f.id cp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` cp_name, ";
+		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
+		sql += " FROM daily_log.tbl_cp_mr_summer a ";
+		sql += " LEFT JOIN    daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN  daily_config.tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN daily_config.tbl_cp f ON b.cp_id = f.id ";
+		sql += " WHERE a.mr_date >= '" + startDate + "' ";
+		sql += " AND a.mr_date <= '" + endDate + "' ";
+		
+		if(cpId>0)
+		{
+			sql += " AND f.id = " + cpId;
+		}
+		
+		sql += " GROUP BY f.id,d.id ";
+		sql += " ORDER BY cp_name,sp_trone_name ";
+		sql += " )a  ";
+		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON a.cp_id = g.cp_id AND a.sp_trone_id = g.sp_trone_id ";
+		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " WHERE g.`js_type` = " + jsType;
+		
+		return (List<SpFinanceShowModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpFinanceShowModel> list = new ArrayList<SpFinanceShowModel>();
+				SpFinanceShowModel model = null;
+				
+				while(rs.next())
+				{
+					model = new SpFinanceShowModel();
+					
+					model.setSpId(rs.getInt("cp_id"));
+					model.setShortName(StringUtil.getString(rs.getString("cp_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
 					model.setOperatorName(StringUtil.getString(rs.getString("name_cn"), ""));
 					model.setAmount(rs.getFloat("amounts"));
 					model.setJiesuanlv(rs.getFloat("jiesuanlv"));
@@ -152,9 +214,9 @@ public class SettleAcountDao
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate)
+	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate,int dateType)
 	{
-		String sql = "SELECT c.`name`,k.`name_cn`,SUM(a.amount) total_amount,f.rate jiesuanlv";
+		String sql = "SELECT c.`name`,CONCAT(k.`name_cn`,'-',j.name) name_cn,SUM(a.amount) total_amount,f.rate jiesuanlv";
 			sql += " FROM daily_log.`tbl_cp_mr_summer` a";
 			sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
 			sql += " LEFT JOIN daily_config.tbl_trone e ON b.`trone_id` = e.`id`";
@@ -166,6 +228,7 @@ public class SettleAcountDao
 			sql += " left join daily_config.tbl_operator k on j.operator_id = k.id ";
 			
 			sql += " where a.`cp_id` =  " + cpId;
+			sql += " and f.js_type = " + dateType;
 			sql += " and a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
 			sql += " group by c.id";
 		

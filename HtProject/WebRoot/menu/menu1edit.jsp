@@ -76,7 +76,7 @@
 				<input type="hidden" value="0" name="type">
 				<input type="hidden" value="<%= id %>" name="id">
 				<dd class="dd01_me">模块</dd>
-				<dd class="dd03_me">
+				<dd class="dd04_me">
 					<select name="head_id" id="sel_head_id"   style="width: 200px">
 							<option value="-1">请选择模块</option>
 							<%

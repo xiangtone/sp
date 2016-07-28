@@ -12,7 +12,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String title = URLDecoder.decode(request.getParameter("title"),"UTF-8");
+	String title = StringUtil.getString(request.getParameter("title"), "");
+	
+	if(!StringUtil.isNullOrEmpty(title))
+	{
+		title =	URLDecoder.decode(request.getParameter("title"),"UTF-8");
+	}
 
 	float defaultRate = StringUtil.getFloat(request.getParameter("rate"), 0.0F);
 
@@ -57,7 +62,7 @@
 	{
 		if(confirm('真的要删除吗？'))
 		{
-			window.location.href = "rateaction.jsp?type=5&id=" + id + "&query=<%= query2 %>";	
+			window.location.href = "rateaction.jsp?type=5&cpsptroneid=<%= id %>&id=" + id + "&query=<%= query2 %>";	
 		}
 	}
 	

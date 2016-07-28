@@ -23,7 +23,7 @@
 	String endDate = StringUtil
 			.getString(request.getParameter("enddate"), defaultEndDate);
 	
-	int showType = StringUtil.getInteger(request.getParameter("showtype"), 1);
+	int showType = StringUtil.getInteger(request.getParameter("showtype"), 13);
 	
 	int coId = StringUtil.getInteger(request.getParameter("co_id"), -1);
 	

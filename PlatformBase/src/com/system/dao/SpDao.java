@@ -15,7 +15,7 @@ public class SpDao
 	@SuppressWarnings("unchecked")
 	public List<SpModel> loadSpData(int coId)
 	{
-		String sql = "select * from tbl_sp where co_id = " + coId;
+		String sql = "select * from tbl_sp where co_id = " + coId + " order by CONVERT(short_name USING gbk)";
 		return (List<SpModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
