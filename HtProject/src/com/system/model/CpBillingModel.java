@@ -15,6 +15,7 @@ public class CpBillingModel
 	private int status;
 	private String remark;
 	private String payTime;
+	private String createDate;
 	
 	public int getId()
 	{
@@ -119,6 +120,14 @@ public class CpBillingModel
 	public void setJsName(String jsName)
 	{
 		this.jsName = jsName;
+	}
+	public String getCreateDate()
+	{
+		return createDate;
+	}
+	public void setCreateDate(String createDate)
+	{
+		this.createDate = createDate;
 	}
 	
 	

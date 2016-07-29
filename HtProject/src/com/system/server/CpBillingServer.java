@@ -1,6 +1,7 @@
 package com.system.server;
 
 import java.util.List;
+import java.util.Map;
 
 import com.system.dao.CpBillingDao;
 import com.system.model.CpBillingSpTroneModel;
@@ -103,6 +104,12 @@ public class CpBillingServer
 		dao.addCpBillingSpTroneData(spTroneList, billingId);
 		
 		dao.addCpBillingTroneOrderDetailData(orderDetailList, billingId);
+	}
+	
+	public Map<String, Object> loadCpBilling(String startDate, String endDate,
+			int cpId,int jsType,int pageIndex)
+	{
+		return new CpBillingDao().loadCpBilling(startDate, endDate, cpId, jsType, pageIndex);
 	}
 	
 	public boolean exportCpBilling(final int cpId,final int jsType,final String startDate,final String endDate)

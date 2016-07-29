@@ -200,15 +200,15 @@ public class CpBillingDao
 	}
 	
 	public Map<String, Object> loadCpBilling(String startDate, String endDate,
-			int cpId, int pageIndex)
+			int cpId,int jsType,int pageIndex)
 	{
 		startDate = SqlUtil.sqlEncode(startDate);
 		endDate = SqlUtil.sqlEncode(endDate);		
 		
-		String sql = "SELECT a.`cp_id`,b.`short_name`,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`";
+		String sql = "SELECT " + Constant.CONSTANT_REPLACE_STRING;
 		sql += " FROM daily_config.`tbl_cp_billing` a";
 		sql += " LEFT JOIN daily_config.`tbl_cp` b ON a.`cp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`id`";
+		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
 		sql += " WHERE 1=1";
 		
 		if(cpId>0)
@@ -223,10 +223,15 @@ public class CpBillingDao
 		
 		if(!StringUtil.isNullOrEmpty(endDate))
 		{
-			sql += " and a.end_date >= '" + endDate + "'";
+			sql += " and a.end_date <= '" + endDate + "'";
 		}
 		
-		sql += "ORDER BY id DESC;";
+		if(jsType>=0)
+		{
+			sql += " and a.js_type = " + jsType;
+		}
+		
+		sql += " ORDER BY a.id DESC";
 		
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
@@ -250,7 +255,7 @@ public class CpBillingDao
 				}));
 
 		map.put("list", control.query(
-				sql.replace(Constant.CONSTANT_REPLACE_STRING, " * ") + limit,
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.create_date,a.id,a.`cp_id`,b.`short_name` cp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status ") + limit,
 				new QueryCallBack()
 				{
 					@Override
@@ -262,7 +267,18 @@ public class CpBillingDao
 							CpBillingModel model = new CpBillingModel();
 
 							model.setId(rs.getInt("id"));
-							
+							model.setCpId(rs.getInt("cp_id"));
+							model.setCpName(StringUtil.getString(rs.getString("cp_name"), ""));
+							model.setEndDate(StringUtil.getString(rs.getString("end_date"), ""));
+							model.setStartDate(StringUtil.getString(rs.getString("start_date"), ""));
+							model.setJsType(rs.getInt("js_type"));
+							model.setJsName(StringUtil.getString(rs.getString("js_name"), ""));
+							model.setTaxRate(rs.getFloat("tax_rate"));
+							model.setPreBilling(rs.getFloat("pre_billing"));
+							model.setActureBilling(rs.getFloat("acture_billing"));
+							model.setStatus(rs.getInt("status"));
+							model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
+							model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
 							
 							list.add(model);
 						}

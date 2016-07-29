@@ -197,7 +197,7 @@ public class CpSpTroneRateDao
 	public List<CpSpTroneRateModel> loadCpSpTroneRateList(final int cpId,int jsType,String startDate,String endDate)
 	{
 				
-		String sql = "SELECT b.`cp_id`,b.`sp_trone_id`,a.`start_date`,a.`end_date`,b.`js_type` ";
+		String sql = "SELECT b.`cp_id`,b.`sp_trone_id`,a.`start_date`,a.`end_date`,b.`js_type`,a.rate ";
 		sql += " FROM daily_config.`tbl_cp_trone_rate_list` a";
 		sql += " LEFT JOIN daily_config.`tbl_cp_trone_rate` b ON a.`cp_trone_rate_id` = b.`id`";
 		sql += " WHERE b.`cp_id` = " + cpId + " AND b.`js_type` = " + jsType;
