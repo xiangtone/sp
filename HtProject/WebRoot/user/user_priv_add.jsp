@@ -46,6 +46,13 @@
 			return;
 		}
 		
+		if(isNullOrEmpty(nickName))
+		{
+			$("#input_nick_name").focus();
+			alert("昵称好歹也填一下吧？");
+			return;
+		}
+		
 		document.getElementById("addform").submit();
 	}
 </script>

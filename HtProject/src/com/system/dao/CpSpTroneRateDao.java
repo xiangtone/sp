@@ -11,6 +11,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.CpSpTroneRateModel;
+import com.system.model.CpBillingSptroneDetailModel;
 import com.system.util.StringUtil;
 
 public class CpSpTroneRateDao
@@ -191,5 +192,40 @@ public class CpSpTroneRateDao
 		sql += " WHERE b.id IS NULL AND a.sp_trone_id IS NOT NULL AND a.cp_id IS NOT NULL;";
 		new JdbcControl().execute(sql);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<CpSpTroneRateModel> loadCpSpTroneRateList(final int cpId,int jsType,String startDate,String endDate)
+	{
+				
+		String sql = "SELECT b.`cp_id`,b.`sp_trone_id`,a.`start_date`,a.`end_date`,b.`js_type` ";
+		sql += " FROM daily_config.`tbl_cp_trone_rate_list` a";
+		sql += " LEFT JOIN daily_config.`tbl_cp_trone_rate` b ON a.`cp_trone_rate_id` = b.`id`";
+		sql += " WHERE b.`cp_id` = " + cpId + " AND b.`js_type` = " + jsType;
+		sql += " AND a.`start_date` >= '" + startDate + "' AND a.`end_date` <= '" + endDate + "'";
+		
+		return (List<CpSpTroneRateModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<CpSpTroneRateModel> list = new ArrayList<CpSpTroneRateModel>();
+				
+				while(rs.next())
+				{
+					CpSpTroneRateModel model = new CpSpTroneRateModel();
+					model.setCpId(cpId);
+					model.setSpTroneId(rs.getInt("sp_trone_id"));
+					model.setStartDate(rs.getString("start_date"));
+					model.setEndDate(rs.getString("end_date"));
+					model.setRate(rs.getFloat("rate"));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	
+	
 	
 }
