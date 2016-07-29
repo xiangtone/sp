@@ -119,8 +119,9 @@ public class SettleAcountDao
 	@SuppressWarnings("unchecked")
 	public List<SpFinanceShowModel> loadCpSettleAccountData(String startDate,String endDate,int cpId,int jsType)
 	{
-		String sql = " SELECT a.*,g.`rate` jiesuanlv,CONCAT(j.`name_cn`,'-',i.name) name_cn ";
+		String sql = "SELECT a.* FROM (";
 		
+		sql += " SELECT a.*,g.`rate` jiesuanlv,CONCAT(j.`name_cn`,'-',i.name) name_cn ";
 		sql += " FROM ( ";
 		sql += " SELECT  f.id cp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` cp_name, ";
 		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
@@ -145,6 +146,12 @@ public class SettleAcountDao
 		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
 		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		sql += " WHERE g.`js_type` = " + jsType;
+		
+		sql += " ) a WHERE a.cp_id NOT IN ( SELECT cp_id FROM daily_config.`tbl_cp_billing` WHERE js_type = " + jsType;
+		
+		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
+				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date)));";
+		
 		
 		return (List<SpFinanceShowModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -256,4 +263,16 @@ public class SettleAcountDao
 			}
 		});
 	}
+	
+	public void addCpBilling(int cpId,int jsType,String startDate,String endDate)
+	{
+		
+	}
+	
+	public void getCpBillingDetail(int cpId,int jsType,String startDate,String endDate)
+	{
+		
+	}
+	
+	
 }

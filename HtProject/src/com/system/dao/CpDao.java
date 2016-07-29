@@ -180,11 +180,10 @@ public class CpDao
 
 		if (!StringUtil.isNullOrEmpty(keyWord))
 		{
-			sql += " AND (a.full_name LIKE '%"+keyWord+"%' or a.short_name like '%" + keyWord + "%' or c.nick_name like '%" + keyWord + "%' or b.nick_name like '%" + keyWord + "%' or a.id = '" + keyWord + "') ";
-			sql += " AND (a.full_name LIKE '%" + keyWord
-					+ "%' or a.short_name like '%" + keyWord
-					+ "%' or c.nick_name like '%" + keyWord
-					+ "%' or b.nick_name like '%" + keyWord + "%') ";
+			sql += " AND (a.full_name LIKE '%"+keyWord+"%' or a.short_name like '%" 
+					+ keyWord + "%' or a.id = '"+ keyWord +"' or c.nick_name like '%" 
+					+ keyWord + "%' or b.nick_name like '%" + keyWord + "%' or a.id = '" 
+					+ keyWord + "') ";
 		}
 
 		Map<String, Object> map = new HashMap<String, Object>();

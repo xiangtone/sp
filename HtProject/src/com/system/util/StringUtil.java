@@ -209,6 +209,18 @@ public class StringUtil
 		return sdf2.format(new Date());
 	}
 	
+	public static Date getDateFromString(String date)
+	{
+		try
+		{
+			return sdf1.parse(date);
+		}
+		catch(Exception ex){}
+		
+		return null;
+	}
+	
+	
 	public static  String getMonthFormat()
 	{
 		return sdf2.format(new Date());

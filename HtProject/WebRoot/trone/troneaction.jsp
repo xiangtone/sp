@@ -23,9 +23,9 @@
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone_id"), -1);	
 	int spApiUrlId = StringUtil.getInteger(request.getParameter("api_url_id"), -1);	
-	String troneOrder = StringUtil.getString(request.getParameter("trone_order"), "");
-	String troneNum = StringUtil.getString(request.getParameter("trone_num"), "");
-	String troneName = StringUtil.getString(request.getParameter("trone_name"), "");
+	String troneOrder = StringUtil.getString(request.getParameter("trone_order"), "").trim();
+	String troneNum = StringUtil.getString(request.getParameter("trone_num"), "").trim();
+	String troneName = StringUtil.getString(request.getParameter("trone_name"), "").trim();
 	float price = StringUtil.getFloat(request.getParameter("price"), 0.0F);
 	int dynamic = StringUtil.getInteger(request.getParameter("dynamic"), -1);
 	int matchPrice = StringUtil.getInteger(request.getParameter("match_price"), -1);
