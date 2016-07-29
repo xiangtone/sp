@@ -98,7 +98,9 @@
 <script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 //排序 tableId: 表的id,iCol:第几列 ；
-function TableSorter(tableId, iCol) {     
+  var sortStatus;
+  var sortArray;
+function TableSorter(tableId, iCol,dataType) {     
     var table = document.getElementById(tableId);     
     var tbody = table.tBodies[0];     
     var colRows = tbody.rows;     
@@ -108,16 +110,23 @@ function TableSorter(tableId, iCol) {
        var tr=colRows[y];
     	aTrs.push(colRows[y]);
     	tr.parentNode.removeChild(tr);
-    }    
-    var sortArray = Sort(aTrs,iCol); 
+    } 
+    if(sortStatus==null||sortStatus!=iCol){
+    	sortArray = Sort(aTrs,iCol,dataType); 
+    	sortStatus=iCol;
+    }else{
+    	sortArray=arrayReverse(sortArray);
+    }
+
     for (var k=0; k < sortArray.length; k++) {  
     	sortArray[k].cells[0].innerHTML=k+1;
     	tbody.appendChild(sortArray[k]);
     }  
 }
-function Sort(aTrs,col){
+function Sort(aTrs,col,dataType){
 	 var i = aTrs.length, j;
 	 var tempExchangVal;
+	 if(dataType=='date'){
 	    while (i > 0) {
 	        for (j = 0; j < i - 1; j++) {
 	            if (aTrs[j].cells[col].innerHTML>aTrs[j+1].cells[col].innerHTML) {
@@ -128,7 +137,47 @@ function Sort(aTrs,col){
 	        }
 	   i--;
 	}
+}   
+	 if(dataType=='float'){
+	
+		    while (i > 0) {
+		        for (j = 0; j < i - 1; j++) {
+		        	var strmin=parseFloat(aTrs[j].cells[col].innerHTML);
+		        	var strmax=parseFloat(aTrs[j+1].cells[col].innerHTML);
+		            if (strmin>strmax) {
+		                tempExchangVal = aTrs[j];
+		                aTrs[j] = aTrs[j + 1];
+		                aTrs[j + 1] = tempExchangVal;
+		            }
+		        }
+		   i--;
+		}
+	}   
+	 if(dataType=='String'){
+		    while (i > 0) {
+		        for (j = 0; j < i - 1; j++) {
+		        	var strmin=aTrs[j].cells[col].innerHTML;
+		        	var strmax=aTrs[j+1].cells[col].innerHTML;
+		        	strmin=strmin.substr(0,strmin.length-1);
+		        	strmax=strmax.substr(0,strmax.length-1);
+		            if (parseFloat(strmin)>parseFloat(strmax)) {
+		                tempExchangVal = aTrs[j];
+		                aTrs[j] = aTrs[j + 1];
+		                aTrs[j + 1] = tempExchangVal;
+		            }
+		        }
+		   i--;
+		}
+	}   
 	return aTrs;
+}
+function arrayReverse(arr) {
+	for (var i = 0; i < arr.length / 2; i++) {
+	var temp = arr[i]; //交换变量
+	arr[i] = arr[arr.length - i - 1];
+	arr[arr.length-i-1]=temp;
+	}
+	return arr;
 }
 
 
@@ -461,14 +510,14 @@ function Sort(aTrs,col){
 			<thead>
 				<tr>
 					<td>序号</td>
-					<td onclick="TableSorter('table_id',1)"><%=titles[sortType - 1]%></td>
-					<td onclick="TableSorter('table_id',2)">数据量(条)</td>
-					<td onclick="TableSorter('table_id',3)">金额(元)</td>
-					<td onclick="TableSorter('table_id',4)">失败量(条)</td>
-					<td onclick="TableSorter('table_id',5)">推送量(条)</td>
-					<td onclick="TableSorter('table_id',6)">失败金额(元 )</td>
-					<td onclick="TableSorter('table_id',7)">推送金额(元)</td>
-					<td onclick="TableSorter('table_id',8)">失败率</td>
+					<td onclick="TableSorter('table_id',1,'date')"><%=titles[sortType - 1]%></td>
+					<td onclick="TableSorter('table_id',2,'float')">数据量(条)</td>
+					<td onclick="TableSorter('table_id',3,'float')">金额(元)</td>
+					<td onclick="TableSorter('table_id',4,'float')">失败量(条)</td>
+					<td onclick="TableSorter('table_id',5,'float')">推送量(条)</td>
+					<td onclick="TableSorter('table_id',6,'float')">失败金额(元 )</td>
+					<td onclick="TableSorter('table_id',7,'float')">推送金额(元)</td>
+					<td onclick="TableSorter('table_id',8,'String')">失败率</td>
 				</tr>
 			</thead>
 			<tbody>
