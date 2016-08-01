@@ -439,9 +439,6 @@ public class StringUtil
 //		int[] values = {1,1,0};
 //		System.out.println(concatStrings(oriSources, values, "|"));
 		
-		String[] s = "".split(",");
-		System.out.println(s.length);
-		
 		
 	}
 	
