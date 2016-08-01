@@ -12,6 +12,7 @@ public class CpBillingModel
 	private float taxRate;
 	private float preBilling;
 	private float actureBilling;
+	private float amount;
 	private int status;
 	private String remark;
 	private String payTime;
@@ -128,6 +129,14 @@ public class CpBillingModel
 	public void setCreateDate(String createDate)
 	{
 		this.createDate = createDate;
+	}
+	public float getAmount()
+	{
+		return amount;
+	}
+	public void setAmount(float amount)
+	{
+		this.amount = amount;
 	}
 	
 	

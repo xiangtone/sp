@@ -1,27 +1,92 @@
+<%@page import="com.system.server.CpServer"%>
+<%@page import="com.system.model.CpModel"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.system.model.SettleAccountModel"%>
+<%@page import="com.system.server.SettleAccountServer"%>
 <%@page import="com.system.server.JsTypeServer"%>
 <%@page import="com.system.model.JsTypeModel"%>
 <%@page import="com.system.model.CpBillingModel"%>
 <%@page import="com.system.server.CpBillingServer"%>
 <%@page import="com.system.util.Base64UTF"%>
-<%@page import="com.system.server.CpServer"%>
-<%@page import="com.system.model.CpModel"%>
-<%@page import="com.system.model.TroneOrderModel"%>
-<%@page import="com.system.server.TroneOrderServer"%>
-<%@page import="com.system.server.SpServer"%>
-<%@page import="com.system.model.SpModel"%>
-<%@page import="com.system.model.TroneModel"%>
-<%@page import="com.system.server.TroneServer"%>
 <%@page import="com.system.constant.Constant"%>
 <%@page import="com.system.util.PageUtil"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="com.system.model.SpTroneModel"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
-<%@page import="com.system.server.SpTroneServer"%>
 <%@page import="com.system.util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+
+	int cpBillingId = StringUtil.getInteger(request.getParameter("cpbillingid"), -1);
+
+	int type = StringUtil.getInteger(request.getParameter("type"), -1);
+	
+	CpBillingServer server = new CpBillingServer();
+	
+	int status = StringUtil.getInteger(request.getParameter("status"), -1);
+	
+	//导出EXCEL数据
+	if(cpBillingId>0 && type ==1)
+	{
+		List<SettleAccountModel> list = server.exportExcelData(cpBillingId);
+		
+		CpBillingModel cpBillingModel = server.getCpBillingModel(cpBillingId);
+		
+		response.setContentType("application/octet-stream;charset=utf-8");
+		
+		String fileName = cpBillingModel.getCpName() + "(" + cpBillingModel.getStartDate() + "_" + cpBillingModel.getEndDate() + ").xls";
+		
+		if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
+		{
+			fileName = URLEncoder.encode(fileName, "UTF-8");
+		} 
+		else 
+		{
+			fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+		}
+
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+		SettleAccountServer accountServer = new SettleAccountServer();
+		
+		accountServer.exportSettleAccount(2, cpBillingModel.getJsType(), cpBillingModel.getCpName(), cpBillingModel.getStartDate() , cpBillingModel.getEndDate(), list,
+				response.getOutputStream());
+		
+		out.clear();
+		
+		out = pageContext.pushBody();
+		
+		return;
+	}
+	//重新生成指定帐单的数据
+	else if(type==2 && cpBillingId > 0)
+	{
+		server.reExportCpBillint(cpBillingId);
+	}
+	//删除帐单数据
+	else if(type==3 && cpBillingId > 0)
+	{
+		server.delCpBilling(cpBillingId);
+	}
+	//确定对帐单无误，更新对帐单状态
+	else  if(type==4 && cpBillingId > 0)
+	{
+		//把帐单更新为待CP审核
+		server.updateCpBillingStatus(cpBillingId, 1);
+	}
+	//帮CP确认帐单无误，更新对帐单状态
+	else  if(type==5 && cpBillingId > 0)
+	{
+		//把帐单更新为CP已审核
+		server.updateCpBillingStatus(cpBillingId, 2);
+	}
+	//撤回待CP审核的帐单
+	else if(type==6 && cpBillingId > 0)
+	{
+		server.updateCpBillingStatus(cpBillingId, 0);
+	}
+
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
 
 	String query = Base64UTF.encode(request.getQueryString());
@@ -34,7 +99,7 @@
 	
 	String endDate = StringUtil.getString(request.getParameter("enddate"), "");
 
-	Map<String, Object> map =  new CpBillingServer().loadCpBilling(startDate, endDate, cpId, jsType, pageIndex);
+	Map<String, Object> map =  server.loadCpBilling(startDate, endDate, cpId, jsType,status,pageIndex);
 		
 	List<CpBillingModel> list = (List<CpBillingModel>)map.get("list");
 	
@@ -51,10 +116,14 @@
 	params.put("cp_id", cpId + "");
 	params.put("startdate", startDate);
 	params.put("enddate",endDate);
+	params.put("status",""+status);
 	
 	String pageData = PageUtil.initPageQuery("cpbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"准备","对帐中"};
+	String[] statusData = {"待审核","CP对帐中","CP已对帐"};
+	
+	String[] btnStrings = {"<a href='#' onclick='sendCpBillingToCp(helloisthereany)'>审核</a> <a href='#' onclick='delCpBilling(helloisthereany)'>删除</a> <a href='#' onclick='reExportCpBilling(helloisthereany)'>重新生成</a>",
+			"<a href='#' onclick='confirmCpBillingForCp(helloisthereany)'>CP审核</a> <a href='#' onclick='reCallCpBillingFromCpStatus(helloisthereany)'>撤回</a>",""};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -88,11 +157,48 @@
 		$("#sel_cp_id").val(joData.id);
 	}
 
+	//删除帐单
 	function delCpBilling(id)
 	{
-		if(confirm('真的要删除帐单吗？删除后可以在CP帐单下重新生成'))
+		if(confirm('真的要删除帐单吗？删除后可以在CP数据下重新生成帐单'))
 		{
-			window.location.href = "troneaction.jsp?did=" + id;	
+			window.location.href = "cpbilling.jsp?type=3&cpbillingid=" + id + "&<%= Base64UTF.decode(query) %>";	
+		}
+	}
+	
+	//重新生成帐单
+	function reExportCpBilling(id)
+	{
+		if(confirm("确定是否重新生成帐单？"))
+		{
+			window.location.href = "cpbilling.jsp?type=2&cpbillingid=" + id + "&<%= Base64UTF.decode(query) %>";
+		}
+	}
+	
+	//审核帐单
+	function sendCpBillingToCp(id)
+	{
+		if(confirm("是否确认数据无误？审核后会进入CP审核!"))
+		{
+			window.location.href = "cpbilling.jsp?type=4&cpbillingid=" + id + "&<%= Base64UTF.decode(query) %>";
+		}
+	}
+	
+	//替CP审核帐单
+	function confirmCpBillingForCp(id)
+	{
+		if(confirm("CP是否已确认数据正确？审核后将会进入财务对帐流程！"))
+		{
+			window.location.href = "cpbilling.jsp?type=5&cpbillingid=" + id;
+		}
+	}
+	
+	//召回已发送给CP的帐单
+	function reCallCpBillingFromCpStatus(id)
+	{
+		if(confirm("确定是否要撤回该CP帐单？"))
+		{
+			window.location.href = "cpbilling.jsp?type=6&cpbillingid=" + id;
 		}
 	}
 	
@@ -100,6 +206,7 @@
 	{
 		$("#sel_js_type").val(<%= jsType %>);
 		$("#sel_cp_id").val(<%= cpId %>);
+		$("#sel_status").val(<%= status %>);
 	});
 	
 	
@@ -108,9 +215,6 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<dl>
-				<dd class="ddbtn" ><a href="troneorderadd.jsp">增  加</a></dd>
-			</dl>
 			<form action="cpbilling.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
@@ -151,6 +255,20 @@
 						%>
 						</select>
 					</dd>
+					<dd class="dd01_me">状态</dd>
+					<dd class="dd04_me">
+						<select name="status" id="sel_status" >
+						<option value="-1">请选择</option>
+						<%
+						for(int i=0; i<statusData.length; i++)
+						{
+							%>
+							<option value="<%= i %>"><%= statusData[i] %></option>
+							<%
+						}
+						%>
+						</select>
+					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查     询" type="submit" />
 					</dd>
@@ -165,8 +283,8 @@
 					<td>开始时间</td>
 					<td>结束时间</td>
 					<td>结算类型</td>
-					<td>税率</td>
-					<td>预支付</td>
+					<td>信息费</td>
+					<td>应支付</td>
 					<td>备注</td>
 					<td>创建时间</td>
 					<td>状态</td>
@@ -185,14 +303,15 @@
 					<td><%=model.getStartDate() %></td>
 					<td><%=model.getEndDate()%></td>
 					<td><%= model.getJsName() %></td>
-					<td><%= model.getTaxRate() %></td>
+					<td><%= model.getAmount() %></td>
 					<td><%=model.getPreBilling() %></td>
 					<td><%=model.getRemark() %></td>
 					<td><%= model.getCreateDate() %></td>
 					<td><%= statusData[model.getStatus()] %></td>
 					<td>
-						<a href="cpbillingedit.jsp?query=<%= query %>&id=<%= model.getId() %>" >修改</a>
-						<a href="cpbilling.jsp?type=1&cpid=<%= model.getId() %>">导出</a>
+						<a href="cpbillingdetail.jsp?query=<%= query %>&cpbillingid=<%= model.getId() %>" >详细</a>
+						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
+						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>
 					</td>
 				</tr>
 				<%

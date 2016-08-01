@@ -7,15 +7,52 @@ package com.system.model;
  */
 public class CpBillingSptroneDetailModel
 {
+	int id;
 	private int cpBillingId;
 	private int spTroneId;
+	private String spTroneName;
 	private String mrDate;
 	private float amount;
+	private float reduceAmount;
 	private float rate;
+	private String remark;
+	private int status;
 	
 	public int getCpBillingId()
 	{
 		return cpBillingId;
+	}
+	public int getId()
+	{
+		return id;
+	}
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	public String getSpTroneName()
+	{
+		return spTroneName;
+	}
+	public void setSpTroneName(String spTroneName)
+	{
+		this.spTroneName = spTroneName;
+	}
+	public float getReduceAmount()
+	{
+		return reduceAmount;
+	}
+	public void setReduceAmount(float reduceAmount)
+	{
+		this.reduceAmount = reduceAmount;
+	}
+	public int getStatus()
+	{
+		return status;
+	}
+	public void setStatus(int status)
+	{
+		this.status = status;
 	}
 	public void setCpBillingId(int cpBillingId)
 	{
@@ -52,6 +89,14 @@ public class CpBillingSptroneDetailModel
 	public void setSpTroneId(int spTroneId)
 	{
 		this.spTroneId = spTroneId;
+	}
+	public String getRemark()
+	{
+		return remark;
+	}
+	public void setRemark(String remark)
+	{
+		this.remark = remark;
 	}
 	
 }
