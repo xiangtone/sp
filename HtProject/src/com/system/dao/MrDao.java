@@ -645,7 +645,7 @@ public class MrDao
 	}
 	
 	//2016.07.26 废弃，查询方式更新，采用新的查询方式，从原来所需要的时间从4S减少到3S。。。哈哈。。
-	/*
+	//2016.08.01 重新启用，因为有个小时的时间不能处理。。痛苦
 	public Map<String, Object> getMrTodayData(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
 			int cityId,int spCommerceUserId,int cpCommerceUserId,int sortType)
@@ -763,9 +763,10 @@ public class MrDao
 		
 		return map;
 	}
-	*/
 	
 	//新的SQL查询数据方式
+	//2016.08.01 废弃，因为有个小时的时间不能处理。。痛苦
+	/*
 	public Map<String, Object> getMrTodayData(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
 			int cityId,int spCommerceUserId,int cpCommerceUserId,int sortType)
@@ -896,6 +897,7 @@ public class MrDao
 		
 		return map;
 	}
+	*/
 	
 	public Map<String, Object> getMrTodayDataQiBa(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
