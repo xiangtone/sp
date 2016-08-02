@@ -169,4 +169,21 @@ public class SingleCpSpTroneRateDao
 		return rows>0;
 	}
 	
+	public static void main(String[] args)
+	{
+		int cpTroneRateId = 0;
+		String startDate = "startDate";
+		String endDate = "endDate";
+		
+		String sql = "SELECT count(*) FROM daily_config.tbl_cp_trone_rate_list	WHERE cp_trone_rate_id = "
+				+ cpTroneRateId + " AND ( ('" + startDate + "' >= start_date AND '"
+				+ startDate + "' <= end_date) OR('" + endDate
+				+ "' >= start_date AND '" + endDate + "' <= end_date) OR('"
+				+ startDate + "' <= start_date AND '" + endDate
+				+ "' >= end_date) );";
+		
+		System.out.println(sql);
+		
+	}
+	
 }

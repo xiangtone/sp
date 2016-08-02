@@ -51,38 +51,20 @@
 						<input type="radio" value="2"  name="chktype"  />IMEI
 						<input type="radio" value="3"  name="chktype"  />IMSI
 					</dd>
-					<br />
-					<br />
-					<br />
+					<div style="clear: both;"><br /></div>
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">IMEI/IMSI/电话</dd>
 					<dd class="dd03_me">
 					<textarea name="pl_data"  style="width:200px;height: 150px;"   id="pl_data" ></textarea>
 					</dd>
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
+					<div style="clear: both;"><br /></div>
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me" style="margin-bottom 10px">备注</dd>
 					<dd class="dd03_me">
 						<input type="text" name="remark" id="add_remark"
 							style="width: 200px">
 					</dd>
-					
-				
-					
-
-					<br />
-					<br />
-					<br />
+					<div style="clear: both;"><br /></div>
 					<dd class="dd00"></dd>
 					<dd class="dd00_me"></dd>
 					<dd class="ddbtn" style="margin-left: 100px; margin-top: 10px">
@@ -94,7 +76,7 @@
 				</form>
 			</dl>
 		</div>
-
+		
 	</div>
 </body>
 </html>

@@ -209,6 +209,18 @@ public class StringUtil
 		return sdf2.format(new Date());
 	}
 	
+	public static Date getDateFromString(String date)
+	{
+		try
+		{
+			return sdf1.parse(date);
+		}
+		catch(Exception ex){}
+		
+		return null;
+	}
+	
+	
 	public static  String getMonthFormat()
 	{
 		return sdf2.format(new Date());
@@ -426,9 +438,6 @@ public class StringUtil
 //		String[] oriSources = {"A","b","C"};
 //		int[] values = {1,1,0};
 //		System.out.println(concatStrings(oriSources, values, "|"));
-		
-		String[] s = "".split(",");
-		System.out.println(s.length);
 		
 		
 	}

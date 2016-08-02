@@ -136,24 +136,5 @@ public class SettleAccountServer
 		
 	}
 	
-	@SuppressWarnings("unused")
-	private List<SettleAccountModel> loadSpSettleAccountFromFile(String filePath)
-	{
-		String[] strs = null;
-		List<SettleAccountModel> list = new ArrayList<SettleAccountModel>();
-		for(String line : FileUtil.readFileToList(filePath, "GBK"))
-		{
-			strs = line.split("\t");
-			SettleAccountModel model = new SettleAccountModel();
-			
-			model.setOperatorName(strs[0]);
-			model.setSpTroneName(strs[1]);
-			model.setAmount(Float.parseFloat(strs[2].replace(",", "")));
-			model.setJiesuanlv(Float.parseFloat(strs[3]));
-			
-			list.add(model);
-		}
-		return list;
-	}
 	 
 }

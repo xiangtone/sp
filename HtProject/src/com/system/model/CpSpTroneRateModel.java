@@ -13,6 +13,11 @@ public class CpSpTroneRateModel
 	private float dayLimit;
 	private float monthLimit;
 	private String prosData;
+	
+	//这个数据增加是为了帐单处理
+	private String startDate;
+	private String endDate;
+	
 	//结算类型
 	private int jsType;
 	
@@ -111,6 +116,22 @@ public class CpSpTroneRateModel
 	public void setJsType(int jsType)
 	{
 		this.jsType = jsType;
+	}
+	public String getStartDate()
+	{
+		return startDate;
+	}
+	public void setStartDate(String startDate)
+	{
+		this.startDate = startDate;
+	}
+	public String getEndDate()
+	{
+		return endDate;
+	}
+	public void setEndDate(String endDate)
+	{
+		this.endDate = endDate;
 	}
 	
 	
