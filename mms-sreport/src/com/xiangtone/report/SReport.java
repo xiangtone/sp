@@ -9,24 +9,21 @@ import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 import org.common.util.ThreadPool;
 
-public class SReport implements Runnable{
+public class SReport {
 	private static Logger logger = Logger.getLogger(SReport.class);
 
 	public SReport() {
-	}
-
-	@Override
-	public void run() {
 		Connection conn = null;
 		PreparedStatement db = null;
 		while (true) {
 			try {
+				
 				conn = ConnectionService.getInstance().getConnectionForLocal();
 				logger.debug("the conn is:" + conn);
 				db = conn.prepareStatement("");
 				long startTime = System.currentTimeMillis();
 
-				logger.debug("System.currentTimeMillis():"+System.currentTimeMillis());
+				logger.debug("System.currentTimeMillis():" + System.currentTimeMillis());
 				// MysqlDB db=new MysqlDB("league");
 				try {
 					ReportAll rAll = new ReportAll();
@@ -318,6 +315,6 @@ public class SReport implements Runnable{
 	}
 
 	public static void main(String args[]) {
-		ThreadPool.mThreadPool.execute(new SReport());
+		new SReport();
 	}
 }
