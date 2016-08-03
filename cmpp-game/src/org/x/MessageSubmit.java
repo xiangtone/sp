@@ -113,6 +113,8 @@ public class MessageSubmit {
 			db.getPreparedStatement(strSql).executeUpdate();
 		} catch (Exception e) {
 			logger.error(strSql, e);
+		}finally{
+			db.close();
 		}
 	}
 

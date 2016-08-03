@@ -64,9 +64,10 @@ public class MessageDeliver {
 			strSql += ",deliverTime='" + deliverTime + "'";
 			logger.debug(strSql);
 			db.getPreparedStatement(strSql).executeUpdate();
-			db.close();
 		} catch (Exception e) {
 			logger.error(strSql,e);
+		}finally{
+			db.close();
 		}
 	}
 }
