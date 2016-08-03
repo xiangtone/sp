@@ -250,7 +250,7 @@ public class CpBillingDao
 	@SuppressWarnings("unchecked")
 	public List<SettleAccountModel> exportExcelData(int cpBillingId)
 	{
-		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,a.amount total_amount,a.rate ";
+		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,(a.amount-a.reduce_amount) total_amount,a.rate ";
 		
 		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` a ";
 		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
@@ -258,7 +258,7 @@ public class CpBillingDao
 		sql += " LEFT JOIN daily_config.`tbl_product_1` d ON c.`product_1_id` = d.`id` ";
 		sql += " LEFT JOIN daily_config.`tbl_operator` e ON d.`operator_id` = e.`id` ";
 		
-		sql += " WHERE 1=1 AND a.cp_billing_id =" + cpBillingId;
+		sql += " WHERE 1=1 AND a.status = 0 AND a.cp_billing_id =" + cpBillingId ;
 		
 		return (List<SettleAccountModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -413,7 +413,7 @@ public class CpBillingDao
 	 */
 	public void updateCpBilling(int cpBillingId)
 	{
-		String sql = "SELECT  SUM(amount) amount,SUM(reduce_amount) reduce_amount,SUM(amount*rate) pre_billing FROM daily_log.`tbl_cp_billing_sp_trone` WHERE cp_billing_id = " + cpBillingId + " AND STATUS = 0";
+		String sql = "SELECT  SUM(amount) amount,SUM(reduce_amount) reduce_amount,SUM((amount-reduce_amount)*rate) pre_billing FROM daily_log.`tbl_cp_billing_sp_trone` WHERE cp_billing_id = " + cpBillingId + " AND STATUS = 0";
 		JdbcControl control = new JdbcControl();
 		float[] result = (float[])control.query(sql, new QueryCallBack()
 		{
