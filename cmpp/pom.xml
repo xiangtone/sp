@@ -16,9 +16,9 @@
 			<version>1.4.7</version>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.29</version>
+			<groupId>org.xtone.common</groupId>
+			<artifactId>xtone-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
 	</dependencies>
