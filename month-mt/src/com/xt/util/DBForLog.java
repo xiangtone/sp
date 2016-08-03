@@ -61,14 +61,22 @@ public class DBForLog {
 	public static void main(String[] args) {
 		String sql="SELECT * FROM `tbl_base_users` WHERE id=1";
 		DBForLog db=new DBForLog();
+		ResultSet rs=null;
 		try {
 			db.executeQuery(sql);
-			ResultSet rs=db.getRs();
+			rs=db.getRs();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			db.close();
+		}
+		try {
 			if(rs.next()){
 				myLogger.debug(rs.getString("name"));
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 }

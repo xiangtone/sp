@@ -4,125 +4,120 @@ package org.x;
 *All right reserved.
 */
 
-
 import java.io.*;
 import java.sql.*;
 
-import com.xiangtone.sql.Mysqldb;
+import org.apache.log4j.Logger;
+import org.common.util.ConnectionService;
 
-/*
-*
-*
-*/
-public class SMSCost
-{
-	/**
-	*
-	*
-	*/
-	public String serverID="8003";
-	public String serverCode_IOD="BZ";
-	public String serverCode_PUSH="-BZ";
+import com.xiangtone.util.DBForLog;
+
+public class SMSCost {
+	private static Logger logger = Logger.getLogger(SMSCost.class);
+	public String serverID = "8003";
+	public String serverCodeIOD = "BZ";
+	public String serverCodePUSH = "-BZ";
 	public String serverName = "BZ";
-	public String infoFee="0";
-	public String feeType="01";
-	public int mediaType=1;
+	public String infoFee = "0";
+	public String feeType = "01";
+	public int mediaType = 1;
 	public String spCode;
 	public String memo;
-	
-	Mysqldb db;
-	ResultSet rs = null;
-	String strSql;
-	/*
-	*
-	*
-	*/
-	public String getCost_serverID(){ return serverID;}
-	public String getCost_serverCode_IOD(){ return serverCode_IOD;}
-	public String getCost_serverCode_PUSH() {return serverCode_PUSH;}
-	public String getCost_serverName() {return serverName;}
-	public String getCost_infoFee() { return infoFee;}
-	public String getCost_feeType() { return feeType;}
-	public int getCost_mediaType() { return mediaType;}
-	public String getCost_spCode() { return spCode;}
-	public String getCost_memo() { return memo;}
-	
-	public void setCost_serverID(String _serverID){this.serverID = _serverID;}
-	
-	public SMSCost()
-	{
-		db = new Mysqldb();
+
+	public String getServerID() {
+		return serverID;
 	}
-	
-	/*
-	*
-	*
-	*/
-	public void lookupInfofeeByServerID_IOD(String _serverID)
-	{
-		try
-		{
-			strSql="select *  from sms_cost where serverid='"+_serverID+"'";
-			rs = db.execQuery(strSql);
-			if(rs.next())
-			{
-				//System.out.println("ddddddd");
-				this.serverID = _serverID;
-				this.serverCode_IOD =rs.getString("feecode_iod");
-				this.serverName = rs.getString("servername");
-				this.serverCode_PUSH = rs.getString("feecode_push");
-				this.infoFee = rs.getString("infofee");
-				this.feeType = rs.getString("feetype");
-				this.mediaType = rs.getInt("mediatype");
-				this.spCode = rs.getString("spcode");
-				this.memo = rs.getString("memo");
-				//System.out.println("spcode::"+this.spCode);
-			}
-			//rs =null;
-			//db =null;
-		}
-		catch(Exception e)
-		{
-			System.out.println("err:"+e.toString());
-			System.out.println(strSql);
-		}
+
+	public String getServerCodeIOD() {
+		return serverCodeIOD;
 	}
-	/**
-	*
-	*
-	*/
-	public void lookupInfofeeByServerID_PUSH(String _serverID)
-	{
-		
-		try
-		{
-			strSql="select *  from sms_cost where serverid='"+_serverID+"'";
-			rs = db.execQuery(strSql);
-			if(rs.next())
-			{
-				this.serverID = _serverID;
-				this.serverCode_IOD =rs.getString("feecode_iod");
+
+	public String getServerCodePUSH() {
+		return serverCodePUSH;
+	}
+
+	public String getServerName() {
+		return serverName;
+	}
+
+	public String getInfoFee() {
+		return infoFee;
+	}
+
+	public String getFeeType() {
+		return feeType;
+	}
+
+	public int getMediaType() {
+		return mediaType;
+	}
+
+	public String getSpCode() {
+		return spCode;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setCostServerID(String serverID) {
+		this.serverID = serverID;
+	}
+
+	public SMSCost() {
+	}
+
+	public void lookupInfofeeByServerIDIOD(String serverID) {
+		String strSql=null;
+		DBForLog db=new DBForLog();
+		try {
+			ResultSet rs = null;
+			strSql = "select *  from sms_cost where serverid='" + serverID + "'";
+			logger.debug(strSql);
+			db.executeQuery(strSql);
+			rs = db.getRs();
+			if (rs.next()) {
+				this.serverID = serverID;
+				this.serverCodeIOD = rs.getString("feecode_iod");
 				this.serverName = rs.getString("servername");
-				this.serverCode_PUSH = rs.getString("feecode_push");
+				this.serverCodePUSH = rs.getString("feecode_push");
 				this.infoFee = rs.getString("infofee");
 				this.feeType = rs.getString("feetype");
 				this.mediaType = rs.getInt("mediatype");
 				this.spCode = rs.getString("spcode");
 				this.memo = rs.getString("memo");
 			}
-			rs =null;
-			//db =null;//not do it
+		} catch (Exception e) {
+			logger.error(strSql, e);
+		} finally {
+			db.close();
 		}
-		catch(Exception e)
-		{
-			System.out.println(e.toString());
-			System.out.println(strSql);
+	}
+
+	public void lookupInfofeeByServerIDPUSH(String serverID) {
+		String strSql = null;
+		DBForLog db=new DBForLog();
+		try {
+			ResultSet rs = null;
+			strSql = "select *  from sms_cost where serverid='" + serverID + "'";
+			logger.debug(strSql);
+			db.executeQuery(strSql);
+			rs = db.getRs();
+			if (rs.next()) {
+				this.serverID = serverID;
+				this.serverCodeIOD = rs.getString("feecode_iod");
+				this.serverName = rs.getString("servername");
+				this.serverCodePUSH = rs.getString("feecode_push");
+				this.infoFee = rs.getString("infofee");
+				this.feeType = rs.getString("feetype");
+				this.mediaType = rs.getInt("mediatype");
+				this.spCode = rs.getString("spcode");
+				this.memo = rs.getString("memo");
+			}
+		} catch (Exception e) {
+			logger.error(strSql, e);
+		} finally {
+			db.close();
 		}
 	}
 }
-		 
-				
-
-	
-	
-	

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.log4j.Logger;
+import org.common.util.ConnectionService;
 
 public class DBForLocal {
 	private static Logger myLogger = Logger.getLogger(DBForLocal.class);

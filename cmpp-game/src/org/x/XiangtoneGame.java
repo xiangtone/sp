@@ -12,22 +12,14 @@ import com.xiangtone.util.ConfigManager;
  * 
  */
 
-public class XiangtoneGame
+public class XiangtoneGame {
+	private static Logger logger = Logger.getLogger(XiangtoneGame.class);
+	public static void main(String args[]) {
 
-{
-
-	private static final Logger LOG = Logger.getLogger(XiangtoneGame.class);
-
-	public static void main(String args[])
-
-	{
-
-		try
-
-		{
+		try {
 			int port = Integer.parseInt((String) ConfigManager.getConfigData("listen_port"));
 
-			LOG.info("game start listen:" + port);
+			logger.debug("创世短信游戏线程开始....listen:" + port);
 
 			VCPServer server = new VCPServer(port);
 
@@ -35,19 +27,15 @@ public class XiangtoneGame
 
 			// Thread.currentThread().sleep(2000);
 
+			logger.debug("游戏定时触发发送线程开始....");
+
 			// GameServer game = new GameServer();
 
 			// new Thread(game).start();
 
-		}
+		} catch (Exception e) {
 
-		catch (Exception e)
-
-		{
-
-			LOG.error("error when start app...");
-
-			e.printStackTrace();
+			logger.error("系统出错,将会退出。",e);
 
 			System.exit(0);
 

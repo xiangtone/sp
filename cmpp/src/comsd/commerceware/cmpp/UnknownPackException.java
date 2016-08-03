@@ -4,14 +4,11 @@
 // Source File Name:   UnknownPackException.java
 package comsd.commerceware.cmpp;
 
+public class UnknownPackException extends Exception {
 
-public class UnknownPackException extends Exception
-{
+	public UnknownPackException() {
+		details = "unknown packet is received";
+	}
 
-    public UnknownPackException()
-    {
-        details = "unknown packet is received";
-    }
-
-    String details;
+	String details;
 }

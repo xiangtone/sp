@@ -5,14 +5,11 @@
 
 package comsd.commerceware.cmpp;
 
+public class DeliverFailException extends Exception {
 
-public class DeliverFailException extends Exception
-{
+	public DeliverFailException() {
+		details = "Receive deliver packet exception";
+	}
 
-    public DeliverFailException()
-    {
-        details = "Receive deliver packet exception";
-    }
-
-    String details;
+	String details;
 }

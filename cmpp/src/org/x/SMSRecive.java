@@ -17,27 +17,29 @@ import com.xiangtone.util.FormatSysTime;
 import com.xiangtone.util.IntByteConvertor;
 
 import comsd.commerceware.cmpp.CMPP;
-import comsd.commerceware.cmpp.cmppe_deliver_result;
-import comsd.commerceware.cmpp.cmppe_result;
-import comsd.commerceware.cmpp.cmppe_submit_result;
-import comsd.commerceware.cmpp.conn_desc;
+import comsd.commerceware.cmpp.CmppeDeliverResult;
+import comsd.commerceware.cmpp.CmppeResult;
+import comsd.commerceware.cmpp.CmppeSubmitResult;
+import comsd.commerceware.cmpp.ConnDesc;
 
 public class SMSRecive implements Runnable {
 
+	private static Logger logger = Logger.getLogger(SMSRecive.class);
+
 	CMPP p = new CMPP();
 
-	// conn_desc con = new conn_desc();
+	// connDesc con = new connDesc();
 
-	cmppe_deliver_result cd = new cmppe_deliver_result();
+	CmppeDeliverResult cd = new CmppeDeliverResult();
 
-	cmppe_submit_result sr = new cmppe_submit_result();
+	CmppeSubmitResult sr = new CmppeSubmitResult();
 
-	cmppe_result cr = new cmppe_result();
+	CmppeResult cr = new CmppeResult();
 
 	public SMSoperate handle;
 
 	public CMPPSingleConnect cmppcon = CMPPSingleConnect.getInstance();;
-	conn_desc con = cmppcon.con;
+	ConnDesc con = cmppcon.con;
 	public static final String ISMGID = "01";
 
 	public SMSRecive()
@@ -54,11 +56,8 @@ public class SMSRecive implements Runnable {
 
 	public void run() {
 
-		////////////////// ï¿½ï¿½Ö¾ï¿½ï¿½Â¼/////////////
-
-		// ThreadPoolManager moPoolManger = new ThreadPoolManager(500,this.ISMGID);
-
-		//////////////////////////////////////
+		// ThreadPoolManager moPoolManger = new
+		// ThreadPoolManager(500,this.ISMGID);
 
 		while (true) {
 
@@ -72,160 +71,141 @@ public class SMSRecive implements Runnable {
 
 				{
 
-					sr.flag = -1; // ï¿½ï¿½Î»
+					sr.flag = -1; // ¸´Î»
 
-					String str_resp_msgId = IntByteConvertor.getLong(sr.msg_id, 0) + "";// MyTools.Bytes2HexString(sr.msg_id);MyTools.Bytes2HexString(sr.msg_id);//new
-																																							// String(sr.msg_id2)//IntByteConvertor.getLong(sr.msg_id,0)
-																																							// +
-																																							// "";//MyTools.Bytes2HexString(sr.msg_id);
+					String strRespMsgId = IntByteConvertor.getLong(sr.msgId, 0) + "";// MyTools.Bytes2HexString(sr.msgId);MyTools.Bytes2HexString(sr.msgId);//new
+																						// String(sr.msgId2)//IntByteConvertor.getLong(sr.msgId,0)
+																						// +
+																						// "";//MyTools.Bytes2HexString(sr.msgId);
 
-					int i_resp_result = sr.result;
+					int iRespResult = sr.result;
 
-					int i_resp_seq = sr.seq;
+					int iRespSeq = sr.seq;
 
-					System.out.println("sr.result:" + i_resp_result);
+					logger.debug("sr.result:" + iRespResult);
 
-					System.out.println("sr.seq:" + i_resp_seq);
+					logger.debug("sr.seq:" + iRespSeq);
 
-					System.out.println("sr.msg_id:" + str_resp_msgId);
+					logger.debug("sr.msgId:" + strRespMsgId);
 
-					handle.receiveSubmitResp(this.ISMGID, (int) i_resp_seq, (String) str_resp_msgId, (int) i_resp_result);
+					handle.receiveSubmitResp(this.ISMGID, (int) iRespSeq, (String) strRespMsgId, (int) iRespResult);
 
-					// handle.receiveSubmitResp(this.ISMGID,(int)i_resp_seq,(String)str_resp_msgId,(int)i_resp_result);
+					// handle.receiveSubmitResp(this.ISMGID,(int)iRespSeq,(String)strRespMsgId,(int)iRespResult);
 
 				}
 
-				if (cd.STAT == 0) // Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				if (cd.STAT == 0) // ËµÃ÷ÓÐÏûÏ¢ÉÏÀ´ÁË
 
 				{
 
 					cd.STAT = -1;
 
-					System.out.println("ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...");
+					logger.debug("ÓÐÏûÏ¢ÉÏÀ´ÁË...");
 
 					/////////////////////////////
 
 					// moPoolManger.process1(cd);
 
-					/////////////////////// ï¿½ï¿½ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì³ï¿½ date:2008-11-26 16:09
+					/////////////////////// ½øÐÐÖØ¹¹£¬¼ÓÈëÏß³Ì³Ø date:2008-11-26 16:09
 
-					String msg_id = IntByteConvertor.getLong(cd.msg_id, 0) + "";// MyTools.Bytes2HexString(cd.get_msg_id());
+					String msgId = IntByteConvertor.getLong(cd.msgId, 0) + "";// MyTools.Bytes2HexString(cd.getMsgId());
 
-					String str_ismgid = this.ISMGID;
+					String strIsmgid = this.ISMGID;
 
-					String str_spcode = cd.getSPCode();
+					String strSpcode = cd.getSPCode();
 
-					String str_cpn = cd.getCpn();
+					String strCpn = cd.getCpn();
 
-					int cpn_type = cd.getsrcType();// add 061121
+					int cpnType = cd.getsrcType();// add 061121
 
-					int i_len = cd.getLen();
+					int iLen = cd.getLen();
 
-					int i_fmt = cd.getFmt();
+					int iFmt = cd.getFmt();
 
-					int i_tp_udhi = cd.get_tp_udhi();
+					int iTpUdhi = cd.getTpUdhi();
 
-					String str_svc_type = cd.getServerType();
+					String strSvcType = cd.getServerType();
 
-					String link_id = cd.getLinkId();
+					String linkId = cd.getLinkId();
 
-					System.out.println("content:" + cd.getMessage());
+					logger.debug("content:" + cd.getMessage());
 
-					byte[] str_content = cd.getMessage();
+					byte[] strContent = cd.getMessage();
 
-					int i_report_flag = cd.getRegistered_delivery();
+					int iReportFlag = cd.getRegisteredDelivery();
 
-					System.out.println("i_report_flag:" + i_report_flag);
+					logger.debug("iReportFlag:" + iReportFlag);
 
-					System.out.println("........................");
+					logger.debug("strSpcode:" + strSpcode);
 
-					System.out.println("........................");
+					// myLogger.info(FormatSysTime.getCurrentTimeA() + " new
+					// msg--spcode:"
+					// + strSpcode +" cpn:" + strCpn.trim() + " linkId:" +
+					// linkId + "
+					// content:" + new String(strContent));
 
-					System.out.println("........................");
-
-					System.out.println("str_spcode:" + str_spcode);
-
-					System.out.println("........................");
-
-					System.out.println("........................");
-
-					System.out.println("........................");
-
-					// myLogger.info(FormatSysTime.getCurrentTimeA() + " new msg--spcode:"
-					// + str_spcode +" cpn:" + str_cpn.trim() + " linkId:" + link_id + "
-					// content:" + new String(str_content));
-
-					if (i_report_flag == 1)
+					if (iReportFlag == 1)
 
 					{
 
-						System.out.println("×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢....");
+						logger.debug("×´Ì¬±¨¸æÐÅÏ¢....");
 
-						String report_dest_cpn = cd.get_dest_cpn();
+						String reportDestCpn = cd.getDestCpn();
 
-						msg_id = IntByteConvertor.getLong(cd.msg_id2, 0) + "";// MyTools.Bytes2HexString(cd.get_msg_id());
+						msgId = IntByteConvertor.getLong(cd.msgId2, 0) + "";// MyTools.Bytes2HexString(cd.getMsgId());
 
-						String submit_time = cd.get_submit_time();
+						String submitTime = cd.getSubmitTime();
 
-						String done_time = cd.get_done_time();
+						String doneTime = cd.getDoneTime();
 
-						String stat2 = cd.get_stat();
+						String stat2 = cd.getStat();
 
-						System.out.println("stat2:" + stat2);
+						logger.debug("stat2:" + stat2);
 
-						// myLogger.info(FormatSysTime.getCurrentTimeA() + "report
-						// msg--spcode:" + str_spcode +" cpn:" + report_dest_cpn.trim() + "
-						// msgid:" + msg_id + " submit_time:" + submit_time +" done_time:" +
-						// done_time + " stat_dev:" + stat2);
-
-						int stat_dev = 0;
+						int statDev = 0;
 
 						if (stat2.equals("DELIVRD"))
 
-							stat_dev = 0;
+							statDev = 0;
 
 						else
 
-							stat_dev = -1;
+							statDev = -1;
 
 						try {
-							handle.receiveReport(this.ISMGID, msg_id, link_id, report_dest_cpn, str_spcode, str_cpn, submit_time,
-									done_time, stat_dev, stat2);
+							handle.receiveReport(this.ISMGID, msgId, linkId, reportDestCpn, strSpcode, strCpn,
+									submitTime, doneTime, statDev, stat2);
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							logger.error("", e);
 						}
 
-						// handle.receiveReport(this.ISMGID,msg_id,report_dest_cpn,str_spcode,str_cpn,submit_time,done_time,stat_dev);
+						// handle.receiveReport(this.ISMGID,msgId,reportDestCpn,strSpcode,strCpn,submitTime,doneTime,statDev);
 
 						continue;
 
 					}
 
-					cd.printAll(); // ï¿½ï¿½Ó¡moï¿½ï¿½Ï¢;
+					cd.printAll(); // ´òÓ¡moÏûÏ¢;
 
-					///////////////////////////////
-					///////////////////////////////
+					handle.setDeliverIsmgID(strIsmgid);
 
-					handle.setDeliver_ismgID(str_ismgid);
+					handle.setDeliverMsgID(msgId);
 
-					handle.setDeliver_msgID(msg_id);
+					handle.setDeliverSpCode(strSpcode);
 
-					handle.setDeliver_spCode(str_spcode);
+					handle.setDeliverServerID(strSvcType);
 
-					handle.setDeliver_serverID(str_svc_type);
+					handle.setDeliverFmt(iFmt);
 
-					handle.setDeliver_fmt(i_fmt);
+					handle.setDeliverSrcCpn(strCpn);
 
-					handle.setDeliver_srcCpn(str_cpn);
+					handle.setDeliverSrcCpnType(cpnType);
 
-					handle.setDeliver_srcCpnType(cpn_type);
+					handle.setDeliverContentLen(iLen);
 
-					handle.setDeliver_contentLen(i_len);
+					handle.setDeliverContent(strContent);
 
-					handle.setDeliver_content(str_content);
-
-					handle.setDeliver_linkId(link_id);
+					handle.setDeliverLinkId(linkId);
 
 					handle.receiveDeliver();
 
@@ -234,19 +214,9 @@ public class SMSRecive implements Runnable {
 				Thread.currentThread().sleep(100);
 			} catch (Exception e) {
 
-				Logger myLogger = Logger.getLogger("MsgSendLogger");
+				logger.error("SmsRecive ÖØÐÂÁ¬½Ó....", e);
 
-				Logger mySonLogger = Logger.getLogger("myLogger.mySonLogger");
-
-				// PropertyConfigurator.configure("log4j.properties");
-
-				myLogger.info(FormatSysTime.getCurrentTimeA() + " exception msg--Exception:" + e.toString());
-
-				System.out.println(e.toString());
-
-				System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½....");
-
-				p.cmpp_disconnect_from_ismg(con);
+				p.cmppDisconnectFromIsmg(con);
 
 				cmppcon.destroy();
 
@@ -260,7 +230,7 @@ public class SMSRecive implements Runnable {
 
 				}
 
-				cmppcon = CMPPSingleConnect.getInstance(); // ï¿½ï¿½ï¿½ï¿½
+				cmppcon = CMPPSingleConnect.getInstance(); // ÖØÁ¬
 
 				con = cmppcon.con;
 

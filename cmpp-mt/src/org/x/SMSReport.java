@@ -13,126 +13,137 @@ package org.x;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 import java.util.*;
+
+import org.apache.log4j.Logger;
+import org.common.util.ConnectionService;
+
+import com.xiangtone.util.DBForLocal;
+
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import com.xiangtone.sql.Mysqldb;
-import com.xiangtone.util.TimeTools;
-import tempreportlog.*;
 public class SMSReport {
-	String ismgid;
-	String msgid;
-	String destcpn;
-	String spcode;
-	String src_cpn;
-	String sub_time;
-	String done_time;
+	private static Logger logger = Logger.getLogger(SMSReport.class);
+	String ismgId;
+	String msgId;
+	String destCpn;
+	String spCode;
+	String srcCpn;
+	String subTime;
+	String doneTime;
 	String linkId;
-	Mysqldb mydb;
-	int stat_dev;
+	int statDev;
 	String statDetail;
-	
-	//FileWriter fw = null;
-	//StringBuffer sb;
-	public SMSReport(){
-		//String file_name = "";
-		//file_name = TimeTools.get_month();//取锟斤拷系统锟斤拷锟斤拷时锟斤拷锟斤拷锟斤拷锟斤拷为锟斤拷志锟斤拷锟侥硷拷锟斤拷
-		mydb = new Mysqldb();
-		/*
-		try{
-			
-			//fw = new FileWriter("/home/smsapp/smsapp/CMPP/log/" + file_name+".txt",true);
-			//sb = new StringBuffer();
-		}catch(IOException e){
-			System.out.println(e.toString());
-		}
-		*/
-		
-	}
-	public void insertReportLog(){
-		
-		String str_sql = "insert into sms_reportlog(id,ismgid,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','" + ismgid + "','" + msgid + "','" + linkId + "','" + spcode + "','" + destcpn + "','" + src_cpn + "','" + sub_time + "','" + done_time + "','" + stat_dev + "','" + statDetail + "')"; 
-		String tempstr_sql = "insert into sms_tempreportlog(id,ismgid,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','" + ismgid + "','" + msgid + "','" + linkId + "','" + spcode + "','" + destcpn + "','" + src_cpn + "','" + sub_time + "','" + done_time + "','" + stat_dev + "','" + statDetail + "')"; 
-		String companystr_sql = "insert into companysms_reportlog(id,ismgid,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','" + ismgid + "','" + msgid + "','" + linkId + "','" + spcode + "','" + destcpn + "','" + src_cpn + "','" + sub_time + "','" + done_time + "','" + stat_dev + "','" + statDetail + "')"; 
 
-
-		System.out.println(str_sql);
-		//System.out.println(tempstr_sql);
-		
+	// FileWriter fw = null;
+	// StringBuffer sb;
+	public SMSReport() {
+		// String file_name = "";
+		// file_name = TimeTools.get_month();//取得系统当月时间用于作为日志的文件。
 		/*
-		sb.append("ismg:" + ismgid + ".");
-		sb.append("msgid:" + msgid + ".");
-		sb.append("destcpn:" + destcpn + ".");
-		sb.append("spcode:" + spcode + ".");
-		sb.append("srcpn:" + src_cpn + ".");
-		sb.append("subtime:" + sub_time + ".");
-		sb.append("donetime:" + done_time + ".");
-		sb.append("stat:" + stat_dev + ".");
-		*/
-		try{
-			
-			mydb.execUpdate(str_sql);
-			System.out.println("start to insert temprept");
-			mydb.execUpdate(tempstr_sql);
-			mydb.execUpdate(companystr_sql);
-			//fw.write(sb.toString());tempstr_sql
-			//fw.flush();
-			//fw.close();
-			mydb.close();
-			//ReportHandle tempReportLog = new ReportHandle();
-			//tempReportLog.logReport(str_sql);
-		}catch(Exception e){
-			System.out.println(e.toString());
-			try{
-				mydb.close();
-			}catch(Exception e1){
-				}
-			
+		 * try{
+		 * 
+		 * //fw = new FileWriter("/home/smsapp/smsapp/CMPP/log/" +
+		 * file_name+".txt",true); //sb = new StringBuffer(); }catch(IOException
+		 * e){ System.out.println(e.toString()); }
+		 */
+	}
+
+	public void insertReportLog() {
+		DBForLocal db=new DBForLocal();
+		String strSql = "insert into sms_reportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
+				+ ismgId + "','" + msgId + "','" + linkId + "','" + spCode + "','" + destCpn + "','" + srcCpn + "','"
+				+ subTime + "','" + doneTime + "','" + statDev + "','" + statDetail + "')";
+		String tempstrSql = "insert into sms_tempreportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
+				+ ismgId + "','" + msgId + "','" + linkId + "','" + spCode + "','" + destCpn + "','" + srcCpn + "','"
+				+ subTime + "','" + doneTime + "','" + statDev + "','" + statDetail + "')";
+		String companystrSql = "insert into companysms_reportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
+				+ ismgId + "','" + msgId + "','" + linkId + "','" + spCode + "','" + destCpn + "','" + srcCpn + "','"
+				+ subTime + "','" + doneTime + "','" + statDev + "','" + statDetail + "')";
+
+		/*
+		 * sb.append("ismg:" + ismgId + "."); sb.append("msgid:" + msgid + ".");
+		 * sb.append("destcpn:" + destcpn + "."); sb.append("spcode:" + spcode +
+		 * "."); sb.append("srcpn:" + src_cpn + "."); sb.append("subtime:" +
+		 * sub_time + "."); sb.append("donetime:" + done_time + ".");
+		 * sb.append("stat:" + stat_dev + ".");
+		 */
+		try {
+			logger.debug(strSql);
+			db.executeUpdate(strSql);
+			logger.debug(tempstrSql);
+			db.executeUpdate(tempstrSql);
+			logger.debug(companystrSql);
+			db.executeUpdate(companystrSql);
+			// fw.write(sb.toString());tempstr_sql
+			// fw.flush();
+			// fw.close();
+			// ReportHandle tempReportLog = new ReportHandle();
+			// tempReportLog.logReport(str_sql);
+		} catch (Exception e) {
+			logger.error("insertReportLog", e);
+		} finally {
+			db.close();
 		}
-		
+
 	}
-	public void setReport_ismgID(String _ismgid){
-		this.ismgid = _ismgid;	
+
+	public void setIsmgId(String ismgId) {
+		this.ismgId = ismgId;
 	}
-	public void setReport_msgID(String _smgid){
-		this.msgid = _smgid;
+
+	public void setMsgId(String msgId) {
+		this.msgId = msgId;
 	}
-	public void setReport_destCpn(String _destcpn){
-		this.destcpn = _destcpn;
+
+	public void setDestCpn(String destCpn) {
+		this.destCpn = destCpn;
 	}
-	public void setReport_spCode(String _spcode){
-		this.spcode = _spcode;
+
+	public void setSpCode(String spCode) {
+		this.spCode = spCode;
 	}
-	public void setReport_srcCpn(String _strcpn){
-		this.src_cpn = _strcpn;
+
+	public void setSrcCpn(String srcCpn) {
+		this.srcCpn = srcCpn;
 	}
-	public void setReport_submitTime(String _subtime){
-		this.sub_time = _subtime;
+
+	public void setSubTime(String subTime) {
+		this.subTime = subTime;
 	}
-	public void setReport_doneTime(String _donetime){
-		this.done_time = _donetime;
+
+	public void setDoneTime(String doneTime) {
+		this.doneTime = doneTime;
 	}
-	public void setReport_stat(int _statdev){
-		this.stat_dev = _statdev;
+
+	public void setLinkId(String linkId) {
+		this.linkId = linkId;
 	}
-	public void setReport_linkId(String linkId){
-		this.linkId = linkId;	
+
+	public void setStatDev(int statDev) {
+		this.statDev = statDev;
 	}
-	public void setReport_msg(String reportMsg){
+
+	public void setStatDetail(String statDetail) {
+		this.statDetail = statDetail;
+	}
+
+	public void setReportMsg(String reportMsg) {
 		this.statDetail = reportMsg;
 	}
 	/*
-	str_cpn = str_cpn.substring(2,13);
-	 			smsreport.setReport_ismgID(_ismgID);
-    		smsreport.setReport_msgID(msg_id.trim());
-    		smsreport.setReport_destCpn(dest_cpn);
-    		smsreport.setReport_spCode(str_spcode);
-    		smsreport.setReport_srcCpn(str_cpn);
-    		smsreport.setReport_submitTime(submit_time);
-    		smsreport.setReport_doneTime(done_time);
-    		smsreport.setReport_stat(stat_dev);
-    		smsreport.saveReportLog();
-    		smsreport.insertReportLog();
-	*/
-	
-	
+	 * str_cpn = str_cpn.substring(2,13); smsreport.setReport_ismgId(_ismgId);
+	 * smsreport.setReport_msgID(msg_id.trim());
+	 * smsreport.setReport_destCpn(dest_cpn);
+	 * smsreport.setReport_spCode(str_spcode);
+	 * smsreport.setReport_srcCpn(str_cpn);
+	 * smsreport.setReport_submitTime(submit_time);
+	 * smsreport.setReport_doneTime(done_time);
+	 * smsreport.setReport_stat(stat_dev); smsreport.saveReportLog();
+	 * smsreport.insertReportLog();
+	 */
+
 }

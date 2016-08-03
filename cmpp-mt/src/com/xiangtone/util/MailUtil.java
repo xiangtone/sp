@@ -12,8 +12,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
-public class MailUtil {
+import org.apache.log4j.Logger;
 
+import com.xiangtone.sms.api.SmSubmitResult;
+
+public class MailUtil {
+	private static Logger logger = Logger.getLogger(MailUtil.class);
 	
 		/**
 		 * @param fromTitle
@@ -29,7 +33,7 @@ public class MailUtil {
 			try {
 				ConfigManager configManager=ConfigManager.getInstance();
 				// 发件人使用发邮件的电子信箱服务器
-				String host = configManager.getConfigData("MAILHOST");
+				String host = configManager.getConfigData("mail_host");
 
 				// 创建 properties ，里面包含了发送邮件服务器的地址。
 				Properties props = new Properties();
@@ -39,7 +43,7 @@ public class MailUtil {
 				props.put("mail.smtp.auth", "true");
 				props.put("mail.smtp.localhost", "localhost");
 				// 校验发信人权限
-				MyAuthenticator myauth = new MyAuthenticator(configManager.getConfigData("SENDMAIL"), configManager.getConfigData("MAILPASS"));
+				MyAuthenticator myauth = new MyAuthenticator(configManager.getConfigData("send_mail"), configManager.getConfigData("mail_pass"));
 				// 创建 session
 				Session session = Session.getDefaultInstance(props, myauth);
 				// session.setDebug(true);//打开调试
@@ -60,15 +64,14 @@ public class MailUtil {
 				// 发送邮件
 				Transport.send(message);
 			} catch (Exception ex) {
-				ex.printStackTrace();
-				System.out.println("邮件发送失败");
+				logger.error("Failed to send mail",ex);
 			}
 		}
 
 		public static void main(String[] args) {
 			ConfigManager configManager=ConfigManager.getInstance();
 			StringBuffer url = new StringBuffer(configManager.getConfigData("ACTIVATION_URL") + "confrimAccount.action");
-			String sendMail=configManager.getConfigData("SENDMAIL");
+			String sendMail=configManager.getConfigData("send_mail");
 			try {
 				send("test", sendMail, "429379083@qq.com,Shirp@bjxiangtone.com", "test2");
 			} catch (Exception e) {

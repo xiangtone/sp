@@ -16,15 +16,18 @@
 			<version>1.4.7</version>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.29</version>
+			<groupId>org.xtone.common</groupId>
+			<artifactId>xtone-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${final.name}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
+			<resource>
+				<directory>${runtime.env}/</directory>
+			</resource>
 			<resource>
 				<directory>src</directory>
 				<excludes>
@@ -35,6 +38,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<target>1.6</target>
 					<source>1.6</source>
@@ -56,7 +60,7 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
-										<Main-Class>org.x.tlsmsmt_public</Main-Class>
+										<Main-Class>org.x.TlsmsmtPublic</Main-Class>
 									</manifestEntries>
 								</transformer>
 							</transformers>
@@ -96,7 +100,7 @@
 			<!-- Enabling the use of FTP -->
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
+				<artifactId>wagon-ftp</artifactId>
 				<version>1.0-beta-6</version>
 			</extension>
 		</extensions>
@@ -107,12 +111,28 @@
 			<properties>
 				<runtime.env>packageConfig\vgame</runtime.env>
 				<final.name>cmpp-mt</final.name>
-				<ftp.server.id>cmppServer</ftp.server.id>
-				<ftp.to.url>sftp://121.40.125.15:12980/home/smsdevp/newApp/mt</ftp.to.url>
+				<ftp.server.id>HYServer</ftp.server.id>
+				<ftp.to.url>ftp://121.40.137.243/tomcat_9010/swap_dir/</ftp.to.url>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+		</profile>
+		<profile>
+			<id>alphaLocal</id>
+			<properties>
+				<runtime.env>packageConfig\cy</runtime.env>
+				<final.name>cy-wechat-token</final.name>
+				<ftp.server.id>alphaFmSz01</ftp.server.id>
+				<ftp.to.url>ftp://alphaZ.test:29281/server/java-app/cy-wechat-token/swap/</ftp.to.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<runtime.env>packageConfig\test</runtime.env>
+				<final.name>cmpp-mt-test</final.name>
+			</properties>
 		</profile>
 	</profiles>
 </project>

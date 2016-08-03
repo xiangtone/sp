@@ -2,7 +2,10 @@ package org.x;
 
 import java.sql.ResultSet;
 
-import com.xiangtone.sql.Mysqldb;
+import org.apache.log4j.Logger;
+
+import com.xiangtone.util.DBForLocal;
+import com.xiangtone.util.DBForLog;
 
 /**
  * A class respresenting a set of packet and byte couters. It is bservable to
@@ -13,25 +16,23 @@ public class SMSMO {
 	 * Packet counters;
 	 * 
 	 */
-	protected String cpn;
+	private static Logger logger = Logger.getLogger(SMSMO.class);
+	protected String cpn;// ÓÃ»§ÊÖ»úºÅ
 	protected int cpnType;
-	protected String spCode; // ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
-	protected String spCode_first;
-	protected String svcType; // Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	protected String content; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	protected String serverName;
-	protected String serverID; // ï¿½ï¿½ï¿½ï¿½id
-	protected String serverAction = ""; // contentï¿½Ö½ï¿½1 ,Òµï¿½ï¿½Ö¸ï¿½ï¿½
-	protected String deliverTime; // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
-	protected String ismgID; // Ê¡ï¿½ï¿½ï¿½Ø±ï¿½Ö¾(01ï¿½ï¿½ï¿½ï¿½06ï¿½ï¿½ï¿½ï¿½08ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½15É½ï¿½ï¿½19ï¿½ã¶«
+	protected String spCode; // ÌØ±ð·þÎñºÅ(³¤ºÅ)
+	protected String spCodeFirst;// ÌØ·þÎñºÅ
+	protected String svcType; // ÒµÎñÀàÐÍ
+	protected String content; // ¶ÌÐÅÄÚÈÝ
+	protected String serverName;// content·Ö½â0 ,ÒµÎñ´úºÅ
+	protected String serverID; // ·þÎñid
+	protected String serverAction = ""; // content·Ö½â1 ,ÒµÎñÖ¸Áî
+	protected String deliverTime; // ½ÓÊÕÊ±¼ä
+	protected String ismgID; // Ê¡Íø¹Ø±êÖ¾(01±±¾©06ÁÉÄþ08ºÚÁú½­15É½¶«19¹ã¶«
 	protected int vcpID;
 	protected int len;
-	protected int tp_udhi = 0;
+	protected int tpUdhi = 0;
 	protected int fmt = 0;
 	protected String msgId = "";
-	public Mysqldb db;
-	private String strSql = "";
-	private ResultSet rs = null;
 	protected String corpID;
 	protected String linkID;
 
@@ -39,120 +40,120 @@ public class SMSMO {
 	 * method of set and get
 	 *
 	 */
-	public String getMO_cpn() {
+	public String getMOCpn() {
 		return cpn;
 	}
 
-	public int getMO_cpnType() {
+	public int getMOCpnType() {
 		return cpnType;
 	}
 
-	public String getMO_spCode() {
+	public String getMOSpCode() {
 		return spCode;
 	}
 
-	public String getMO_svcType() {
+	public String getMOSvcType() {
 		return svcType;
 	}
 
-	public String getMO_content() {
+	public String getMOContent() {
 		return content;
 	}
 
-	public String getMO_serverName() {
+	public String getMOServerName() {
 		return serverName;
 	}
 
-	public String getMO_serverID() {
+	public String getMOServerID() {
 		return serverID;
 	}
 
-	public String getMO_serverAction() {
+	public String getMOServerAction() {
 		return serverAction;
 	}
 
-	public String getMO_deliverTime() {
+	public String getMODeliverTime() {
 		return deliverTime;
 	}
 
-	public String getMO_ismgID() {
+	public String getMOIsmgID() {
 		return ismgID;
 	}
 
-	public int getMO_vcpID() {
+	public int getMOVcpID() {
 		return vcpID;
 	}
 
-	public String getMO_corpID() {
+	public String getMOCorpID() {
 		return corpID;
 	}
 
-	public String getMO_linkID() {
+	public String getMOLinkID() {
 		return linkID;
 	}
 
-	public String getMO_msgId() {
+	public String getMOMsgId() {
 		return msgId;
 	}
 
-	public void setMO_cpn(String cpn) {
+	public void setMOCpn(String cpn) {
 		this.cpn = cpn;
 	}
 
-	public void setMo_cpntype(int _cpntype) {
-		this.cpnType = _cpntype;
+	public void setMoCpnType(int cpntype) {
+		this.cpnType = cpntype;
 	}
 
-	public void setMO_spCode(String spcode) {
+	public void setMOSpCode(String spcode) {
 		this.spCode = spcode;
 	}
 
-	public void setMO_spCode_first(String spCode_first) {
-		this.spCode_first = spCode_first;
+	public void setMOSpCodeFirst(String spCodeFirst) {
+		this.spCodeFirst = spCodeFirst;
 	}
 
-	public void setMO_svcType(String svcType) {
+	public void setMOSvcType(String svcType) {
 		this.svcType = svcType;
 	}
 
-	public void setMO_content(String content) {
+	public void setMOContent(String content) {
 		this.content = content;
 	}
 
-	public void setMO_serverName(String serverName) {
+	public void setMOServerName(String serverName) {
 		this.serverName = serverName;
 	}
 
-	public void setMO_serverID(String serverID) {
+	public void setMOServerID(String serverID) {
 		this.serverID = serverID;
 	}
 
-	public void setMO_serverAction(String serverAction) {
+	public void setMOServerAction(String serverAction) {
 		this.serverAction = serverAction;
 	}
 
-	public void setMO_deliverTime(String deliverTime) {
+	public void setMODeliverTime(String deliverTime) {
 		this.deliverTime = deliverTime;
 	}
 
-	public void setMO_ismgID(String ismgID) {
+	public void setMOIsmgID(String ismgID) {
 		this.ismgID = ismgID;
 	}
 
-	public void setMO_vcpID(int vcpID) {
+	public void setMOVcpID(int vcpID) {
 		this.vcpID = vcpID;
 	}
 
-	public void setMO_corpID(String _corpID) {
-		this.corpID = _corpID;
+	public void setMOCorpID(String corpID) {
+		this.corpID = corpID;
 	}
 
-	public void setMO_linkID(String linkid) {
+	public void setMOLinkID(String linkid) {
 		this.linkID = linkid;
 	}
 
 	///////////// add setMsgId
-	public void setMO_msgId(String msgId) {
+	public void setMOMsgId(String msgId) {
 		this.msgId = msgId;
 	}
 
@@ -161,19 +162,20 @@ public class SMSMO {
 	 *
 	 */
 	public SMSMO() {
-		db = new Mysqldb();
 	}
 
 	/**
 	 * the first methods of class insert mo log
 	 */
 	public void insertMOLog() {
+		String strSql = null;
+		DBForLocal db=new DBForLocal();
 		try {
 			strSql = "insert into sms_molog set ";
 			strSql += " vcpid=" + vcpID;
 			strSql += ",ismgid='" + ismgID + "'";
 			strSql += ",corpid='" + corpID + "'";
-			strSql += ",spcode_first='" + spCode_first + "'";
+			strSql += ",spcode_first='" + spCodeFirst + "'";
 			strSql += ",content='" + content + "'";
 			strSql += ",spcode='" + spCode + "'";
 			strSql += ",msgid='" + msgId + "'";
@@ -183,11 +185,13 @@ public class SMSMO {
 			strSql += ",serveraction='" + serverAction + "'";
 			strSql += ",delivertime='" + deliverTime + "'";
 			strSql += ",linkid='" + linkID + "'";
-			db.execUpdate(strSql);
+			logger.debug(strSql);
+			db.executeUpdate(strSql);
 		} catch (Exception e) {
-			System.out.println(e.toString());
-			System.out.println(strSql);
+			logger.error("insertMOLog", e);
 			e.printStackTrace();
+		} finally {
+			db.close();
 		}
 	}
 
@@ -196,12 +200,14 @@ public class SMSMO {
 	*
 	*/
 	public void insertErrorMOLog() {
+		String strSql = null;
+		DBForLocal db=new DBForLocal();
 		try {
 			strSql = "insert into sms_molog_error set ";
 			strSql += " vcpid=" + vcpID;
 			strSql += ",ismgid='" + ismgID + "'";
 			strSql += ",corpid='" + corpID + "'";
-			strSql += ",spcode_first='" + spCode_first + "'";
+			strSql += ",spcode_first='" + spCodeFirst + "'";
 			strSql += ",content='" + content + "'";
 			strSql += ",spcode='" + spCode + "'";
 			strSql += ",cpn='" + cpn + "'";
@@ -209,61 +215,82 @@ public class SMSMO {
 			strSql += ",servername='" + serverName + "'";
 			strSql += ",serveraction='" + serverAction + "'";
 			strSql += ",delivertime='" + deliverTime + "'";
-			db.execUpdate(strSql);
+			logger.debug(strSql);
+			db.executeUpdate(strSql);
 		} catch (Exception e) {
-			System.out.println(e.toString());
-			System.out.println(strSql);
+			logger.error("insertErrorMOLog", e);
 			e.printStackTrace();
+		} finally {
+			db.close();
 		}
 	}
 
-	public String getMO_corpID(String cpn) {
+	public String getMOCorpID(String cpn) {
+		String strSql = null;
+		DBForLog db=new DBForLog();
 		try {
+			ResultSet rs = null;
 			strSql = "select corp_id from sms_user where cpn='" + cpn + "'";
-			rs = db.execQuery(strSql);
+			logger.debug(strSql);
+			db.executeQuery(strSql);
+			rs = db.getRs();
 			if (rs.next()) {
 				String corp_id = rs.getString("corp_id");
 				return corp_id;
 			}
 		} catch (Exception e) {
+			logger.error("getMOCorpID", e);
 			e.printStackTrace();
+		} finally {
+			db.close();
 		}
 		return "00";
 	}
 
 	/**
-	 * È¡ï¿½ï¿½gameid
+	 * È¡µ½gameid
 	 *
 	 */
 	public String getGameID(int vcpid, String servername) {
+		String strSql = null;
+		DBForLog db=new DBForLog();
 		try {
+			ResultSet rs = null;
 			strSql = "select gameid from sms_gamelist where vcpid=" + vcpid + " and gamename='" + servername + "'";
-			rs = db.execQuery(strSql);
+			logger.debug(strSql);
+			db.executeQuery(strSql);
+			rs = db.getRs();
 			if (rs.next()) {
 				String gameid = rs.getString("gameid");
 				return gameid;
 			}
 		} catch (Exception e) {
+			logger.error("getGameID", e);
 			e.printStackTrace();
+		} finally {
+			db.close();
 		}
 		return "";
 	}
 
-	/**
-	 *
-	 *
-	 */
-
 	public String getImsgID(String scpn) {
+		String strSql = null;
+		DBForLog db=new DBForLog();
 		try {
+			ResultSet rs = null;
 			strSql = " select ismgid from sms_user where cpn='" + scpn + "'";
-			rs = db.execQuery(strSql);
+			logger.debug(strSql);
+			db.executeQuery(strSql);
+			rs = db.getRs();
 			if (rs.next()) {
 				String ismgid = rs.getString("ismgid");
 				return ismgid;
 			}
 		} catch (Exception e) {
+			logger.error("getImsgID", e);
 			e.printStackTrace();
+		} finally {
+			db.close();
 		}
 		return "01";
 	}

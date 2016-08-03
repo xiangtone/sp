@@ -6,24 +6,29 @@ package org.x;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 
-import com.xiangtone.util.ConfigManager;
-import com.xiangtone.util.MailUtil;
-
 /**
  * @author Administrator
  *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-import comsd.commerceware.cmpp.CMPP;
-import comsd.commerceware.cmpp.cmppe_login;
-import comsd.commerceware.cmpp.conn_desc;
+import comsd.commerceware.cmpp.*;
+
+import java.lang.*;
+
+import org.apache.log4j.Logger;
+
+import com.xiangtone.util.ConfigManager;
+import com.xiangtone.util.MailUtil;
+
+import java.io.*;
 
 public class CMPPSingleConnect {
 	private static CMPPSingleConnect cmppcon = null;
+	private static Logger logger = Logger.getLogger(CMPPSingleConnect.class);
 	private CMPP p = new CMPP();
-	public static conn_desc con = new conn_desc();
-	private cmppe_login cl = new cmppe_login();
+	public static ConnDesc con = new ConnDesc();
+	private CmppeLogin cl = new CmppeLogin();
 	public static int count=0;
   	private int maxConnect=Integer.parseInt(ConfigManager.getInstance().getConfigData("max_connect"));
 
@@ -40,27 +45,28 @@ public class CMPPSingleConnect {
 
 	private void connectIsmg() {
 		try {
-			System.out.println("connectIsmg:" + SMSIsmgInfo.qw_ismg_ip);
-			p.cmpp_connect_to_ismg(SMSIsmgInfo.qw_ismg_ip, SMSIsmgInfo.qw_ismg_port, con);
-			cl.set_icpid(SMSIsmgInfo.qw_icpID);
-			cl.set_auth(SMSIsmgInfo.qw_icpShareKey);
-			cl.set_version((byte) 0x30);
-			cl.set_timestamp(1111101020);
-			p.cmpp_login(con, cl);
-			count=0;
-  		}catch(Exception e){
-  			count++;
+			logger.debug("login ismg:" + SMSIsmgInfo.qwIsmgIp);
+			p.cmppConnectToIsmg(SMSIsmgInfo.qwIsmgIp,SMSIsmgInfo.qwIsmgPort,con);
+//			logger.debug("鐧婚檰娴嬭瘯缃戝叧:127.0.0.1");
+//			p.cmppConnectToIsmg("127.0.0.1", 7891, con);// test
+			cl.setIcpid(SMSIsmgInfo.qwIcpID);
+			cl.setAuth(SMSIsmgInfo.qwIcpShareKey);
+			cl.setVersion((byte) 0x30);
+			cl.setTimestamp(1111101020);
+			p.cmppLogin(con, cl);
+		} catch (Exception e) {
+			count++;
   			if(count>=maxConnect){
   				count=0;
-  				MailUtil.send("短信网关连接异常", ConfigManager.getInstance().getConfigData("SENDMAIL"), ConfigManager.getInstance().getConfigData("MAILTO"), "短信网关尝试重连次数超过"+maxConnect+"次！");
+  				MailUtil.send("Ismg connect error", ConfigManager.getInstance().getConfigData("send_mail"), ConfigManager.getInstance().getConfigData("mail_to"), "Failed to connect more than "+maxConnect);
   			}
-			System.out.println("err:login ismg failed! --CMPP_receive.java");
-			System.out.println(e.toString());
+			logger.error("login ismg failed!", e);
+			e.printStackTrace();
 		}
 	}
 
 	synchronized public static void destroy() {
-		System.out.println("destory connect instance.......");
+		logger.debug("destory connect instance.......");
 		cmppcon = null;
 	}
 }

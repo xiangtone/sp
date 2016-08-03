@@ -1,46 +1,38 @@
 package org.x;
+
 /**
- * <p>Title: </p>
- * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2003</p>
- * <p>Company: Disney.com</p>
+ * <p>
+ * Title:
+ * </p>
+ * <p>
+ * Description:
+ * </p>
+ * <p>
+ * Copyright: Copyright (c) 2003
+ * </p>
+ * <p>
+ * Company: Disney.com
+ * </p>
+ * 
  * @author Gavin Wang
  * @version 0.5
  */
-public class SMSFactory 
-{
+public class SMSFactory {
 	/**
 	*
 	*
 	*/
-    public CMPPSend createSMS (String type,SMSMT mt)
-    {
-    	/*
-        if(type.equals("06")) {
-            return new CMPPSend_ln(mt); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        } else if(type.equals("08")) { 
-            return new CMPPSend_hl(mt);    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        } else if(type.equals("10")) {
-            return new CMPPSend_bj(mt);    //ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
-        } else if(type.equals("01")) {
-            return new CMPPSend_bj(mt);   //ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
-        } else if(type.equals("15")) {
-            return new CMPPSend_sd(mt);  //É½ï¿½ï¿½ï¿½Æ¶ï¿½
-        } else if(type.equals("19")) {
-        	return new CMPPSend_gd(mt);  //ï¿½ã¶«ï¿½Æ¶ï¿½
-        } else { 
-            return new CMPPSend_bj(mt);	
-        }
-        */
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-        System.out.println("content is:" + mt.sendContent);
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-        System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-    	return new CMPPSend_sd(mt);
-    }
+	public CMPPSend createSMS(String type, SMSMT mt) {
+		/*
+		 * if(type.equals("06")) { return new CMPPSend_ln(mt); //ÁÉÄþÉòÑô } else
+		 * if(type.equals("08")) { return new CMPPSend_hl(mt); //ºÚÁú½­ } else
+		 * if(type.equals("10")) { return new CMPPSend_bj(mt); //½­ËÕÒÆ¶¯ } else
+		 * if(type.equals("01")) { return new CMPPSend_bj(mt); //±±¾©ÒÆ¶¯ } else
+		 * if(type.equals("15")) { return new CMPPSend_sd(mt); //É½¶«ÒÆ¶¯ } else
+		 * if(type.equals("19")) { return new CMPPSend_gd(mt); //¹ã¶«ÒÆ¶¯ } else {
+		 * return new CMPPSend_bj(mt); }
+		 */
+		System.out.println("content is:" + mt.sendContent);
+		return new CMPPSendSd(mt);
+	}
 }

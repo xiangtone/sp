@@ -1,0 +1,4 @@
+2016-08-03 15:18:11,500 [main] DEBUG [org.common.util.ConfigManager] - load config from loader.getResourceAsStream:config.properties
+2016-08-03 15:18:59,290 [main] DEBUG [org.common.util.ConfigManager] - load config from loader.getResourceAsStream:config.properties
+2016-08-03 15:19:21,690 [main] DEBUG [com.xiangtone.report.SReport] - System.currentTimeMillis():1470208761689
+2016-08-03 15:19:21,702 [main] DEBUG [org.common.util.ConfigManager] - load config from loader.getResourceAsStream:config.properties

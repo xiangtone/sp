@@ -13,9 +13,6 @@ import com.xiangtone.sql.Mysqldb;
  *
  */
 public class SMSUserSchedule {
-	/**
-	*
-	*/
 	Mysqldb db;
 	ResultSet rs = null;
 	String strSql;
