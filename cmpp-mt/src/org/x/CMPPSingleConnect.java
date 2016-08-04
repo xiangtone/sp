@@ -31,7 +31,8 @@ public class CMPPSingleConnect {
 	public static ConnDesc con = new ConnDesc();
 	private CmppeLogin cl = new CmppeLogin();
 	public static int count=0;
-  	private int maxConnect=Integer.parseInt(ConfigManager.getInstance().getConfigData("max_connect"));
+	private ConfigManager configManager = ConfigManager.getInstance();
+  	private int maxConnect=Integer.parseInt(configManager.getConfigData("max_connect"));
 
 	private CMPPSingleConnect() {
 		connectIsmg();
