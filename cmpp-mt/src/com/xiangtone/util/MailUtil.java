@@ -43,7 +43,7 @@ public class MailUtil {
 				props.put("mail.smtp.auth", "true");
 				props.put("mail.smtp.localhost", "localhost");
 				// 校验发信人权限
-				MyAuthenticator myauth = new MyAuthenticator(configManager.getConfigData("send_mail"), configManager.getConfigData("mail_pass"));
+				MyAuthenticator myauth = new MyAuthenticator(configManager.getConfigData("mail_from"), configManager.getConfigData("mail_pass"));
 				// 创建 session
 				Session session = Session.getDefaultInstance(props, myauth);
 				// session.setDebug(true);//打开调试

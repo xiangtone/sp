@@ -15,6 +15,7 @@ package org.x;
 import comsd.commerceware.cmpp.*;
 
 import java.lang.*;
+import java.net.InetAddress;
 
 import org.apache.log4j.Logger;
 
@@ -55,13 +56,25 @@ public class CMPPSingleConnect {
 			cl.setTimestamp(1111101020);
 			p.cmppLogin(con, cl);
 		} catch (Exception e) {
-			count++;
-  			if(count>=maxConnect){
-  				count=0;
-  				MailUtil.send("Ismg connect error", ConfigManager.getInstance().getConfigData("send_mail"), ConfigManager.getInstance().getConfigData("mail_to"), "Failed to connect more than "+maxConnect);
-  			}
+			if (configManager.getConfigData("mail_io").equals("true")) {
+				count++;
+				if (count >= maxConnect) {
+					count = 0;
+					try {
+						MailUtil.send("GATEWAY ERROR:form " + InetAddress.getLocalHost().getHostAddress(),
+								configManager.getConfigData("mail_form"), configManager.getConfigData("mail_to"),
+								"Trying to connect to dateway more than " + maxConnect);
+						// MailUtil.send("短信网关连接异常",
+						// configManager().getConfigData("mail_form"),
+						// configManager().getConfigData("mail_to"),
+						// "短信网关尝试重连次数超过"+maxConnect+"次！");
+					} catch (Exception e1) {
+						logger.error("Mail send error", e1);
+					}
+
+				}
+			}
 			logger.error("login ismg failed!", e);
-			e.printStackTrace();
 		}
 	}
 

@@ -75,10 +75,8 @@ public class SMSReport {
 			logger.debug(strSql);
 			db.executeUpdate(strSql);
 			logger.debug(tempStrSql);
-			db.iniPreparedStatement(tempStrSql);
 			db.executeUpdate(tempStrSql);
 			logger.debug(companyStrSql);
-			db.iniPreparedStatement(companyStrSql);
 			db.executeUpdate(companyStrSql);
 			// fw.write(sb.toString());tempstr_sql
 			// fw.flush();
