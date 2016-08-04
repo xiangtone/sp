@@ -1,3 +1,17 @@
+<%@page import="com.system.sdk.server.SdkTroneServer"%>
+<%@page import="com.system.sdk.model.SdkTroneModel"%>
+<%@page import="com.system.sdk.server.SdkSpTroneServer"%>
+<%@page import="com.system.sdk.model.SdkSpTroneModel"%>
+<%@page import="com.system.sdk.server.SdkDataSummerServer"%>
+<%@page import="com.system.sdk.model.SdkDataSummerModel"%>
+<%@page import="com.system.sdk.server.SdkSpServer"%>
+<%@page import="com.system.sdk.model.SdkSpModel"%>
+<%@page import="com.system.sdk.server.SdkChannelServer"%>
+<%@page import="com.system.sdk.model.SdkChannelModel"%>
+<%@page import="com.system.sdk.server.SdkCpServer"%>
+<%@page import="com.system.sdk.model.SdkCpModel"%>
+<%@page import="com.system.sdk.server.SdkAppServer"%>
+<%@page import="com.system.sdk.model.SdkAppModel"%>
 <%@page import="com.system.server.UserServer"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.ConfigManager"%>
@@ -35,51 +49,46 @@
 
 	String startDate = StringUtil.getString(request.getParameter("startdate"), defaultStartDate);
 	String endDate = StringUtil.getString(request.getParameter("enddate"), defaultEndDate);
-
-	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 1);
-
-	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
-	int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone"), -1);
-	int troneId = StringUtil.getInteger(request.getParameter("trone"), -1);
-	int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order"), -1);
-	int provinceId = StringUtil.getInteger(request.getParameter("province"), -1);
-	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
-	int operatorId = StringUtil.getInteger(request.getParameter("operator"), -1);
-	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
-	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
-	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
+	int channelId=StringUtil.getInteger(request.getParameter("sdk_channel_id"), -1);
+	int appId=StringUtil.getInteger(request.getParameter("app_id"), -1);
+	int troneId=StringUtil.getInteger(request.getParameter("trone_id"), -1);
+	int spTroneId=StringUtil.getInteger(request.getParameter("sp_trone_id"), -1);
+	int showType=StringUtil.getInteger(request.getParameter("showType"), 1);
+	// 1:天  2:周  3：月  4：CP 5:APP 6:channel 7:sp_trone_id 8:trone_id 9:province_id
+	String[] titles = {"日期", "周数", "月份", "CP", "APP", "渠道", "SP业务", "通道", "省份"};
+	List<SdkCpModel>  cpList=new SdkCpServer().loadSdkCp();
+	List<SdkAppModel> appList=new SdkAppServer().loadSdkApp();
+	List<SdkChannelModel> channelList=new SdkChannelServer().loadSdkChannel();
+	List<SdkSpModel> channel=new SdkSpServer().loadSdkSp();
+	List<SdkSpTroneModel> spTroneList=new SdkSpTroneServer().loadSdkSpTrone();
+	List<SdkTroneModel> sdkTroneList=new SdkTroneServer().loadSdkTrone();
+	List<ProvinceModel> provinceList=new ProvinceServer().loadProvince();
+	List<SdkDataSummerModel> dataSummerList=new SdkDataSummerServer().loadSdkDataSummerModel(cpId,
+			channelId, appId, 
+			troneId, spTroneId, 
+			startDate, endDate, showType);
 
-	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
-	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
-
-	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"), -1);
-	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
-
-	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
-			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId, cpCommerceUserId,
-			sortType);
-
-	List<SpModel> spList = new SpServer().loadSp();
-	List<CpModel> cpList = new CpServer().loadCp();
-	List<TroneModel> troneList = new TroneServer().loadTroneList();
+	//List<SpModel> spList = new SpServer().loadSp();
+	//List<CpModel> cpList = new CpServer().loadCp();
+	//List<TroneModel> troneList = new TroneServer().loadTroneList();
 	//List<TroneOrderModel> troneOrderList = new TroneOrderServer().loadTroneOrderList();
 
-	List<TroneOrderModel> troneOrderList = new ArrayList();
+	//List<TroneOrderModel> troneOrderList = new ArrayList();
 
-	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
-	List<CityModel> cityList = new CityServer().loadCityList();
-	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
+	//List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
+	//List<CityModel> cityList = new CityServer().loadCityList();
+	//List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
 
-	List<MrReportModel> list = (List<MrReportModel>) map.get("list");
+	//List<MrReportModel> list = (List<MrReportModel>) map.get("list");
 
-	int dataRows = (Integer) map.get("datarows");
-	int showDataRows = (Integer) map.get("showdatarows");
-	double amount = (Double) map.get("amount");
-	double showAmount = (Double) map.get("showamount");
+	//int dataRows = (Integer) map.get("datarows");
+	//int showDataRows = (Integer) map.get("showdatarows");
+	//double amount = (Double) map.get("amount");
+	//double showAmount = (Double) map.get("showamount");
 
-	String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
-			"运营商", "数据类型", "第一业务线", "第二业务线"};
+	//String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
+	//		"运营商", "数据类型", "第一业务线", "第二业务线"};
 
 	out.clear();
 %>
@@ -180,169 +189,25 @@ function arrayReverse(arr) {
 	return arr;
 }
 
-
-
-	var spList = new Array();
-	<%for (SpModel spModel : spList) {%>
-		spList.push(new joSelOption(<%=spModel.getId()%>,1,'<%=spModel.getShortName()%>'));
-		<%}%>
-	
-	var cpList = new Array();
-	<%for (CpModel cpModel : cpList) {%>
-		cpList.push(new joSelOption(<%=cpModel.getId()%>,1,'<%=cpModel.getShortName()%>'));
-		<%}%>
-	
-	function onSpDataSelect(joData)
-	{
-		$("#sel_sp").val(joData.id);
-		troneChange();
-	}
-	
-	function onCpDataSelect(joData)
-	{
-		$("#sel_cp").val(joData.id);
-		troneOrderChange();
-	}
-
-	function joCity(id,provinceId,name)
-	{
-		var obj = {};
-		obj.id = id;
-		obj.provinceId = provinceId;
-		obj.name = name;
-		return obj;
-	}
-	
-	function joTrone(id,spId,troneName)
-	{
-		var obj = {};
-		obj.id = id;
-		obj.spId = spId;
-		obj.troneName = troneName;
-		return obj;
-	}
-	
-	function joTroneOrder(id,cpId,troneOrderName)
-	{
-		var obj = {};
-		obj.id = id;
-		obj.cpId = cpId;
-		obj.troneOrderName = troneOrderName;
-		return obj;
-	}
-
-	var cityList = new Array();
-	<%for (CityModel city : cityList) {%>
-	cityList.push(new joCity(<%=city.getId()%>,<%=city.getProvinceId()%>,'<%=city.getName()%>'));<%}%>
+$(function()
+		{
+			$("#startdate").val(<%=startDate%>);
+			$("#enddate").val(<%=endDate%>);
+			$("#sp_trone_id").val(<%=spTroneId%>);
+			$("#trone_id").val(<%=troneId%>);
+			$("#cp_id").val(<%=cpId%>);
+			$("#app_id").val(<%=appId%>);
+			$("#sdk_channel_id").val(<%=channelId%>);
+			$("#showType").val(<%=showType%>);
+			
 		
-	var troneList = new Array();
-	<%for (TroneModel trone : troneList) {%>
-	troneList.push(new joTrone(<%=trone.getId()%>,<%=trone.getSpId()%>,'<%=trone.getSpShortName() + "-" + trone.getTroneName()%>'));<%}%>
-	
-	var troneOrderList = new Array();
-	<%for (TroneOrderModel troneOrder : troneOrderList) {%>
-	troneOrderList.push(new joTroneOrder(<%=troneOrder.getId()%>,<%=troneOrder.getCpId()%>,'<%=troneOrder.getCpShortName() + "-" + troneOrder.getOrderTroneName()%>'));<%}%>
-	
-	var spTroneArray = new Array();
-	<%for (SpTroneModel spTroneModel : spTroneList) {%>
-	spTroneArray.push(new joBaseObject(<%=spTroneModel.getId()%>,<%=spTroneModel.getSpId()%>,'<%=spTroneModel.getSpTroneName()%>'));	
-		<%}%>
-	
-	$(function()
-	{
-		$("#sel_sort_type").val(<%=sortType%>);
-		
-		//SP的二级联动
-		$("#sel_sp").val(<%=spId%>);
-		$("#sel_sp").change(troneChange);
-		troneChange();
-		$("#sel_sp_trone").val(<%=spTroneId%>);
-		$("#sel_trone").val(<%=troneId%>);
-		
-		//CP的二级联动
-		$("#sel_cp").val(<%=cpId%>);	
-		$("#sel_cp").change(troneOrderChange);
-		troneOrderChange();
-		$("#sel_trone_order").val(<%=troneOrderId%>);
-		
-		//省份的二级联动
-		$("#sel_province").val(<%=provinceId%>);
-		$("#sel_province").change(provinceChange);
-		provinceChange();		
-		$("#sel_city").val(<%=cityId%>);
-		
-		$("#sel_operator").val(<%=operatorId%>);
-		$("#sel_data_type").val(<%=dataType%>);
-		$("#sel_commerce_user").val(<%=spCommerceUserId%>);
-		$("#sel_cp_commerce_user").val(<%=cpCommerceUserId%>);
-	});
-	
+		});
 
-	
-	var npSpTroneArray = new Array();
-	
-	<%for (SpTroneModel spTroneModel : spTroneList) {%>
-		npSpTroneArray.push(new joSelOption(<%=spTroneModel.getId()%>,<%=spTroneModel.getSpId()%>,'<%=spTroneModel.getSpTroneName()%>'));
-<%}%>
-	function npSpTroneChange(jodata) {
-		$("#sel_sp_trone").val(jodata.id);
-	}
-
-	function troneChange() {
-		var spId = $("#sel_sp").val();
-
-		$("#sel_sp_trone").empty();
-		$("#sel_sp_trone").append("<option value='-1'>全部</option>");
-		for (i = 0; i < spTroneArray.length; i++) {
-			if (spTroneArray[i].pid == spId || spId == "-1") {
-				$("#sel_sp_trone").append(
-						"<option value='" + spTroneArray[i].id + "'>"
-								+ spTroneArray[i].name + "</option>");
-			}
-		}
-
-		$("#sel_trone").empty();
-		$("#sel_trone").append("<option value='-1'>全部</option>");
-		for (i = 0; i < troneList.length; i++) {
-			if (troneList[i].spId == spId || spId == "-1") {
-				$("#sel_trone").append(
-						"<option value='" + troneList[i].id + "'>"
-								+ troneList[i].troneName + "</option>");
-			}
-		}
-	}
-
-	function troneOrderChange() {
-		var cpId = $("#sel_cp").val();
-		$("#sel_trone_order").empty();
-		$("#sel_trone_order").append("<option value='-1'>全部</option>");
-		for (i = 0; i < troneOrderList.length; i++) {
-			if (troneOrderList[i].cpId == cpId || cpId == "-1") {
-				$("#sel_trone_order").append(
-						"<option value='" + troneOrderList[i].id + "'>"
-								+ troneOrderList[i].troneOrderName
-								+ "</option>");
-			}
-		}
-	}
-
-	function provinceChange() {
-		var provinceId = $("#sel_province").val();
-		$("#sel_city").empty();
-		$("#sel_city").append("<option value='-1'>全部</option>");
-		for (i = 0; i < cityList.length; i++) {
-			if (cityList[i].provinceId == provinceId || provinceId == "-1") {
-				$("#sel_city").append(
-						"<option value='" + cityList[i].id + "'>"
-								+ cityList[i].name + "</option>");
-			}
-		}
-	}
 </script>
 <body>
 	<div class="main_content">
 		<div class="content">
-			<form action="mr1.jsp" method="get" style="margin-top: 10px">
+			<form action="sdkdata.jsp" method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
@@ -356,152 +221,92 @@ function arrayReverse(arr) {
 							onclick="WdatePicker({isShowClear:false,readOnly:true})"
 							style="width: 100px;">
 					</dd>
-					<dd class="dd01_me">SP</dd>
+					<dd class="dd01_me">SP业务</dd>
 					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" style="width: 110px;"
-							title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
+						<select name="sp_trone_id" id="sp_trone_id" style="width: 110px;"
+							title="选择SP业务" >
 							<option value="-1">全部</option>
 							<%
-								for (SpModel sp : spList) {
+								for (SdkSpTroneModel spTrone : spTroneList) {
 							%>
-							<option value="<%=sp.getId()%>"><%=sp.getShortName()%></option>
+							<option value="<%=spTrone.getSpTroneId()%>"><%=spTrone.getName()%></option>
 							<%
 								}
 							%>
 						</select>
-					</dd>
-					<dd class="dd01_me">SP业务</dd>
-					<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;"
-							onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
 					</dd>
 					<dd class="dd01_me">SP通道</dd>
 					<dd class="dd04_me">
-						<select name="trone" id="sel_trone" title="请选择通道"
-							style="width: 110px;"></select>
-					</dd>
-					<dd class="dd01_me">数据类型</dd>
-					<dd class="dd04_me">
-						<select name="data_type" id="sel_data_type" style="width: 100px;">
-							<option value="-1">全部</option>
-							<option value="0">实时</option>
-							<option value="1">隔天</option>
-							<option value="2">IVR</option>
-							<option value="3">第三方支付</option>
+						<select name="trone_id" id="trone_id" style="width: 110px;">
+						<option value="-1">全部</option>
+							<%
+								for (SdkTroneModel trone : sdkTroneList) {
+							%>
+							<option value="<%=trone.getTroneId()%>"><%=trone.getName()%></option>
+							<%
+								}
+							%>
 						</select>
-					</dd>
-					<br />
-					<br />
-					<br />
+					</dd><div style="clear: both;"><br /><div/>
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP"
-							style="width: 110px;"
-							onclick="namePicker(this,cpList,onCpDataSelect)">
-							<option value="-1">全部</option>
+						<select name="cp_id" id="cp_id" style="width: 110px;">
+						<option value="-1">全部</option>
 							<%
-								for (CpModel cp : cpList) {
+								for (SdkCpModel cpModel : cpList) {
 							%>
-							<option value="<%=cp.getId()%>"><%=cp.getShortName()%></option>
+							<option value="<%=cpModel.getCpId()%>"><%=cpModel.getName()+"-"+cpModel.getNickName()%></option>
 							<%
 								}
 							%>
 						</select>
 					</dd>
-					<!--  
-					<dd>
-						<dd class="dd01_me">业务</dd>
-						<dd class="dd04_me">
-						<select name="trone_order" id="sel_trone_order" title="请选择业务" style="width: 110px;"></select>
-					</dd>
-					-->
-					<!-- 暂时先隐藏 -->
-					<!--  
-					<dd>
-						<dd class="dd01_me">省份</dd>
-						<dd class="dd04_me">
-						<select name="province" id="sel_province" title="请选择省份">
-							<option value="-1">全部</option>
-							<%for (ProvinceModel province : provinceList) {%>
-							<option value="<%=province.getId()%>"><%=province.getName()%></option>	
-								<%}%>
-						</select>
-					</dd>
-					<dd>
-						<dd class="dd01_me">城市</dd>
-						<dd class="dd04_me">
-						<select name="city" id="sel_city" title="请选择城市">
-							
-						</select>
-					</dd>
-					-->
-					<dd class="dd01_me">运营商</dd>
+					<dd class="dd01_me">APP</dd>
 					<dd class="dd04_me">
-						<select name="operator" id="sel_operator" style="width: 100px;">
-							<option value="-1">全部</option>
-							<option value="3">移动</option>
-							<option value="1">联通</option>
-							<option value="2">电信</option>
-							<option value="5">第三方支付</option>
-						</select>
-					</dd>
-					<dd class="dd01_me">SP商务</dd>
-					<dd class="dd04_me">
-						<select name="commerce_user" id="sel_commerce_user"
-							style="width: 100px;">
-							<option value="-1">全部</option>
+						<select name="app_id" id="app_id" style="width: 110px;">
+						<option value="-1">全部</option>
 							<%
-								for (UserModel commerceUser : userList) {
+								for (SdkAppModel appModel : appList) {
 							%>
-							<option value="<%=commerceUser.getId()%>"><%=commerceUser.getNickName()%></option>
+							<option value="<%=appModel.getSdkAppId()%>"><%=appModel.getName()%></option>
 							<%
 								}
 							%>
 						</select>
 					</dd>
-					<dd class="dd01_me">CP商务</dd>
+					
+					<dd class="dd01_me">渠道</dd>
 					<dd class="dd04_me">
-						<select name="cp_commerce_user" id="sel_cp_commerce_user"
-							style="width: 100px;">
-							<option value="-1">全部</option>
-							<%
-								for (UserModel commerceUser : cpCommerceUserList) {
-							%>
-							<option value="<%=commerceUser.getId()%>"><%=commerceUser.getNickName()%></option>
-							<%
-								}
-							%>
-						</select>
-					</dd>
-					<dd class="dd01_me" style="font-weight: bold; font-size: 14px">展示方式</dd>
-					<dd class="dd04_me">
-						<select name="sort_type" id="sel_sort_type" title="展示方式"
+						<select name="sdk_channel_id" id="sdk_channel_id" title="请选择渠道"
 							style="width: 110px;">
-							<option value="1">日期</option>
-							<option value="2">周数</option>
-							<option value="3">月份</option>
-							<option value="4">SP</option>
-							<option value="10">SP业务</option>
-							<option value="6">SP通道</option>
-							<option value="5">CP</option>
-							<option value="7">CP通道</option>
-							<option value="8">省份</option>
-							<option value="9">城市</option>
-							<!-- <option value="11">按小时</option> -->
-							<option value="12">SP商务</option>
-							<option value="13">CP商务</option>
-							<option value="14">运营商</option>
-							<option value="15">数据类型</option>
-							<option value="16">第一业务线</option>
-							<option value="17">第二业务线</option>
+						<option value="-1">全部</option>
+							<%
+								for (SdkChannelModel channelModel : channelList) {
+							%>
+							<option value="<%=channelModel.getSdkChannelId()%>"><%=channelModel.getChannelName()%></option>
+							<%
+								}
+							%>
+						</select>
+					</dd>
+					
+					<dd class="dd01_me">展示方式</dd>
+					<dd class="dd04_me">
+						<select name="showType" id="showType" title="展示方式"
+							style="width: 110px;">
+						<option value="1">日期</option>
+						<option value="2">周数</option>
+						<option value="3">月份</option>
+						<option value="4">CP</option>
+						<option value="5">APP</option>
+						<option value="6">渠道</option>
+						<option value="7">SP通道</option>
+						<option value="8">通道</option>
+						<option value="9">省份</option>
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
-					</dd>
-					<dd class="dd01_me">
-						<a style="color: blue;"
-							href="mr_lr.jsp?<%=request.getQueryString()%>">查看利润</a>
 					</dd>
 				</dl>
 			</form>
@@ -510,51 +315,40 @@ function arrayReverse(arr) {
 			<thead>
 				<tr>
 					<td>序号</td>
-					<td onclick="TableSorter('table_id',1,'date')"><%=titles[sortType - 1]%></td>
-					<td onclick="TableSorter('table_id',2,'float')">数据量(条)</td>
-					<td onclick="TableSorter('table_id',3,'float')">金额(元)</td>
-					<td onclick="TableSorter('table_id',4,'float')">失败量(条)</td>
-					<td onclick="TableSorter('table_id',5,'float')">推送量(条)</td>
-					<td onclick="TableSorter('table_id',6,'float')">失败金额(元 )</td>
-					<td onclick="TableSorter('table_id',7,'float')">推送金额(元)</td>
-					<td onclick="TableSorter('table_id',8,'String')">失败率</td>
+					<td onclick="TableSorter('table_id',1,'date')"><%=titles[showType - 1]%></td>
+					<td onclick="TableSorter('table_id',2,'float')">激活用户（个）</td>
+					<td onclick="TableSorter('table_id',3,'float')">活跃用户(个)</td>
+					<td onclick="TableSorter('table_id',4,'float')">通道请求(条)</td>
+					<td onclick="TableSorter('table_id',5,'float')">有效通道请求(条)</td>
+					<td onclick="TableSorter('table_id',6,'float')">指令成功(条 )</td>
+					<td onclick="TableSorter('table_id',7,'float')">短息成功(条)</td>
+					<td onclick="TableSorter('table_id',8,'float')">计费成功（条）</td>
+					<td onclick="TableSorter('table_id',9,'float')">计费金额（元）</td>
 				</tr>
 			</thead>
 			<tbody>
 				<%
 					int index = 1;
-					for (MrReportModel model : list) {
+					for (SdkDataSummerModel model : dataSummerList) {
 				%>
 				<tr>
 					<td><%=index++%></td>
-					<td><%=model.getTitle1()%></td>
-					<td><%=model.getDataRows()%></td>
+					<td><%=model.getTitle()%></td>
+					<td><%=model.getUserRows()%></td>
+					<td><%=model.getActivityRows()%></td>
+					<td><%=model.getTroneRequestRows()%></td>
+					<td><%=model.getTroneEffectRequestRows()%></td>
+					<td><%=model.getTroneOrderRows()%></td>
+					<td><%=model.getMsgRows()%></td>
+					<td><%=model.getSucRows()%></td>
 					<td><%=StringUtil.getDecimalFormat(model.getAmount())%></td>
-					<td><%=model.getDataRows() - model.getShowDataRows()%></td>
-					<td><%=model.getShowDataRows()%></td>
-
-					<td><%=StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount())%></td>
-					<td><%=StringUtil.getDecimalFormat(model.getShowAmount())%></td>
-					<td><%=StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows())%></td>
 				</tr>
 				<%
 					}
 				%>
 			
 			<tbody>
-				<tr>
-					<td></td>
-					<td></td>
-					<td>总数据量(条)：<%=dataRows%></td>
-					<td>总金额(元)：<%=StringUtil.getDecimalFormat(amount)%></td>
-					<td>总失败量(条)：<%=dataRows - showDataRows%>
-					</td>
-					<td>总推送量(条)：<%=showDataRows%></td>
-
-					<td>总失败金额(元 )：<%=StringUtil.getDecimalFormat(amount - showAmount)%></td>
-					<td>总推送金额(元)：<%=StringUtil.getDecimalFormat(showAmount)%></td>
-					<td>总失败率：<%=StringUtil.getPercent(dataRows - showDataRows, dataRows)%></td>
-				</tr>
+			
 			</tbody>
 		</table>
 	</div>

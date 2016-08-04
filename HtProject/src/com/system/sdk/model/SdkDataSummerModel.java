@@ -2,15 +2,15 @@ package com.system.sdk.model;
 
 public class SdkDataSummerModel
 {
-	private String title;
-	private int userRows;
-	private int activityRows;
-	private int troneRequestRows;
-	private int troneEffectRequestRows;
-	private int troneOrderRows;
-	private int msgRows;
-	private int sucRows;
-	private float amount;
+	private String title;//标题
+	private int userRows;//激活用户
+	private int activityRows;//活跃用户
+	private int troneRequestRows;//通道请求数
+	private int troneEffectRequestRows;//有效通道请求数
+	private int troneOrderRows;//指令成功数
+	private int msgRows;//短息成功数
+	private int sucRows;//计费成功数
+	private float amount;//计费金额
 	
 	public int getUserRows()
 	{
