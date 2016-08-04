@@ -63,7 +63,8 @@ public class MessageDeliver {
 			strSql += ",cpn='" + mobileCode + "',servername='" + gameCode + "',serveraction='" + actionCode + "'";
 			strSql += ",deliverTime='" + deliverTime + "'";
 			logger.debug(strSql);
-			db.getPreparedStatement(strSql).executeUpdate();
+			db.iniPreparedStatement(strSql);
+			db.executeUpdate(strSql);
 		} catch (Exception e) {
 			logger.error(strSql,e);
 		}finally{

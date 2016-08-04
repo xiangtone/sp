@@ -62,7 +62,7 @@ public class ReportAll {
 				int selectnums = 200;
 				if ("1071".equals(cpid))
 					selectnums = 200;
-				sql = "select exchange_id,messageid,exchange_status,service_code,src_phone,dst_phone,exchange_time,success_time   from mms_transaction_detail where exchange_status<>1 and report_status=0 and linkid!='' and league_id='"
+				sql = "select exchange_id,messageid,exchange_status,service_code,src_phone,dst_phone,exchange_time,success_time from mms_transaction_detail where exchange_status<>1 and report_status=0 and linkid!='' and league_id='"
 						+ cpid + "' order by exchange_id desc limit " + selectnums;
 
 				ResultSet rs2 = ps.executeQuery(sql);
@@ -165,7 +165,7 @@ public class ReportAll {
 	private class SendThread implements Runnable {
 		private StringBuffer sb;
 		private URL sendUrl;
-		private String tt;
+		private String tt="";
 
 		public String getTt() {
 			return tt;

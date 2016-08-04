@@ -1,47 +1,57 @@
 package com.xt.util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 
 public class DBForLocal {
-	private static Logger myLogger = Logger.getLogger(DBForLocal.class);
+	private static Logger logger = Logger.getLogger(DBForLocal.class);
 
-	private Connection conn = null;
-	private Statement stmt = null;
+	private Connection connection = null;
+	private PreparedStatement preparedStatement = null;
 
-	public DBForLocal(){
-		try {
-			conn=ConnectionService.getInstance().getConnectionForLocal();
-			stmt = conn.createStatement();
-		} catch (SQLException e) {
-			myLogger.error("DB",e);
-		}
+	public DBForLocal() {
 	}
 
-	public int executeUpdate(String paramString) throws SQLException {
-		return this.stmt.executeUpdate(paramString);
+	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
+		if (connection == null) {
+			connection = ConnectionService.getInstance().getConnectionForLocal();
+		}
+		if (preparedStatement == null) {
+			preparedStatement = connection.prepareStatement(sqlStr);
+		}
+		preparedStatement = connection.prepareStatement(sqlStr);
+		return preparedStatement;
+	}
+
+	public int executeUpdate(String sqlStr) throws SQLException {
+		if (connection == null) {
+			connection = ConnectionService.getInstance().getConnectionForLocal();
+		}
+		if (preparedStatement == null) {
+			preparedStatement = connection.prepareStatement(sqlStr);
+		}
+		return preparedStatement.executeUpdate();
 	}
 
 	public void close() {
-		if (this.stmt != null) {
+		if (this.preparedStatement != null) {
 			try {
-				this.stmt.close();
+				this.preparedStatement.close();
 			} catch (SQLException localSQLException2) {
-				this.myLogger.error("Statement close", localSQLException2);
+				this.logger.error("Statement close", localSQLException2);
 			}
-			this.stmt = null;
+			this.preparedStatement = null;
 		}
-		if (this.conn != null) {
+		if (this.connection != null) {
 			try {
-				this.conn.close();
+				this.connection.close();
 			} catch (SQLException localSQLException3) {
-				this.myLogger.error("Connection close", localSQLException3);
+				this.logger.error("Connection close", localSQLException3);
 			}
-			this.conn = null;
+			this.connection = null;
 		}
 	}
-	
 }

@@ -29,7 +29,7 @@ public class Report1039 {
 
 	public Report1039(Statement db)
 	{
-		logger.debug("now begin Report1039===新极地");
+		logger.debug("Report 1039===新极地");
 		checkReport(db);
 
 	}

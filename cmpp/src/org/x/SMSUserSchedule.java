@@ -17,7 +17,7 @@ import com.xiangtone.util.DBForLog;
  */
 public class SMSUserSchedule {
 	private static Logger logger = Logger.getLogger(SMSUserSchedule.class);
-	private DBForLog db=null;
+	private DBForLog db=new DBForLog();
 	private PreparedStatement ps=null;
 	private ResultSet rs = null;
 	private String strSql;
@@ -37,11 +37,6 @@ public class SMSUserSchedule {
 	public String serverID = "1000";
 	int vcpID = 1;
 	String ismgId = "01";
-
-	/**
-	 * get method
-	 *
-	 */
 
 	public String getUSchedGameCode() {
 		return gameCode;
@@ -254,9 +249,7 @@ public class SMSUserSchedule {
 		boolean flag = false;
 		try {
 			strSql = "select * from sms_gamelist where gamename='" + strGameCode + "' and ismgid='" + ismgId + "'";
-			db=new DBForLog();
-			ps=db.getPreparedStatement(strSql);
-			rs = ps.executeQuery();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 				this.gameID = new Integer(rs.getInt("gameid")).toString();
@@ -277,9 +270,7 @@ public class SMSUserSchedule {
 		try {
 			strSql = "select * from sms_gamelist where gameid='" + gameId + "' and ismgid='" + ismgId + "'";
 			logger.debug("strSql:" + strSql);
-			db=new DBForLog();
-			ps=db.getPreparedStatement(strSql);
-			rs = ps.executeQuery();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 				this.gameCode = rs.getString("gamename");
@@ -302,9 +293,7 @@ public class SMSUserSchedule {
 	private boolean isCorpIDExist(String id) {
 		strSql = "select * from sms_company where corp_id='" + id + "'";
 		try {
-			db=new DBForLog();
-			ps=db.getPreparedStatement(strSql);
-			rs = ps.executeQuery();
+			rs = db.executeQuery(strSql);
 			if (!rs.next())
 				return false;
 		} catch (Exception e) {
@@ -325,9 +314,7 @@ public class SMSUserSchedule {
 
 		strSql = "select * from sms_cost where servername='" + servername + "' limit 1";
 		try {
-			db=new DBForLog();
-			ps=db.getPreparedStatement(strSql);
-			rs = ps.executeQuery();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				String serverid = rs.getString("serverid");
 				return serverid;

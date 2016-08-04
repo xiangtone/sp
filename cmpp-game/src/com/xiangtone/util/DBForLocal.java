@@ -13,23 +13,27 @@ public class DBForLocal {
 	private PreparedStatement preparedStatement = null;
 
 	public DBForLocal() {
-		connection = ConnectionService.getInstance().getConnectionForLocal();
 	}
 
-	public PreparedStatement getPreparedStatement(String paramString) {
-		if(connection==null){
+	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
+		if (connection == null) {
 			connection = ConnectionService.getInstance().getConnectionForLocal();
 		}
-		try {
-			preparedStatement = connection.prepareStatement(paramString);
-		} catch (SQLException e) {
-			logger.error("",e);
+		if (preparedStatement == null) {
+			preparedStatement = connection.prepareStatement(sqlStr);
 		}
+		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
 	}
 
-	public Connection getConnection() {
-		return connection;
+	public int executeUpdate(String sqlStr) throws SQLException {
+		if (connection == null) {
+			connection = ConnectionService.getInstance().getConnectionForLocal();
+		}
+		if (preparedStatement == null) {
+			preparedStatement = connection.prepareStatement(sqlStr);
+		}
+		return preparedStatement.executeUpdate();
 	}
 
 	public void close() {
@@ -50,16 +54,4 @@ public class DBForLocal {
 			this.connection = null;
 		}
 	}
-
-	public void executeUpdate(String strSql) {
-		if(connection==null){
-			connection = ConnectionService.getInstance().getConnectionForLocal();
-		}
-		try {
-			preparedStatement.executeUpdate(strSql);
-		} catch (SQLException e) {
-			logger.error(strSql,e);
-		}
-	}
-
 }

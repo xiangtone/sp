@@ -29,7 +29,7 @@ public class Report1040 {
 	private String sql = "";
 
 	public Report1040(Statement db) {
-		logger.debug("now begin Report1040===快乐风");
+		logger.debug("Report 1040===快乐风");
 		checkReport(db);
 	}
 

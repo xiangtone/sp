@@ -31,14 +31,11 @@ public class SMSUser {
 	public String corpSpcode;
 
 	private String strSql = "";
-	private DBForLocal dblocal;
-	private DBForLog dblog;
-	private PreparedStatement ps=null;
-	private ResultSet rs=null;
-	/**
-	 * method of get and set
-	 *
-	 */
+	private DBForLocal dblocal = new DBForLocal();
+	private DBForLog dblog = new DBForLog();
+	private PreparedStatement ps = null;
+	private ResultSet rs = null;
+
 	public String getUserCpn() {
 		return cpn;
 	}
@@ -106,7 +103,7 @@ public class SMSUser {
 	 * method one insert user log
 	 */
 	public void insertNewUser() {
-		
+
 		try {
 			// ≤Â»Î
 			strSql = "insert into sms_user set ";
@@ -118,11 +115,10 @@ public class SMSUser {
 			strSql += ",last_visit_time='" + this.lastVisitTime + "'";
 			strSql += ",visit_times=1";
 			logger.debug(strSql);
-			dblocal=new DBForLocal();
-			dblocal.getPreparedStatement(strSql).executeUpdate();
+			dblocal.executeUpdate(strSql);
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			dblocal.close();
 		}
 	}
@@ -136,15 +132,13 @@ public class SMSUser {
 		try {
 			strSql = "select * from sms_user where cpn='" + this.cpn + "'";
 			logger.debug(strSql);
-			dblog=new DBForLog();
-			PreparedStatement ps=dblog.getPreparedStatement(strSql);
-			rs = ps.executeQuery();
+			rs = dblog.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 			}
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			dblocal.close();
 		}
 		return flag;
@@ -160,11 +154,10 @@ public class SMSUser {
 		strSql += " where cpn = '" + _cpn + "'";
 		logger.debug(strSql);
 		try {
-			dblocal=new DBForLocal();
-			dblocal.getPreparedStatement(strSql).executeUpdate();
+			dblocal.executeUpdate(strSql);
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally {
+			logger.error(strSql, e);
+		} finally {
 			dblocal.close();
 		}
 
@@ -176,12 +169,10 @@ public class SMSUser {
 		strSql += " where cpn = '" + this.cpn + "'";
 		logger.debug(strSql);
 		try {
-			dblocal=new DBForLocal();
-			dblocal.getPreparedStatement(strSql).executeUpdate();
-
+			dblocal.executeUpdate(strSql);
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			dblocal.close();
 		}
 
@@ -196,12 +187,11 @@ public class SMSUser {
 		try {
 			strSql = " update sms_user set creditmoney=creditmoney+" + money + " where cpn ='" + cpn + "'";
 			logger.debug(strSql);
-			dblocal=new DBForLocal();
-			dblocal.getPreparedStatement(strSql).executeUpdate();
+			dblocal.executeUpdate(strSql);
 			flag = true;
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			dblocal.close();
 		}
 		return flag;
@@ -217,13 +207,11 @@ public class SMSUser {
 
 			strSql = "update sms_user set creditmoney=creditmoney-" + money + "  where mobile='" + cpn + "'";
 			logger.debug(strSql);
-			dblocal=new DBForLocal();
-			dblocal.getPreparedStatement(strSql).executeUpdate();
+			dblocal.executeUpdate(strSql);
 			flag = true;
-
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			dblocal.close();
 		}
 		return flag;
@@ -239,15 +227,13 @@ public class SMSUser {
 		try {
 			strSql = "select * from sms_user where cpn='" + cpn + "'";
 			logger.debug(strSql);
-			dblog=new DBForLog();
-			PreparedStatement ps=dblog.getPreparedStatement(strSql);
-			rs = ps.executeQuery();
+			rs = dblog.executeQuery(strSql);
 			if (rs.next()) {
 				balance = rs.getInt("creditmoney");
 			}
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			dblocal.close();
 		}
 		return balance;

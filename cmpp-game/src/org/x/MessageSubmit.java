@@ -110,7 +110,8 @@ public class MessageSubmit {
 		DBForLocal db=new DBForLocal();
 		try {
 			logger.debug(strSql);
-			db.getPreparedStatement(strSql).executeUpdate();
+			db.iniPreparedStatement(strSql);
+			db.executeUpdate(strSql);
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		}finally{

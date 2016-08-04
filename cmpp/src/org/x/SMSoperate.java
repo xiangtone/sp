@@ -91,7 +91,7 @@ public class SMSoperate {
 
 		catch (IndexOutOfBoundsException e) {
 
-			logger.error("",e);
+			logger.error("", e);
 
 		}
 
@@ -171,13 +171,13 @@ public class SMSoperate {
 
 			SMSMT smsmt = new SMSMT();
 
-			smsmt.setMTIsmgID(ismgID);
+			smsmt.setIsmgID(ismgID);
 
-			smsmt.setMTSubmitSeq(seq);
+			smsmt.setSubmitSeq(seq);
 
-			smsmt.setMTSubmitMsgID(msgID.trim());
+			smsmt.setSubmitMsgID(msgID.trim());
 
-			smsmt.setMTSubmitResult(submitResult);
+			smsmt.setSubmitResult(submitResult);
 
 			// smsmt.updateSubmitSeq(IsmgID,Seq,MsgID,SubmitResult);
 
@@ -187,7 +187,7 @@ public class SMSoperate {
 
 		catch (Exception e) {
 
-			logger.error("",e);
+			logger.error("", e);
 		}
 
 	}
@@ -244,7 +244,7 @@ public class SMSoperate {
 
 		catch (Exception e) {
 
-			logger.error("",e);
+			logger.error("", e);
 
 		}
 
@@ -257,7 +257,6 @@ public class SMSoperate {
 			String strContent = "";
 
 			switch (this.deliverFmt) // 根据不同编码的信息处理
-
 			{
 
 			case 0:
@@ -343,35 +342,35 @@ public class SMSoperate {
 
 			// 设置mo具体的信息
 
-			smsmo.setMOMsgId(this.deliverMsgID);
+			smsmo.setMsgId(this.deliverMsgID);
 
-			smsmo.setMOCpn(this.deliverSrcCpn);
+			smsmo.setCpn(this.deliverSrcCpn);
 
-			smsmo.setMoCpntype(this.srcCpnType);
+			smsmo.setCpntype(this.srcCpnType);
 
-			smsmo.setMOSpCode(smsus.getUSchedSpCode());
+			smsmo.setSpCode(smsus.getUSchedSpCode());
 
-			smsmo.setMOServerID(smsus.getUSchedServerID());
+			smsmo.setServerID(smsus.getUSchedServerID());
 
-			smsmo.setMOServerName(smsus.getUSchedGameCode());
+			smsmo.setServerName(smsus.getUSchedGameCode());
 
-			smsmo.setMOServerAction(smsus.getUSchedActionCode());
+			smsmo.setServerAction(smsus.getUSchedActionCode());
 
-			smsmo.setMOVcpID(smsus.getUSchedVcpID());
+			smsmo.setVcpID(smsus.getUSchedVcpID());
 
-			smsmo.setMOSpCodeFirst(this.deliverSpCode);
+			smsmo.setSpCodeFirst(this.deliverSpCode);
 
-			smsmo.setMOSvcType(this.deliverServerID);
+			smsmo.setSvcType(this.deliverServerID);
 
-			smsmo.setMOContent(strContent);
+			smsmo.setContent(strContent);
 
-			smsmo.setMODeliverTime(strTime);
+			smsmo.setDeliverTime(strTime);
 
-			smsmo.setMOIsmgID(deliverIsmgID);
+			smsmo.setIsmgID(deliverIsmgID);
 
-			smsmo.setMOCorpID(smsus.getUSchedCorpID());
+			smsmo.setCorpID(smsus.getUSchedCorpID());
 
-			smsmo.setMOLinkID(this.linkid);
+			smsmo.setLinkID(this.linkid);
 
 			logger.debug(smsus.getUSchedSpCode());
 
@@ -389,7 +388,7 @@ public class SMSoperate {
 
 			// 派发并发送
 
-			String stat = smsTovcp.sendMosmsToVcp(smsmo);
+			String stat = smsTovcp.sendMoSmsToVcp(smsmo);
 
 			logger.debug("派发并发送结果:" + stat);
 
@@ -405,7 +404,7 @@ public class SMSoperate {
 
 		catch (Exception e) {
 
-			logger.error("",e);
+			logger.error("", e);
 
 		}
 

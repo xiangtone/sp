@@ -33,7 +33,7 @@ public class SMSMOtoVCP {
 		// smsmo = new smsmo();
 	}
 
-	public String send_mosms_to_vcp(SMSMO smsmo) {
+	public String sendMoSmsToVcp(SMSMO smsmo) {
 		String stat = "-1";
 		try {
 			System.out.println("send..cpn:" + smsmo.getMO_cpn());

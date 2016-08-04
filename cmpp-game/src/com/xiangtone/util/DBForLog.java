@@ -10,34 +10,30 @@ public class DBForLog {
 	private static Logger logger = Logger.getLogger(DBForLog.class);
 
 	private Connection connection = null;
-	private PreparedStatement preparedStatement= null;
+	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 
-	public DBForLog(){
-		connection=ConnectionService.getInstance().getConnectionForLog();
+	public DBForLog() {
 	}
-	
-	public PreparedStatement getPreparedStatement(String paramString) {
-		if(connection==null){
-			connection=ConnectionService.getInstance().getConnectionForLog();
+
+	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException{
+		if (connection == null) {
+			connection = ConnectionService.getInstance().getConnectionForLog();
 		}
-		try {
-			preparedStatement = connection.prepareStatement(paramString);
-		} catch (SQLException e) {
-			logger.error("",e);
+		if (preparedStatement == null) {
+			preparedStatement = connection.prepareStatement(sqlStr);
 		}
 		return preparedStatement;
 	}
 
-	public Connection getConnection() {
-		return connection;
-	}
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-
-	public ResultSet getResultSet() {
+	public ResultSet executeQuery(String sqlStr) throws SQLException {
+		if (connection == null) {
+			connection = ConnectionService.getInstance().getConnectionForLog();
+		}
+		if (preparedStatement == null) {
+			preparedStatement = connection.prepareStatement(sqlStr);
+		}
+		resultSet = preparedStatement.executeQuery();
 		return resultSet;
 	}
 
@@ -68,36 +64,4 @@ public class DBForLog {
 		}
 	}
 
-	public static void main(String[] args) {
-		String sql="SELECT * FROM `tbl_base_users` WHERE id=1";
-		DBForLog db=new DBForLog();
-		try {
-//			db.getPreparedStatement(sql).executeQuery();
-			db.close();
-			db.executeQuery(sql);
-			ResultSet rs=db.getRs();
-			if(rs.next()){
-				logger.debug(rs.getString("name"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void executeQuery(String strSql) {
-		if(connection==null){
-			connection=ConnectionService.getInstance().getConnectionForLog();
-		}
-		try {
-			preparedStatement=connection.prepareStatement(strSql);
-			resultSet=preparedStatement.executeQuery();
-		} catch (SQLException e) {
-			logger.error(strSql,e);
-		}
-	}
-
-	public ResultSet getRs() {
-		return resultSet;
-	}
-	
 }
