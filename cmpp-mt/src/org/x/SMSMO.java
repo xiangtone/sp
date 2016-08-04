@@ -232,15 +232,13 @@ public class SMSMO {
 			ResultSet rs = null;
 			strSql = "select corp_id from sms_user where cpn='" + cpn + "'";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs =db.executeQuery(strSql);
 			if (rs.next()) {
 				String corp_id = rs.getString("corp_id");
 				return corp_id;
 			}
 		} catch (Exception e) {
 			logger.error("getMOCorpID", e);
-			e.printStackTrace();
 		} finally {
 			db.close();
 		}
@@ -258,15 +256,13 @@ public class SMSMO {
 			ResultSet rs = null;
 			strSql = "select gameid from sms_gamelist where vcpid=" + vcpid + " and gamename='" + servername + "'";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				String gameid = rs.getString("gameid");
 				return gameid;
 			}
 		} catch (Exception e) {
 			logger.error("getGameID", e);
-			e.printStackTrace();
 		} finally {
 			db.close();
 		}
@@ -280,15 +276,13 @@ public class SMSMO {
 			ResultSet rs = null;
 			strSql = " select ismgid from sms_user where cpn='" + scpn + "'";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				String ismgid = rs.getString("ismgid");
 				return ismgid;
 			}
 		} catch (Exception e) {
 			logger.error("getImsgID", e);
-			e.printStackTrace();
 		} finally {
 			db.close();
 		}

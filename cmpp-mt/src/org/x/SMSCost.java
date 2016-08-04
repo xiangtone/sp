@@ -74,8 +74,7 @@ public class SMSCost {
 			ResultSet rs = null;
 			strSql = "select *  from sms_cost where serverid='" + serverID + "'";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				this.serverID = serverID;
 				this.serverCodeIOD = rs.getString("feecode_iod");
@@ -101,8 +100,7 @@ public class SMSCost {
 			ResultSet rs = null;
 			strSql = "select *  from sms_cost where serverid='" + serverID + "'";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				this.serverID = serverID;
 				this.serverCodeIOD = rs.getString("feecode_iod");

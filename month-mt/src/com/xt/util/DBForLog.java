@@ -16,13 +16,11 @@ public class DBForLog {
 	public DBForLog() {
 	}
 
-	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException{
+	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
 		if (connection == null) {
 			connection = ConnectionService.getInstance().getConnectionForLog();
 		}
-		if (preparedStatement == null) {
-			preparedStatement = connection.prepareStatement(sqlStr);
-		}
+		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
 	}
 
@@ -30,9 +28,7 @@ public class DBForLog {
 		if (connection == null) {
 			connection = ConnectionService.getInstance().getConnectionForLog();
 		}
-		if (preparedStatement == null) {
-			preparedStatement = connection.prepareStatement(sqlStr);
-		}
+		preparedStatement = connection.prepareStatement(sqlStr);
 		resultSet = preparedStatement.executeQuery();
 		return resultSet;
 	}

@@ -244,8 +244,7 @@ public class SMSUserSchedule {
 			strSql = "select gamename,gameid,vcpid from sms_gamelist where gamename='" + strGameCode + "' and ismgid='"
 					+ ismgId + "'";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 				this.gameID = new Integer(rs.getInt("gameid")).toString();
@@ -270,8 +269,7 @@ public class SMSUserSchedule {
 			strSql = "select gamename,gameid,vcpid from sms_gamelist where gameid='" + gameId + "' and ismgid='"
 					+ ismgId + "'";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 				this.gameCode = rs.getString("gamename");
@@ -298,8 +296,7 @@ public class SMSUserSchedule {
 		strSql = "select * from sms_company where corp_id='" + id + "'";
 		try {
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (!rs.next())
 				return false;
 		} catch (Exception e) {
@@ -323,8 +320,7 @@ public class SMSUserSchedule {
 		strSql = "select * from sms_cost where servername='" + servername + "' and spid='916006' limit 1";
 		try {
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				String _serverid = rs.getString("serverid");
 				return _serverid;

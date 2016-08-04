@@ -80,8 +80,7 @@ public class SMSBinary {
 		try {
 			strSql = "select ringid,content,len from sms_binary where ringid = " + ringID + " order by section";
 			logger.debug(strSql);
-			db.executeQuery(strSql);
-			rs = db.getRs();
+			rs=db.executeQuery(strSql);
 			int i = 0;
 			while (rs.next()) {
 				int nsize = rs.getInt("len");

@@ -245,10 +245,6 @@ public class SMSMT {
 		}
 	}
 
-	/**
-	*
-	*
-	*/
 	public void updateSubmitSeq(String ismgId, int seq, String msgId, int submitResult) {
 		DBForLocal db=new DBForLocal();
 		String strSql=null;
@@ -257,9 +253,6 @@ public class SMSMT {
 					+ " where submit_seq = " + seq + " and ismgid ='" + ismgId + "' order by id desc limit 1";
 			logger.debug(strSql);
 			db.executeUpdate(strSql);
-			// MtsMtHandle mtsMtLog = new MtsMtHandle();
-			// mtsMtLog.updateSubmitSeq(strSql);
-
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		} finally {
@@ -318,7 +311,7 @@ public class SMSMT {
 			strSql += ",submit_seq=" + submitSeq;
 			strSql += ",card_flag=" + cardFlag;
 			logger.debug(strSql);
-			db.close();
+			db.executeUpdate(strSql);
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		} finally {

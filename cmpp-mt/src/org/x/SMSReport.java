@@ -57,10 +57,10 @@ public class SMSReport {
 		String strSql = "insert into sms_reportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
 				+ ismgId + "','" + msgId + "','" + linkId + "','" + spCode + "','" + destCpn + "','" + srcCpn + "','"
 				+ subTime + "','" + doneTime + "','" + statDev + "','" + statDetail + "')";
-		String tempstrSql = "insert into sms_tempreportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
+		String tempStrSql = "insert into sms_tempreportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
 				+ ismgId + "','" + msgId + "','" + linkId + "','" + spCode + "','" + destCpn + "','" + srcCpn + "','"
 				+ subTime + "','" + doneTime + "','" + statDev + "','" + statDetail + "')";
-		String companystrSql = "insert into companysms_reportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
+		String companyStrSql = "insert into companysms_reportlog(id,ismgId,msg_id,linkid,spcode,dest_cpn,src_cpn,submit_time,done_time,stat,stat_msg) values('','"
 				+ ismgId + "','" + msgId + "','" + linkId + "','" + spCode + "','" + destCpn + "','" + srcCpn + "','"
 				+ subTime + "','" + doneTime + "','" + statDev + "','" + statDetail + "')";
 
@@ -74,10 +74,12 @@ public class SMSReport {
 		try {
 			logger.debug(strSql);
 			db.executeUpdate(strSql);
-			logger.debug(tempstrSql);
-			db.executeUpdate(tempstrSql);
-			logger.debug(companystrSql);
-			db.executeUpdate(companystrSql);
+			logger.debug(tempStrSql);
+			db.iniPreparedStatement(tempStrSql);
+			db.executeUpdate(tempStrSql);
+			logger.debug(companyStrSql);
+			db.iniPreparedStatement(companyStrSql);
+			db.executeUpdate(companyStrSql);
 			// fw.write(sb.toString());tempstr_sql
 			// fw.flush();
 			// fw.close();
