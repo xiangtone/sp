@@ -4,7 +4,13 @@
 */
 package com.xiangtone.sms.api;
 
+import java.util.Arrays;
+
+import org.apache.log4j.Logger;
+
 public class SmSubmitResult extends SmResult {
+	private static Logger logger = Logger.getLogger(SmSubmitResult.class);
+
 	public SmSubmitResult() {
 
 	}
@@ -12,75 +18,71 @@ public class SmSubmitResult extends SmResult {
 	public void readInBytes(byte[] b) // throws Exception
 	{
 		try {
-			// System.out.println("b.length"+b.length);
-			for (int i = 0; i < b.length; i++)
-				// System.out.print(b[i]+",");
-				deByteCode = new DeByteCode(b);
+			logger.debug(Arrays.toString(b));
+			deByteCode = new DeByteCode(b);
 			while (deByteCode.offset < b.length) {
 				byte type = deByteCode.int8();
 				short len = deByteCode.int16();
 				int valueLen = len - 3;
-				// System.out.println("---type:"+type);
-				// System.out.println("---valueLen: "+valueLen);
 				switch (type) {
 				case 1:
-					vcp_id = deByteCode.asciiz(valueLen);
-					System.out.println("vcp_id:" + vcp_id);
+					vcpId = deByteCode.asciiz(valueLen);
+					logger.debug("vcpId:" + vcpId);
 					break;
 				case 2:
-					server_code = deByteCode.asciiz(valueLen);
-					System.out.println("server_code:" + server_code);
+					serverCode = deByteCode.asciiz(valueLen);
+					logger.debug("serverCode:" + serverCode);
 					break;
 
 				case 3:
-					prov_code = deByteCode.asciiz(valueLen);
-					System.out.println("prov_id:" + prov_code);
+					provCode = deByteCode.asciiz(valueLen);
+					logger.debug("provId:" + provCode);
 					break;
 				case 4:
-					server_type = deByteCode.asciiz(valueLen);
-					System.out.println("server_type:" + server_type);
+					serverType = deByteCode.asciiz(valueLen);
+					logger.debug("serverType:" + serverType);
 					break;
 				case 5:
-					dest_cpn = deByteCode.asciiz(valueLen);
-					System.out.println("dest_cpn:" + dest_cpn);
+					destCpn = deByteCode.asciiz(valueLen);
+					logger.debug("destCpn:" + destCpn);
 					break;
 				case 6:
-					fee_cpn = deByteCode.asciiz(valueLen);
-					System.out.println("fee_cpn:" + fee_cpn);
+					feeCpn = deByteCode.asciiz(valueLen);
+					logger.debug("feeCpn:" + feeCpn);
 					break;
 				case 7:
-					fee_type = deByteCode.asciiz(valueLen);
-					System.out.println("fee_type:" + fee_type);
+					feeType = deByteCode.asciiz(valueLen);
+					logger.debug("feeType:" + feeType);
 					break;
 
 				case 8:
-					fee_code = deByteCode.asciiz(valueLen);
-					System.out.println("fee_code:" + fee_code);
+					feeCode = deByteCode.asciiz(valueLen);
+					logger.debug("feeCode:" + feeCode);
 					break;
 				case 9:
-					media_type = deByteCode.asciiz(valueLen);
-					System.out.println("media_type:" + media_type);
+					mediaType = deByteCode.asciiz(valueLen);
+					logger.debug("mediaType:" + mediaType);
 					break;
 				case 10:
 					content = deByteCode.getBytes(valueLen);
-					System.out.println("content：" + new String(content));
+					logger.debug("content：" + new String(content));
 					break;
 				case 11:
-					registered_delivery = deByteCode.asciiz(valueLen);
-					System.out.println("registered_delivery:" + registered_delivery);
+					registeredDelivery = deByteCode.asciiz(valueLen);
+					logger.debug("registeredDelivery:" + registeredDelivery);
 
 					break;
 				case 13:
-					// String tempfeecpn_type = deByteCode.int32();
-					feecpn_type = deByteCode.int8();// Integer.parseInt(tempfeecpn_type);
+					// String tempfeecpnType = deByteCode.int32();
+					feecpnType = deByteCode.int8();// Integer.parseInt(tempfeecpnType);
 					break;
 				case 12:
 					linkid = deByteCode.asciiz(valueLen);
-					System.out.println("linkid value is:" + linkid);
+					logger.debug("linkid value is:" + linkid);
 					break;
 				case 14:
 					msgId = deByteCode.asciiz(valueLen);
-					System.out.println("msgId value is:" + msgId);
+					logger.debug("msgId value is:" + msgId);
 					break;
 				default:
 					stat = "01"; // 无效的消息类型
@@ -89,94 +91,90 @@ public class SmSubmitResult extends SmResult {
 			}
 			stat = "00"; // 成功
 		} catch (Exception e) {
-			// throw new Exception("decoding error");
-
-			System.out.println(e.toString());
+			logger.error("", e);
 		}
 	}
 
-	public static String vcp_id;
-	public static String server_code = "05511";
-	public static String prov_code = "01";
+	public static String vcpId;
+	public static String serverCode = "05511";
+	public static String provCode = "01";
 
-	public static String server_type;
-	public static String dest_cpn;
-	public static String fee_cpn;
-	public static String fee_type;
-	public static String fee_code;
-	public static String media_type;
+	public static String serverType;
+	public static String destCpn;
+	public static String feeCpn;
+	public static String feeType;
+	public static String feeCode;
+	public static String mediaType;
 
 	public static byte[] content;
 
-	public static String registered_delivery;
+	public static String registeredDelivery;
 	public static String stat = "09";
 	public DeByteCode deByteCode;
 	// add at 061123
-	public static int feecpn_type;
+	public static int feecpnType;
 	public static String linkid;
 	public static String msgId;
 	//
 
-	public String get_vcp_id() {
-		return vcp_id;
+	public String getVcpId() {
+		return vcpId;
 	}
 
-	public String get_server_code() {
-		return this.server_code;
+	public String getServerCode() {
+		return this.serverCode;
 	}
 
-	public String get_media_type() {
-		return this.media_type;
+	public String getMediaType() {
+		return this.mediaType;
 	}
 
-	public String get_fee_type() {
-		return this.fee_type;
+	public String getFeeType() {
+		return this.feeType;
 	}
 
-	public String get_server_type() {
-		return server_type;
+	public String getServerType() {
+		return serverType;
 	}
 
-	public String get_dest_cpn() {
-		return dest_cpn;
+	public String getDestCpn() {
+		return destCpn;
 	}
 
-	public String get_fee_cpn() {
-		return fee_cpn;
+	public String getFeeCpn() {
+		return feeCpn;
 	}
 
-	public String get_fee_code() {
-		return fee_code;
+	public String getFeeCode() {
+		return feeCode;
 	}
 
-	public byte[] get_content() {
+	public byte[] getContent() {
 		return content;
 	}
 
-	public String get_stat() {
+	public String getStat() {
 		return stat;
 	}
 
-	public String get_prov_code() {
-		return prov_code;
+	public String getProvCode() {
+		return provCode;
 	}
 
-	public String get_delivery() {
-		return registered_delivery;
+	public String getDelivery() {
+		return registeredDelivery;
 	}
 
-	// add at 061123
-	public String get_linkid() {
+	public String getLinkid() {
 		return linkid;
 	}
 
-	public int get_feecpn_type() {
-		return feecpn_type;
+	public int getFeecpnType() {
+		return feecpnType;
 	}
 
-	public String get_msgId() {
+	public String getMsgId() {
 		return msgId;
 	}
-	/////
 
 }

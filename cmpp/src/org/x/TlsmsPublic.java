@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class TlsmsPublic {
-	private static Logger logger = Logger.getLogger(.class);
 	public static void main(String[] args){
 		try{
 			SMSIsmgInfo info = new SMSIsmgInfo("config.ini");

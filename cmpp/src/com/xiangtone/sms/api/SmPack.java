@@ -9,10 +9,10 @@ public final class SmPack
 
     public SmPack()
     {
-        pk_head = new SmHeader();
+        pkHead = new SmHeader();
         buf = new byte[512];
     }
 
-    protected SmHeader pk_head;
+    protected SmHeader pkHead;
     protected byte buf[];
 }

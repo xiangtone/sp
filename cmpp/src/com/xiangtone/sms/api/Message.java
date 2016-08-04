@@ -6,9 +6,12 @@ package com.xiangtone.sms.api;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
+
+import org.apache.log4j.Logger;
 
 public class Message {
-
+	private static Logger logger = Logger.getLogger(Message.class);
 	public Message() {
 	}
 
@@ -18,7 +21,7 @@ public class Message {
 		try {
 			s = new Socket(host, port);
 			s.setSoTimeout(0x927c0);
-			System.out.println(s.toString());
+			logger.debug(s.toString());
 		} catch (IOException e) {
 			throw e;
 		}
@@ -35,7 +38,7 @@ public class Message {
 			conn.sock = null;
 			// conn.sock.close();
 		} catch (Exception e) {
-			return;
+			logger.error("",e);
 		}
 	}
 
@@ -49,7 +52,7 @@ public class Message {
 			int bodyLen = buf.length; // 信息体长度
 			byte[] header = new byte[8]; // 信息头
 			ByteCode bc = new ByteCode(8);
-			System.out.println(8 + bodyLen);
+			logger.debug(8 + bodyLen);
 			bc.AddInt(8 + bodyLen); // 信息头 add total length
 			bc.AddInt(StateCode.SM_DELIVER); // 信息头 add message type
 			// bc.AddInt(3);
@@ -61,7 +64,7 @@ public class Message {
 			out = null;
 			throw e;
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error("",e);
 		}
 
 	}
@@ -85,10 +88,9 @@ public class Message {
 			out.flush();
 
 		} catch (IOException e) {
-			out = null;
-			throw e;
+			logger.error("",e);
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error("",e);
 		}
 
 	}
@@ -98,9 +100,9 @@ public class Message {
 		try {
 			p.pkHead.pkLen = in.readInt();
 			p.pkHead.pkCmd = in.readInt();
-			System.out.println("readHead ...pkCmd:" + p.pkHead.pkCmd);
+			logger.debug("readHead ...pkCmd:" + p.pkHead.pkCmd);
 		} catch (IOException e) {
-			throw e;
+			logger.error("",e);
 		}
 		return true;
 	}
@@ -115,8 +117,7 @@ public class Message {
 
 			out.write(bc.getBytes());
 		} catch (IOException e) {
-
-			System.out.println("send Head Exception" + e.getMessage());
+			logger.error("",e);
 			throw e;
 		}
 	}
@@ -132,38 +133,36 @@ public class Message {
 			switch (sr.packCmd) {
 			case 1: // StateCode.smSubmit
 				SmSubmitResult ssr = (SmSubmitResult) sr;
-				System.out.println("----receiver vcp ------stat=" + ssr.stat);
-				System.out.println("----receiver vcp submit message------");
+				logger.debug("----receiver vcp ------stat=" + ssr.stat);
+				logger.debug("----receiver vcp submit message------");
 				smSendSubmitAck(conn, ssr.stat);
 				break;
 			case 2: // StatCode.smSubmitAck
 				SmSubmitAckResult ssra = (SmSubmitAckResult) sr;
-				System.out.println("--------" + ssra.stat);
+				logger.debug("--------" + ssra.stat);
 				break;
 			case 3:
 				SmDeliverResult sdr = (SmDeliverResult) sr;
-				System.out.println(" ------receiver platform-----stat =" + sdr.stat);
+				logger.debug(" ------receiver platform-----stat =" + sdr.stat);
 				smSendDeliverAck(conn, sdr.stat);
 				break;
 			case 4:
 				SmDeliverAckResult sdar = (SmDeliverAckResult) sr;
-				System.out.println("---------deliverAck-----:" + sdar.stat);
+				logger.debug("---------deliverAck-----:" + sdar.stat);
 				break;
 
 			default:
-				System.out.println("---------Error packet-----------");
+				logger.debug("---------Error packet-----------");
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			System.out.println("have a exception");
+			logger.error("",e);
 		} finally {
 			try {
 				if (conn.sock != null)
 					conn.sock.close();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("",e);
 			}
 		}
 	}
@@ -183,12 +182,11 @@ public class Message {
 			ack.AddInt16((short) (3 + len1)); // add length
 			ack.addAsciiz(ackCode, len1); // add value string
 			byte[] b = ack.getBytes();
-			for (int i = 0; i < b.length; i++)
-				System.out.print(b[i] + ",");
+			Arrays.toString(b);
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
-			throw e;
+			logger.error("",e);
 		}
 
 	}
@@ -213,7 +211,7 @@ public class Message {
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
-			throw e;
+			logger.error("",e);
 		}
 
 	}
@@ -226,7 +224,7 @@ public class Message {
 		in = new DataInputStream(conn.sock.getInputStream());
 
 		readHead(in, pack); // read header
-		// System.out.println("totalLen:" +pack.pkHead.pkLen);
+		// logger.debug("totalLen:" +pack.pkHead.pkLen);
 		byte packbuf[] = new byte[pack.pkHead.pkLen - 8];
 		in.read(packbuf); // read body message
 		//////////////////// add at 061206
@@ -237,47 +235,47 @@ public class Message {
 		switch (pack.pkHead.pkCmd) {
 
 		case 1:
-			System.out.println("------- Case 1 -------");
+			logger.debug("------- Case 1 -------");
 			SmSubmitResult ssr = new SmSubmitResult();
 			try {
 				ssr.readInBytes(packbuf); // 处理信息体
 				ssr.packCmd = 1;
 				return ssr;
 			} catch (Exception e1) {
-				throw new UnknownPackException();
+				logger.error("",e1);
 			}
 			// break;
 		case 2:
-			System.out.println("-------case 2--------");
+			logger.debug("-------case 2--------");
 			SmSubmitAckResult ssra = new SmSubmitAckResult();
 			try {
 				ssra.readInBytes(packbuf);
 				ssra.packCmd = 2;
 				return ssra;
 			} catch (Exception e) {
-				throw new UnknownPackException();
+				logger.error("",e);
 			}
 
 		case 3:
-			System.out.println("-------Case 3 --------");
+			logger.debug("-------Case 3 --------");
 			SmDeliverResult sdr = new SmDeliverResult();
 			try {
 				sdr.readInBytes(packbuf);
 				sdr.packCmd = 3;
 				return sdr;
 			} catch (Exception e2) {
-				throw new UnknownPackException();
+				logger.error("",e2);
 			}
 			// break;
 		case 4:
-			System.out.println("-----case 4------");
+			logger.debug("-----case 4------");
 			SmDeliverAckResult adar = new SmDeliverAckResult();
 			try {
 				adar.readInBytes(packbuf);
 				adar.packCmd = 4;
 				return adar;
 			} catch (Exception e) {
-				throw new UnknownPackException();
+				logger.error("",e);
 			}
 
 		default:

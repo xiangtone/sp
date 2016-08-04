@@ -7,104 +7,98 @@
  * @author Gavin wang (wangyg@xmindex.com.cn)
  * @version 1.0
  */
- /**
+/**
 *Copyright 2003 Xiamen Xiangtone Co. Ltd.
 *All right reserved.
 */
 package com.xiangtone.sms.api;
 
-
 import java.io.*;
 
-public class SmSubmit
-{
+public class SmSubmit {
 	public ByteCode bc;
-	public SmSubmit()
-	{
-	 	 bc = new ByteCode(1);
+
+	public SmSubmit() {
+		bc = new ByteCode(1);
 	}
-	
-	
-	public void set_vcp_id(String vcp_id) throws Exception
-	{
+
+	public void setVcpId(String vcpId) throws Exception {
 		bc.AddByte(StateCode.VCP_ID);
-		bc.AddShort((short)(3+vcp_id.getBytes().length));
-		bc.AddBytes(vcp_id.getBytes());	
+		bc.AddShort((short) (3 + vcpId.getBytes().length));
+		bc.AddBytes(vcpId.getBytes());
 	}
-	public void set_server_code(String server_code) throws Exception
-	{
+
+	public void setServerCode(String serverCode) throws Exception {
 		bc.AddByte(StateCode.SERVER_CODE);
-		bc.AddShort((short)(3+server_code.getBytes().length));
-		bc.AddBytes(server_code.getBytes());
-		
+		bc.AddShort((short) (3 + serverCode.getBytes().length));
+		bc.AddBytes(serverCode.getBytes());
+
 	}
-	public void set_media_type(String media_type) throws Exception
-	{
+
+	public void setMediaType(String mediaType) throws Exception {
 		bc.AddByte(StateCode.MEDIA_TYPE);
-		bc.AddShort((short)(3+media_type.getBytes().length));
-		bc.AddBytes(media_type.getBytes());
+		bc.AddShort((short) (3 + mediaType.getBytes().length));
+		bc.AddBytes(mediaType.getBytes());
 	}
-	public void set_server_type(String server_type) throws Exception
-	{
+
+	public void setServerType(String serverType) throws Exception {
 		bc.AddByte(StateCode.SERVER_ID);
-		bc.AddShort((short)(3+server_type.getBytes().length));
-		bc.AddBytes(server_type.getBytes());
-		
+		bc.AddShort((short) (3 + serverType.getBytes().length));
+		bc.AddBytes(serverType.getBytes());
+
 	}
-	public void set_dest_cpn(String dest_cpn) throws Exception
-	{
+
+	public void setDestCpn(String destCpn) throws Exception {
 		bc.AddByte(StateCode.DEST_CPN);
-		bc.AddShort((short)(3+dest_cpn.getBytes().length));
-		bc.AddBytes(dest_cpn.getBytes());
-		
+		bc.AddShort((short) (3 + destCpn.getBytes().length));
+		bc.AddBytes(destCpn.getBytes());
+
 	}
-	public void  set_fee_cpn(String fee_cpn) throws Exception
-	{
-		
-		
+
+	public void setFeeCpn(String feeCpn) throws Exception {
+
 		bc.AddByte(StateCode.FEE_CPN);
-		bc.AddShort((short)(3+fee_cpn.getBytes().length));
-		bc.AddBytes(fee_cpn.getBytes());
-		
+		bc.AddShort((short) (3 + feeCpn.getBytes().length));
+		bc.AddBytes(feeCpn.getBytes());
+
 	}
-	public void  set_fee_type(String fee_type) throws Exception
-	{
-		
+
+	public void setFeeType(String feeType) throws Exception {
+
 		bc.AddByte(StateCode.FEE_TYPE);
-		bc.AddShort((short)(3+fee_type.getBytes().length));
-		bc.AddBytes(fee_type.getBytes());
-		
+		bc.AddShort((short) (3 + feeType.getBytes().length));
+		bc.AddBytes(feeType.getBytes());
+
 	}
-	public void set_fee_code(String fee_code) throws Exception
-	{
+
+	public void setFeeCode(String feeCode) throws Exception {
 		bc.AddByte(StateCode.FEE_CODE);
-		bc.AddShort((short)(3+fee_code.getBytes().length));
-		bc.AddBytes(fee_code.getBytes());
-		
+		bc.AddShort((short) (3 + feeCode.getBytes().length));
+		bc.AddBytes(feeCode.getBytes());
+
 	}
-	public void set_content(String content) throws Exception
-	{
+
+	public void setContent(String content) throws Exception {
 		bc.AddByte(StateCode.CONTENT);
-		bc.AddShort((short)(3+content.getBytes().length));
+		bc.AddShort((short) (3 + content.getBytes().length));
 		bc.AddBytes(content.getBytes());
 	}
-	public void set_prov_id(String prov_id) throws Exception
-	{
+
+	public void set_provId(String provId) throws Exception {
 		bc.AddByte(StateCode.PROV_ID);
-		bc.AddShort((short)(3+prov_id.getBytes().length));
-		bc.AddBytes(prov_id.getBytes());
+		bc.AddShort((short) (3 + provId.getBytes().length));
+		bc.AddBytes(provId.getBytes());
 	}
-	public void set_registered_delivery(String registered_delivery)  throws Exception
-	{
+
+	public void setRegisteredDelivery(String registeredDelivery) throws Exception {
 		bc.AddByte(StateCode.REGISTERED_DELIVERY);
-		bc.AddShort((short)(3+registered_delivery.getBytes().length));
-		bc.AddBytes(registered_delivery.getBytes());
-		
+		bc.AddShort((short) (3 + registeredDelivery.getBytes().length));
+		bc.AddBytes(registeredDelivery.getBytes());
+
 	}
-	public byte[] getBytes()
-	{
-	 	return bc.getBytes();
+
+	public byte[] getBytes() {
+		return bc.getBytes();
 	}
-	
 
 }

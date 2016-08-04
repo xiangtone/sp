@@ -4,48 +4,42 @@
 */
 package com.xiangtone.sms.api;
 
-public class SmSubmitAckResult extends SmResult
-{
-	public SmSubmitAckResult()
-	{
-		
+public class SmSubmitAckResult extends SmResult {
+	public SmSubmitAckResult() {
+
 	}
-	public void readInBytes(byte[] b) //throws Exception
+
+	public void readInBytes(byte[] b) // throws Exception
 	{
-		try 
-    		{
-    			//System.out.println("b.length"+b.length);
-         		deByteCode=new DeByteCode(b);
-         		while(deByteCode.offset<b.length)
-         		{
-         			byte type = deByteCode.int8();
-         			short len = deByteCode.int16();
-         			int valueLen = len-3;
-         			System.out.println("type:"+type);
-         			switch(type)
-         			{
-         				case 100 :
-         					error_code = deByteCode.asciiz(valueLen);
-         					stat = error_code;
-         					System.out.println("stat:"+stat);
-         					break;
-         					
-         				default:
-         					stat = "-1"; //服务返回错误
-         					return ;
-         			}
-         		}
-         	}
-         	catch (Exception e)
-         	{
-                   //throw new Exception("decoding error");
-                   
-                   System.out.println(e.toString());
-                }
-		
-		
+		try {
+			// System.out.println("b.length"+b.length);
+			deByteCode = new DeByteCode(b);
+			while (deByteCode.offset < b.length) {
+				byte type = deByteCode.int8();
+				short len = deByteCode.int16();
+				int valueLen = len - 3;
+				System.out.println("type:" + type);
+				switch (type) {
+				case 100:
+					errorCode = deByteCode.asciiz(valueLen);
+					stat = errorCode;
+					System.out.println("stat:" + stat);
+					break;
+
+				default:
+					stat = "-1"; // 服务返回错误
+					return;
+				}
+			}
+		} catch (Exception e) {
+			// throw new Exception("decoding error");
+
+			System.out.println(e.toString());
+		}
+
 	}
+
 	public DeByteCode deByteCode;
-	public String stat="00";
-	public String error_code;
+	public String stat = "00";
+	public String errorCode;
 }

@@ -216,25 +216,25 @@ public class SMSoperate {
 
 				strCpn = strCpn.substring(2, 13);
 
-			smsreport.setReportIsmgID(ismgID);
+			smsreport.setIsmgID(ismgID);
 
-			smsreport.setReportMsgID(msgId);
+			smsreport.setMsgID(msgId);
 
-			smsreport.setReportLinkId(linkId.trim());
+			smsreport.setLinkId(linkId.trim());
 
-			smsreport.setReportDestCpn(destCpn);
+			smsreport.setDestCpn(destCpn);
 
-			smsreport.setReportSpCode(strSpcode);
+			smsreport.setSpCode(strSpcode);
 
-			smsreport.setReportSrcCpn(strCpn);
+			smsreport.setSrcCpn(strCpn);
 
-			smsreport.setReportSubmitTime(submitTime);
+			smsreport.setSubmitTime(submitTime);
 
-			smsreport.setReportDoneTime(doneTime);
+			smsreport.setDoneTime(doneTime);
 
-			smsreport.setReportStat(statDev);
+			smsreport.setStat(statDev);
 
-			smsreport.setReportMsg(reportMsg);// add at 2009-02-17
+			smsreport.setMsg(reportMsg);// add at 2009-02-17
 
 			// smsreport.saveReportLog();
 

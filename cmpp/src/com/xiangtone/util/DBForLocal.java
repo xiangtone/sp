@@ -19,9 +19,6 @@ public class DBForLocal {
 		if (connection == null) {
 			connection = ConnectionService.getInstance().getConnectionForLocal();
 		}
-		if (preparedStatement == null) {
-			preparedStatement = connection.prepareStatement(sqlStr);
-		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
 	}
@@ -30,9 +27,7 @@ public class DBForLocal {
 		if (connection == null) {
 			connection = ConnectionService.getInstance().getConnectionForLocal();
 		}
-		if (preparedStatement == null) {
-			preparedStatement = connection.prepareStatement(sqlStr);
-		}
+		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement.executeUpdate();
 	}
 
