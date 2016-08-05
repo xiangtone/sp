@@ -100,8 +100,8 @@ public class SdkDataSummerDao
 					SdkDataSummerModel model = new SdkDataSummerModel();
 				
 					model.setTitle(StringUtil.getString(rs.getString("show_title"), ""));
-					model.setActivityRows(rs.getInt("user_rows"));
-					model.setUserRows(rs.getInt("activity_rows"));
+					model.setActivityRows(rs.getInt("activity_rows"));
+					model.setUserRows(rs.getInt("user_rows"));
 					model.setTroneRequestRows(rs.getInt("trone_request_rows"));
 					model.setTroneEffectRequestRows(rs.getInt("trone_effect_request_rows"));
 					model.setTroneOrderRows(rs.getInt("trone_order_rows"));
