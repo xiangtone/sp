@@ -342,7 +342,7 @@ function arrayReverse(arr) {
 <body>
 	<div class="main_content">
 		<div class="content">
-			<form action="mr1.jsp" method="get" style="margin-top: 10px">
+			<form action="mr1_third_pay.jsp" method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
