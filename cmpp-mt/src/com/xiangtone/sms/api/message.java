@@ -6,6 +6,7 @@ package com.xiangtone.sms.api;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -53,7 +54,7 @@ public class Message {
 			int bodyLen = buf.length; // 信息体长度
 			byte[] header = new byte[8]; // 信息头
 			ByteCode bc = new ByteCode(8);
-			logger.debug(8 + bodyLen);
+//			logger.debug(8 + bodyLen);
 			bc.AddInt(8 + bodyLen); // 信息头 add total length
 			bc.AddInt(StateCode.SM_DELIVER); // 信息头 add message type
 			// bc.AddInt(3);
@@ -101,7 +102,7 @@ public class Message {
 		try {
 			p.pkHead.pkLen = in.readInt();
 			p.pkHead.pkCmd = in.readInt();
-			logger.debug("readHead pkCmd:" + p.pkHead.pkCmd);
+//			logger.debug("readHead pkCmd:" + p.pkHead.pkCmd);
 		} catch (IOException e) {
 			logger.error("sendSmSubmit", e);
 			throw e;
@@ -135,21 +136,21 @@ public class Message {
 			switch (sr.packCmd) {
 			case 1: // StateCode.SmSubmit
 				SmSubmitResult ssr = (SmSubmitResult) sr;
-				logger.debug("stat=" + ssr.stat);
+//				logger.debug("stat=" + ssr.stat);
 				smSendSubmitAck(conn, ssr.stat);
 				break;
 			case 2: // StatCode.SmSubmitAck
 				SmSubmitAckResult ssra = (SmSubmitAckResult) sr;
-				logger.debug(ssra.stat);
+//				logger.debug(ssra.stat);
 				break;
 			case 3:
 				SmDeliverResult sdr = (SmDeliverResult) sr;
-				logger.debug("receiver platform stat =" + sdr.stat);
+//				logger.debug("receiver platform stat =" + sdr.stat);
 				smSendDeliverAck(conn, sdr.stat);
 				break;
 			case 4:
 				SmDeliverAckResult sdar = (SmDeliverAckResult) sr;
-				logger.debug("deliverAck:" + sdar.stat);
+//				logger.debug("deliverAck:" + sdar.stat);
 				break;
 
 			default:
@@ -184,8 +185,7 @@ public class Message {
 			ack.AddInt16((short) (3 + len1)); // add length
 			ack.addAsciiz(ackCode, len1); // add value string
 			byte[] b = ack.getBytes();
-			for (int i = 0; i < b.length; i++)
-				logger.debug(b[i] + ",");
+//			logger.debug(Arrays.toString(b));
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
@@ -210,8 +210,7 @@ public class Message {
 			ack.AddInt16((short) (3 + len1)); // add length
 			ack.addAsciiz(ackCode, len1); // add value string
 			byte[] b = ack.getBytes();
-			for (int i = 0; i < b.length; i++)
-				logger.debug(b[i] + ",");
+//			logger.debug(Arrays.toString(b));
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
@@ -229,7 +228,7 @@ public class Message {
 		in = new DataInputStream(conn.sock.getInputStream());
 
 		readHead(in, pack); // read header
-		// System.out.println("totalLen:" +pack.pkHead.pkLen);
+		// logger.debug("totalLen:" +pack.pkHead.pkLen);
 		byte packbuf[] = new byte[pack.pkHead.pkLen - 8];
 		in.read(packbuf); // read body message
 		//////////////////// add at 061206
@@ -240,7 +239,7 @@ public class Message {
 		switch (pack.pkHead.pkCmd) {
 
 		case 1:
-			System.out.println("------- Case 1 -------");
+//			logger.debug("------- Case 1 -------");
 			SmSubmitResult ssr = new SmSubmitResult();
 			try {
 				ssr.readInBytes(packbuf); // 处理信息体
@@ -263,7 +262,7 @@ public class Message {
 			}
 
 		case 3:
-			System.out.println("-------Case 3 --------");
+//			logger.debug("-------Case 3 --------");
 			SmDeliverResult sdr = new SmDeliverResult();
 			try {
 				sdr.readInBytes(packbuf);
@@ -275,7 +274,7 @@ public class Message {
 			}
 			// break;
 		case 4:
-			System.out.println("-----case 4------");
+//			logger.debug("-----case 4------");
 			SmDeliverAckResult adar = new SmDeliverAckResult();
 			try {
 				adar.readInBytes(packbuf);

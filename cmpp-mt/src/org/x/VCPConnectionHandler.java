@@ -46,12 +46,11 @@ public class VCPConnectionHandler implements Runnable {
 
 			mess.readPa(con); // 读取提交信息
 			String stat = sm.getStat();
-			logger.debug("stat....:" + stat);
-			//
+//			logger.debug("stat....:" + stat);
 			// stat = "00";
 			if (stat.equals("00")) {
 
-				logger.debug("new message");
+//				logger.debug("new message");
 				String corpId = "00";
 				int vcpId = 1;
 				vcpId = Integer.parseInt(sm.getVcpId()); // getvcpId();
@@ -71,11 +70,7 @@ public class VCPConnectionHandler implements Runnable {
 				String linkId = sm.getLinkId();
 				int feeCpnType = sm.getFeecpnType();
 				String msgId = sm.getMsgId();
-				logger.debug("linkid is:" + linkId);
-				logger.debug("feecpntype:" + feeCpnType);
-				logger.debug("msgid is:" + msgId);
-				logger.debug("destcpn:" + destCpn);
-				logger.debug("feeCpn:" + feeCpn);
+//				logger.debug("linkid is:" + linkId+", feecpntype:" + feeCpnType+", msgid is:" + msgId+", destcpn:" + destCpn +", feeCpn:" + feeCpn);
 
 				////////////////////////
 				if (ismgId == null || ismgId.equals(""))
@@ -150,9 +145,7 @@ public class VCPConnectionHandler implements Runnable {
 					mysms.sendTextSMS(); // 发送文本
 					break;
 				}
-				logger.debug("mt.feeType:" + mt.feeType);
-				logger.debug("sfeeType:" + feeType);
-				logger.debug("feeType:" + feeType);
+//				logger.debug("mt.feeType:" + mt.feeType+" sfeeType:" + feeType+" feeType:" + feeType);
 
 			} // end if
 

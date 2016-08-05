@@ -4,6 +4,8 @@
 */
 package com.xiangtone.sms.api;
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 
 public class SmDeliverResult extends SmResult {
@@ -15,36 +17,33 @@ public class SmDeliverResult extends SmResult {
 	public void readInBytes(byte[] b) // throws Exception
 	{
 		try {
-
-			for (int i = 0; i < b.length; i++)
-				System.out.print(b[i] + ",");
+//			logger.debug(Arrays.toString(b));
 			deByteCode = new DeByteCode(b);
 			while (deByteCode.offset < b.length) {
 				byte type = deByteCode.int8();
 				short len = deByteCode.int16();
 				int valueLen = len - 3;
-				logger.debug("type:" + type);
-				logger.debug("valueLen:  " + valueLen);
+//				logger.debug("type:" + type+", valueLen:  " + valueLen);
 				switch (type) {
 				case 1:
 					mobileCode = deByteCode.asciiz(valueLen);
-					logger.debug("mobileCode:" + mobileCode);
+//					logger.debug("mobileCode:" + mobileCode);
 					break;
 				case 2:
 					gameCode = deByteCode.asciiz(valueLen);
-					logger.debug("gameCode:" + gameCode);
+//					logger.debug("gameCode:" + gameCode);
 					break;
 				case 3:
 					actionCode = deByteCode.asciiz(valueLen);
-					logger.debug("actionCode:" + actionCode);
+//					logger.debug("actionCode:" + actionCode);
 					break;
 				case 4:
 					spCode = deByteCode.asciiz(valueLen);
-					logger.debug("spCode:" + spCode);
+//					logger.debug("spCode:" + spCode);
 					break;
 				case 5:
 					ismgCode = deByteCode.asciiz(valueLen);
-					logger.debug("ismgCode:" + ismgCode);
+//					logger.debug("ismgCode:" + ismgCode);
 					break;
 				default:
 					stat = "01"; //无效的消息类型

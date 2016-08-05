@@ -11,7 +11,7 @@ import com.xiangtone.util.DBForLocal;
  * Copyright 2003 Xiamen Xiangtone Co. Ltd. All right reserved.
  */
 public class MtSubmitSeq {
-	private static Logger logger = Logger.getLogger(ConfigManager.class);
+	private static Logger logger = Logger.getLogger(MtSubmitSeq.class);
 	private int submitSeq;
 	private String submitMsgID;
 	private int submitResult;
@@ -75,13 +75,14 @@ public class MtSubmitSeq {
 		try {
 			strSql = "update sms_mtlog set submit_seq = 0 ,submit_msgid=?,submit_result=? where submit_seq = ? and ismgid =? order by id desc limit 1";
 			logger.debug(strSql);
+			logger.debug("Statement: submit_msgid="+getSubmitMsgID()+", submit_result="+getSubmitResult()+", submit_seq = "+getSubmitSeq()+", ismgid ="+getIsmgID());
 			ps=db.iniPreparedStatement(strSql);
 			int m=1;
 			ps.setString(m++, getSubmitMsgID());
 			ps.setLong(m++, getSubmitResult());
 			ps.setLong(m++, getSubmitSeq());
 			ps.setString(m++, getIsmgID());
-			return db.executeUpdate(strSql);
+			return ps.executeUpdate();
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		} finally {
