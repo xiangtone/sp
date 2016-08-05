@@ -1,6 +1,6 @@
 package comsd.commerceware.cmpp;
 
-public class MyTools {
+public class mytools {
 
 	// 整型-->四个字节
 	public byte[] int2Bytes(int n) {
