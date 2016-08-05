@@ -57,7 +57,7 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
-										<Main-Class>org.x.tlsms_public1</Main-Class>
+										<Main-Class>org.x.TlsmsPublic</Main-Class>
 									</manifestEntries>
 								</transformer>
 							</transformers>

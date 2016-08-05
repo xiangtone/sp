@@ -156,7 +156,6 @@ public class ReportAll {
 	}
 
 	private String send(String url, StringBuffer sb) {
-		logger.debug("url====" + url);
 		SendThread st=new SendThread(url, sb);
 		ThreadPool.tpx.execute(st);
 		return st.getTt();
@@ -213,7 +212,7 @@ public class ReportAll {
 					tt += inputLine;
 				}
 
-				logger.debug("tt===" + tt);
+				logger.debug("tt:" + tt+"	sendUrl:"+sendUrl);
 				in.close();
 			} catch (Exception e) {
 				logger.error(sendUrl.toString(), e);
