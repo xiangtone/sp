@@ -94,7 +94,7 @@ public class MrSummerDao
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("INSERT INTO daily_log.`tbl_mr_summer`(sp_id,cp_id,mcc,province_id,city_id,trone_id,trone_order_id,mr_date,data_rows,amount,record_type)");
+		sb.append("INSERT INTO daily_log.`tbl_third_pay_mr_summer`(sp_id,cp_id,mcc,province_id,city_id,trone_id,trone_order_id,mr_date,data_rows,amount,record_type)");
 		sb.append(" SELECT b.sp_id,b.cp_id,460,32,416,b.trone_id,b.trone_order_id,DATE_FORMAT(a.`createdate`,'%Y-%m-%d') mr_date,COUNT(*) data_rows,SUM(amount)/100 amount,3 FROM game_log.`tbl_xypay_" + tableName + "` a");
 		sb.append(" LEFT JOIN");
 		sb.append(" (");

@@ -93,7 +93,7 @@ public class CpMrDao
 	{
 		StringBuffer sb = new StringBuffer(1024);
 		
-		sb.append("INSERT INTO daily_log.`tbl_cp_mr_summer`(cp_id,mcc,province_id,city_id,trone_order_id,mr_date,data_rows,amount,record_type)");
+		sb.append("INSERT INTO daily_log.`tbl_third_pay_cp_mr_summer`(cp_id,mcc,province_id,city_id,trone_order_id,mr_date,data_rows,amount,record_type)");
 		sb.append(" SELECT b.cp_id,460,32,416,b.trone_order_id,DATE_FORMAT(a.`createdate`,'%Y-%m-%d') mr_date,COUNT(*) data_rows,SUM(amount)/100 amount,3 FROM game_log.`tbl_xypay_" + tableName + "` a");
 		sb.append(" LEFT JOIN");
 		sb.append(" (");

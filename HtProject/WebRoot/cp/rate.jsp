@@ -82,7 +82,7 @@
 	{
 		var newShowRows = parseFloat($("#myput_" + editId).val());
 		
-		if(isNaN(newShowRows) || newShowRows>=1 || newShowRows<=0)
+		if(isNaN(newShowRows) || newShowRows>=10 || newShowRows<=0)
 		{
 			alert("请输入介于0和1之间的数据");
 			return;

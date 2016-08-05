@@ -171,7 +171,7 @@ public class SdkDataSummerDao
 	
 	public static void main(String[] args)
 	{
-		new SdkDataSummerDao().loadSdkDataSummer(0, 308, 0, 0, 0, "2016-07-02","2016-09-02",7);
+		new SdkDataSummerDao().loadSdkDataSummer(0, 0, 0, 0, 0, "2016-07-02","2016-09-02",1);
 	}
 	
 }
