@@ -250,7 +250,7 @@ public class CpBillingDao
 	@SuppressWarnings("unchecked")
 	public List<SettleAccountModel> exportExcelData(int cpBillingId)
 	{
-		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,(a.amount-a.reduce_amount) total_amount,a.rate ";
+		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,a.amount,a.reduce_amount,a.rate ";
 		
 		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` a ";
 		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
@@ -274,7 +274,8 @@ public class CpBillingDao
 					
 					model.setOperatorName(StringUtil.getString(rs.getString("name_cn"), ""));
 					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
-					model.setAmount(rs.getFloat("total_amount"));
+					model.setAmount(rs.getFloat("amount"));
+					model.setReduceAmount(rs.getFloat("reduce_amount"));
 					model.setJiesuanlv(rs.getFloat("rate"));
 					
 					list.add(model);

@@ -93,7 +93,7 @@
 		
 		var rate = parseFloat($("#input_jiesuanlv").val());
 		
-		if(isNaN(rate) || rate>=1 || rate<=0)
+		if(isNaN(rate) || rate>=10 || rate<=0)
 		{
 			alert("<%=jiuSuanName%>只能介于0和1之间");
 			$("#input_jiesuanlv").focus();

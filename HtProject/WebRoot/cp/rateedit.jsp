@@ -67,7 +67,7 @@
 		
 		limit = parseFloat($("#input_rate").val());
 		
-		if (isNaN(limit) || limit<0 || limit>=1)
+		if (isNaN(limit) || limit<0 || limit>=10)
 		{
 			alert("请输入正确的结算率");
 			$("#input_rate").focus();

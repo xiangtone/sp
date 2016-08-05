@@ -63,6 +63,9 @@ public class ExcelManager
 			int tempSpTroneNameLength = 0;
 			int maxSpTroneNameLength = 0;
 			
+			int tempProductLineLength = 0;
+			int maxProductLineLength = 0;
+			
 			Map<String, HSSFCellStyle> mapStyle = createStyles(book);
 			
 			SettleAccountModel model = null;
@@ -88,18 +91,27 @@ public class ExcelManager
 				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
 				cell.setCellValue(model.getAmount());
 				
+				//核减信息费
 				cell = row.createCell(7);
 				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
-				cell.setCellValue(model.getJiesuanlv());
+				cell.setCellValue(model.getReduceAmount());
 				
 				cell = row.createCell(8);
 				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
-				cell.setCellFormula("G"+ (4+i) +"*H"+ (4+i));
+				cell.setCellValue(model.getJiesuanlv());
+				
+				cell = row.createCell(9);
+				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
+				cell.setCellFormula("(G"+ (4+i) +"-H" + (4+i) + ")*I"+ (4+i));
 				
 				tempSpTroneNameLength = model.getSpTroneName().getBytes("GBK").length;
+				tempProductLineLength = model.getOperatorName().getBytes("GBK").length;
 				
 				if(tempSpTroneNameLength > maxSpTroneNameLength)
 					maxSpTroneNameLength = tempSpTroneNameLength;
+				
+				if(tempProductLineLength > maxProductLineLength)
+					maxProductLineLength = tempProductLineLength;
 			}
 			
 			//结算方式宽度
@@ -109,15 +121,17 @@ public class ExcelManager
 			//渠道名称宽度
 			sheet.setColumnWidth(3, (channelName.getBytes("GBK").length+1)*256);
 			//运营商宽度
-			sheet.setColumnWidth(4, 9*256);
+			sheet.setColumnWidth(4, (maxProductLineLength+1)*256);
 			//产品名称宽度
 			sheet.setColumnWidth(5, (maxSpTroneNameLength+1)*256);
 			//信息费宽度
 			sheet.setColumnWidth(6, 13*256);
+			//特殊信息费宽度***2016.08.04加入
+			sheet.setColumnWidth(7, 13*256);
 			//结算价宽度
-			sheet.setColumnWidth(7, 12*256);
+			sheet.setColumnWidth(8, 18*256);
 			//渠道酬金宽度
-			sheet.setColumnWidth(8, 13*256);
+			sheet.setColumnWidth(9, 13*256);
 			
 			sheet.addMergedRegion(new CellRangeAddress(3,2+list.size(),1,1));
 			sheet.getRow(3).getCell(1).setCellValue(dateType);
@@ -132,13 +146,13 @@ public class ExcelManager
 			sheet.getRow(3).getCell(3).setCellStyle(mapStyle.get("BASE_STYLE"));
 			
 			HSSFRow row = sheet.createRow(3+list.size());
-			for(int i=0; i<8; i++)
+			for(int i=0; i<9; i++)
 				row.createCell(i+1).setCellStyle(mapStyle.get("BASE_STYLE"));
 			
-			sheet.addMergedRegion(new CellRangeAddress(3+list.size(),3+list.size(),1,7));
+			sheet.addMergedRegion(new CellRangeAddress(3+list.size(),3+list.size(),1,8));
 			row.getCell(1).setCellValue("合计");
-			row.getCell(8).setCellFormula("SUM(I" + 3 + ":I" + (list.size() + 3) + ")");
-			row.getCell(8).setCellStyle(mapStyle.get("FORMAT_STYLE"));
+			row.getCell(9).setCellFormula("SUM(J" + 3 + ":J" + (list.size() + 3) + ")");
+			row.getCell(9).setCellStyle(mapStyle.get("FORMAT_STYLE"));
 			
 			sheet.setForceFormulaRecalculation(true);
 			

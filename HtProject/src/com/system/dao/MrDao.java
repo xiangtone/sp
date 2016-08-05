@@ -146,6 +146,135 @@ public class MrDao
 		return map;
 	}
 	
+	public Map<String, Object> getThirdPayMrData(String startDate, String endDate,
+			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
+			int cityId,int operatorId,int dataType, int spCommerceUserId,int cpCommerceUserId,int sortType)
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		String query = "";
+		
+		if(spId>0)
+			query += " and d.id = " + spId;
+		
+		if(troneId>0)
+			query += " and c.id = " + troneId;
+		
+		if(cpId>0)
+			query += " and e.id = " + cpId;
+		
+		if(troneOrderId>0)
+			query += " and b.id = " + troneOrderId;
+		
+		if(provinceId>0)
+			query += " and f.id = " + provinceId;
+		
+		if(cityId>0)
+			query += " and g.id =" + cityId;
+		
+		if(spTroneId>0)
+			query += " and h.id = " + spTroneId;
+		
+		if(operatorId>0)
+			query += " and n.flag = " + operatorId;
+		
+		if(dataType>-1)
+			query+= " and a.record_type = " + dataType;
+		
+		if(spCommerceUserId>0)
+			query += " and d.commerce_user_id = " + spCommerceUserId;
+		
+		if(cpCommerceUserId>0)
+			query += " and e.commerce_user_id = " + cpCommerceUserId;
+		
+		String[] result = getSortType(sortType);
+		String queryParams = result[0];
+		String joinId = result[1];
+		
+		String sql = "select a.show_title,aa,bb,cc,dd from (";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) aa,sum(a.amount) bb ";
+		sql += " from daily_log.tbl_third_pay_mr_summer a";
+		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id ";
+		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+		sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+		sql += " left join daily_config.tbl_cp e on b.cp_id = e.id ";
+		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";		
+		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
+		sql += " group by join_id order by show_title asc )a";
+		sql += " left join(";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) cc,sum(a.amount) dd ";
+		sql += " from daily_log.tbl_third_pay_cp_mr_summer a ";
+		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
+		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+		sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+		sql += " left join daily_config.tbl_cp e on a.cp_id = e.id";
+		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
+		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
+		sql += " group by join_id order by show_title asc";
+		sql += " )b on a.join_id = b.join_id;";
+		
+		
+		JdbcControl control = new JdbcControl();
+		
+		final List<Object> datalist = new ArrayList<Object>();
+		
+		map.put("list", control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<MrReportModel> list = new ArrayList<MrReportModel>();
+				int dataRows=0,showDataRows = 0;
+				double amount=0,showAmount = 0;
+				while(rs.next())
+				{
+					MrReportModel model = new MrReportModel();
+					
+					model.setTitle1(rs.getString("show_title"));
+					model.setDataRows(rs.getInt(2));
+					model.setAmount(rs.getFloat(3));
+					model.setShowDataRows(rs.getInt(4));
+					model.setShowAmount(rs.getFloat(5));
+					
+					dataRows += model.getDataRows();
+					showDataRows += model.getShowDataRows();
+					amount += model.getAmount();
+					showAmount += model.getShowAmount();
+					
+					list.add(model);
+				}
+				
+				datalist.add(dataRows);
+				datalist.add(showDataRows);
+				datalist.add(amount);
+				datalist.add(showAmount);
+				
+				return list;
+			}
+		}));
+		
+		map.put("datarows", datalist.get(0));
+		map.put("showdatarows", datalist.get(1));
+		map.put("amount", datalist.get(2));
+		map.put("showamount", datalist.get(3));
+		
+		return map;
+	}
+	
 	public Map<String, Object> getMrAnalyLrData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
 			int cityId,int operatorId,int dataType, int spCommerceUserId,int cpCommerceUserId,int sortType)
