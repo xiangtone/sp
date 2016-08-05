@@ -16,15 +16,11 @@
 			<version>1.4.7</version>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.29</version>
+			<groupId>org.xtone.common</groupId>
+			<artifactId>xtone-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>4.1.2.Final</version>
-		</dependency>
+		
 	</dependencies>
 	<build>
 		<finalName>${final.name}</finalName>
@@ -35,10 +31,6 @@
 			</resource>
 			<resource>
 				<directory>src</directory>
-				<excludes>
-<!-- 					<exclude>**/*.java</exclude> -->
-					<!-- <exclude>${runtime.env}/*.ini</exclude> -->
-				</excludes>
 			</resource>
 		</resources>
 		<plugins>
@@ -50,7 +42,6 @@
 					<encoding>GBK</encoding>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -66,7 +57,7 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
-										<Main-Class>org.x.tlsms_public1</Main-Class>
+										<Main-Class>org.x.TlsmsPublic</Main-Class>
 									</manifestEntries>
 								</transformer>
 							</transformers>
@@ -125,10 +116,12 @@
 			</activation>
 		</profile>
 		<profile>
-			<id>test</id>
+			<id>alphaLocal</id>
 			<properties>
-				<runtime.env>packageConfig\test</runtime.env>
-				<final.name>cmpp-test</final.name>
+				<runtime.env>packageConfig\cy</runtime.env>
+				<final.name>cy-wechat-token</final.name>
+				<ftp.server.id>alphaFmSz01</ftp.server.id>
+				<ftp.to.url>ftp://alphaZ.test:29281/server/java-app/cy-wechat-token/swap/</ftp.to.url>
 			</properties>
 		</profile>
 	</profiles>

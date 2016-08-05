@@ -4,21 +4,23 @@ package org.x;
 *All right reserved.
 */
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import com.xiangtone.sql.Mysqldb;
+import org.apache.log4j.Logger;
+
+import com.xiangtone.util.DBForLog;
 
 /**
  * this Class operate gamelisttbl
  *
  */
 public class SMSUserSchedule {
-	/**
-	*
-	*/
-	Mysqldb db;
-	ResultSet rs = null;
-	String strSql;
+	private static Logger logger = Logger.getLogger(SMSUserSchedule.class);
+	private DBForLog db=new DBForLog();
+	private PreparedStatement ps=null;
+	private ResultSet rs = null;
+	private String strSql;
 	public static final int SPCODE_LEN = 8; // 基础号长度
 	public static final int CORP_LEN = 2;// 媒体号长度
 	public static final int GAME_LEN = 3;// 游戏号长度
@@ -36,43 +38,31 @@ public class SMSUserSchedule {
 	int vcpID = 1;
 	String ismgId = "01";
 
-	/**
-	 * get method
-	 *
-	 */
-
-	public String getUSched_gameCode() {
+	public String getUSchedGameCode() {
 		return gameCode;
 	}
 
-	public String getUSched_serverID() {
-		return getServerIDbyServerName(getUSched_gameCode());
+	public String getUSchedServerID() {
+		return getServerIDbyServerName(getUSchedGameCode());
 	}
 
-	public String getUSched_spCode() {
+	public String getUSchedSpCode() {
 		return spCode;
 	}
 
-	public String getUSched_actionCode() {
+	public String getUSchedActionCode() {
 		return actionCode;
 	}
 
-	public int getUSched_vcpID() {
+	public int getUSchedVcpID() {
 		return vcpID;
 	}
 
-	public String getUSched_corpID() {
+	public String getUSchedCorpID() {
 		return corpID;
 	}
 
-	/**
-	 *
-	 *
-	 */
 	public SMSUserSchedule() {
-		if (db == null) {
-			db = new Mysqldb();
-		}
 	}
 
 	/**
@@ -96,14 +86,8 @@ public class SMSUserSchedule {
 				}
 
 			}
-			System.out.println(":::::::::::");
-			System.out.println(":::::::::::");
-			System.out.println(":::::::::::");
-			System.out.println("game id:" + this.gameID);
-			System.out.println("spcode:" + this.spCode);
-			System.out.println(":::::::::::");
-			System.out.println(":::::::::::");
-			System.out.println(":::::::::::");
+			logger.debug("game id:" + this.gameID);
+			logger.debug("spcode:" + this.spCode);
 			int offset = content.indexOf(" ", 0);// 判断空格
 			if (offset > 0) {
 				gameCode = content.substring(0, offset);
@@ -120,15 +104,9 @@ public class SMSUserSchedule {
 			}
 
 			int len = spCode.length();
-			System.out.println("----------------------");
-			System.out.println("----------------------");
-			System.out.println("----------------------");
-			System.out.println("----------------------");
-			System.out.println("this length is:" + len);
-			System.out.println("----------------------");
-			System.out.println("----------------------");
-			String _strspcode = "";
-			String _strgame = "";
+			logger.debug("this length is:" + len);
+			String strspcode = "";
+			String strgame = "";
 			switch (len) {
 			case SPCODE_LEN:
 				if (isItemExist(gameCode)) {
@@ -154,93 +132,93 @@ public class SMSUserSchedule {
 			// case SPCODE_LEN+CORP_LEN+GAME_LEN:
 
 			case SPCODE_LEN + GAME_LEN:
-				_strspcode = spCode.substring(0, SPCODE_LEN);
+				strspcode = spCode.substring(0, SPCODE_LEN);
 				/*
 				 * String _strcorp = spCode.substring(SPCODE_LEN,SPCODE_LEN);
 				 */
-				_strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN);
+				strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN);
 				/*
 				 * if(!isCorpIDExist(_strcorp)) { this.corpID = "00"; this.spCode =
 				 * _strspcode+this.corpID+_strgame; }
 				 */
-				if (!isGameIDExist(_strgame)) {
+				if (!isGameIDExist(strgame)) {
 					this.gameCode = "ERROR";
-					this.spCode = _strspcode;
+					this.spCode = strspcode;
 				}
-				System.out.println("***********this.vcpID:" + this.vcpID);
-				System.out.println("***********this.vcpID:" + this.spCode);
+				logger.debug("***********this.vcpID:" + this.vcpID);
+				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN1:
-				_strspcode = spCode.substring(0, SPCODE_LEN);
+				strspcode = spCode.substring(0, SPCODE_LEN);
 				/*
 				 * String _strcorp = spCode.substring(SPCODE_LEN,SPCODE_LEN);
 				 */
-				_strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN1);
+				strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN1);
 				/*
 				 * if(!isCorpIDExist(_strcorp)) { this.corpID = "00"; this.spCode =
 				 * _strspcode+this.corpID+_strgame; }
 				 */
-				if (!isGameIDExist(_strgame)) {
+				if (!isGameIDExist(strgame)) {
 					this.gameCode = "ERROR";
-					this.spCode = _strspcode;
+					this.spCode = strspcode;
 				}
-				System.out.println("***********this.vcpID:" + this.vcpID);
-				System.out.println("***********this.vcpID:" + this.spCode);
+				logger.debug("***********this.vcpID:" + this.vcpID);
+				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN2:
-				_strspcode = spCode.substring(0, SPCODE_LEN);
+				strspcode = spCode.substring(0, SPCODE_LEN);
 				/*
 				 * String _strcorp = spCode.substring(SPCODE_LEN,SPCODE_LEN);
 				 */
-				_strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN2);
+				strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN2);
 				/*
 				 * if(!isCorpIDExist(_strcorp)) { this.corpID = "00"; this.spCode =
 				 * _strspcode+this.corpID+_strgame; }
 				 */
-				if (!isGameIDExist(_strgame)) {
+				if (!isGameIDExist(strgame)) {
 					this.gameCode = "ERROR";
-					this.spCode = _strspcode;
+					this.spCode = strspcode;
 				}
-				System.out.println("***********this.vcpID:" + this.vcpID);
-				System.out.println("***********this.vcpID:" + this.spCode);
+				logger.debug("***********this.vcpID:" + this.vcpID);
+				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN3:
-				_strspcode = spCode.substring(0, SPCODE_LEN);
+				strspcode = spCode.substring(0, SPCODE_LEN);
 				/*
 				 * String _strcorp = spCode.substring(SPCODE_LEN,SPCODE_LEN);
 				 */
-				_strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN3);
+				strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN3);
 				/*
 				 * if(!isCorpIDExist(_strcorp)) { this.corpID = "00"; this.spCode =
 				 * _strspcode+this.corpID+_strgame; }
 				 */
-				if (!isGameIDExist(_strgame)) {
+				if (!isGameIDExist(strgame)) {
 					this.gameCode = "ERROR";
-					this.spCode = _strspcode;
+					this.spCode = strspcode;
 				}
-				System.out.println("***********this.vcpID:" + this.vcpID);
-				System.out.println("***********this.vcpID:" + this.spCode);
+				logger.debug("***********this.vcpID:" + this.vcpID);
+				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN4:
-				_strspcode = spCode.substring(0, SPCODE_LEN);
+				strspcode = spCode.substring(0, SPCODE_LEN);
 				/*
 				 * String _strcorp = spCode.substring(SPCODE_LEN,SPCODE_LEN);
 				 */
-				_strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN4);
+				strgame = spCode.substring(SPCODE_LEN, SPCODE_LEN + GAME_LEN4);
 				/*
 				 * if(!isCorpIDExist(_strcorp)) { this.corpID = "00"; this.spCode =
 				 * _strspcode+this.corpID+_strgame; }
 				 */
-				if (!isGameIDExist(_strgame)) {
+				if (!isGameIDExist(strgame)) {
 					this.gameCode = "ERROR";
-					this.spCode = _strspcode;
+					this.spCode = strspcode;
 				}
-				System.out.println("***********this.vcpID:" + this.vcpID);
-				System.out.println("***********this.vcpID:" + this.spCode);
+				logger.debug("***********this.vcpID:" + this.vcpID);
+				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			default:
@@ -256,34 +234,22 @@ public class SMSUserSchedule {
 				}
 
 				break;
-			// System.out.println("***********this.vcpID:"+this.vcpID);
-			// System.out.println("***********this.vcpID:"+this.spCode);
+			// logger.debug("***********this.vcpID:"+this.vcpID);
+			// logger.debug("***********this.vcpID:"+this.spCode);
 
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				db.close();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+			logger.error(e);
+		} 
 
 	}
 
-	/**
-	*
-	*
-	*/
 	private boolean isItemExist(String strGameCode) {
 
 		boolean flag = false;
 		try {
 			strSql = "select * from sms_gamelist where gamename='" + strGameCode + "' and ismgid='" + ismgId + "'";
-			rs = db.execQuery(strSql);
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 				this.gameID = new Integer(rs.getInt("gameid")).toString();
@@ -292,21 +258,19 @@ public class SMSUserSchedule {
 				this.vcpID = rs.getInt("vcpid");
 			}
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error(strSql,e);
+		}finally{
+			db.close();
 		}
 		return flag;
 	}
 
-	/**
-	*
-	*
-	*/
 	private boolean isGameIDExist(String gameId) {
 		boolean flag = false;
 		try {
 			strSql = "select * from sms_gamelist where gameid='" + gameId + "' and ismgid='" + ismgId + "'";
-			System.out.println("strSql:" + strSql);
-			rs = db.execQuery(strSql);
+			logger.debug("strSql:" + strSql);
+			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 				this.gameCode = rs.getString("gamename");
@@ -316,8 +280,9 @@ public class SMSUserSchedule {
 				this.vcpID = rs.getInt("vcpid");
 			}
 		} catch (Exception e) {
-			System.out.println(e.toString());
-			e.printStackTrace();
+			logger.error(strSql,e);
+		}finally{
+			db.close();
 		}
 		return flag;
 	}
@@ -328,11 +293,13 @@ public class SMSUserSchedule {
 	private boolean isCorpIDExist(String id) {
 		strSql = "select * from sms_company where corp_id='" + id + "'";
 		try {
-			rs = db.execQuery(strSql);
+			rs = db.executeQuery(strSql);
 			if (!rs.next())
 				return false;
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error(strSql,e);
+		}finally{
+			db.close();
 		}
 		this.corpID = id;
 		return true;
@@ -347,13 +314,15 @@ public class SMSUserSchedule {
 
 		strSql = "select * from sms_cost where servername='" + servername + "' limit 1";
 		try {
-			ResultSet rs2 = db.execQuery(strSql);
-			if (rs2.next()) {
-				String _serverid = rs2.getString("serverid");
-				return _serverid;
+			rs = db.executeQuery(strSql);
+			if (rs.next()) {
+				String serverid = rs.getString("serverid");
+				return serverid;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(strSql,e);
+		}finally{
+			db.close();
 		}
 		return this.serverID;
 	}
@@ -361,19 +330,19 @@ public class SMSUserSchedule {
 	public static void main(String[] args) {
 		SMSUserSchedule sms = new SMSUserSchedule();
 		sms.getUserDetail(args[0], args[1]);
-		String game_code = sms.getUSched_gameCode();
-		String sp_code = sms.getUSched_spCode();
-		String action_code = sms.getUSched_actionCode();
-		int vcp_id = sms.getUSched_vcpID();
-		String corp_id = sms.getUSched_corpID();
-		String server_id = sms.getUSched_serverID();
+		String game_code = sms.getUSchedGameCode();
+		String sp_code = sms.getUSchedSpCode();
+		String action_code = sms.getUSchedActionCode();
+		int vcp_id = sms.getUSchedVcpID();
+		String corp_id = sms.getUSchedCorpID();
+		String server_id = sms.getUSchedServerID();
 
-		System.out.println("game_code:" + game_code);
-		System.out.println("sp_code:" + sp_code);
-		System.out.println("action_code:" + action_code);
-		System.out.println("vcp_id:" + vcp_id);
-		System.out.println("corp_id:" + corp_id);
-		System.out.println("serverid:" + server_id);
+		logger.debug("game_code:" + game_code);
+		logger.debug("sp_code:" + sp_code);
+		logger.debug("action_code:" + action_code);
+		logger.debug("vcp_id:" + vcp_id);
+		logger.debug("corp_id:" + corp_id);
+		logger.debug("serverid:" + server_id);
 	}
 
 }

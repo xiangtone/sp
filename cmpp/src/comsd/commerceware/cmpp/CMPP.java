@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -14,25 +15,21 @@ public final class CMPP {
 
 	private final static Logger LOG = Logger.getLogger(CMPP.class);
 
-	mytools tools = new mytools();
-	////////////////// 日志记录/////////////
-	// Logger myLogger = Logger.getLogger("MsgSendLogger");
-	// Logger mySonLogger = Logger.getLogger("myLogger.mySonLogger");
-	// PropertyConfigurator.configure("/app/smsgw/smsplatform/CMPP/log4j.properties");
+	MyTools tools = new MyTools();
 
-	//////////////////////////////////////
 	public CMPP() {
 
 	}
 
 	// 连接网关
-	public void cmpp_connect_to_ismg(String host, int port, conn_desc conn) throws IOException {
+	public void cmppConnectToIsmg(String host, int port, ConnDesc conn) throws IOException {
 		Socket s = null;
 		try {
 			s = new Socket(host, port);
-			System.out.println(s);
+			LOG.debug(s);
 			s.setSoTimeout(0x927c0);
 		} catch (IOException e) {
+			LOG.error("", e);
 			throw e;
 		}
 		conn.seq = 1; // 序号为1 代表开始
@@ -40,17 +37,18 @@ public final class CMPP {
 	}
 
 	// 断开连接
-	public void cmpp_disconnect_from_ismg(conn_desc conn) {
+	public void cmppDisconnectFromIsmg(ConnDesc conn) {
 		try {
 			conn.sock.close();
-		} catch (Exception _ex) {
+		} catch (Exception ex) {
+			LOG.error("", ex);
 			return;
 		}
 	}
 
 	public byte[] cmppLoginBytes(CmppLogin cl) {
 		byte[] buf = new byte[100];
-		int body_len = 0;
+		int bodyLen = 0;
 
 		DataOutputStream out = null;
 		OutOfBoundsException e = new OutOfBoundsException();
@@ -58,41 +56,41 @@ public final class CMPP {
 		MD5 md5 = new MD5();
 		byte md5Byte[] = new byte[40];
 		memset(md5Byte, 40);
-		String strtime = Integer.toString(cl.icp_timestamp);
+		String strtime = Integer.toString(cl.icpTimestamp);
 		byte[] temp = tools.string2Bytes(strtime);
 
-		int id_len = cl.icp_id.length;
+		int idLen = cl.icpId.length;
 
-		int auth_len = cl.icp_auth.length;
-		// System.out.println("auth_len:" + auth_len);
+		int authLen = cl.icpAuth.length;
+		// LOG.debug("authLen:" + authLen);
 
-		strcpy(md5Byte, cl.icp_id, 0, id_len);
-		strcpy(md5Byte, cl.icp_auth, 15, auth_len);
-		strcpy(md5Byte, temp, 15 + auth_len, temp.length);
-		int lengthMd5 = 15 + auth_len + temp.length;
+		strcpy(md5Byte, cl.icpId, 0, idLen);
+		strcpy(md5Byte, cl.icpAuth, 15, authLen);
+		strcpy(md5Byte, temp, 15 + authLen, temp.length);
+		int lengthMd5 = 15 + authLen + temp.length;
 		int pkLen = 12;
 		int pkCmd = 0x00000001;
 		// if (conn.seq == 0x7fffffff)
 		// conn.seq = 1;
-		body_len = tools.strcpy(buf, cl.icp_id, pkLen);// add icp_id
+		bodyLen = tools.strcpy(buf, cl.icpId, pkLen);// add icpId
 
 		byte[] bufMd5 = md5.getMD5ofStr(md5Byte, lengthMd5);// get md5 for
-																												// icp_auth
-		body_len += tools.strcpy(buf, bufMd5, body_len + pkLen); // add
-																															// icp_auth
+															// icpAuth
+		bodyLen += tools.strcpy(buf, bufMd5, bodyLen + pkLen); // add
+																// icpAuth
 
-		body_len += tools.strcpy(buf, cl.icp_version, body_len + pkLen); // add
-																																			// icp_version
-		body_len += tools.strcpy(buf, cl.icp_timestamp, body_len + pkLen); // add
-																																				// icp_timestamp
-		// body_len
-		// +=tools.strcpy(buf,(short)cl.icp_timestamp,body_len+ch.pk_len); // add
-		// icp_timestamp
+		bodyLen += tools.strcpy(buf, cl.icpVersion, bodyLen + pkLen); // add
+																		// icpVersion
+		bodyLen += tools.strcpy(buf, cl.icpTimestamp, bodyLen + pkLen); // add
+																		// icpTimestamp
+		// bodyLen
+		// +=tools.strcpy(buf,(short)cl.icpTimestamp,bodyLen+ch.pkLen); // add
+		// icpTimestamp
 
-		pkLen += body_len;
+		pkLen += bodyLen;
 		tools.strcpy(buf, pkLen, 0);
 		tools.strcpy(buf, pkCmd, 4);
-		tools.strcpy(buf, conn_desc.seq++, 8);
+		tools.strcpy(buf, ConnDesc.seq++, 8);
 		byte[] bufResult = new byte[pkLen];
 		for (int i = 0; i < pkLen; i++) {
 			bufResult[i] = buf[i];
@@ -104,7 +102,7 @@ public final class CMPP {
 
 	public byte[] cmppLoginBodyBytes(CmppLogin cl) {
 		byte[] buf = new byte[100];
-		int body_len = 0;
+		int bodyLen = 0;
 
 		DataOutputStream out = null;
 		OutOfBoundsException e = new OutOfBoundsException();
@@ -112,37 +110,37 @@ public final class CMPP {
 		MD5 md5 = new MD5();
 		byte md5Byte[] = new byte[40];
 		memset(md5Byte, 40);
-		String strtime = Integer.toString(cl.icp_timestamp);
+		String strtime = Integer.toString(cl.icpTimestamp);
 		byte[] temp = tools.string2Bytes(strtime);
 
-		int id_len = cl.icp_id.length;
+		int idLen = cl.icpId.length;
 
-		int auth_len = cl.icp_auth.length;
-		// System.out.println("auth_len:" + auth_len);
+		int authLen = cl.icpAuth.length;
+		// LOG.debug("authLen:" + authLen);
 
-		strcpy(md5Byte, cl.icp_id, 0, id_len);
-		strcpy(md5Byte, cl.icp_auth, 15, auth_len);
-		strcpy(md5Byte, temp, 15 + auth_len, temp.length);
-		int lengthMd5 = 15 + auth_len + temp.length;
+		strcpy(md5Byte, cl.icpId, 0, idLen);
+		strcpy(md5Byte, cl.icpAuth, 15, authLen);
+		strcpy(md5Byte, temp, 15 + authLen, temp.length);
+		int lengthMd5 = 15 + authLen + temp.length;
 		int pkLen = 0;
 		// if (conn.seq == 0x7fffffff)
 		// conn.seq = 1;
-		body_len = tools.strcpy(buf, cl.icp_id, pkLen);// add icp_id
+		bodyLen = tools.strcpy(buf, cl.icpId, pkLen);// add icpId
 
 		byte[] bufMd5 = md5.getMD5ofStr(md5Byte, lengthMd5);// get md5 for
-																												// icp_auth
-		body_len += tools.strcpy(buf, bufMd5, body_len + pkLen); // add
-																															// icp_auth
+															// icpAuth
+		bodyLen += tools.strcpy(buf, bufMd5, bodyLen + pkLen); // add
+																// icpAuth
 
-		body_len += tools.strcpy(buf, cl.icp_version, body_len + pkLen); // add
-																																			// icp_version
-		body_len += tools.strcpy(buf, cl.icp_timestamp, body_len + pkLen); // add
-																																				// icp_timestamp
-		// body_len
-		// +=tools.strcpy(buf,(short)cl.icp_timestamp,body_len+ch.pk_len); // add
-		// icp_timestamp
+		bodyLen += tools.strcpy(buf, cl.icpVersion, bodyLen + pkLen); // add
+																		// icpVersion
+		bodyLen += tools.strcpy(buf, cl.icpTimestamp, bodyLen + pkLen); // add
+																		// icpTimestamp
+		// bodyLen
+		// +=tools.strcpy(buf,(short)cl.icpTimestamp,bodyLen+ch.pkLen); // add
+		// icpTimestamp
 
-		pkLen += body_len;
+		pkLen += bodyLen;
 		byte[] bufResult = new byte[pkLen];
 		for (int i = 0; i < pkLen; i++) {
 			bufResult[i] = buf[i];
@@ -153,11 +151,11 @@ public final class CMPP {
 	}
 
 	// login ismg
-	public void cmpp_login(conn_desc conn, CmppLogin cl) throws IOException, OutOfBoundsException {
-		cmppe_head ch = new cmppe_head();
+	public void cmppLogin(ConnDesc conn, CmppLogin cl) throws IOException, OutOfBoundsException {
+		CmppeHead ch = new CmppeHead();
 
 		byte[] buf = new byte[100];
-		int body_len = 0;
+		int bodyLen = 0;
 
 		DataOutputStream out = null;
 		OutOfBoundsException e = new OutOfBoundsException();
@@ -165,66 +163,69 @@ public final class CMPP {
 		MD5 md5 = new MD5();
 		byte md5Byte[] = new byte[40];
 		memset(md5Byte, 40);
-		String strtime = Integer.toString(cl.icp_timestamp);
+		String strtime = Integer.toString(cl.icpTimestamp);
 		byte[] temp = tools.string2Bytes(strtime);
 
-		int id_len = cl.icp_id.length;
+		int idLen = cl.icpId.length;
 
-		int auth_len = cl.icp_auth.length;
-		System.out.println("auth_len:" + auth_len);
+		int authLen = cl.icpAuth.length;
+		LOG.debug("authLen:" + authLen);
 
-		strcpy(md5Byte, cl.icp_id, 0, id_len);
-		strcpy(md5Byte, cl.icp_auth, 15, auth_len);
-		strcpy(md5Byte, temp, 15 + auth_len, temp.length);
-		int lengthMd5 = 15 + auth_len + temp.length;
+		strcpy(md5Byte, cl.icpId, 0, idLen);
+		strcpy(md5Byte, cl.icpAuth, 15, authLen);
+		strcpy(md5Byte, temp, 15 + authLen, temp.length);
+		int lengthMd5 = 15 + authLen + temp.length;
 		try {
 			out = new DataOutputStream(conn.sock.getOutputStream());
-			ch.pk_len = 12;
-			ch.pk_cmd = 0x00000001;
-			ch.pk_seq = conn.seq;
+			ch.pkLen = 12;
+			ch.pkCmd = 0x00000001;
+			ch.pkSeq = conn.seq;
 			conn.seq++;
 			if (conn.seq == 0x7fffffff)
 				conn.seq = 1;
-			body_len = tools.strcpy(buf, cl.icp_id, ch.pk_len);// add icp_id
+			bodyLen = tools.strcpy(buf, cl.icpId, ch.pkLen);// add icpId
 
 			byte[] bufMd5 = md5.getMD5ofStr(md5Byte, lengthMd5);// get md5 for
-																													// icp_auth
-			body_len += tools.strcpy(buf, bufMd5, body_len + ch.pk_len); // add
-																																		// icp_auth
+																// icpAuth
+			bodyLen += tools.strcpy(buf, bufMd5, bodyLen + ch.pkLen); // add
+																		// icpAuth
 
-			body_len += tools.strcpy(buf, cl.icp_version, body_len + ch.pk_len); // add
-																																						// icp_version
-			body_len += tools.strcpy(buf, cl.icp_timestamp, body_len + ch.pk_len); // add
-																																							// icp_timestamp
-			// body_len
-			// +=tools.strcpy(buf,(short)cl.icp_timestamp,body_len+ch.pk_len); // add
-			// icp_timestamp
+			bodyLen += tools.strcpy(buf, cl.icpVersion, bodyLen + ch.pkLen); // add
+																				// icpVersion
+			bodyLen += tools.strcpy(buf, cl.icpTimestamp, bodyLen + ch.pkLen); // add
+																				// icpTimestamp
+			// bodyLen
+			// +=tools.strcpy(buf,(short)cl.icpTimestamp,bodyLen+ch.pkLen); //
+			// add
+			// icpTimestamp
 
-			ch.pk_len += body_len;
-			tools.strcpy(buf, ch.pk_len, 0);
-			tools.strcpy(buf, ch.pk_cmd, 4);
-			tools.strcpy(buf, ch.pk_seq, 8);
-			for (int i = 0; i < ch.pk_len; i++) {
+			ch.pkLen += bodyLen;
+			tools.strcpy(buf, ch.pkLen, 0);
+			tools.strcpy(buf, ch.pkCmd, 4);
+			tools.strcpy(buf, ch.pkSeq, 8);
+			for (int i = 0; i < ch.pkLen; i++) {
 				System.out.print(buf[i] + ",");
 			}
 
-			out.write(buf, 0, ch.pk_len);
+			out.write(buf, 0, ch.pkLen);
 			out.flush();
 
 			out = null;
 		} catch (IOException e1) {
 			out = null;
+			LOG.error("", e1);
 			throw e1;
 		}
 	}
 
-	protected boolean read_count_byte(DataInputStream in, byte buf[], int len) throws IOException {
+	protected boolean readCountByte(DataInputStream in, byte buf[], int len) throws IOException {
 		try {
 			for (int i = 0; i < len; i++)
 				buf[i] = in.readByte();
 
 		} catch (IOException e) {
 			in = null;
+			LOG.error("", e);
 			throw e;
 		}
 		return true;
@@ -236,26 +237,25 @@ public final class CMPP {
 
 	}
 
-	protected boolean readHead(DataInputStream in, cmppe_pack p) throws IOException {
+	protected boolean readHead(DataInputStream in, CmppePack p) throws IOException {
 		try {
-			p.pk_head.pk_len = in.readInt();
-			p.pk_head.pk_cmd = in.readInt();
-			p.pk_head.pk_seq = in.readInt();
+			p.pkHead.pkLen = in.readInt();
+			p.pkHead.pkCmd = in.readInt();
+			p.pkHead.pkSeq = in.readInt();
 
-			// System.out.println();
-			// System.out.println("readHead_pk_len:" + p.pk_head.pk_len);
-			// System.out.println("readHead_pk_cmd:" + p.pk_head.pk_cmd);
-			// System.out.println("readHead_pk_seq:" + p.pk_head.pk_seq);
-			LOG.info("read resp message readHead_pk_seq:" + p.pk_head.pk_seq);
+			// LOG.debug();
+			// LOG.debug("readHeadPkLen:" + p.pkHead.pkLen);
+			// LOG.debug("readHeadPkCmd:" + p.pkHead.pkCmd);
+			// LOG.debug("readHeadPkSeq:" + p.pkHead.pkSeq);
+			LOG.info("read resp message readHeadPkSeq:" + p.pkHead.pkSeq);
 		} catch (IOException e) {
-			System.out.println("readHead Exception");
-			e.printStackTrace();
+			LOG.error("readHead Exception", e);
 			throw e;
 		}
 		return true;
 	}
 
-	protected boolean send_unknowncount_byte(DataOutputStream out, byte buf[]) throws IOException {
+	protected boolean sendUnknowncountByte(DataOutputStream out, byte buf[]) throws IOException {
 		int i = 0;
 		try {
 			while (buf[i] != 0 && i < 200) {
@@ -265,6 +265,7 @@ public final class CMPP {
 			out.write(buf[i]);
 			out.flush();
 		} catch (IOException e) {
+			LOG.error("", e);
 			throw e;
 		}
 		return true;
@@ -274,18 +275,16 @@ public final class CMPP {
 		int i;
 		for (i = 0; i < maxlen; i++)
 			d[i + from] = s[i];
-
-		// d[i + from] = 0;
 		return i;
 	}
 
-	protected void sendHeader(byte[] buf, cmppe_head ch) throws IOException {
+	protected void sendHeader(byte[] buf, CmppeHead ch) throws IOException {
 
-		System.out.println("send ch.pk_len:" + ch.pk_len);
-		System.out.println("send ch.pk_cmd:" + ch.pk_cmd);
-		tools.strcpy(buf, ch.pk_len, 0);
-		tools.strcpy(buf, ch.pk_cmd, 4);
-		tools.strcpy(buf, ch.pk_seq, 8);
+		LOG.debug("send ch.pkLen:" + ch.pkLen);
+		LOG.debug("send ch.pkCmd:" + ch.pkCmd);
+		tools.strcpy(buf, ch.pkLen, 0);
+		tools.strcpy(buf, ch.pkCmd, 4);
+		tools.strcpy(buf, ch.pkSeq, 8);
 
 	}
 
@@ -298,19 +297,19 @@ public final class CMPP {
 		return i != maxlen ? 1 : -2;
 	}
 
-	public void cmpp_logout(conn_desc conn) throws IOException {
+	public void cmppLogout(ConnDesc conn) throws IOException {
 		byte[] buf = new byte[100];
-		byte[] _tmp = new byte[512];
+		byte[] tmp = new byte[512];
 		DataOutputStream out = null;
-		cmppe_head ch = new cmppe_head();
-		new cmppe_pack();
+		CmppeHead ch = new CmppeHead();
+		new CmppePack();
 		try {
 			out = new DataOutputStream(conn.sock.getOutputStream());
 			new DataInputStream(conn.sock.getInputStream());
-			ch.pk_len = 16;
-			ch.pk_cmd = 2;
-			ch.pk_stat = 0;
-			ch.pk_seq = conn.seq;
+			ch.pkLen = 16;
+			ch.pkCmd = 2;
+			ch.pkStat = 0;
+			ch.pkSeq = conn.seq;
 			// sendHeader(buf, ch);
 			conn.seq++;
 			if (conn.seq == 0x7fffffff)
@@ -318,32 +317,33 @@ public final class CMPP {
 			out = null;
 		} catch (IOException e) {
 			out = null;
+			LOG.error("", e);
 			throw e;
 		}
 	}
 
-	public void cmpp_cancel(conn_desc conn, cmppe_cancel cc) throws IOException, OutOfBoundsException {
+	public void cmppCancel(ConnDesc conn, CmppeCancel cc) throws IOException, OutOfBoundsException {
 		byte[] buf = new byte[100];
-		byte[] _tmp = new byte[512];
+		byte[] tmp = new byte[512];
 		DataOutputStream out = null;
-		cmppe_head ch = new cmppe_head();
-		new cmppe_pack();
+		CmppeHead ch = new CmppeHead();
+		new CmppePack();
 		try {
 			out = new DataOutputStream(conn.sock.getOutputStream());
-			ch.pk_len = 12;
-			ch.pk_cmd = 7;
-			ch.pk_stat = 0;
-			ch.pk_seq = conn.seq;
-			int len = cc.msg_id.length;
+			ch.pkLen = 12;
+			ch.pkCmd = 7;
+			ch.pkStat = 0;
+			ch.pkSeq = conn.seq;
+			int len = cc.msgId.length;
 
-			ch.pk_len += len;
+			ch.pkLen += len;
 			// sendHeader(buf,ch);
-			// send_count_byte(out, cc.msg_id, len);
+			// sendCountByte(out, cc.msgId, len);
 
-			tools.strcpy(buf, cc.msg_id, ch.pk_len);
-			tools.strcpy(buf, ch.pk_len, 0);
-			tools.strcpy(buf, ch.pk_cmd, 4);
-			tools.strcpy(buf, ch.pk_seq, 8);
+			tools.strcpy(buf, cc.msgId, ch.pkLen);
+			tools.strcpy(buf, ch.pkLen, 0);
+			tools.strcpy(buf, ch.pkCmd, 4);
+			tools.strcpy(buf, ch.pkSeq, 8);
 
 			conn.seq++;
 			if (conn.seq == 0x7fffffff)
@@ -351,32 +351,29 @@ public final class CMPP {
 			out = null;
 		} catch (IOException e) {
 			out = null;
+			LOG.error("", e);
 			throw e;
 		}
 	}
 
-	public synchronized void cmpp_active_test(conn_desc conn) throws IOException {
+	public synchronized void cmppActiveTest(ConnDesc conn) throws IOException {
 		synchronized (conn) {
-			LOG.info("cmpp_active_test:begin");
+			LOG.info("cmppActiveTest:begin");
 			DataOutputStream out = null;
-			cmppe_head ch = new cmppe_head();
+			CmppeHead ch = new CmppeHead();
 			try {
 				out = new DataOutputStream(conn.sock.getOutputStream());
-				ch.pk_len = 12;
-				ch.pk_cmd = 8;
-				ch.pk_seq = conn.seq;
+				ch.pkLen = 12;
+				ch.pkCmd = 8;
+				ch.pkSeq = conn.seq;
 
 				byte[] buf = new byte[12];
-				int body_len = 0;
-				tools.strcpy(buf, ch.pk_len + body_len, 0);
-				tools.strcpy(buf, ch.pk_cmd, 4);
-				tools.strcpy(buf, ch.pk_seq, 8);
+				int bodyLen = 0;
+				tools.strcpy(buf, ch.pkLen + bodyLen, 0);
+				tools.strcpy(buf, ch.pkCmd, 4);
+				tools.strcpy(buf, ch.pkSeq, 8);
 				out.write(buf, 0, 12); // 测试信息体为空
-				for (int i = 0; i < 12; i++) {
-					// System.out.print(buf[i] + ",");
-				}
-				// System.out.println("seq:"+conn.seq);
-				// System.out.println("sock:"+conn.sock);
+				LOG.debug(Arrays.toString(buf));
 				out.flush();
 				conn.seq++;
 				if (conn.seq == 0x7fffffff)
@@ -384,191 +381,185 @@ public final class CMPP {
 				out = null;
 			} catch (IOException e) {
 				out = null;
+				LOG.error("", e);
 				throw e;
 			}
-			LOG.info("cmpp_active_test:end");
+			LOG.info("cmppActiveTest:end");
 		}
 	}
 
-	protected void cmpp_send_active_resp(conn_desc conn, int seq) throws IOException {
+	protected void cmppSendActiveResp(ConnDesc conn, int seq) throws IOException {
 		synchronized (conn) {
-			LOG.info("cmpp_send_active_resp:begin");
-			cmppe_head ch = new cmppe_head();
+			LOG.info("cmppSendActiveResp:begin");
+			CmppeHead ch = new CmppeHead();
 
 			try {
 				DataOutputStream out = new DataOutputStream(conn.sock.getOutputStream());
 
-				ch.pk_len = 12;
-				ch.pk_cmd = 0x80000008;
-				ch.pk_seq = seq;
+				ch.pkLen = 12;
+				ch.pkCmd = 0x80000008;
+				ch.pkSeq = seq;
 
-				byte active_resp_stat = 0;
+				byte activeRespStat = 0;
 				byte[] buf = new byte[100];
-				int body_len = tools.strcpy(buf, active_resp_stat, ch.pk_len);
-				// System.out.println("body_len is:" + body_len);
-				tools.strcpy(buf, ch.pk_len + body_len, 0);
-				tools.strcpy(buf, ch.pk_cmd, 4);
-				tools.strcpy(buf, ch.pk_seq, 8);
+				int bodyLen = tools.strcpy(buf, activeRespStat, ch.pkLen);
+				// LOG.debug("bodyLen is:" + bodyLen);
+				tools.strcpy(buf, ch.pkLen + bodyLen, 0);
+				tools.strcpy(buf, ch.pkCmd, 4);
+				tools.strcpy(buf, ch.pkSeq, 8);
 				for (int i = 0; i < 13; i++) {
 					// System.out.print(buf[i] + " ");
 				}
-				// System.out.println();
+				// LOG.debug();
 				out.write(buf, 0, 13);
 				out.flush();
 			} catch (IOException e) {
+				LOG.error("", e);
 				throw e;
 			}
-			LOG.info("cmpp_send_active_resp:end");
+			LOG.info("cmppSendActiveResp:end");
 		}
 	}
 
-	public int cmpp_submit(conn_desc conn, cmppe_submit cs) throws IOException {
-		int user_seq = -1;
+	public int cmppSubmit(ConnDesc conn, CmppeSubmit cs) throws IOException {
+		int userSeq = -1;
 		byte buf[] = new byte[1024];
-		byte[] _tmp = new byte[5];
-		cmppe_head ch = new cmppe_head();
-		new cmppe_pack();
+		byte[] tmp = new byte[5];
+		CmppeHead ch = new CmppeHead();
+		new CmppePack();
 		try {
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println("src_id value is:" + new String(cs.src_terminal_id));
-			System.out.println("socket is:" + conn.sock);
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			LOG.debug("srcId value is:" + new String(cs.srcTerminalId));
+			LOG.debug("socket is:" + conn.sock);
 			OutputStream os = conn.sock.getOutputStream();
 			int len = 12;
-			len += tools.strcpy(buf, cs.msg_id, len);
-			len += tools.strcpy(buf, cs.pk_total, len);
-			len += tools.strcpy(buf, cs.pk_number, len);
-			len += tools.strcpy(buf, cs.registered_delivery, len);
-			len += tools.strcpy(buf, cs.msg_level, len);
-			len += tools.strcpy(buf, cs.service_id, len);
-			len += tools.strcpy(buf, cs.fee_usertype, len);
-			len += tools.strcpy(buf, cs.fee_terminal_id, len);
-			len += tools.strcpy(buf, cs.fee_terminal_type, len);
-			len += tools.strcpy(buf, cs.tp_pid, len);
-			len += tools.strcpy(buf, cs.tp_udhi, len);
+			len += tools.strcpy(buf, cs.msgId, len);
+			len += tools.strcpy(buf, cs.pkTotal, len);
+			len += tools.strcpy(buf, cs.pkNumber, len);
+			len += tools.strcpy(buf, cs.registeredDelivery, len);
+			len += tools.strcpy(buf, cs.msgLevel, len);
+			len += tools.strcpy(buf, cs.serviceId, len);
+			len += tools.strcpy(buf, cs.feeUsertype, len);
+			len += tools.strcpy(buf, cs.feeTerminalId, len);
+			len += tools.strcpy(buf, cs.feeTerminalType, len);
+			len += tools.strcpy(buf, cs.tpPid, len);
+			len += tools.strcpy(buf, cs.tpUdhi, len);
 
-			len += tools.strcpy(buf, cs.msg_fmt, len);
-			len += tools.strcpy(buf, cs.msg_src, len);
+			len += tools.strcpy(buf, cs.msgFmt, len);
+			len += tools.strcpy(buf, cs.msgSrc, len);
 			len += tools.strcpy(buf, cs.feetype, len);
 			len += tools.strcpy(buf, cs.feecode, len);
-			len += tools.strcpy(buf, cs.valid_time, len);
-			len += tools.strcpy(buf, cs.at_time, len);
-			len += tools.strcpy(buf, cs.src_terminal_id, len);
+			len += tools.strcpy(buf, cs.validTime, len);
+			len += tools.strcpy(buf, cs.atTime, len);
+			len += tools.strcpy(buf, cs.srcTerminalId, len);
 
-			len += tools.strcpy(buf, cs.destusr_tl, len);
-			for (int i = 0; i < cs.destusr_tl; i++) {
-				len += tools.strcpy(buf, cs.dest_terminal_id[i], len);
+			len += tools.strcpy(buf, cs.destusrTl, len);
+			for (int i = 0; i < cs.destusrTl; i++) {
+				len += tools.strcpy(buf, cs.destTerminalId[i], len);
 			}
-			len += tools.strcpy(buf, cs.dest_terminal_type, len);
-			len += tools.strcpy(buf, cs.msg_length, len);
-			len += tools.strcpy(buf, cs.msg_content, len);
+			len += tools.strcpy(buf, cs.destTerminalType, len);
+			len += tools.strcpy(buf, cs.msgLength, len);
+			len += tools.strcpy(buf, cs.msgContent, len);
 			// len +=tools.strcpy(buf,cs.reserve,len);
-			len += tools.strcpy(buf, cs.linkid, len);
+			len += tools.strcpy(buf, cs.linkId, len);
 
-			ch.pk_len = len;
-			ch.pk_cmd = 4;
-			ch.pk_seq = conn.seq;
+			ch.pkLen = len;
+			ch.pkCmd = 4;
+			ch.pkSeq = conn.seq;
 
-			tools.strcpy(buf, ch.pk_len, 0);
-			tools.strcpy(buf, ch.pk_cmd, 4);
-			tools.strcpy(buf, ch.pk_seq, 8);
+			tools.strcpy(buf, ch.pkLen, 0);
+			tools.strcpy(buf, ch.pkCmd, 4);
+			tools.strcpy(buf, ch.pkSeq, 8);
 
 			for (int i = 0; i < len; i++)
 				System.out.print(buf[i] + ",");
 			os.write(buf, 0, len); // 写
 			os.flush();
-			System.out.println("write finished");
-			user_seq = conn.seq;
+			LOG.debug("write finished");
+			userSeq = conn.seq;
 			conn.seq++;
 			if (conn.seq == 0x7fffffff)
 				conn.seq = 1;
 		} catch (IOException e) {
 			throw e;
 		}
-		return user_seq;
+		return userSeq;
 	}
 
-	public void readPa(conn_desc con) throws Exception {
-		cmppe_result cr = null;
+	public void readPa(ConnDesc con) throws Exception {
+		CmppeResult cr = null;
 		try {
 			cr = readResPack(con);
-			switch (cr.pack_id) {
+			switch (cr.packId) {
 
 			case -2147483648:
-				System.out.println("get nack pack");
+				LOG.debug("get nack pack");
 				break;
 
 			case -2147483647:
-				cmppe_login_result cl = (cmppe_login_result) cr;
-				System.out.println("------------login resp----------: VERSION = " + cl.version);
-				System.out.println("------------login resp----------: STAT = " + ((cmppe_result) (cl)).stat);
+				CmppeLoginResult cl = (CmppeLoginResult) cr;
+				LOG.debug("------------login resp----------: VERSION = " + cl.version);
+				LOG.debug("------------login resp----------: STAT = " + ((CmppeResult) (cl)).stat);
 				break;
 
 			case -2147483646:
-				System.out.println("------------logout resp----------: STAT = " + cr.stat);
+				LOG.debug("------------logout resp----------: STAT = " + cr.stat);
 				break;
 
 			case -2147483644:
-				cmppe_submit_result sr = (cmppe_submit_result) cr;
+				CmppeSubmitResult sr = (CmppeSubmitResult) cr;
 				sr.flag = 0;
-				System.out.println("------------submit resp----------: STAT = " + sr.stat + " SEQ = " + sr.seq);
+				LOG.debug("------------submit resp----------: STAT = " + sr.stat + " SEQ = " + sr.seq);
 				break;
 
 			case 5: // '\005'
-				System.out.println("------------deliver---------: STAT = 0");
-				cmppe_deliver_result cd = (cmppe_deliver_result) cr;
-				cmpp_send_deliver_resp(con, cd);
-				System.out.println("----------send deliver -------ok");
+				LOG.debug("------------deliver---------: STAT = 0");
+				CmppeDeliverResult cd = (CmppeDeliverResult) cr;
+				cmppSendDeliverResp(con, cd);
+				LOG.debug("----------send deliver -------ok");
 				break;
 			case -2147483641:
-				System.out.println("---------cancel-----------: STAT = " + cr.stat);
+				LOG.debug("---------cancel-----------: STAT = " + cr.stat);
 				break;
 
 			case -2147483640:
-				// myLogger.info(FormatSysTime.getCurrentTimeA() + "---------active
+				// myLogger.info(FormatSysTime.getCurrentTimeA() +
+				// "---------active
 				// resp-----------: STAT " + cr.stat);
-				// System.out.println("---------active resp-----------: STAT " +
+				// LOG.debug("---------active resp-----------: STAT " +
 				// cr.stat);
 				break;
 
 			default:
-				System.out.println("---------Error packet-----------");
+				LOG.debug("---------Error packet-----------");
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			System.out.println("have a exception");
+			LOG.error("", e);
 			throw new Exception("readPa err...");
 		}
 	}
 
-	public cmppe_result readResPack(conn_desc conn) throws IOException, UnknownPackException, DeliverFailException {
+	public CmppeResult readResPack(ConnDesc conn) throws IOException, UnknownPackException, DeliverFailException {
 		DataInputStream in = null;
-		cmppe_result cr = new cmppe_result();
-		cmppe_submit_result sr = new cmppe_submit_result();
+		CmppeResult cr = new CmppeResult();
+		CmppeSubmitResult sr = new CmppeSubmitResult();
 		new OutOfBoundsException();
-		cmppe_pack pack = new cmppe_pack();
+		CmppePack pack = new CmppePack();
 		new DataOutputStream(conn.sock.getOutputStream());
 		in = new DataInputStream(conn.sock.getInputStream());
 		do {
 			if (in.available() >= 12) {
 				readHead(in, pack);
-				if (pack.pk_head.pk_cmd != 8) {
+				if (pack.pkHead.pkCmd != 8) {
 					break;
 				} else {
 					LOG.debug("receive gateway active");
-					// System.out.println("receive gateway active...");
-					cmpp_send_active_resp(conn, pack.pk_head.pk_seq); // if pk_cmd =8 then
-					// send active_resp
+					// LOG.debug("receive gateway active...");
+					cmppSendActiveResp(conn, pack.pkHead.pkSeq); // if
+																	// pkCmd
+																	// =8
+																	// then
+					// send activeResp
 				}
 			}
 		} while (true);
@@ -576,7 +567,7 @@ public final class CMPP {
 		// check package
 		boolean checkPackage = true;
 		while (checkPackage) {
-			if (in.available() >= pack.pk_head.pk_len - 12) {
+			if (in.available() >= pack.pkHead.pkLen - 12) {
 				checkPackage = false;
 			} else {
 				try {
@@ -588,28 +579,18 @@ public final class CMPP {
 			}
 		}
 
-		switch (pack.pk_head.pk_cmd) {
+		switch (pack.pkHead.pkCmd) {
 		case -2147483648:
-			cr.pack_id = 0x80000000;
-			cr.stat = pack.pk_head.pk_stat;
+			cr.packId = 0x80000000;
+			cr.stat = pack.pkHead.pkStat;
 			return cr;
 
-		case -2147483647: // cmpp_login_rep
-			cmppe_login_result cl = new cmppe_login_result();
-			cl.pack_id = 0x80000001;
-			// cl.stat = in.readByte();
-			///////////////////
-			// System.out.println("::::::::::::::::::::");
-			// System.out.println("::::::::::::::::::::");
-			// System.out.println("::::::::::::::::::::");
-			// System.out.println("the length is:" + pack.pk_head.pk_len);
-			// System.out.println("::::::::::::::::::::");
-			// System.out.println("::::::::::::::::::::");
-			// System.out.println("::::::::::::::::::::");
-			///////////////////
+		case -2147483647: // cmppLoginRep
+			CmppeLoginResult cl = new CmppeLoginResult();
+			cl.packId = 0x80000001;
 
 			cl.stat = in.readInt(); // 状态 =0(成功)
-			if (pack.pk_head.pk_len > 16) {
+			if (pack.pkHead.pkLen > 16) {
 				for (int k = 0; k < 16; k++)
 					cl.auth[k] = in.readByte(); // 认证码
 
@@ -620,60 +601,60 @@ public final class CMPP {
 			return cl;
 
 		case -2147483646:
-			read_count_byte(in, pack.buf, pack.pk_head.pk_len - 16);
-			cr.pack_id = 0x80000002;
-			cr.stat = pack.pk_head.pk_stat;
+			readCountByte(in, pack.buf, pack.pkHead.pkLen - 16);
+			cr.packId = 0x80000002;
+			cr.stat = pack.pkHead.pkStat;
 			return cr;
 
-		case -2147483644: // cmpp_submit_rep
-			sr.pack_id = 0x80000004;
-			sr.seq = pack.pk_head.pk_seq;
-			sr.stat = pack.pk_head.pk_stat;
-			if (pack.pk_head.pk_len - 16 > 0) {
+		case -2147483644: // cmppSubmitRep
+			sr.packId = 0x80000004;
+			sr.seq = pack.pkHead.pkSeq;
+			sr.stat = pack.pkHead.pkStat;
+			if (pack.pkHead.pkLen - 16 > 0) {
 				for (int k = 0; k < 8; k++)
-					sr.msg_id[k] = in.readByte(); // 认证码
+					sr.msgId[k] = in.readByte(); // 认证码
 			} else {
-				sr.msg_id = null;
+				sr.msgId = null;
 				return sr;
 			}
 			sr.result = in.readInt();// change at 061208
-			System.out.println("submit result is:::::" + sr.result);
+			LOG.debug("submit result is:::::" + sr.result);
 
 			return sr;
 
 		case 5: // '\005' get mo
-			System.out.println("------- Case 5 -------");
-			cmppe_deliver_result cd = new cmppe_deliver_result();
+			LOG.debug("------- Case 5 -------");
+			CmppeDeliverResult cd = new CmppeDeliverResult();
 			try {
-				byte packbuf[] = new byte[pack.pk_head.pk_len - 12];
+				byte packbuf[] = new byte[pack.pkHead.pkLen - 12];
 				in.read(packbuf);
 				cd.readInBytes(packbuf); // 解析deliver信息
 
-				cd.seq = pack.pk_head.pk_seq;
-				cd.pack_id = 5;
+				cd.seq = pack.pkHead.pkSeq;
+				cd.packId = 5;
 
 				return cd;
 			} catch (Exception e1) {
-				System.out.println(" receive deliver error..............");
-				System.out.println(e1.toString());
+				LOG.error("receive deliver error",e1);
 				e1.printStackTrace();
 				throw new UnknownPackException();
 			}
 
 		case -2147483641:
-			read_count_byte(in, pack.buf, pack.pk_head.pk_len - 16);
-			cr.stat = pack.pk_head.pk_stat;
-			cr.pack_id = 0x80000007;
+			readCountByte(in, pack.buf, pack.pkHead.pkLen - 16);
+			cr.stat = pack.pkHead.pkStat;
+			cr.packId = 0x80000007;
 			return cr;
 
 		case -2147483640:
-			cr.stat = pack.pk_head.pk_stat;
+			cr.stat = pack.pkHead.pkStat;
 
-			cr.pack_id = 0x80000008;
-			int success_id = in.readByte();// change at 2008-11-11 in.readByte() ->
-																			// in.readInt();
-			cr.stat = success_id;
-			// System.out.println("------------success_id--------:" + success_id);
+			cr.packId = 0x80000008;
+			int successId = in.readByte();// change at 2008-11-11 in.readByte()
+											// ->
+											// in.readInt();
+			cr.stat = successId;
+			// LOG.debug("------------successId--------:" + successId);
 			return cr;
 
 		}
@@ -681,55 +662,56 @@ public final class CMPP {
 		throw un;
 	}
 
-	public void cmpp_send_deliver_resp(conn_desc conn, cmppe_deliver_result cd) throws IOException {
+	public void cmppSendDeliverResp(ConnDesc conn, CmppeDeliverResult cd) throws IOException {
 		synchronized (conn) {
-			LOG.info("cmpp_send_deliver_resp:begin" + " " + cd.msg_id);
-			// check msg_id
-			if (cd.msg_id.length != 8) {
-				LOG.error("cd.msg_id:" + cd.msg_id + " is wrong");
+			LOG.info("cmppSendDeliverResp:begin" + " " + cd.msgId);
+			// check msgId
+			if (cd.msgId.length != 8) {
+				LOG.error("cd.msgId:" + cd.msgId + " is wrong");
 				return;
 			}
-			cmppe_head ch = new cmppe_head();
+			CmppeHead ch = new CmppeHead();
 			try {
 				DataOutput out = new DataOutputStream(conn.sock.getOutputStream());
-				ch.pk_cmd = 0x80000005;
-				ch.pk_len = 24;
-				ch.pk_seq = cd.seq;
+				ch.pkCmd = 0x80000005;
+				ch.pkLen = 24;
+				ch.pkSeq = cd.seq;
 				sendHeader(ch, out);
 
 				ByteCode delv = new ByteCode(12);
-				delv.AddBytes(cd.msg_id);
+				delv.AddBytes(cd.msgId);
 				// delv.AddInt8((short)cd.stat);
 				delv.AddInt32(cd.stat);
 				out.write(delv.getBytes());
 			} catch (IOException e) {
+				LOG.error("", e);
 				throw e;
 			} catch (Exception e1) {
+				LOG.error("", e1);
 				throw new IOException("decode error");
 			}
-			LOG.info("cmpp_send_deliver_resp:end");
+			LOG.info("cmppSendDeliverResp:end");
 		}
 	}
 
-	protected void sendHeader(cmppe_head ch, DataOutput out) throws IOException {
+	protected void sendHeader(CmppeHead ch, DataOutput out) throws IOException {
 		synchronized (out) {
 			try {
 				ByteCode bc = new ByteCode(3);
 
-				bc.AddInt32(ch.pk_len);
-				bc.AddInt32(ch.pk_cmd);
-				bc.AddInt32(ch.pk_seq);
+				bc.AddInt32(ch.pkLen);
+				bc.AddInt32(ch.pkCmd);
+				bc.AddInt32(ch.pkSeq);
 
 				out.write(bc.getBytes());
 			} catch (IOException e) {
-
-				System.out.println("send Head Exception" + e.getMessage());
+				LOG.error("send Head Exception", e);
 				throw e;
 			}
 		}
 	}
 
-	public static final byte CMPPE_MAX_ICP_ID_LEN = 6;
+	public static final byte CMPPE_MAX_ICP_IDVEN = 6;
 	public static final byte CMPPE_AUTH_LEN = 16;
 	public static final byte CMPPE_MAX_SVC_LEN = 10;
 	public static final byte CMPPE_DATETIME_LEN = 16;

@@ -70,8 +70,8 @@ public class ConfigManager {
 				}
 			}
 			if (in == null) {
-				String filePath = Thread.currentThread().getContextClassLoader().getResource("").toString().replaceAll("file:",
-						"") + resource;
+				String filePath = Thread.currentThread().getContextClassLoader().getResource("").toString()
+						.replaceAll("file:", "") + resource;
 				if (filePath.indexOf(":") == 2)
 					filePath = filePath.substring(1, filePath.length());
 				File file = new File(filePath);

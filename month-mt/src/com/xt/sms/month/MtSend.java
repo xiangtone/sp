@@ -16,11 +16,11 @@ import org.apache.log4j.Logger;
 
 public class MtSend implements Runnable {
 	private static Logger logger = Logger.getLogger(MtSend.class);
-	private static boolean ifsend930=true;
-	private static boolean ifsend=true;
-	
-	private DBForLocal dbLocal = null;
-	private DBForLog dbLog = null;
+	private static boolean ifsend930 = true;
+	private static boolean ifsend = true;
+
+	private DBForLocal dbLocal = new DBForLocal();
+	private DBForLog dbLog = new DBForLog();
 
 	private Map<String, Map<String, String>> serviceMap = new HashMap();
 	private Map<String, List<String>> messagesMap = new HashMap();
@@ -35,8 +35,6 @@ public class MtSend implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				this.dbLocal = new DBForLocal();
-				this.dbLog = new DBForLog();
 				int hourOfDay = DateTimeTool.getHourOfDay();
 				int min = DateTimeTool.getMinute();
 				if ((hourOfDay >= 9) && (hourOfDay < 19)) {
@@ -46,31 +44,27 @@ public class MtSend implements Runnable {
 						loadMessagesSpecial();
 						sendRetainedUser();
 						sendNewUser();
-						ifsend=true;
-						ifsend930=true;
+						ifsend = true;
+						ifsend930 = true;
 					} else {
-						if(ifsend930){
+						if (ifsend930) {
 							logger.debug("9:00-9:30 not send...");
-							ifsend930=false;
+							ifsend930 = false;
 						}
 					}
-				} else{
-					if(ifsend){
+				} else {
+					if (ifsend) {
 						logger.debug("out of range 9:00-19:00 not send...");
-						ifsend=false;
+						ifsend = false;
 					}
 				}
 			} catch (Exception e) {
-				logger.error("",e);
+				logger.error("", e);
 			} finally {
-				if (this.dbLocal != null) {
-					this.dbLocal.close();
-				}
-				if (this.dbLog != null) {
-					this.dbLog.close();
-				}
+				this.dbLocal.close();
+				this.dbLog.close();
 			}
-//			logger.debug("sleep 60s.");
+			// logger.debug("sleep 60s.");
 			try {
 				Thread.sleep(60000L);
 			} catch (InterruptedException e) {
@@ -85,8 +79,7 @@ public class MtSend implements Runnable {
 		String sql = "select gameid,gamecode,spcode,gamename,price from companygames";
 		logger.debug(sql);
 		try {
-			this.dbLog.executeQuery(sql);
-			ResultSet rs=dbLog.getRs();
+			ResultSet rs = dbLog.executeQuery(sql);
 			while (rs.next()) {
 				String gamecode = rs.getString("gamecode");
 				String gameid = rs.getString("gameid");
@@ -102,19 +95,18 @@ public class MtSend implements Runnable {
 				this.serviceMap.put(gamecode, map);
 			}
 		} catch (SQLException e) {
-			logger.error(sql,e);
-		}
+			logger.error(sql, e);
+		} 
 	}
 
-	private void loadMessages(){
+	private void loadMessages() {
 		if (this.messagesMap.size() > 0) {
 			this.messagesMap.clear();
 		}
 		String sql = "select serverid,msg from messages";
 		logger.debug(sql);
 		try {
-			this.dbLog.executeQuery(sql);
-			ResultSet rs=dbLog.getRs();
+			ResultSet rs = dbLog.executeQuery(sql);
 			String msg;
 			while (rs.next()) {
 				String serverid = rs.getString("serverid");
@@ -131,20 +123,19 @@ public class MtSend implements Runnable {
 			for (String serverid : this.messagesMap.keySet())
 				logger.debug("'" + serverid + "' : " + ((List) this.messagesMap.get(serverid)).size());
 		} catch (SQLException e) {
-			logger.error(sql,e);
+			logger.error(sql, e);
 		}
-		
+
 	}
 
-	private void loadMessagesSpecial(){
+	private void loadMessagesSpecial() {
 		if (this.messagesSpecialMap.size() > 0) {
 			this.messagesSpecialMap.clear();
 		}
 		String sql = "select serverid,msg from messages_special";
 		logger.debug(sql);
 		try {
-			this.dbLog.executeQuery(sql);
-			ResultSet rs=dbLog.getRs();
+			ResultSet rs = dbLog.executeQuery(sql);
 			String msg;
 			while (rs.next()) {
 				String serverid = rs.getString("serverid");
@@ -161,29 +152,28 @@ public class MtSend implements Runnable {
 			for (String serverid : this.messagesSpecialMap.keySet())
 				logger.debug("'" + serverid + "' : " + ((List) this.messagesSpecialMap.get(serverid)).size());
 		} catch (SQLException e) {
-			logger.error(sql,e);
+			logger.error(sql, e);
 		}
-		
+
 	}
 
-	private int getSuccCount(String cpn, String serverid){
+	private int getSuccCount(String cpn, String serverid) {
 		int count = 0;
 
 		String sql = "select count(*) as c from sms_platform.sms_mtlogbackup where feetype='03' and reptstat='DELIVRD' and destcpn = '"
 				+ cpn + "' and serverid = '" + serverid + "'";
 		logger.debug(sql);
 		try {
-			this.dbLog.executeQuery(sql);
-			ResultSet rs=dbLog.getRs();
+			ResultSet rs = dbLog.executeQuery(sql);
 			if (rs.next()) {
 				count = rs.getInt("c");
 			}
 			return count;
 		} catch (SQLException e) {
-			logger.error(sql,e);
+			logger.error(sql, e);
 		}
 		return count;
-		
+
 	}
 
 	private int updateCompanysUser(String id, String msgid, String sendate){
@@ -193,7 +183,7 @@ public class MtSend implements Runnable {
 		try {
 			return this.dbLocal.executeUpdate(sql);
 		} catch (SQLException e) {
-			logger.error(sql,e);
+			logger.error(sql, e);
 		}
 		return 0;
 	}
@@ -204,7 +194,7 @@ public class MtSend implements Runnable {
 		try {
 			return this.dbLocal.executeUpdate(sql);
 		} catch (SQLException e) {
-			logger.error(sql,e);
+			logger.error(sql, e);
 		}
 		return 0;
 	}
@@ -218,7 +208,7 @@ public class MtSend implements Runnable {
 		try {
 			return this.dbLocal.executeUpdate(sql);
 		} catch (SQLException e) {
-			logger.error(sql,e);
+			logger.error(sql, e);
 		}
 		return 0;
 	}
@@ -279,8 +269,8 @@ public class MtSend implements Runnable {
 					int feeCount = price / 2 + 1;
 
 					if (succCount < feeCount) {
-						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : "
-								+ succCount + " not_enough.");
+						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : " + succCount
+								+ " not_enough.");
 						notEnoughCount++;
 						getMessage(map);
 						updateCompanysUser(id, (String) map.get("msgid"), DateTimeTool.getTomorrow());
@@ -302,8 +292,8 @@ public class MtSend implements Runnable {
 							millis = System.currentTimeMillis();
 						}
 					} else {
-						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : "
-								+ succCount + " enough.");
+						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : " + succCount
+								+ " enough.");
 						enoughCount++;
 						updateCompanysUser(id, DateTimeTool.getNextMonthFirstday());
 					}
@@ -392,7 +382,7 @@ public class MtSend implements Runnable {
 		return str1;
 	}
 
-	private void sendRetainedUser(){
+	private void sendRetainedUser() {
 		int id = 0;
 		List sendList = new ArrayList();
 		do {
@@ -402,8 +392,7 @@ public class MtSend implements Runnable {
 					+ "and id > " + id + " " + "order by id limit 5000";
 			logger.debug(sql);
 			try {
-				this.dbLog.executeQuery(sql);
-				ResultSet rs=dbLog.getRs();
+				ResultSet rs = dbLog.executeQuery(sql);
 				while (rs.next()) {
 					id = rs.getInt("id");
 					String company = rs.getString("company");
@@ -423,24 +412,23 @@ public class MtSend implements Runnable {
 					sendList.add(map);
 				}
 			} catch (SQLException e) {
-				logger.error(sql,e);
+				logger.error(sql, e);
 			}
-			
+
 			logger.debug("retained sendList : " + sendList.size());
 
 			filterSendList(sendList);
 		} while (sendList.size() > 0);
 	}
 
-	private void sendNewUser(){
+	private void sendNewUser() {
 		List sendList = new ArrayList();
 
 		String sql = "select id,company,cpn,serviceid,msgid,provid from companys_user where (state = '1' or state='3') and firstsend = 0 order by id limit 1000";
 		logger.debug(sql);
-		
+
 		try {
-			this.dbLog.executeQuery(sql);
-			ResultSet rs=dbLog.getRs();
+			ResultSet rs = dbLog.executeQuery(sql);
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String company = rs.getString("company");
@@ -460,7 +448,7 @@ public class MtSend implements Runnable {
 				sendList.add(map);
 			}
 		} catch (SQLException e1) {
-			logger.error(sql,e1);
+			logger.error(sql, e1);
 		}
 
 		logger.debug("new user sendList : " + sendList.size());

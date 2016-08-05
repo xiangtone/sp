@@ -22,19 +22,19 @@ public class ConfigManager {
 	/**
 	 * 对应于属性文件的文件对象变量
 	 */
-	private File m_file = null;
+	private File mFile = null;
 	/**
 	 * 属性文件的最后修改日期
 	 */
-	private long m_lastModifiedTime = 0;
+	private long mLastModifiedTime = 0;
 	/**
 	 * 属性文件所对应的属性对象变量
 	 */
-	private static Properties m_props = null;
+	private static Properties mProps = null;
 	/**
 	 * 本类可能存在的惟一的一个实例
 	 */
-	private static ConfigManager m_instance = null;
+	private static ConfigManager mInstance = null;
 
 	/**
 	 * 私有的构造子，用以保证外界无法直接实例化
@@ -102,9 +102,9 @@ public class ConfigManager {
 
 	private static void init(String filePath) {
 
-		m_props = new Properties();
+		mProps = new Properties();
 		try {
-			m_props.load(getResourceAsStream(filePath));
+			mProps.load(getResourceAsStream(filePath));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -112,7 +112,7 @@ public class ConfigManager {
 
 	private static String getProperty(String key) {
 		String result = "";
-		if (m_props == null) {
+		if (mProps == null) {
 			init(PFILE);
 		}
 		try {
@@ -122,8 +122,8 @@ public class ConfigManager {
 			// prop.clear();
 			// init("");
 			// }
-			if (m_props.containsKey(key)) {
-				result = m_props.getProperty(key);
+			if (mProps.containsKey(key)) {
+				result = mProps.getProperty(key);
 			}
 		} catch (Exception exce) {
 			exce.printStackTrace();
@@ -145,10 +145,10 @@ public class ConfigManager {
 	 * @return 返还ConfigManager 类的单一实例
 	 */
 	synchronized public static ConfigManager getInstance() {
-		if (m_instance == null) {
-			m_instance = new ConfigManager();
+		if (mInstance == null) {
+			mInstance = new ConfigManager();
 		}
-		return m_instance;
+		return mInstance;
 	}
 
 }
