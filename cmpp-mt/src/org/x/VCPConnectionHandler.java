@@ -6,20 +6,19 @@ package org.x;
 
 import java.net.Socket;
 
-import com.xiangtone.sms.api.conn_desc;
-import com.xiangtone.sms.api.message;
-import com.xiangtone.sms.api.sm_submit_result;
+import org.apache.log4j.Logger;
+
+import com.xiangtone.sms.api.ConnDesc;
+import com.xiangtone.sms.api.Message;
+import com.xiangtone.sms.api.SmSubmitResult;
 import com.xiangtone.util.FormatSysTime;
 
 public class VCPConnectionHandler implements Runnable {
-	/**
-	*
-	*
-	*/
+	private static Logger logger = Logger.getLogger(VCPConnectionHandler.class);
 	protected Socket socketToHandle;
-	protected conn_desc con;
-	protected message mess;
-	protected sm_submit_result sm;
+	protected ConnDesc con;
+	protected Message mess;
+	protected SmSubmitResult sm;
 	protected SMSFactory myFactory;
 	// protected SMSMT mt;
 	protected SMSCost cost;
@@ -27,18 +26,14 @@ public class VCPConnectionHandler implements Runnable {
 	// protected SMSCard card;
 	protected SMSMO mo;
 
-	/**
-	*
-	*
-	*/
 	public VCPConnectionHandler(Socket aSocketToHandle) {
 		socketToHandle = aSocketToHandle;
-		con = new conn_desc(socketToHandle);
+		con = new ConnDesc(socketToHandle);
 
 		// mt = new SMSMT();
 		myFactory = new SMSFactory();
-		sm = new sm_submit_result();
-		mess = new message();
+		sm = new SmSubmitResult();
+		mess = new Message();
 		cost = new SMSCost();
 		// month =new SMSMonth();
 		// card = new SMSCard();
@@ -46,149 +41,119 @@ public class VCPConnectionHandler implements Runnable {
 		// strart();
 	}
 
-	/**
-	*
-	*
-	*/
 	public void run() {
 		try {
 
-			mess.readPa(con); // ï¿½ï¿½È¡ï¿½á½»ï¿½ï¿½Ï¢
-			String stat = sm.get_stat();
-			System.out.println("stat....:" + stat);
-			//
+			mess.readPa(con); // ¶ÁÈ¡Ìá½»ÐÅÏ¢
+			String stat = sm.getStat();
+//			logger.debug("stat....:" + stat);
 			// stat = "00";
 			if (stat.equals("00")) {
 
-				////////////////////////////////////////
-				System.out.println(":::::::::::::");
-				System.out.println(":::::::::::::");
-				System.out.println(":::::::::::::");
-				System.out.println("new message");
-				System.out.println(":::::::::::::");
-				System.out.println(":::::::::::::");
-				System.out.println(":::::::::::::");
-				///////////////////////////////////////
-				String _corpid = "00";
-				int _vcpid = 1;
-				_vcpid = Integer.parseInt(sm.get_vcp_id()); // get_vcpid();
-				String _spcode = sm.get_server_code();// ï¿½Ø·ï¿½ï¿½ï¿½Ã»ï¿½ï¿½
-																							// //sm.get_server_code();
+//				logger.debug("new message");
+				String corpId = "00";
+				int vcpId = 1;
+				vcpId = Integer.parseInt(sm.getVcpId()); // getvcpId();
+				String spCode = sm.getServerCode();// ÌØ·þºÅÃ»ÓÐ
+													// //sm.getServerCode();
 
-				int _mediatype = Integer.parseInt(sm.get_media_type());
-				String _destcpn = sm.get_dest_cpn();
-				String _feecpn = sm.get_fee_cpn();
-				String _infofee = sm.get_fee_code();
-				String _feetype = sm.get_fee_type();
-				String s_feetype = _feetype;
-				String _serverid = sm.get_server_type();
-				String _content = new String(sm.get_content());
-				String _ismgid = sm.get_prov_code();
+				int mediaType = Integer.parseInt(sm.getMediaType());
+				String destCpn = sm.getDestCpn();
+				String feeCpn = sm.getFeeCpn();
+				String Infofee = sm.getFeeCode();
+				String feeType = sm.getFeeType();
+				String sfeeType = feeType;
+				String serverId = sm.getServerType();
+				String content = new String(sm.getContent());
+				String ismgId = sm.getProvCode();
 				/////////// add at 061123
-				String _linkid = sm.get_linkid();
-				int _feecpntype = sm.get_feecpn_type();
-				String msgId = sm.get_msgId();
-				System.out.println("linkid is:" + _linkid);
-				System.out.println("feecpntype:" + _feecpntype);
-				System.out.println("msgid is:" + msgId);
-				System.out.println("destcpn:" + _destcpn);
-				System.out.println("_feecpn:" + _feecpn);
+				String linkId = sm.getLinkId();
+				int feeCpnType = sm.getFeecpnType();
+				String msgId = sm.getMsgId();
+//				logger.debug("linkid is:" + linkId+", feecpntype:" + feeCpnType+", msgid is:" + msgId+", destcpn:" + destCpn +", feeCpn:" + feeCpn);
 
 				////////////////////////
-				if (_ismgid == null || _ismgid.equals(""))
-					_ismgid = mo.getImsgID(_feecpn);
+				if (ismgId == null || ismgId.equals(""))
+					ismgId = mo.getImsgID(feeCpn);
 				if (msgId == null) {
 					msgId = "";
 				}
-				String _servercode = "";
-				String _servername = "";
+				String ServerCode = "";
+				String serverName = "";
 				SMSMT mt = new SMSMT();
-				cost.lookupInfofeeByServerID_IOD(_serverid);
-				_infofee = cost.getCost_infoFee();
-				_servercode = cost.getCost_serverCode_IOD();
-				_feetype = cost.getCost_feeType();
-				_servername = cost.getCost_serverName();
+				cost.lookupInfofeeByServerIDIOD(serverId);
+				Infofee = cost.getInfoFee();
+				ServerCode = cost.getServerCodeIOD();
+				feeType = cost.getFeeType();
+				serverName = cost.getServerName();
 
-				mt.setMT_vcpID(_vcpid);
-				mt.setMT_ismgID(_ismgid);
-				mt.setMT_spCode(_spcode);
-				mt.setMT_corpID(_corpid);
-				mt.setMT_destCpn(_destcpn);
-				mt.setMT_feeCpn(_feecpn);
-				mt.setMT_serverID(_serverid);
-				mt.setMT_serverName(_servername);
-				mt.setMT_infoFee(_infofee);
-				mt.setMT_feeCode(_servercode);
-				mt.setMT_feeType(_feetype);
-				mt.setMT_sendContent(_content);
-				mt.setMT_mediaType(_mediatype);
-				mt.setMT_sendTime(FormatSysTime.getCurrentTimeA());
-				mt.setMT_linkID(_linkid);
-				mt.setMT_cpnType(_feecpntype);
-				mt.setMT_submitMsgID(msgId);
+				mt.setMTVcpID(vcpId);
+				mt.setMTIsmgID(ismgId);
+				mt.setMTSpCode(spCode);
+				mt.setMTCorpID(corpId);
+				mt.setMTDestCpn(destCpn);
+				mt.setMTFeeCpn(feeCpn);
+				mt.setMTServerID(serverId);
+				mt.setMTServerName(serverName);
+				mt.setMTInfoFee(Infofee);
+				mt.setMTFeeCode(ServerCode);
+				mt.setMTFeeType(feeType);
+				mt.setMTSendContent(content);
+				mt.setMTMediaType(mediaType);
+				mt.setMTSendTime(FormatSysTime.getCurrentTimeA());
+				mt.setMTLinkID(linkId);
+				mt.setMTCpnType(feeCpnType);
+				mt.setMTSubmitMsgID(msgId);
 
 				/////////////////
 				/*
-				 * System.out.println("////////////////");
-				 * System.out.println("////////////////");
-				 * System.out.println("////////////////");
-				 * System.out.println("////////////////");
-				 * System.out.println("_serverid:" + _serverid);
-				 * System.out.println("cpntype is:" + mt.cpnType);
-				 * System.out.println("linkid is:" + mt.linkID);
-				 * System.out.println("content is:" + mt.sendContent);
-				 * System.out.println("msgId is:" + mt.submitMsgID);
-				 * System.out.println("////////////////");
-				 * System.out.println("////////////////");
-				 * System.out.println("////////////////");
-				 * System.out.println("////////////////");
+				 * logger.debug("////////////////");
+				 * logger.debug("////////////////");
+				 * logger.debug("////////////////");
+				 * logger.debug("////////////////"); logger.debug("serverId:" +
+				 * serverId); logger.debug("cpntype is:" + mt.cpnType);
+				 * logger.debug("linkid is:" + mt.linkID); logger.debug(
+				 * "content is:" + mt.sendContent); logger.debug("msgId is:" +
+				 * mt.submitMsgID); logger.debug("////////////////");
+				 * logger.debug("////////////////");
+				 * logger.debug("////////////////");
+				 * logger.debug("////////////////");
 				 */
 				//////////////////
 				if (msgId.startsWith("auto")) {
-					mt.setMT_feeType("01");
-					mt.setMT_serverID("1000");
-					mt.setMT_infoFee("0");
-					mt.setMT_serverName("AutoHELP");
-					mt.setMT_feeCode("HELP");
+					mt.setMTFeeType("01");
+					mt.setMTServerID("1000");
+					mt.setMTInfoFee("0");
+					mt.setMTServerName("AutoHELP");
+					mt.setMTFeeCode("HELP");
 				}
-				// mt.insertMTLog(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+				// mt.insertMTLog(); 
 				///////////////////
-				CMPPSend mysms = myFactory.createSMS(_ismgid, mt);
-				switch (_mediatype) {
+				CMPPSend mysms = myFactory.createSMS(ismgId, mt);
+				switch (mediaType) {
 				case 1:
-					mysms.sendTextSMS(); // ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
+					mysms.sendTextSMS(); // ·¢ËÍÎÄ±¾
 					break;
 				case 2:
-					mysms.sendBinaryPicSMS(); // ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
+					mysms.sendBinaryPicSMS(); // ·¢ËÍÍ¼Æ¬
 					break;
 				case 3:
-					mysms.sendBinaryRingSMS();
+					mysms.sendBinaryRingSMS();// ·¢ËÍÁåÉù
 					break;
 
 				default:
-					mysms.sendTextSMS(); // ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
+					mysms.sendTextSMS(); // ·¢ËÍÎÄ±¾
 					break;
 				}
-				System.out.println("*************************mt.feeType:" + mt.feeType);
-				System.out.println("*************************s_feetype:" + _feetype);
-				System.out.println("*************************_feetype:" + _feetype);
+//				logger.debug("mt.feeType:" + mt.feeType+" sfeeType:" + feeType+" feeType:" + feeType);
 
 			} // end if
 
 		} // end try
 		catch (Exception e) {
-			System.out.println("Error handling a client: " + e);
+			logger.error("Error handling a client: ", e);
 			e.printStackTrace();
 		}
 
 	}
-	/*
-	 * public static void main(String[] args){ try{ SMSIsmgInfo info = new
-	 * SMSIsmgInfo("config.ini"); info.loadParam(); info.printParam();
-	 * SMSActiveTest sdc = new SMSActiveTest(); new Thread(sdc).start(); SMSRecive
-	 * sr = new SMSRecive(); new Thread(sr).start(); }catch(Exception e){
-	 * System.out.println(">>>>>>Æ½Ì¨ï¿½ï¿½ï¿½ï¿½"); e.printStackTrace(); } VCPServer
-	 * vcpserver = new VCPServer(8001); vcpserver.start(); //VCPConnectionHandler
-	 * vcphanlder = new VCPConnectionHandler(); }
-	 */
 }

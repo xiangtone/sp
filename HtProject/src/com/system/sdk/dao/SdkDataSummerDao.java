@@ -12,7 +12,8 @@ import com.system.util.StringUtil;
 
 public class SdkDataSummerDao
 {
-	public void loadSdkDataSummer(int cpId,int channelId,int appId,int troneId,int spTroneId,String startDate,String endDate,int showType)
+	@SuppressWarnings("unchecked")
+	public List<SdkDataSummerModel> loadSdkDataSummer(int cpId,int channelId,int appId,int troneId,int spTroneId,String startDate,String endDate,int showType)
 	{
 		String[] joinQuery = getShowType(showType);
 		String queryParams = joinQuery[0];
@@ -88,9 +89,7 @@ public class SdkDataSummerDao
 		sql += " GROUP BY join_id ";
 		sql += " )b ON a.join_id = b.join_id ";
 		
-		System.out.println(sql);
-		
-		new JdbcGameControl().query(sql, new QueryCallBack()
+		return (List<SdkDataSummerModel>)new JdbcGameControl().query(sql, new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException
@@ -99,10 +98,10 @@ public class SdkDataSummerDao
 				while(rs.next())
 				{
 					SdkDataSummerModel model = new SdkDataSummerModel();
-					
+				
 					model.setTitle(StringUtil.getString(rs.getString("show_title"), ""));
-					model.setActivityRows(rs.getInt("user_rows"));
-					model.setUserRows(rs.getInt("activity_rows"));
+					model.setActivityRows(rs.getInt("activity_rows"));
+					model.setUserRows(rs.getInt("user_rows"));
 					model.setTroneRequestRows(rs.getInt("trone_request_rows"));
 					model.setTroneEffectRequestRows(rs.getInt("trone_effect_request_rows"));
 					model.setTroneOrderRows(rs.getInt("trone_order_rows"));
@@ -138,7 +137,7 @@ public class SdkDataSummerDao
 				break;
 			case 4:
 				joinId = " g.cp_id ";
-				queryParams = " g.nick_name ";
+				queryParams = " CONCAT(g.name,'-',g.nick_name) ";
 				break;
 			case 5:
 				joinId = " e.sdk_app_id ";
@@ -171,7 +170,7 @@ public class SdkDataSummerDao
 	
 	public static void main(String[] args)
 	{
-		new SdkDataSummerDao().loadSdkDataSummer(0, 308, 0, 0, 0, "2016-07-02","2016-09-02",7);
+		new SdkDataSummerDao().loadSdkDataSummer(0, 0, 0, 0, 0, "2016-07-02","2016-09-02",1);
 	}
 	
 }

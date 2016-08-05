@@ -9,6 +9,7 @@ import com.system.dao.analy.CpMrDao;
 import com.system.dao.analy.HoldConfigDao;
 import com.system.dao.analy.MrDao;
 import com.system.dao.analy.MrSummerDao;
+import com.system.database.JdbcControl;
 import com.system.model.analy.HoldConfigModel;
 import com.system.model.analy.MrModel;
 import com.system.util.StringUtil;
@@ -196,10 +197,23 @@ public class AnalyMrDailyServer
 	}
 	*/
 	
+	private void delThirdPaySummerData(String startDate,String endDate)
+	{
+		String sql1 = "DELETE FROM daily_log.`tbl_third_pay_cp_mr_summer` WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		String sql2 = "DELETE FROM daily_log.`tbl_third_pay_mr_summer` WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		
+		JdbcControl control =new JdbcControl();
+		control.execute(sql1);
+		control.execute(sql2);
+	}
+	
 	public void startAnalyDailyMr()
 	{
 		log.info("start analy mr daily");
 		String startDate = StringUtil.getPreDayOfMonth();
+		
+		delThirdPaySummerData(startDate,startDate);
+		
 		analyMrDailyWithDate(startDate,startDate);
 		log.info("start analy cp mr daily");
 		analyCpMrToSummer(startDate,startDate);

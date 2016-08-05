@@ -1,7 +1,0 @@
-2009-03-16  19:58:57  [MsgSendLogger]-[INFO]  compUrl is:http://59.33.38.61:8000/get_sms_mo.aspx
- mo:<?xml version="1.0"  encoding="UTF-8"?><pwd_message_list version="3.0"><message_type>SMS_MO</message_type><data><message><msgid>4057308957299014092</msgid><mobile>13437833901</mobile><mobiletype></mobiletype><userType>1</userType><gwid>cshdyd</gwid><spcode>106650081</spcode><serviceType>4002</serviceType><linkid>19392127888357202285</linkid><momsg>11</momsg><feeflag>1</feeflag><cpproductID>101011</cpproductID></message></data></pwd_message_list>
- recStat is:1006
-  2009-03-16  20:19:43  [MsgSendLogger]-[INFO]  compUrl is:http://59.33.38.61:8000/get_sms_mo.aspx
- mo:<?xml version="1.0"  encoding="UTF-8"?><pwd_message_list version="3.0"><message_type>SMS_MO</message_type><data><message><msgid>4058052776915206389</msgid><mobile>13437833901</mobile><mobiletype></mobiletype><userType>1</userType><gwid>cshdyd</gwid><spcode>106650081</spcode><serviceType>4002</serviceType><linkid>20173812041354935888</linkid><momsg>11</momsg><feeflag>1</feeflag><cpproductID>101011</cpproductID></message><message><msgid>4058052776915206389</msgid><mobile>13437833901</mobile><mobiletype></mobiletype><userType>1</userType><gwid>cshdyd</gwid><spcode>106650081</spcode><serviceType>4002</serviceType><linkid>20173812041354935888</linkid><momsg>11</momsg><feeflag>1</feeflag><cpproductID>101011</cpproductID></message></data></pwd_message_list>
- recStat is:1006
-  

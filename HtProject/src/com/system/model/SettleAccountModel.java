@@ -5,6 +5,7 @@ public class SettleAccountModel
 	private String operatorName;
 	private String spTroneName;
 	private float amount;
+	private float reduceAmount;
 	private float jiesuanlv;
 	
 	public String getSpTroneName()
@@ -38,6 +39,14 @@ public class SettleAccountModel
 	public void setOperatorName(String operatorName)
 	{
 		this.operatorName = operatorName;
+	}
+	public float getReduceAmount()
+	{
+		return reduceAmount;
+	}
+	public void setReduceAmount(float reduceAmount)
+	{
+		this.reduceAmount = reduceAmount;
 	}
 	
 	

@@ -97,7 +97,7 @@ public class ByteCode {
       AddInt8((byte)b);
   }
 
-protected void AddBytes( byte b[])
+	protected void AddBytes( byte b[])
   throws Exception
  {
  if(b == null)

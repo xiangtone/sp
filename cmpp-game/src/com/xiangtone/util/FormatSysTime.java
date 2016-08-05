@@ -25,8 +25,8 @@ public class FormatSysTime
 	    String sss = new String(formatStr);    
 	    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(sss);  
 	    sbf = sdf.format(new java.util.Date(ll));  
-	    String cur_time=sbf.toString();
-	    return cur_time;
+	    String curTime=sbf.toString();
+	    return curTime;
     }
     
 	public static String getCurrentTimeA()
@@ -36,7 +36,7 @@ public class FormatSysTime
 	    String sss = new String("yyyy-MM-dd HH:mm:ss");    
 	    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(sss);  
 	    sbf = sdf.format(new java.util.Date(ll));  
-	    String cur_time=sbf.toString();
-	    return cur_time;
+	    String curTime=sbf.toString();
+	    return curTime;
     }
 }

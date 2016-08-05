@@ -1,16 +1,20 @@
 package org.x;
 
-import com.xiangtone.sms.api.conn_desc;
-import com.xiangtone.sms.api.message;
-import com.xiangtone.sms.api.sm_submit;
+import org.apache.log4j.Logger;
+
+import com.xiangtone.sms.api.ConnDesc;
+import com.xiangtone.sms.api.Message;
+import com.xiangtone.sms.api.SmSubmit;
 import com.xiangtone.util.ConfigManager;
+import com.xiangtone.util.DBForLocal;
 
 public class MessageSubmit {
+	private static Logger logger = Logger.getLogger(MessageSubmit.class);
+
 	public MessageSubmit() {
-		// sub = new sm_submit();
-		xtsms = new message();
-		conn = new conn_desc();
-		db = new mysqldb();
+		// sub = new SmSubmit();
+		xtsms = new Message();
+		conn = new ConnDesc();
 	}
 
 	public String destCpn;
@@ -30,122 +34,123 @@ public class MessageSubmit {
 	public String sendTime;
 	public String msgId;// add at 08-11-27
 
-	public sm_submit sub; // 提交信息
-	public message xtsms;
-	public conn_desc conn;
-	public mysqldb db;
+	public SmSubmit sub; // 提交信息
+	public Message xtsms;
+	public ConnDesc conn;
 
-	public void set_destCpn(String str) {
+	public void setDestCpn(String str) {
 		this.destCpn = str;
 	}
 
-	public void set_feeCpn(String str) {
+	public void setFeeCpn(String str) {
 		this.feeCpn = str;
 	}
 
-	public void set_cpnType(int type) {
+	public void setCpnType(int type) {
 		this.cpntype = type;
 	}// add at 061123
 
-	public void set_content(String str) {
+	public void setContent(String str) {
 		this.content = str;
 	}
 
-	public void set_serverID(String str) {
+	public void setServerID(String str) {
 		this.serverID = str;
 	}
 
-	public void set_vcpID(String str) {
+	public void setVcpID(String str) {
 		this.vcpID = str;
 	}
 
-	public void set_provID(String str) {
+	public void setProvID(String str) {
 		this.provID = str;
 	}
 
-	public void set_spCode(String str) {
+	public void setSpCode(String str) {
 		this.spCode = str;
 	}
 
-	public void set_feeType(String str) {
+	public void setFeeType(String str) {
 		this.feeType = str;
 	}
 
-	public void set_feeCode(String str) {
+	public void setFeeCode(String str) {
 		this.feeCode = str;
 	}
 
-	public void set_mediaType(String str) {
+	public void setMediaType(String str) {
 		this.mediaType = str;
 	}
 
-	public void set_delivery(String str) {
+	public void setDelivery(String str) {
 		this.delivery = str;
 	}
 
-	public void set_linkid(String str) {
+	public void setLinkid(String str) {
 		this.linkid = str;
 	}
 
-	public void set_gameCode(String str) {
+	public void setGameCode(String str) {
 		this.gameCode = str;
 	}
 
-	public void set_sendTime(String str) {
+	public void setSendTime(String str) {
 		this.sendTime = str;
 	}
 
-	public void set_msgId(String msgId) {
+	public void setMsgId(String msgId) {
 		this.msgId = msgId;
 	}
 
 	public void insertMTlog() {
+		String strSql = " insert into sms_mtlog set  spcode='" + spCode + "',ismgid='" + provID + "'";
+		strSql += ",destcpn='" + destCpn + "',feecpn='" + feeCpn + "',serverid='" + serverID + "'";
+		strSql += ",servername='" + gameCode + "',content='" + content + "'";
+		strSql += ",feetype='" + feeType + "',sendtime='" + sendTime + "'";
+		DBForLocal db=new DBForLocal();
 		try {
-			String strSql = " insert into sms_mtlog set  spcode='" + spCode + "',ismgid='" + provID + "'";
-			strSql += ",destcpn='" + destCpn + "',feecpn='" + feeCpn + "',serverid='" + serverID + "'";
-			strSql += ",servername='" + gameCode + "',content='" + content + "'";
-			strSql += ",feetype='" + feeType + "',sendtime='" + sendTime + "'";
-			System.out.println(strSql);
-			db.executeInsert(strSql);
+			logger.debug(strSql);
+			db.executeUpdate(strSql);
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			logger.error(strSql, e);
+		}finally{
+			db.close();
 		}
 	}
 
-	public void send_result_to_smsPlatform() {
+	public void sendResultToSmsPlatform() {
 		try {
-			sub = new sm_submit();
-			sub.set_vcp_id(this.vcpID);
-			sub.set_server_code(this.spCode);
-			sub.set_prov_id(this.provID);
-			sub.set_server_type(this.serverID);
-			sub.set_dest_cpn(this.destCpn);
-			sub.set_fee_type(this.feeType);
-			sub.set_fee_cpn(this.feeCpn);
-			sub.set_fee_cpntype(this.cpntype);// add at 061123
-			sub.set_fee_linkid(this.linkid);// add at 061123
-			sub.set_fee_msgId(this.msgId);// add at 08-11-27
+			sub = new SmSubmit();
+			sub.setVcpId(this.vcpID);
+			sub.setServerCode(this.spCode);
+			sub.setProvId(this.provID);
+			sub.setServerType(this.serverID);
+			sub.setDestCpn(this.destCpn);
+			sub.setFeeType(this.feeType);
+			sub.setFeeCpn(this.feeCpn);
+			sub.setFeeCpntype(this.cpntype);// add at 061123
+			sub.setFeeLinkid(this.linkid);// add at 061123
+			sub.setFeeMsgId(this.msgId);// add at 08-11-27
 			// sub.set_fee_code("10");
-			sub.set_media_type(this.mediaType);
-			sub.set_content(this.content);
-			sub.set_registered_delivery(this.delivery);
-			System.out.println("开始连接... 发送MT信息...");
-			String sms_serverip = (String) ConfigManager.getInstance().getConfigData("sms_serverip",
+			sub.setMediaType(this.mediaType);
+			sub.setContent(this.content);
+			sub.setRegisteredDelivery(this.delivery);
+			logger.debug("开始连接... 发送MT信息...");
+			String smsServerip = (String) ConfigManager.getInstance().getConfigData("sms_serverip",
 					"xiangtone_serverip not found!");
-			String sms_serverport = (String) ConfigManager.getInstance().getConfigData("sms_serverport",
+			String smsServerport = (String) ConfigManager.getInstance().getConfigData("sms_serverport",
 					"xiangtone_serverport not found!");
-			System.out.println(sms_serverip);
-			System.out.println(sms_serverport);
+			logger.debug(smsServerip);
+			logger.debug(smsServerport);
 
-			xtsms.connect_to_server(sms_serverip, Integer.parseInt(sms_serverport), conn); // 连接服务器
-			System.out.println(conn.sock);
-			xtsms.send_sm_submit(conn, sub); // 提交信息
+			xtsms.connectToServer(smsServerip, Integer.parseInt(smsServerport), conn); // 连接服务器
+			logger.debug(conn.sock);
+			xtsms.sendSmSubmit(conn, sub); // 提交信息
 			xtsms.readPa(conn);// 读取返回
-			xtsms.disconnect_from_server(conn);
-			System.out.println("提交成功。。");
+			xtsms.disconnectFromServer(conn);
+			logger.debug("提交成功。。");
 		} catch (Exception e) {
-			System.out.println(e.toString());
-			e.printStackTrace();
+			logger.error("", e);
 		}
 	}
 
