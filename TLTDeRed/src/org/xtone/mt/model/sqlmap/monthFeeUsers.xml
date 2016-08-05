@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="monthFeeUsers">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+				<insert id="addCompanysFeeUsers" parameterClass="dto">
+				<![CDATA[
+				 insert into smscompanymonthorders.companysfeeusers(
+								               company,
+								               serviceid,
+								               infofee,
+								               prov,
+								               lastmonthfeeusers,
+								               countmonth,
+								               countdate
+								              )
+				    select company,
+				           serviceid,
+				           infofee,
+				           provid,
+				           count(distinct cpn),
+				           #month#,
+				           now()
+				    from smscompanymonthorders.$table$ 
+				    where addate >=#startDate#
+				      and addate < #endDate#
+				      and company!='' 
+				 group by company,serviceid,provid
+				  ]]>
+				</insert>
+				
+				<select id="queryMonthUsers" parameterClass="map" resultClass="dto">
+				<![CDATA[
+					    select company,
+					           serviceid,
+					           infofee,
+					           provid,
+					           count(distinct cpn),
+					           #month#,
+					           now()
+					    from smscompanymonthorders.$table$ 
+					    where addate >=#startDate#
+					      and addate < #endDate#
+					      and company!='' 
+					 group by company,serviceid,provid
+				   ]]>
+				</select>
+				
+				<select id="countMonthFeeUsers" parameterClass="map" resultClass="dto">
+				    select count(distinct cpn) as num
+				    from smscompanymonthorders.$table$ 
+				    where addate >=#addate#
+				    and company=#company#
+				    and serviceid=#serviceid#
+				    and provid=#provid#
+				</select>
+				
+				
+				<update id="updateCompanysFeeUsers" parameterClass="dto">
+				  update smscompanymonthorders.companysfeeusers set monthfeeusers=#monthfeeusers#
+				  where company=#company#
+				    and serviceid=#serviceid#
+				    and prov=#provid#
+				    and countmonth=#countmonth#
+				</update>	
+</sqlMap>

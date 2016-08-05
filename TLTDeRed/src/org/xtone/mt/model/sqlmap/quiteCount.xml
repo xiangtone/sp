@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="quiteCount">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+    <select id="queryProvCount" parameterClass="map" resultClass="dto">
+		              SELECT company,sum(mtsnum) as countNum
+		              FROM companysprovcount
+		              where 1=1
+		              <isNotEmpty prepend="and" property="month">
+				        month like '%$month$%'
+				      </isNotEmpty>  
+		              group by company
+	</select>
+	<select id="queryMtCount" parameterClass="map" resultClass="dto">
+		 SELECT company,sum(distmts) as countNum
+		 FROM company_mtcount 
+		 where 1=1
+		 <isNotEmpty prepend="and" property="countdate">
+				        countdate like '%$countdate$%'
+		 </isNotEmpty>
+		 group by company
+	</select>
+	
+	
+	
+	
+	
+	
+		
+		
+		
+</sqlMap>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ThreadMt">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+		<select id="queryPartners"  parameterClass="map" resultClass="java.lang.Integer">
+		 <![CDATA[
+		               select 
+						       count(*) as count
+					  from smscompanymts.partners 
+		                   ]]>
+		           
+		</select>
+		
+		
+		
+		
+		
+		
+</sqlMap>
