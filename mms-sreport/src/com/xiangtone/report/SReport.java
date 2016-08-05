@@ -9,24 +9,21 @@ import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 import org.common.util.ThreadPool;
 
-public class SReport implements Runnable{
+public class SReport {
 	private static Logger logger = Logger.getLogger(SReport.class);
 
 	public SReport() {
-	}
-
-	@Override
-	public void run() {
 		Connection conn = null;
-		PreparedStatement db = null;
+		PreparedStatement ps = null;
 		while (true) {
 			try {
+				
 				conn = ConnectionService.getInstance().getConnectionForLocal();
 				logger.debug("the conn is:" + conn);
-				db = conn.prepareStatement("");
+				ps = conn.prepareStatement("");
 				long startTime = System.currentTimeMillis();
 
-				logger.debug("System.currentTimeMillis():"+System.currentTimeMillis());
+				logger.debug("System.currentTimeMillis():" + System.currentTimeMillis());
 				// MysqlDB db=new MysqlDB("league");
 				try {
 					ReportAll rAll = new ReportAll();
@@ -105,7 +102,7 @@ public class SReport implements Runnable{
 				// logger.error("now exception Report1057===X-上海品酷",e);
 				// }
 				try {
-					Report1043 r1043 = new Report1043(db);
+					Report1043 r1043 = new Report1043(ps);
 				} catch (Exception e) {
 					logger.error("now exception Report1043===X-掌游时代", e);
 				}
@@ -149,7 +146,7 @@ public class SReport implements Runnable{
 				// }
 
 				try {
-					Report1045 r1045 = new Report1045(db);
+					Report1045 r1045 = new Report1045(ps);
 				} catch (Exception e) {
 					logger.error("now exception Report1045===五巨", e);
 				}
@@ -185,17 +182,15 @@ public class SReport implements Runnable{
 				// logger.error("now exception Report1036===斯美通",e);
 				// }
 				//
-				logger.debug("now begin 1039===新极地");
 				Thread.sleep(10000);
 				try {
-					Report1039 r1039 = new Report1039(db);
+					Report1039 r1039 = new Report1039(ps);
 				} catch (Exception e) {
 					logger.error("now exception Report1039===新极地", e);
 				}
-				logger.debug("now begin 1040===快乐风");
 				Thread.sleep(10000);
 				try {
-					Report1040 r1040 = new Report1040(db);
+					Report1040 r1040 = new Report1040(ps);
 				} catch (Exception e) {
 					logger.error("now exception Report1040===快乐风", e);
 				}
@@ -216,13 +211,9 @@ public class SReport implements Runnable{
 				Thread.sleep(10000);
 				long endTime = System.currentTimeMillis();
 
-				logger.debug(System.currentTimeMillis());
 				long bTime = endTime - startTime;
 				if (bTime < 60 * 5 * 1000) {
-					logger.debug("startTime=" + startTime);
-					logger.debug("endTime=" + endTime);
-					logger.debug("bTime=" + bTime);
-					logger.debug("5min=300000ms");
+					logger.debug("sleep(endTime - startTime):" + bTime);
 					Thread.sleep(bTime);
 				}
 				/*
@@ -299,8 +290,8 @@ public class SReport implements Runnable{
 			} finally {
 
 				try {
-					if (db != null)
-						db.close();
+					if (ps != null)
+						ps.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -318,6 +309,6 @@ public class SReport implements Runnable{
 	}
 
 	public static void main(String args[]) {
-		ThreadPool.mThreadPool.execute(new SReport());
+		new SReport();
 	}
 }

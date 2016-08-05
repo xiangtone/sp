@@ -1,14 +1,16 @@
 package org.x;
 
+/**
+*Copyright 2003 Xiamen Xiangtone Co. Ltd.
+*All right reserved.
+*/
+import java.io.*;
+import java.util.*;
+import com.xiangtone.sms.api.*;
+import com.xiangtone.util.*;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-
-import com.xiangtone.sms.api.conn_desc;
-import com.xiangtone.sms.api.message;
-import com.xiangtone.sms.api.sm_deliver;
-import com.xiangtone.sms.api.sm_deliver_ack_result;
-import com.xiangtone.util.ConfigManager;
-import com.xiangtone.util.FormatSysTime;
 
 /**
 *
@@ -16,23 +18,21 @@ import com.xiangtone.util.FormatSysTime;
 */
 public class SMSMOtoVCP {
 
-	/**
-	*
-	*/
-	public message xtsms;
-	public sm_deliver xtdeliver;
-	public sm_deliver_ack_result xtdeliver_ack;
-	public conn_desc xtconn;
+	private static Logger logger = Logger.getLogger(SMSMOtoVCP.class);
+	public Message xtsms;
+	public SmDeliver xtdeliver;
+	public SmDeliverAckResult xtdeliverAck;
+	public ConnDesc xtconn;
 	// public SMSMO smsmo;
 
-	String vcp_ip1 = (String) ConfigManager.getInstance().getConfigData("vcp_ip1", "vcp_ip1 not found");
-	String vcp_port1 = (String) ConfigManager.getInstance().getConfigData("vcp_port1", "vcp_port1 not found");
-	String vcp_port2 = (String) ConfigManager.getInstance().getConfigData("vcp_port2", "vcp_port2 not found");
-	String vcp_port3 = (String) ConfigManager.getInstance().getConfigData("vcp_port3", "vcp_port2 not found");
-	String vcp_port4 = (String) ConfigManager.getInstance().getConfigData("vcp_port4", "vcp_port2 not found");
+	String vcpIp1 = (String) ConfigManager.getInstance().getConfigItem("vcp_ip1", "vcp_ip1 not found");
+	String vcpPort1 = (String) ConfigManager.getInstance().getConfigItem("vcp_port1", "vcp_port1 not found");
+	String vcpPort2 = (String) ConfigManager.getInstance().getConfigItem("vcp_port2", "vcp_port2 not found");
+	String vcpPort3 = (String) ConfigManager.getInstance().getConfigItem("vcp_port3", "vcp_port2 not found");
+	String vcpPort4 = (String) ConfigManager.getInstance().getConfigItem("vcp_port4", "vcp_port2 not found");
 
-	String vcp_ip2 = (String) ConfigManager.getInstance().getConfigData("vcp_ip2", "vcp_ip2 not found");
-	String vcpip2_port2 = (String) ConfigManager.getInstance().getConfigData("vcpip2_port2", "vcp_port2 not found");
+	String vcpIp2 = (String) ConfigManager.getInstance().getConfigItem("vcp_ip2", "vcp_ip2 not found");
+	String vcpip2port2 = (String) ConfigManager.getInstance().getConfigItem("vcpip2_port2", "vcp_port2 not found");
 
 	// String vcp_ip1="192.168.1.154";
 	// int vcp_port1=7100;
@@ -41,84 +41,85 @@ public class SMSMOtoVCP {
 	// int vcp_port2=7200;
 
 	public SMSMOtoVCP() {
-		xtsms = new message();
-		xtdeliver_ack = new sm_deliver_ack_result();
+		xtsms = new Message();
+		xtdeliverAck = new SmDeliverAckResult();
 		// xtdeliver = new sm_deliver();
-		xtconn = new conn_desc();
+		xtconn = new ConnDesc();
 		// smsmo = new smsmo();
 	}
 
-	public String send_mosms_to_vcp(SMSMO smsmo) {
+	public String sendMosmsToVcp(SMSMO smsmo) {
 
 		String stat = "-1";
 		try {
 
-			System.out.println("send..cpn:" + smsmo.getMO_cpn());
-			System.out.println("send..spcode:" + smsmo.getMO_spCode());
-			System.out.println("send.serverAction:" + smsmo.getMO_serverAction());
-			System.out.println("send.serverAction:" + smsmo.getMO_linkID());
+			logger.debug("send cpn:" + smsmo.getMOCpn());
+			logger.debug("send spcode:" + smsmo.getMOSpCode());
+			logger.debug("send serverAction:" + smsmo.getMOServerAction());
+			logger.debug("send LinkID:" + smsmo.getMOLinkID());
 
-			xtdeliver = new sm_deliver();
-			xtdeliver.set_mobileCode(smsmo.getMO_cpn());
-			xtdeliver.set_mobileType(smsmo.getMO_cpnType());
-			xtdeliver.set_gameCode(smsmo.getMO_serverName());
-			xtdeliver.set_actionCode(smsmo.getMO_serverAction());
-			xtdeliver.set_spCode(smsmo.getMO_spCode());
-			xtdeliver.set_ismgCode(smsmo.getMO_ismgID());
-			xtdeliver.set_linkID(smsmo.getMO_linkID());
-			xtdeliver.set_MsgId(smsmo.getMO_msgId());
+			xtdeliver = new SmDeliver();
+			xtdeliver.setMobileCode(smsmo.getMOCpn());
+			xtdeliver.setMobileType(smsmo.getMOCpnType());
+			xtdeliver.setGameCode(smsmo.getMOServerName());
+			xtdeliver.setActionCode(smsmo.getMOServerAction());
+			xtdeliver.setSpCode(smsmo.getMOSpCode());
+			xtdeliver.setIsmgCode(smsmo.getMOIsmgID());
+			xtdeliver.setLinkID(smsmo.getMOLinkID());
+			xtdeliver.setMsgId(smsmo.getMOMsgId());
 
-			System.out.println("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½...ï¿½ï¿½ï¿½ï¿½moï¿½ï¿½Ï¢....");
+			logger.debug("¿ªÊ¼Á¬½Ó...·¢ËÍmoÏûÏ¢....");
 
-			int vcpID = smsmo.getMO_vcpID();
-			System.out.println("ï¿½É·ï¿½ï¿½ï¿½ï¿½ï¿½vcpID:" + vcpID);
+			int vcpID = smsmo.getMOVcpID();
+			logger.debug("ÅÉ·¢¸øµÄvcpID:" + vcpID);
 
 			switch (vcpID) {
 			case 0:
-				System.out.println(vcp_ip1);
-				xtsms.connect_to_server(vcp_ip1, Integer.parseInt(vcp_port1), xtconn); // ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½
+				logger.debug(vcpIp1);
+				xtsms.connectToServer(vcpIp1, Integer.parseInt(vcpPort1), xtconn); // Á¬½Ó·þÎñÆ÷
 				break;
 			case 1:
-				System.out.println(vcp_ip1);
-				xtsms.connect_to_server(vcp_ip1, Integer.parseInt(vcp_port2), xtconn); // ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½
+				logger.debug(vcpIp1);
+				xtsms.connectToServer(vcpIp1, Integer.parseInt(vcpPort2), xtconn); // Á¬½Ó·þÎñÆ÷
 				break;
 			case 2:
-				System.out.println(vcp_ip1);
-				xtsms.connect_to_server(vcp_ip1, Integer.parseInt(vcp_port3), xtconn);
-				// xtsms.connect_to_server(vcp_ip2,Integer.parseInt(vcp_port2),xtconn);
+				logger.debug(vcpIp1);
+				xtsms.connectToServer(vcpIp1, Integer.parseInt(vcpPort3), xtconn);
+				// xtsms.connectToServer(vcpIp2,Integer.parseInt(vcp_port2),xtconn);
 				break;
 			case 3:
-				System.out.println(vcp_ip1);
-				xtsms.connect_to_server(vcp_ip1, Integer.parseInt(vcp_port4), xtconn);
+				logger.debug(vcpIp1);
+				xtsms.connectToServer(vcpIp1, Integer.parseInt(vcpPort4), xtconn);
 				break;
 			default:
-				System.out.println(vcp_ip1);
-				xtsms.connect_to_server(vcp_ip1, Integer.parseInt(vcp_port1), xtconn); // ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½
+				logger.debug(vcpIp1);
+				xtsms.connectToServer(vcpIp1, Integer.parseInt(vcpPort1), xtconn); // Á¬½Ó·þÎñÆ÷
 				break;
 			/*
-			 * case 1: System.out.println(vcp_ip1);
-			 * xtsms.connect_to_server(vcp_ip1,Integer.parseInt(vcp_port1),xtconn);
-			 * //ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ break; case 2: System.out.println(vcp_ip2);
-			 * xtsms.connect_to_server(vcp_ip2,Integer.parseInt(vcp_port2),xtconn);
-			 * break; default: System.out.println(vcp_ip1);
-			 * xtsms.connect_to_server(vcp_ip1,Integer.parseInt(vcp_port1),xtconn);
-			 * //ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ break;
+			 * case 1: System.out.println(vcpIp1);
+			 * xtsms.connectToServer(vcpIp1,Integer.parseInt(vcp_port1),
+			 * xtconn); // Á¬½Ó·þÎñÆ÷ break; case 2: System.out.println(vcpIp2);
+			 * xtsms.connectToServer(vcpIp2,Integer.parseInt(vcp_port2),
+			 * xtconn); break; default: System.out.println(vcpIp1);
+			 * xtsms.connectToServer(vcpIp1,Integer.parseInt(vcp_port1),
+			 * xtconn); // Á¬½Ó·þÎñÆ÷ break;
 			 */
 			}
 
-			xtsms.send_sm_deliver(xtconn, xtdeliver); // ï¿½á½»ï¿½ï¿½Ï¢
-			xtsms.readPa(xtconn);// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
+			xtsms.sendSmDeliver(xtconn, xtdeliver); // Ìá½»ÐÅÏ¢
+			xtsms.readPa(xtconn);// ¶ÁÈ¡·µ»Ø
 
-			stat = xtdeliver_ack.getAckStat();
-			System.out.println("stat:::::" + stat);
-			System.out.println("xtconn::::" + xtconn);
-			xtsms.disconnect_from_server(xtconn);
+			stat = xtdeliverAck.getAckStat();
+			logger.debug("stat:" + stat);
+			logger.debug("xtconn:" + xtconn);
+			xtsms.disConnectFromServer(xtconn);
 		} catch (Exception e) {
-			Logger myLogger = Logger.getLogger("MsgSendLogger");
-			Logger mySonLogger = Logger.getLogger("myLogger.mySonLogger");
-			PropertyConfigurator.configure("mo2vcplog4j.properties");
-			myLogger.info(FormatSysTime.getCurrentTimeA() + " exception mo2vcp--Exception:" + e.toString());
-			System.out.println("ï¿½ì³£ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½" + e.toString());
+			// Logger myLogger = Logger.getLogger("MsgSendLogger");
+			// Logger mySonLogger = Logger.getLogger("myLogger.mySonLogger");
+			// PropertyConfigurator.configure("mo2vcplog4j.properties");
+			// myLogger.info(FormatSysTime.getCurrentTimeA() + " exception
+			// mo2vcp--Exception:" + e.toString());
+			logger.error("¶Ï¿ªÁ¬½Ó", e);
 			e.printStackTrace();
 		}
 		return stat;

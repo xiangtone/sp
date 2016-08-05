@@ -4,13 +4,11 @@
 */
 package com.xiangtone.sms.api;
 
-public class UnknownPackException extends Exception
-{
+public class UnknownPackException extends Exception {
 
-    public UnknownPackException()
-    {
-        details = "unknown packet is received";
-    }
+	public UnknownPackException() {
+		details = "unknown packet is received";
+	}
 
-    String details;
+	String details;
 }

@@ -4,14 +4,11 @@
 // Source File Name:   OutOfBoundsException.java
 package comsd.commerceware.cmpp;
 
+public class OutOfBoundsException extends Exception {
 
-public class OutOfBoundsException extends Exception
-{
+	public OutOfBoundsException() {
+		details = "array length or data type is invalid";
+	}
 
-    public OutOfBoundsException()
-    {
-        details = "array length or data type is invalid";
-    }
-
-    String details;
+	String details;
 }

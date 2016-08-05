@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
+import org.common.util.ThreadPool;
 
 import java.io.*;
 //import java.lang.reflect.Method;
@@ -61,7 +62,7 @@ public class ReportAll {
 				int selectnums = 200;
 				if ("1071".equals(cpid))
 					selectnums = 200;
-				sql = "select exchange_id,messageid,exchange_status,service_code,src_phone,dst_phone,exchange_time,success_time   from mms_transaction_detail where exchange_status<>1 and report_status=0 and linkid!='' and league_id='"
+				sql = "select exchange_id,messageid,exchange_status,service_code,src_phone,dst_phone,exchange_time,success_time from mms_transaction_detail where exchange_status<>1 and report_status=0 and linkid!='' and league_id='"
 						+ cpid + "' order by exchange_id desc limit " + selectnums;
 
 				ResultSet rs2 = ps.executeQuery(sql);
@@ -155,46 +156,69 @@ public class ReportAll {
 	}
 
 	private String send(String url, StringBuffer sb) {
+		SendThread st=new SendThread(url, sb);
+		ThreadPool.tpx.execute(st);
+		return st.getTt();
+	}
 
-		URL sendUrl;
-		String tt = "";
-		try {
-			sendUrl = new URL(url);
+	private class SendThread implements Runnable {
+		private StringBuffer sb;
+		private URL sendUrl;
+		private String tt="";
 
-			URLConnection connection = sendUrl.openConnection();
-
-			connection.setRequestProperty("Content-type", "text/xml");
-			HttpURLConnection httpConn = (HttpURLConnection) connection;
-			byte[] b = sb.toString().getBytes("UTF-8");
-			logger.debug("len=====" + String.valueOf(b.length));
-			logger.debug("url====" + url);
-			httpConn.setRequestProperty("Content-Length", String.valueOf(b.length));
-
-			httpConn.setRequestMethod("POST");
-			httpConn.setDoOutput(true);
-			httpConn.setDoInput(true);
-
-			OutputStream out = httpConn.getOutputStream();
-			out.write(b);
-			out.close();
-
-			// Read the response and write it to standard out.
-
-			InputStreamReader isr = new InputStreamReader(httpConn.getInputStream());
-			BufferedReader in = new BufferedReader(isr);
-			String inputLine;
-			// String tt="";
-
-			while ((inputLine = in.readLine()) != null) {
-				tt += inputLine;
-			}
-
-			logger.debug("tt===" + tt);
-			in.close();
-		} catch (Exception e) {
-			logger.error("URL=" + url + "\r\n exception=", e);
+		public String getTt() {
+			return tt;
 		}
-		return tt.trim();
+
+		public SendThread(String url, StringBuffer sb) {
+			this.sb = sb;
+			try {
+				sendUrl = new URL(url);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void run() {
+			try {
+
+				URLConnection connection = sendUrl.openConnection();
+
+				connection.setRequestProperty("Content-type", "text/xml");
+				HttpURLConnection httpConn = (HttpURLConnection) connection;
+				byte[] b = sb.toString().getBytes("UTF-8");
+				logger.debug("len=====" + String.valueOf(b.length));
+
+				httpConn.setRequestProperty("Content-Length", String.valueOf(b.length));
+
+				httpConn.setRequestMethod("POST");
+				httpConn.setDoOutput(true);
+				httpConn.setDoInput(true);
+
+				OutputStream out = httpConn.getOutputStream();
+				out.write(b);
+				out.close();
+
+				// Read the response and write it to standard out.
+
+				InputStreamReader isr = new InputStreamReader(httpConn.getInputStream());
+				BufferedReader in = new BufferedReader(isr);
+				String inputLine;
+				// String tt="";
+
+				while ((inputLine = in.readLine()) != null) {
+					tt += inputLine;
+				}
+
+				logger.debug("tt:" + tt+"	sendUrl:"+sendUrl);
+				in.close();
+			} catch (Exception e) {
+				logger.error(sendUrl.toString(), e);
+			}
+		}
+
 	}
 
 	public static void main(String[] args) {

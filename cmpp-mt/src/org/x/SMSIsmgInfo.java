@@ -9,37 +9,32 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class SMSIsmgInfo {
-	/**
-	*
-	*
-	*/
+	private static Logger logger = Logger.getLogger(SMSIsmgInfo.class);
+	public static String fjIsmgSpCode;
+	public static String fjIsmgIp;
+	public static int fjIsmgPort;
+	public static String fjIcpID;
+	public static String fjIcpShareKey;
 
-	/////
-	public static String fj_ismg_spCode;
-	public static String fj_ismg_ip;
-	public static int fj_ismg_port;
-	public static String fj_icpID;
-	public static String fj_icpShareKey;
+	public static String gdIsmgSpCode;
+	public static String gdIsmgIp;
+	public static int gdIsmgPort;
+	public static String gdIcpID;
+	public static String gdIcpShareKey;
 
-	public static String gd_ismg_spCode;
-	public static String gd_ismg_ip;
-	public static int gd_ismg_port;
-	public static String gd_icpID;
-	public static String gd_icpShareKey;
-
-	public static String qw_ismg_spCode;
-	public static String qw_ismg_ip;
-	public static int qw_ismg_port;
-	public static String qw_icpID;
-	public static String qw_icpShareKey;
-	/*
+	public static String qwIsmgSpCode;
+	public static String qwIsmgIp;
+	public static int qwIsmgPort;
+	public static String qwIcpID;
+	public static String qwIcpShareKey;
 	
-	*/
 	String configFile;
 
-	public SMSIsmgInfo(String s_configFile) {
-		configFile = s_configFile;
+	public SMSIsmgInfo(String sConfigFile) {
+		configFile = sConfigFile;
 	}
 
 	public boolean loadParam() {
@@ -69,37 +64,38 @@ public class SMSIsmgInfo {
 				props = new Properties();
 				props.load(in);
 			} else {
-				System.out.println("Can not read the properties file:" + configFile);
+				logger.error("Can not read the properties file:" + configFile);
+				
 				return false;
 			}
 			////////////// fj ismg&sp information
 			String strTmp = "";
 			strTmp = props.getProperty("fj_ismg_port", "paramName").trim();
-			this.fj_ismg_ip = props.getProperty("fj_ismg_ip", "paramName").trim();
-			this.fj_ismg_spCode = props.getProperty("fj_ismg_spCode", "paraName").trim();
-			this.fj_icpID = props.getProperty("fj_icpID", "paramName").trim();
-			this.fj_icpShareKey = props.getProperty("fj_icpShareKey", "paramName").trim();
+			this.fjIsmgIp = props.getProperty("fj_ismg_ip", "paramName").trim();
+			this.fjIsmgSpCode = props.getProperty("fj_ismg_spCode", "paraName").trim();
+			this.fjIcpID = props.getProperty("fj_icpID", "paramName").trim();
+			this.fjIcpShareKey = props.getProperty("fj_icpShareKey", "paramName").trim();
 			try {
-				this.fj_ismg_port = Integer.parseInt(strTmp);
+				this.fjIsmgPort = Integer.parseInt(strTmp);
 			} catch (Exception e) {
-				System.out.println("ICPSocket conver to int error!!!!!!!");
+				logger.error("ICPSocket conver to int error!",e);
 			}
 			////////////// gd ismg&sp information
 			// String strTmp = "";
 
 			strTmp = props.getProperty("qw_ismg_port", "paramName").trim();
-			this.qw_ismg_ip = props.getProperty("qw_ismg_ip", "paramName").trim();
-			this.qw_ismg_spCode = props.getProperty("qw_ismg_spCode", "paraName").trim();
-			this.qw_icpID = props.getProperty("qw_icpID", "paramName").trim();
-			this.qw_icpShareKey = props.getProperty("qw_icpShareKey", "paramName").trim();
+			this.qwIsmgIp = props.getProperty("qw_ismg_ip", "paramName").trim();
+			this.qwIsmgSpCode = props.getProperty("qw_ismg_spCode", "paraName").trim();
+			this.qwIcpID = props.getProperty("qw_icpID", "paramName").trim();
+			this.qwIcpShareKey = props.getProperty("qw_icpShareKey", "paramName").trim();
 			try {
-				this.qw_ismg_port = Integer.parseInt(strTmp);
+				this.qwIsmgPort = Integer.parseInt(strTmp);
 			} catch (Exception e) {
-				System.out.println("ICPSocket conver to int error!!");
+				logger.error("ICPSocket conver to int error!",e);
 			}
 
 		} catch (Exception e) {
-			System.out.println("read profile.ini file error!" + e);
+			logger.error("read profile.ini file error!",e);
 			return false;
 		}
 		return true;
@@ -107,38 +103,34 @@ public class SMSIsmgInfo {
 
 	public void printParam() {
 		/*
-		 * prt("fj_ismg_ip:",fj_ismg_ip); prt("fj_ismg_spcode:",fj_ismg_spCode);
-		 * prt("fj_ismg_prot:",fj_ismg_port); prt("fj_icpID:",fj_icpID);
-		 * prt("fj_icpShareKey:",fj_icpShareKey);
+		 * prt("fjIsmgIp:",fjIsmgIp); prt("fjIsmgSpcode:",fjIsmgSpCode);
+		 * prt("fjIsmgProt:",fjIsmgPort); prt("fjIcpID:",fjIcpID);
+		 * prt("fjIcpShareKey:",fjIcpShareKey);
 		 */
-		prt("qw_ismg_ip:", qw_ismg_ip);
-		prt("qw_ismg_spcode:", qw_ismg_spCode);
-		prt("qw_ismg_prot:", qw_ismg_port);
-		prt("qw_icpID:", qw_icpID);
-		prt("qw_icpShareKey:", qw_icpShareKey);
+		prt("qwIsmgIp:", qwIsmgIp);
+		prt("qwIsmgSpcode:", qwIsmgSpCode);
+		prt("qwIsmgProt:", qwIsmgPort);
+		prt("qwIcpID:", qwIcpID);
+		prt("qwIcpShareKey:", qwIcpShareKey);
 	}
 
 	private void prt(String name, String content) {
-		System.out.println(name + content);
+		logger.debug(name + content);
 	}
 
 	private void prt(String name, int num) {
-		System.out.println(name + num);
+		logger.debug(name + num);
 	}
 
-	public static String getIsmg_spCode(String ismgid) {
-		// �����ж���������ӵõ������ص�spcode,��ҵ����
+	public static String getIsmgSpCode(String ismgid) {
+		//用于有多个网关连接得到的网关的spcode,企业代码
 		String spcode = "05511";
 		if (ismgid.equals("01")) {
-			spcode = fj_ismg_spCode;
+			spcode = fjIsmgSpCode;
 		} else if (ismgid.equals("02")) {
-			spcode = gd_ismg_spCode;
+			spcode = gdIsmgSpCode;
 		}
 		return spcode;
 	}
-	/**
-	*
-	*
-	*/
 
 }

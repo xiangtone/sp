@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.x</groupId>
-	<artifactId>sms-report</artifactId>
+	<artifactId>mms-sreport</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
@@ -25,9 +25,6 @@
 			</resource>
 			<resource>
 				<directory>src</directory>
-				<excludes>
-<!-- 					<exclude>**/*.java</exclude> -->
-				</excludes>
 			</resource>
 		</resources>
 		<plugins>
@@ -105,7 +102,7 @@
 			<id>vgame</id>
 			<properties>
 				<runtime.env>packageConfig\vgame</runtime.env>
-				<final.name>mms-report</final.name>
+				<final.name>mms-sreport</final.name>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -115,7 +112,7 @@
 			<id>test</id>
 			<properties>
 				<runtime.env>packageConfig\test</runtime.env>
-				<final.name>mms-report-test</final.name>
+				<final.name>mms-sreport-test</final.name>
 			</properties>
 		</profile>
 	</profiles>
