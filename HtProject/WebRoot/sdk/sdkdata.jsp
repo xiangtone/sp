@@ -64,31 +64,21 @@
 	List<SdkSpTroneModel> spTroneList=new SdkSpTroneServer().loadSdkSpTrone();
 	List<SdkTroneModel> sdkTroneList=new SdkTroneServer().loadSdkTrone();
 	List<ProvinceModel> provinceList=new ProvinceServer().loadProvince();
-	List<SdkDataSummerModel> dataSummerList=new SdkDataSummerServer().loadSdkDataSummerModel(cpId,
-			channelId, appId, 
-			troneId, spTroneId, 
-			startDate, endDate, showType);
-
-	//List<SpModel> spList = new SpServer().loadSp();
-	//List<CpModel> cpList = new CpServer().loadCp();
-	//List<TroneModel> troneList = new TroneServer().loadTroneList();
-	//List<TroneOrderModel> troneOrderList = new TroneOrderServer().loadTroneOrderList();
-
-	//List<TroneOrderModel> troneOrderList = new ArrayList();
-
-	//List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
-	//List<CityModel> cityList = new CityServer().loadCityList();
-	//List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
-
-	//List<MrReportModel> list = (List<MrReportModel>) map.get("list");
-
-	//int dataRows = (Integer) map.get("datarows");
-	//int showDataRows = (Integer) map.get("showdatarows");
-	//double amount = (Double) map.get("amount");
-	//double showAmount = (Double) map.get("showamount");
-
-	//String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
-	//		"运营商", "数据类型", "第一业务线", "第二业务线"};
+	Map<String,Object> map=new SdkDataSummerServer().loadSdkDataSummerModel(cpId, channelId, appId, troneId, spTroneId, startDate, endDate, showType);
+	List<SdkDataSummerModel> dataSummerList=(List<SdkDataSummerModel>)map.get("list");
+	Integer countActRows=(Integer)map.get("countActRows");
+	Integer countUserRows=(Integer)map.get("countUserRows"); 
+	Integer countTroReqRows=(Integer)map.get("countTroReqRows"); 
+	Integer countEffReqRows=(Integer)map.get("countEffReqRows");
+	Integer countTroOrdRows=(Integer)map.get("countTroOrdRows"); 
+	Integer countMsgRows=(Integer)map.get("countMsgRows");
+	Integer countSucRows=(Integer)map.get("countSucRows");
+	Float countAmount=(Float)map.get("countAmount");
+	Float countEffAmount=(Float)map.get("countEffAmount");
+	//List<SdkDataSummerModel> dataSummerList=new SdkDataSummerServer().loadSdkDataSummerModel(cpId,
+	//		channelId, appId, 
+	//		troneId, spTroneId, 
+	//		startDate, endDate, showType);
 
 	out.clear();
 %>
@@ -178,6 +168,7 @@ function Sort(aTrs,col,dataType){
 		   i--;
 		}
 	}   
+
 	return aTrs;
 }
 function arrayReverse(arr) {
@@ -300,7 +291,7 @@ $(function()
 						<option value="4">CP</option>
 						<option value="5">APP</option>
 						<option value="6">渠道</option>
-						<option value="7">SP通道</option>
+						<option value="7">SP业务</option>
 						<option value="8">通道</option>
 						<option value="9">省份</option>
 						</select>
@@ -320,10 +311,12 @@ $(function()
 					<td onclick="TableSorter('table_id',3,'float')">活跃用户(个)</td>
 					<td onclick="TableSorter('table_id',4,'float')">通道请求(条)</td>
 					<td onclick="TableSorter('table_id',5,'float')">有效通道请求(条)</td>
-					<td onclick="TableSorter('table_id',6,'float')">指令成功(条 )</td>
-					<td onclick="TableSorter('table_id',7,'float')">短息成功(条)</td>
-					<td onclick="TableSorter('table_id',8,'float')">计费成功（条）</td>
-					<td onclick="TableSorter('table_id',9,'float')">计费金额（元）</td>
+					<td onclick="TableSorter('table_id',6,'float')">理论计费金额(元)</td>
+					<td onclick="TableSorter('table_id',7,'float')">指令成功(条 )</td>
+					<td onclick="TableSorter('table_id',8,'float')">短息成功(条)</td>
+					<td onclick="TableSorter('table_id',9,'float')">计费成功(条)</td>
+					<td onclick="TableSorter('table_id',10,'float')">计费金额(元)</td>
+					<td onclick="TableSorter('table_id',11,'String')">转化率</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -338,18 +331,34 @@ $(function()
 					<td><%=model.getActivityRows()%></td>
 					<td><%=model.getTroneRequestRows()%></td>
 					<td><%=model.getTroneEffectRequestRows()%></td>
+					<td><%=StringUtil.getDecimalFormat(model.getEffectAmount())%></td>
 					<td><%=model.getTroneOrderRows()%></td>
 					<td><%=model.getMsgRows()%></td>
 					<td><%=model.getSucRows()%></td>
 					<td><%=StringUtil.getDecimalFormat(model.getAmount())%></td>
+					<td><%=StringUtil.getPercent(model.getAmount(),model.getEffectAmount())%></td>
 				</tr>
 				<%
 					}
 				%>
-			
-			<tbody>
-			
+				</tbody>
+						<tr>
+					<td></td>
+					<td></td>
+					<td>激活用户：<%=countUserRows%></td>
+					<td>活跃用户：<%=countActRows%></td>
+					<td>通道请求：<%=countTroReqRows%></td>
+					<td>有效通道请求：<%=countEffReqRows%></td>
+					<td>理论金额：<%=StringUtil.getDecimalFormat(countEffAmount)%></td>
+					<td>指令成功：<%=countTroOrdRows%></td>
+					<td>短信成功：<%=countMsgRows%></td>
+					<td>计费成功：<%=countSucRows%></td>
+					<td>计费金额：<%=StringUtil.getDecimalFormat(countAmount)%></td>
+				</tr>
 			</tbody>
+				<tbody>
+	
+			
 		</table>
 	</div>
 
