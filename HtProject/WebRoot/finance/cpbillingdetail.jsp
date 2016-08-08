@@ -12,15 +12,23 @@
 <%
 
 	int cpBillingId = StringUtil.getInteger(request.getParameter("cpbillingid"), -1);
+
+	int pageType = StringUtil.getInteger(request.getParameter("pagetype"), 0);
+	
 	CpBillingModel billingModel = new CpBillingServer().getCpBillingModel(cpBillingId);
+	
+	String[] returnUrls = {"cpbilling.jsp","cwcpbilling.jsp"};
+	
 	if(billingModel==null)
 	{
-		response.sendRedirect("cpbilling.jsp");
+		response.sendRedirect(returnUrls[pageType]);
 		return;
 	}
 	List<CpBillingSptroneDetailModel> list = new CpBillingDetailServer().loadCpBillingSpTroneDetail(cpBillingId);
 	String[] statusStr = {"正常","不结算"};
 	String query = StringUtil.getString(request.getParameter("query"), "");
+	
+	boolean isEditAble = billingModel.getStatus()== 0;
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -38,6 +46,11 @@
 <script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 
+	function updateAmount(id)
+	{
+		window.location.href = "cpbillingdetailedit.jsp?query=<%= Base64UTF.encode(query) %>&cpbillingid=<%= cpBillingId %>&id=" + id;
+	}
+	
 </script>
 
 <style type="text/css">
@@ -62,7 +75,7 @@ text-decoration: underline;
 	<div class="main_content">
 		<div class="content" style="margin-left: 20px;font-weight: bold;font-size:small; ;float: left;padding-top: 5px">
 			<%= billingModel.getCpName() + "["+ billingModel.getStartDate() +"-"+ billingModel.getEndDate() +"]["+ billingModel.getJsName() +"]帐单详细" %>
-			&nbsp;&nbsp;&nbsp; <a href="cpbilling.jsp?<%= Base64UTF.decode(query) %>">返  回</a>
+			&nbsp;&nbsp;&nbsp; <a href="<%= returnUrls[pageType] %>?<%= Base64UTF.decode(query) %>">返  回</a>
 		</div>
 		<table cellpadding="0" cellspacing="0" style="padding-top: 5px;">
 			<thead>
@@ -75,7 +88,7 @@ text-decoration: underline;
 					<td>应支付</td>
 					<td>备注</td>
 					<td>状态</td>
-					<td>操作</td>
+					<%= isEditAble ? "<td>操作</td>" : "" %>
 				</tr>
 			</thead>
 			<tbody>
@@ -90,10 +103,12 @@ text-decoration: underline;
 					<td><%= model.getAmount() %></td>
 					<td><%= model.getRate() %></td>
 					<td><%= model.getReduceAmount()  %></td>
-					<td><%= model.getAmount()*model.getRate() %></td>
+					<td><%= (model.getAmount()-model.getReduceAmount())*model.getRate() %></td>
 					<td><%= model.getRemark() %></td>
 					<td><%= statusStr[model.getStatus()] %></td>
-					<td><a href="#">修改</a></td>
+					<%=
+							isEditAble ? "<td><a href=\"#\" onclick=\"updateAmount(" + model.getId() + ")\">修改</a></td>" : ""
+					%>
 				</tr>
 				<%
 					}

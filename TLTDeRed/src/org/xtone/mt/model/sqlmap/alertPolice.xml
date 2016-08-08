@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AlertPolice">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+		<select id="queryMoCountNum" parameterClass="map" resultClass="dto">
+		    select a.company,b.partnerName as companyname,count(a.id) as num from 
+		    smscompanymos.tempcompany_mo a 
+		    left join smscompanymos.partners b 
+		    on a.company=b.partner group by a.company
+		</select>
+</sqlMap>

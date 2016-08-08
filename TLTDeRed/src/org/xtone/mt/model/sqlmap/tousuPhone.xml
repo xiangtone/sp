@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="tousuPhone">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	
+	<insert id="insertTousuPhone" parameterClass="dto">
+	 INSERT INTO smscompanymts.tousu_phone (idoa, phone) VALUES (#idoa#, #phone#)
+	</insert>
+	
+	<insert id="insertTousuInfo" parameterClass="dto">
+	INSERT INTO  smscompanymts.tousu_info(idoa,countnum,repeatnum,errornum,pid,file)
+	VALUES(#idoa#,#countnum#,#repeatnum#,#errornum#,#pid#,#contextpath#)
+	</insert>
+	<insert id="insertTousuResultA" parameterClass="dto">
+	<![CDATA[
+	insert into smscompanymts.tousu_result(idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money,province,city)
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtOne$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	 ]]>
+	</insert>
+	<insert id="insertTousuResultB" parameterClass="dto">
+	<![CDATA[
+	insert into smscompanymts.tousu_result(idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money,province,city)
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtOne$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtTwo$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	 ]]>
+	</insert>
+	<insert id="insertTousuResultC" parameterClass="dto">
+	<![CDATA[
+	insert into smscompanymts.tousu_result(idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money,province,city)
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtOne$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtTwo$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtThree$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	 ]]>
+	</insert>
+
+	<insert id="insertTousuResultD" parameterClass="dto">
+	<![CDATA[
+	insert into smscompanymts.tousu_result(idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money,province,city)
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtOne$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtTwo$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtThree$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtFour$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	 ]]>
+	</insert>
+	
+	<insert id="insertTousuResultE" parameterClass="dto">
+	<![CDATA[
+	insert into smscompanymts.tousu_result(idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money,province,city)
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtOne$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtTwo$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtThree$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtFour$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtFive$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	 ]]>
+	</insert>
+	<insert id="insertTousuResultF" parameterClass="dto">
+	<![CDATA[
+	insert into smscompanymts.tousu_result(idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money,province,city)
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtOne$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtTwo$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtThree$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtFour$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtFive$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	union all
+	select a.idoa,#companyname#,#service#,#pricetype#,a.phone,b.createtime,CONCAT(c.gamename,'(',c.gamecode,')')as gamename,d.partnername,c.price,f.provinces,f.city from smscompanymts.tousu_phone a
+	left join smscompanymts.$tableMtSix$ b on a.phone=b.phone
+	left join smscompanymts.companygames c on b.serviceid=c.gamecode
+	left join smscompanymts.partners d on b.cpid=d.partner
+	left join smscompanymts.provscitys f on b.areacode=f.areacode
+	where b.phone is not  null and idoa=#idoa# AND createtime>=#startDate# AND createtime<=#endDate#
+	 ]]>
+	</insert>
+	
+	<select id="queryTousuResult" parameterClass="map" resultClass="dto">
+	<![CDATA[
+	SELECT phone,cpname
+	FROM  smscompanymts.tousu_result WHERE idoa=#idoa# and pricetype=#pricetype#
+	GROUP BY phone,cpname
+	  ]]>
+	</select>
+	<select id="checkWhitePhone" parameterClass="map" resultClass="dto">
+	<![CDATA[
+		SELECT cpn FROM smscompanymts.whitecpn WHERE cpn=#phone#
+	  ]]>
+	</select>
+		<select id="checkBlackPhone" parameterClass="map" resultClass="dto">
+	<![CDATA[
+		SELECT cpn FROM sms_platform.blackcpns WHERE cpn=#phone#
+	  ]]>
+	</select>
+	<select id="queryTousuResultMore" parameterClass="map" resultClass="dto">
+	<![CDATA[
+	SELECT companyname,service,pricetype,phone,
+	left(MIN(moneytime),10)as mintime,left(MAX(moneytime),10) as maxtime,
+	servicename,cpname,sum(money)/100 as money from smscompanymts.tousu_result 
+	WHERE phone=#phone# and cpname=#cpname# and idoa=#idoa# and pricetype=#pricetype#
+	GROUP BY servicename
+	  ]]>
+	</select>
+	<insert id="insertBlackPhone" parameterClass="dto">
+		INSERT INTO sms_platform.blackcpns (cpn, added, remark) VALUES (#phone#, now(), 'import')
+	</insert>
+	<delete id="deleteTousuPhone" parameterClass="map" >
+	delete from smscompanymts.tousu_phone where idoa=#idoa#
+	</delete>
+	<insert id="insertTousuResultMonth" parameterClass="dto">
+	<![CDATA[
+	insert into smscompanymts.tousu_result(idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money,province,city)
+	select a.idoa,#companyname#,'SMS',#pricetype#,a.phone,
+	CONCAT(left(b.addate,10),#orderlabel#,if(left(b.stopdate,10)='0000-00-00','',concat(left(b.stopdate,10),#cancellabel#))) as moneytime,
+	CONCAT(c.gamename,'(',c.gameid,')')as gamename,IFNULL(d.companyname,#companynametwo#),0 as price,f.province,'' AS city 
+	from smscompanymts.tousu_phone a
+	left join smscompanymonthorders.companys_user b on a.phone=b.cpn
+	left join smscompanymonthorders.companygames c on b.game=c.gameid
+	left join smscompanymonthorders.cpname d on d.monthname=b.company
+	left join smscompanymonthorders.provinceid f on b.provid=f.miscid
+	where b.cpn is not null and d.companyname is not null and c.gamename is not null and a.idoa=#idoa#  
+	order by  addate,stopdate
+	  ]]>
+	</insert>
+	<select id="queryResultMonth" parameterClass="map" resultClass="dto">
+	<![CDATA[
+	SELECT COUNT(*)as num, idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money
+	from smscompanymts.tousu_result where  pricetype=#pricetype# and idoa=#idoa#
+	group by phone,servicename,cpname
+	]]>
+	</select>
+	<select id="queryResultMonthMore" parameterClass="map" resultClass="dto">
+	<![CDATA[
+	SELECT  idoa,companyname,service,pricetype,phone,moneytime,servicename,cpname,money 
+	from smscompanymts.tousu_result 
+	where  pricetype=#pricetype# and idoa=#idoa# and phone=#phone# and servicename=#servicename# and cpname=#cpname#
+	]]>
+	</select>
+</sqlMap>

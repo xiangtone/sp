@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ReportTable">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	<update id="updateCpnByPro" parameterClass="dto">
+	    update $table$ a,smscompanymos.mobile_miscid_cmcc b 
+			set a.province=b.miscid 
+			where left(a.cpn,7)=b.mobile
+	</update>
+	<insert id="insertDayReportByMo" parameterClass="dto">
+		  insert into smscompanymts.dayreport(cpid,serviceid,servicecode,miscid,monum,mousers,countdate)
+		  select a.company as cp,a.game,b.feecode_iod,a.province,count(a.id) as monum,count(distinct a.cpn) as mousers,#countdate#
+			 from $tableNameMO$ a left join sms_platform.sms_cost b on a.game=b.serverid
+			where a.company not like '%pf%'
+			    and a.company not like '%more%'
+			group by a.company,a.game,a.province
+	</insert>
+	<select id="queryMtByAll" parameterClass="map" resultClass="dto">
+	  select company,game,
+	         province,
+	         count(id) as mtnum,
+	         count(distinct cpn)  as mtusers 
+			from smscompanymts.$tableNameMT$
+			group by  company,game,province
+	</select>
+	<select id="queryMtBySucc"  parameterClass="map" resultClass="dto">
+		select a.company,a.game,a.province,b.price,
+		     count(a.id) as mtsuccnum,
+		     count(distinct a.cpn) as mtsuccusers,
+		     count(distinct a.linkid) as mtsuccmoneynum
+		 from smscompanymts.$tableNameMT$ a left join smscompanymts.companygames b on a.game=b.gamecode
+	     where a.sendstate='DELIVRD' group by  a.company,a.game,a.province
+	</select>
+	
+	<update id="updateDayreport" parameterClass="dto">
+      update smscompanymts.dayreport
+		<dynamic prepend="SET"> 
+			<isNotNull prepend="," property="mtnum">
+	         mtnum = #mtnum#
+			</isNotNull>
+			<isNotNull prepend="," property="mtusers">
+	         mtusers = #mtusers#
+			</isNotNull>
+			<isNotNull prepend="," property="mtsuccnum">
+	         mtsuccnum = #mtsuccnum#
+			</isNotNull>
+			<isNotNull prepend="," property="mtsuccusers">
+	         mtsuccusers = #mtsuccusers#
+			</isNotNull>
+			<isNotNull prepend="," property="mtsuccmoneynum">
+	         mtsuccmoneynum = #mtsuccmoneynum#
+			</isNotNull>	
+			<isNotNull prepend="," property="mtsuccmoneyusers">
+	         mtsuccmoneyusers = #mtsuccmoneyusers#
+			</isNotNull>
+			<isNotNull prepend="," property="income">
+	         income = #income#
+			</isNotNull>					
+		</dynamic> 
+	        WHERE cpid=#company# and miscid=#miscid# and serviceid=#serviceid# and countdate=#countdate#
+	</update>
+	
+	<delete id="deleteDayReport" parameterClass="dto">
+	  delete from smscompanymts.dayreport where countdate=#countdate#
+	</delete>
+	
+	<insert id="insertDayReportByLostFlag" parameterClass="dto">
+	  insert into smscompanymts.dayreport(cpid,serviceid,servicecode,miscid,mtnum,mtusers,mtsuccnum,mtsuccusers,mtsuccmoneynum,mtsuccmoneyusers,income,countdate,order_type)
+	  select 'szcshdlost',a.game,b.feecode_iod,a.province,
+	  count(distinct a.linkid),
+	  count(distinct a.cpn),
+	   count(distinct a.linkid),
+	  count(distinct a.cpn),
+	   count(distinct a.linkid),
+	  count(distinct a.cpn),
+	  (count(distinct a.linkid)*b.infofee) as price,
+	  #countdate#,
+	  '1'
+		 from smscompanymts.$tableNameMT$ a left join sms_platform.sms_cost b on a.game=b.serverid 
+		where a.lostflag='1' 
+		group by a.company,a.game,a.province
+	</insert>
+	
+	<delete id="deleteLostDetail" parameterClass="dto">
+	 delete from smscompanymts.lostdetail where countdate=#countdate#
+	</delete>
+	
+	<insert id="insertLostDetail" parameterClass="dto">
+	  insert into smscompanymts.lostdetail(cpid,serviceid,servicecode,miscid,mtnum,mtusers,income,countdate)
+	  select a.company,a.game,b.feecode_iod,a.province,
+	  count(distinct a.linkid),
+	  count(distinct a.cpn),
+	  (count(distinct a.linkid)*b.infofee) as price,
+	  #countdate#
+		 from smscompanymts.$tableNameMT$ a left join sms_platform.sms_cost b on a.game=b.serverid 
+		where a.lostflag='1' 
+		group by a.company,a.game,a.province
+	</insert>
+	         
+	<select id="queryDayReportToSub"  parameterClass="map" resultClass="dto">
+	    select cpid,serviceid,
+	           servicecode,miscid,
+	           monum,mousers,
+	           mtsuccnum,mtsuccusers,
+	           mtsuccmoneynum,
+	           mtsuccmoneyusers,
+	           income,
+	           order_type,
+	           countdate
+	     from smscompanymts.dayreport where countdate=#countdate#
+	</select>
+	<select id="queryMonthToSub" parameterClass="map" resultClass="dto">
+	    SELECT a.company  as cpid,a.game as serviceid,a.serviceid as servicecode,a.provid as miscid,
+	   count(distinct a.cpn) as mtsuccmoneynum,
+	   count(distinct a.cpn)*b.price as income, 
+	   left(a.addate,10) as countdate
+	FROM smscompanymonthorders.companys_order a 
+	left join smscompanymonthorders.companygames b on a.game=b.gameid
+		where left(a.addate,10) = #countdate#
+		 group by a.company,a.game,a.provid
+	</select>
+
+	<insert id="insertDayreportByMonth" parameterClass="dto">
+	     insert into smscompanymts.dayreport(cpid,serviceid,servicecode,miscid,monum,mousers,mtnum,
+	                           mtusers,mtsuccnum,mtsuccusers,mtsuccmoneynum,
+	                           mtsuccmoneyusers,income,countdate,order_type)
+	                     values(#cpid#,#serviceid#,#servicecode#,#miscid#,#monum#,#mousers#,#mtnum#,
+	                           #mtusers#,#mtsuccnum#,#mtsuccusers#,#mtsuccmoneynum#,
+	                           #mtsuccmoneyusers#,#income#,#countdate#,#order_type#)
+	</insert>
+   
+	<insert id="insertDataCenter" parameterClass="dto">
+	    insert into $tableName$(miscid,cpid,service_id,calledno,
+	                            date_time,service_type,
+	                            order_type,spname,income,
+	                            mo_all_num,mo_all_user_num,
+	                            mt_all_num,mt_all_user_num,
+	                            mt_succ_num,mt_succ_user_num)
+	                     values(#miscid#,#cpid#,#service_id#,#calledno#,
+	                            #date_time#,'SMS',
+	                            #order_type#,#spname#,#income#,
+	                            #mo_all_num#,#mo_all_user_num#,
+	                            #mt_all_num#,#mt_all_user_num#,
+	                            #mt_succ_num#,#mt_succ_user_num#)
+	</insert>
+	
+	<delete id="deleteLostDetailTemp" parameterClass="dto">
+	 DELETE FROM smscompanymts.lostdetail_temp
+	</delete>
+	<insert id="insertLostDetailTempMT" parameterClass="dto">
+	INSERT INTO smscompanymts.lostdetail_temp(cpid,serviceid,servicecode,miscid,mtnum,mtusers,income,countdate)
+	SELECT a.company, a.game, b.feecode_iod, a.province, count(DISTINCT a.linkid)AS mtnum, count(DISTINCT a.cpn)AS mtuser, ( count(DISTINCT a.linkid) * b.infofee ) AS mtincome,#countdate#
+	FROM smscompanymts.$tableNameMT$ a 
+	LEFT JOIN sms_platform.sms_cost b ON a.game = b.serverid 
+	WHERE a.lostflag = '1' 
+	GROUP BY a.company, a.game, a.province
+	</insert>
+	<insert id="insertLostDetailTempMO" parameterClass="dto">
+	INSERT INTO smscompanymts.lostdetail_temp(cpid,serviceid,servicecode,miscid,monum,mousers,moincome,countdate)
+	SELECT a.recp, a.game, b.feecode_iod, a.province, count(DISTINCT a.linkid)AS monum, count(DISTINCT a.cpn)mouser, ( count(DISTINCT a.linkid) * b.infofee ) AS moincome,#countdate#
+	FROM $tableNameMO$ a 
+	LEFT JOIN sms_platform.sms_cost b ON a.game = b.serverid 
+	LEFT JOIN smscompanymts.$tableNameMT$ c ON a.linkid=c.linkid
+	WHERE a.recp NOT IN('0','') AND c.sendstate='DELIVRD'
+	GROUP BY a.recp, a.game, a.province
+	</insert>
+	<insert id="insertLostDetailFromTemp" parameterClass="dto">
+	INSERT INTO smscompanymts.lostdetail(cpid,serviceid,servicecode,miscid,mtnum,mtusers,income,monum,mousers,moincome,countdate)
+	SELECT cpid,serviceid,servicecode,miscid,SUM(mtnum)AS mtnum,SUM(mtusers)AS mtusers,SUM(income)AS income,
+	SUM(monum)AS monum,SUM(mousers)AS mousers,SUM(moincome)AS moincome ,countdate
+	FROM smscompanymts.lostdetail_temp GROUP BY cpid,serviceid,miscid,countdate
+	</insert>
+	<select id="queryDayReportklToOA"  parameterClass="map" resultClass="dto">
+		SELECT a.id,a.cpid,a.serviceid,a.servicecode,a.miscid,a.monum,a.mtnum,a.moincome,a.income,a.countdate,b.partnername
+		FROM smscompanymts.lostdetail a LEFT JOIN smscompanymts.partners b ON a.cpid=b.partner
+	    WHERE a.countdate=#countdate#
+	</select>
+	<insert id="insertDayReportklToOA" parameterClass="dto">
+	    insert into $tableName$(miscid, cpid, service_id, calledno,
+	     						spname, service_type, order_type, 
+	     						cpname, mo_num, mt_num, mo_income, 
+	     						mt_income, date_time)
+	                     values(#miscid#, #cpid#, #service_id#, #calledno#,
+	     						#spname#, #service_type#, #order_type#, 
+	     						#cpname#, #mo_num#, #mt_num#, #mo_income#, 
+	     						#mt_income#, #date_time#)
+	</insert>
+</sqlMap>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="updateReportByMt">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	<select id="queryMtReport" parameterClass="map" resultClass="dto">
+	    select submitmsgid,linkid,company,province 
+	    from smscompanymts.tempcompany_mt
+	    where sendstate='-3'
+	     order by addate desc
+	</select>
+	
+	
+	<select id="loadMtReport" parameterClass="map" resultClass="dto">
+	    SELECT stat_msg FROM sms_platform.companysms_reportlog
+	    where  msg_id=#submitmsgid#
+        limit 1
+	</select>
+	
+	<select id="loadLostMr" parameterClass="map" resultClass="dto">
+	    SELECT mrLostNum as lostnum FROM smscompanymts.lostCpByProvince
+	    where cpid=#company# and province=#province#
+	</select>
+	
+	<update id="updateMr" parameterClass="map">
+	    update smscompanymts.tempcompany_mt set sendstate=#sendstate#
+	    <isNotEmpty prepend="," property="lostflag">
+               lostflag=#lostflag#
+        </isNotEmpty>
+	    where submitmsgid=#submitmsgid#
+	</update>
+	<delete id="deleteReportLog" parameterClass="map">
+	    delete from sms_platform.companysms_reportlog
+	       where 
+               msg_id=#submitmsgid#    
+	</delete>
+</sqlMap>

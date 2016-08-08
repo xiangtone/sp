@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+     <form-beans> 
+		<!-- 公共Form -->  
+		<form-bean name="commonActionForm" type="org.eredlab.g4.rif.web.CommonActionForm" />  
+	</form-beans>
+
+	<action-mappings type="org.apache.struts.action.ActionMapping"> 
+	       <!-- 短信下行查询 -->
+			<action name="commonActionForm" path="/mt" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.Company_MtAction">
+				<forward name="load" path="/mt/companyMt.jsp" />
+			</action>  
+			
+			 <!-- 短信下行临时表查询 -->
+			<action name="commonActionForm" path="/tempMt" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.Tempcompany_mtAction">
+				<forward name="load" path="/mt/tempcompany_Mt.jsp" />
+			</action>  
+			
+			<!-- 短信下行查询 -->
+			<action name="commonActionForm" path="/mo" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mo.web.Company_MoAction">
+				<forward name="load" path="/mo/companyMo.jsp" />
+			</action> 
+			
+			 <!-- 短信下行临时表查询 -->
+			<action name="commonActionForm" path="/tempMo" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mo.web.Tempcompany_moAction">
+				<forward name="load" path="/mo/tempcompany_Mo.jsp" />
+			</action>  
+			
+			 <!-- 线程管理查询 -->
+			<action name="commonActionForm" path="/thread" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.LimitDaysCompanysAction">
+				<forward name="load" path="/mt/quartz.jsp" />
+			</action>
+			
+			 <!-- 线程管理查询 -->
+			<action name="commonActionForm" path="/notLimit" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.NotlimitdayAction">
+				<forward name="load" path="/mt/notlimitday.jsp" />
+			</action>
+			
+			 <!-- 统计收入 -->
+			<action name="commonActionForm" path="/mtIncome" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.MtIncomeAction">
+				<forward name="load" path="/mt/countMtIncome.jsp" />
+			</action>
+			
+			<!-- 统计收入 -->
+			<action name="commonActionForm" path="/monthFeeUsers" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.MonthFeeUsersAction">
+				<forward name="load" path="/mt/monthFeeUsers.jsp" />
+			</action>
+			
+			<!-- 包月收入 -->
+			<action name="commonActionForm" path="/monthUser" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.MonthUserAction">
+				<forward name="load" path="/mt/monthUser.jsp" />
+			</action>
+			
+			<!-- 报警 -->
+			<action name="commonActionForm" path="/alertPolice" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.AlertPoliceAction">
+				<forward name="load" path="/mt/alertPolice.jsp" />
+			</action>
+			
+			<action name="commonActionForm" path="/companyUserByMonth" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.Company_UserByMonthAction">
+				<forward name="load" path="/mt/companyUserByMonth.jsp" />
+			</action>
+			
+			
+			<action name="commonActionForm" path="/reportTable" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.ReportTableAction">
+				<forward name="load" path="/mt/reportTable.jsp" />
+			</action>
+			
+			<action name="commonActionForm" path="/alterTable" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.AlterTableAction">
+				<forward name="load" path="/mt/alterTable.jsp" />
+			</action>
+			
+			<action name="commonActionForm" path="/monthMT" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.MonthMtAction">
+				<forward name="load" path="/mt/monthMT.jsp" />
+			</action>
+			
+			<action name="commonActionForm" path="/monthSuccCpnNum" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.MonthSuccCpnNumAction">
+				<forward name="load" path="/mt/monthSuccCpnNum.jsp" />
+			</action>
+			
+			<action name="commonActionForm" path="/dayReportToSub" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.DayReportToSubAction">
+				<forward name="load" path="/mt/dayReportToSub.jsp" />
+			</action>
+			
+			<action name="commonActionForm" path="/updateReportByMt" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.UpdateReportByMtAction">
+				<forward name="load" path="/mt/UpdateReportByMt.jsp" />
+			</action>
+			<!-- 同步扣量数据到OA  -->
+			<action name="commonActionForm" path="/dayReportklToOA" scope="request" validate="false" parameter="reqCode"
+				type="org.xtone.mt.web.DayReportklToOAAction">
+				<forward name="load" path="/mt/dayReportklToOA.jsp" />
+			</action>
+	</action-mappings>
+</struts-config>

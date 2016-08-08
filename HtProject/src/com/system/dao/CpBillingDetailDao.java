@@ -8,6 +8,7 @@ import java.util.List;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.CpBillingSptroneDetailModel;
+import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
 public class CpBillingDetailDao
@@ -68,6 +69,7 @@ public class CpBillingDetailDao
 					model.setReduceAmount(rs.getFloat("reduce_amount"));
 					model.setRate(rs.getFloat("rate"));
 					model.setStatus(rs.getInt("status"));
+					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
 					
 					return model;
 				}
@@ -82,7 +84,7 @@ public class CpBillingDetailDao
 	 */
 	public void updateSingleCpBillingSpTroneDetail(CpBillingSptroneDetailModel model)
 	{
-		String sql = "update daily_log.`tbl_cp_billing_sp_trone` set reduce_amount = " + model.getReduceAmount() + "  and status = " + model.getStatus() + " where id = " + model.getId();
+		String sql = "update daily_log.`tbl_cp_billing_sp_trone` set reduce_amount = " + model.getReduceAmount() + "  , status = " + model.getStatus() + ", remark = '" + SqlUtil.sqlEncode(model.getRemark()) + "' where id = " + model.getId();
 		
 		new JdbcControl().execute(sql);		
 	}

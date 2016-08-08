@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Notlimitday">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+		<select id="queryNotlimitday" parameterClass="map" resultClass="dto">
+			 <![CDATA[  
+					   SELECT a.id as id,
+					          a.company as company,
+					          a.remark as remark,
+					          b.partnerName as partnerName
+					    FROM smscompanymts.notlimitday a,smscompanymts.partners b 
+					    
+					    where a.company=b.partner
+			  ]]>        
+		</select>
+	<select id="queryNotlimitdayForCount" parameterClass="map" resultClass="java.lang.Integer">
+		 <![CDATA[
+		               select  count(*) as count
+					  FROM smscompanymts.notlimitday a,smscompanymts.partners b 
+				    where a.company=b.partner
+		]]>    
+	</select>
+</sqlMap>
