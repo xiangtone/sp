@@ -241,6 +241,8 @@ public class SMSUserSchedule {
 			}
 		} catch (Exception e) {
 			logger.error(e);
+		} finally {
+			db.close();
 		}
 
 	}
@@ -262,7 +264,6 @@ public class SMSUserSchedule {
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		} finally {
-			db.close();
 		}
 		return flag;
 	}
@@ -284,7 +285,6 @@ public class SMSUserSchedule {
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		} finally {
-			db.close();
 		}
 		return flag;
 	}
@@ -301,7 +301,6 @@ public class SMSUserSchedule {
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		} finally {
-			db.close();
 		}
 		this.corpID = id;
 		return true;
@@ -324,7 +323,6 @@ public class SMSUserSchedule {
 		} catch (Exception e) {
 			logger.error(strSql, e);
 		} finally {
-			db.close();
 		}
 		return this.serverID;
 	}
