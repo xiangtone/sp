@@ -277,10 +277,10 @@ public class SMSUserSchedule {
 			if (rs.next()) {
 				flag = true;
 				this.gameCode = rs.getString("gamename");
-				this.serverID = getServerIDbyServerName(this.gameCode);
 				this.gameID = new Integer(rs.getString("gameid")).toString();
-				// this.gameID = gameId;
 				this.vcpID = rs.getInt("vcpid");
+				this.serverID = getServerIDbyServerName(this.gameCode);
+				// this.gameID = gameId;
 			}
 		} catch (Exception e) {
 			logger.error(strSql, e);
