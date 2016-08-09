@@ -74,8 +74,8 @@ public class MtSubmitSeq {
 		PreparedStatement ps=null;
 		try {
 			strSql = "update sms_mtlog set submit_seq = 0 ,submit_msgid=?,submit_result=? where submit_seq = ? and ismgid =? order by id desc limit 1";
-			logger.debug(strSql);
-			logger.debug("Statement: submit_msgid="+getSubmitMsgID()+", submit_result="+getSubmitResult()+", submit_seq = "+getSubmitSeq()+", ismgid ="+getIsmgID());
+			logger.info(strSql);
+			logger.info("Statement: submit_msgid="+getSubmitMsgID()+", submit_result="+getSubmitResult()+", submit_seq = "+getSubmitSeq()+", ismgid ="+getIsmgID());
 			ps=db.iniPreparedStatement(strSql);
 			int m=1;
 			ps.setString(m++, getSubmitMsgID());

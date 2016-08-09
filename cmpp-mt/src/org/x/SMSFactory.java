@@ -32,7 +32,7 @@ public class SMSFactory {
 		 * if(type.equals("19")) { return new CMPPSend_gd(mt); //¹ã¶«ÒÆ¶¯ } else {
 		 * return new CMPPSend_bj(mt); }
 		 */
-		System.out.println("content is:" + mt.sendContent);
+//		System.out.println("content is:" + mt.sendContent);
 		return new CMPPSendSd(mt);
 	}
 }

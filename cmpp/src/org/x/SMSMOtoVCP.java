@@ -34,7 +34,7 @@ public class SMSMOtoVCP {
 			logger.debug("send..cpn:" + smsmo.getCpn());
 			logger.debug("send..spcode:" + smsmo.getSpCode());
 			logger.debug("send.serverAction:" + smsmo.getServerAction());
-			logger.debug("send.serverAction:" + smsmo.getLinkID());
+			logger.info("send.serverAction:" + smsmo.getLinkID());
 
 			xtdeliver = new SmDeliver();
 			xtdeliver.setMobileCode(smsmo.getCpn());

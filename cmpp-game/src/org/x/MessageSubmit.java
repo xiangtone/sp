@@ -103,13 +103,13 @@ public class MessageSubmit {
 	}
 
 	public void insertMTlog() {
-		String strSql = " insert into sms_mtlog set  spcode='" + spCode + "',ismgid='" + provID + "'";
+		String strSql = " insert into sms_mtlog set spcode='" + spCode + "',ismgid='" + provID + "'";
 		strSql += ",destcpn='" + destCpn + "',feecpn='" + feeCpn + "',serverid='" + serverID + "'";
 		strSql += ",servername='" + gameCode + "',content='" + content + "'";
 		strSql += ",feetype='" + feeType + "',sendtime='" + sendTime + "'";
+		logger.info(strSql);
 		DBForLocal db=new DBForLocal();
 		try {
-			logger.debug(strSql);
 			db.executeUpdate(strSql);
 		} catch (Exception e) {
 			logger.error(strSql, e);

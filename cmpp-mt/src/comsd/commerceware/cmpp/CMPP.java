@@ -244,7 +244,7 @@ public final class CMPP {
 	}
 
 	public void cmppActiveTest(ConnDesc conn) throws IOException {
-		logger.info(conn.sock);
+//		logger.info(conn.sock);
 		DataOutputStream out = null;
 		CmppeHead ch = new CmppeHead();
 		try {

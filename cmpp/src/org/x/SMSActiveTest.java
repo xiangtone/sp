@@ -45,14 +45,14 @@ public class SMSActiveTest implements Runnable {
 				} catch (Exception e) {
 					logger.error("testActive exception msg--Exception:",e);
 
-					logger.info("heartbeat down...");
+//					logger.info("heartbeat down...");
 					p.cmppDisconnectFromIsmg(con);
 					cmppcon.destroy();
 					try {
 						Thread.currentThread().sleep(10 * 1000);
 						cmppcon = CMPPSingleConnect.getInstance();
 						con = cmppcon.con;
-						logger.info("try reconnect");
+//						logger.info("try reconnect");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

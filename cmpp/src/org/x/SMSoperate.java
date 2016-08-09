@@ -374,7 +374,7 @@ public class SMSoperate {
 
 			logger.debug(smsus.getUSchedSpCode());
 
-			logger.debug("linkid is:" + this.linkid);
+			logger.info("linkid is:" + this.linkid);
 
 			// ¼ÓÈë¼à¿ØÄ£¿é
 
