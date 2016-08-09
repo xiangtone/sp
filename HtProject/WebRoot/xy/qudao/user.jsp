@@ -206,7 +206,7 @@
 						<input type="hidden" id="ori_hid_<%= model.getId() %>" value="<%=model.getDataRows()%>" />
 					</td>
 
-					<td class="or" <%= model.getStatus()==0 ? "ondblclick='editShowData(" + model.getId() + ")'":"" %> >
+					<td class="or" ondblclick="editShowData(<%= model.getId() %>)"  >
 						<span id="span_<%= model.getId() %>"><%=model.getShowDataRows()%></span>
 					</td>
 					<td><%= model.getStatus()==1 ? "已同步":"未同步" %></td>
