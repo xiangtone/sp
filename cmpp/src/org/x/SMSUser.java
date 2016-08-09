@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 
 import com.xiangtone.util.DBForLocal;
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 import com.xiangtone.util.FormatSysTime;
 
 /**
@@ -32,7 +32,7 @@ public class SMSUser {
 
 	private String strSql = "";
 	private DBForLocal dblocal = new DBForLocal();
-	private DBForLog dblog = new DBForLog();
+	private DBForRead dblog = new DBForRead();
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
 

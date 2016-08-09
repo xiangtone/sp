@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 public class ConnectionService {
 	private static Logger myLogger = Logger.getLogger(ConnectionService.class);
-	private static final String DB_LOG = "log";
+	private static final String DB_READ = "read";
 	private static ConnectionService instance = new ConnectionService();
 
 	private ConnectionService() {
@@ -24,7 +24,7 @@ public class ConnectionService {
 		return instance;
 	}
 
-	private DataSource dsLog = setupDataSource(DB_LOG);
+	private DataSource dsLog = setupDataSource(DB_READ);
 
 	public synchronized Connection getConnectionForLog() {
 		try {
@@ -41,11 +41,21 @@ public class ConnectionService {
 		ds.setUrl(ConfigManager.getConfigData(db + ".url"));
 		ds.setUsername(ConfigManager.getConfigData(db + ".user"));
 		ds.setPassword(ConfigManager.getConfigData(db + ".password"));
-		ds.setInitialSize(Integer.parseInt(ConfigManager.getConfigData(db + ".initialSize")));
-		ds.setMaxActive(Integer.parseInt(ConfigManager.getConfigData(db + ".maxActive")));
-		ds.setMaxIdle(Integer.parseInt(ConfigManager.getConfigData(db + ".maxIdle")));
-		ds.setMinIdle(Integer.parseInt(ConfigManager.getConfigData(db + ".minIdle")));
-		ds.setMaxWait(Long.parseLong(ConfigManager.getConfigData(db + ".maxWait")));
+		ds.setInitialSize(Integer.valueOf(ConfigManager.getConfigData(db + ".initialSize") != null
+				&& ConfigManager.getConfigData(db + ".initialSize").length() > 0
+						? ConfigManager.getConfigData(db + ".initialSize") : "2"));
+		ds.setMaxActive(Integer.valueOf(ConfigManager.getConfigData(db + ".maxActive") != null
+				&& ConfigManager.getConfigData(db + ".maxActive").length() > 0 ? ConfigManager.getConfigData(db + ".maxActive")
+						: "10"));
+		ds.setMaxIdle(Integer.valueOf(ConfigManager.getConfigData(db + ".maxIdle") != null
+				&& ConfigManager.getConfigData(db + ".maxIdle").length() > 0 ? ConfigManager.getConfigData(db + ".maxIdle")
+						: "5"));
+		ds.setMinIdle(Integer.valueOf(ConfigManager.getConfigData(db + ".minIdle") != null
+				&& ConfigManager.getConfigData(db + "..minIdle").length() > 0 ? ConfigManager.getConfigData(db + "..minIdle")
+						: "2"));
+		ds.setMaxWait(Long.valueOf(ConfigManager.getConfigData(db + ".maxWait") != null
+				&& ConfigManager.getConfigData(db + "..maxWait").length() > 0 ? ConfigManager.getConfigData(db + "..maxWait")
+						: "5000"));
 		ds.setRemoveAbandoned(true);
 		ds.setRemoveAbandonedTimeout(60);
 		ds.setLogAbandoned(true);

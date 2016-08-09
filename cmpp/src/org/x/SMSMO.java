@@ -15,7 +15,7 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 import com.xiangtone.util.DBForLocal;
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 
 import java.sql.*;
 
@@ -41,7 +41,7 @@ public class SMSMO {
 	protected int tpUdhi = 0;
 	protected int fmt = 0;
 	protected String msgId = "";
-	private DBForLog dblog = new DBForLog();
+	private DBForRead dblog = new DBForRead();
 	private DBForLocal dblocal = new DBForLocal();
 	private PreparedStatement ps = null;
 	private String strSql = "";

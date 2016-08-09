@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 import org.apache.log4j.Logger;
 
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 
 /**
  * this Class operate gamelisttbl
@@ -17,8 +17,8 @@ import com.xiangtone.util.DBForLog;
  */
 public class SMSUserSchedule {
 	private static Logger logger = Logger.getLogger(SMSUserSchedule.class);
-	private DBForLog db=new DBForLog();
-	private PreparedStatement ps=null;
+	private DBForRead db = new DBForRead();
+	private PreparedStatement ps = null;
 	private ResultSet rs = null;
 	private String strSql;
 	public static final int SPCODE_LEN = 8; // »ù´¡ºÅ³¤¶È
@@ -75,7 +75,7 @@ public class SMSUserSchedule {
 			this.vcpID = 1;
 			this.spCode = spcode;
 			String content = info.toUpperCase().trim();
-			logger.debug("spcode:"+spcode+", info:"+info);
+			logger.debug("spcode:" + spcode + ", info:" + info);
 			if (isItemExist(content)) {
 				if (this.spCode.length() > 8) {
 					this.spCode = this.spCode.substring(0, 8);
@@ -241,13 +241,13 @@ public class SMSUserSchedule {
 			}
 		} catch (Exception e) {
 			logger.error(e);
-		} 
+		}
 
 	}
 
 	private boolean isItemExist(String strGameCode) {
 		boolean flag = false;
-		logger.debug("flag:"+flag);
+		logger.debug("flag:" + flag);
 		try {
 			strSql = "select * from sms_gamelist where gamename='" + strGameCode + "' and ismgid='" + ismgId + "'";
 			logger.debug(strSql);
@@ -257,11 +257,11 @@ public class SMSUserSchedule {
 				this.gameID = new Integer(rs.getInt("gameid")).toString();
 				this.gameCode = rs.getString("gamename");
 				this.vcpID = rs.getInt("vcpid");
-				logger.debug("gameID:"+gameID+", gameCode:"+gameCode+", vcpID:"+vcpID);
+				logger.debug("gameID:" + gameID + ", gameCode:" + gameCode + ", vcpID:" + vcpID);
 			}
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			db.close();
 		}
 		return flag;
@@ -282,8 +282,8 @@ public class SMSUserSchedule {
 				this.vcpID = rs.getInt("vcpid");
 			}
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			db.close();
 		}
 		return flag;
@@ -299,8 +299,8 @@ public class SMSUserSchedule {
 			if (!rs.next())
 				return false;
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			db.close();
 		}
 		this.corpID = id;
@@ -322,8 +322,8 @@ public class SMSUserSchedule {
 				return serverid;
 			}
 		} catch (Exception e) {
-			logger.error(strSql,e);
-		}finally{
+			logger.error(strSql, e);
+		} finally {
 			db.close();
 		}
 		return this.serverID;

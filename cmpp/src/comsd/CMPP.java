@@ -247,7 +247,7 @@ public final class CMPP {
 			// LOG.debug("readHeadPkLen:" + p.pkHead.pkLen);
 			// LOG.debug("readHeadPkCmd:" + p.pkHead.pkCmd);
 			// LOG.debug("readHeadPkSeq:" + p.pkHead.pkSeq);
-//			LOG.info("read resp message readHeadPkSeq:" + p.pkHead.pkSeq);
+			// LOG.info("read resp message readHeadPkSeq:" + p.pkHead.pkSeq);
 		} catch (IOException e) {
 			LOG.error("readHead Exception", e);
 			throw e;
@@ -358,7 +358,7 @@ public final class CMPP {
 
 	public synchronized void cmppActiveTest(ConnDesc conn) throws IOException {
 		synchronized (conn) {
-//			LOG.info("cmppActiveTest:begin");
+			// LOG.info("cmppActiveTest:begin");
 			DataOutputStream out = null;
 			CmppeHead ch = new CmppeHead();
 			try {
@@ -384,13 +384,13 @@ public final class CMPP {
 				LOG.error("", e);
 				throw e;
 			}
-//			LOG.info("cmppActiveTest:end");
+			// LOG.info("cmppActiveTest:end");
 		}
 	}
 
 	protected void cmppSendActiveResp(ConnDesc conn, int seq) throws IOException {
 		synchronized (conn) {
-//			LOG.info("cmppSendActiveResp:begin");
+			// LOG.info("cmppSendActiveResp:begin");
 			CmppeHead ch = new CmppeHead();
 
 			try {
@@ -417,7 +417,7 @@ public final class CMPP {
 				LOG.error("", e);
 				throw e;
 			}
-//			LOG.info("cmppSendActiveResp:end");
+			LOG.info("cmppSendActiveResp:end");
 		}
 	}
 
@@ -665,7 +665,7 @@ public final class CMPP {
 
 	public void cmppSendDeliverResp(ConnDesc conn, CmppeDeliverResult cd) throws IOException {
 		synchronized (conn) {
-//			LOG.info("cmppSendDeliverResp:begin" + " " + cd.msgId);
+			// LOG.info("cmppSendDeliverResp:begin" + " " + cd.msgId);
 			// check msgId
 			if (cd.msgId.length != 8) {
 				LOG.error("cd.msgId:" + cd.msgId + " is wrong");
@@ -691,7 +691,7 @@ public final class CMPP {
 				LOG.error("", e1);
 				throw new IOException("decode error");
 			}
-//			LOG.info("cmppSendDeliverResp:end");
+			// LOG.info("cmppSendDeliverResp:end");
 		}
 	}
 
