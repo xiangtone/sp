@@ -7,9 +7,9 @@ import org.apache.log4j.PropertyConfigurator;
 import com.xiangtone.util.FormatSysTime;
 import com.xiangtone.util.IntByteConvertor;
 
-import comsd.commerceware.cmpp.CMPP;
-import comsd.commerceware.cmpp.CmppeSubmit;
-import comsd.commerceware.cmpp.ConnDesc;
+import comsd.CMPP;
+import comsd.CmppeSubmit;
+import comsd.ConnDesc;
 
 public class CMPPSendSd implements CMPPSend {
 	private static Logger logger = Logger.getLogger(CMPPSendSd.class);

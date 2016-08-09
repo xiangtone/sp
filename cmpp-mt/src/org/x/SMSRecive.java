@@ -13,14 +13,13 @@ package org.x;
 
 import org.apache.log4j.Logger;
 
-import com.xiangtone.util.FormatSysTime;
 import com.xiangtone.util.IntByteConvertor;
 
-import comsd.commerceware.cmpp.CMPP;
-import comsd.commerceware.cmpp.CmppeDeliverResult;
-import comsd.commerceware.cmpp.CmppeResult;
-import comsd.commerceware.cmpp.CmppeSubmitResult;
-import comsd.commerceware.cmpp.ConnDesc;
+import comsd.CMPP;
+import comsd.CmppeDeliverResult;
+import comsd.CmppeResult;
+import comsd.CmppeSubmitResult;
+import comsd.ConnDesc;
 
 public class SMSRecive implements Runnable {
 
@@ -52,16 +51,16 @@ public class SMSRecive implements Runnable {
 
 			try {
 
-				p.readPa(con);//读取接收到的数据包
-				Thread.currentThread().sleep(100);
+				p.readPa(con);// 读取接收到的数据包
+				Thread.currentThread().sleep(10);
 				if (sr.flag == 0) {// submit resp
 
 					sr.flag = -1; // 复位
 
 					String strRespMsgId = IntByteConvertor.getLong(sr.msgId, 0) + "";// MyTools.Bytes2HexString(sr.msgId);MyTools.Bytes2HexString(sr.msgId);//new
-																						// String(sr.msgId2)//IntByteConvertor.getLong(sr.msgId,0)
-																						// +
-																						// "";//MyTools.Bytes2HexString(sr.msgId);
+					// String(sr.msgId2)//IntByteConvertor.getLong(sr.msgId,0)
+					// +
+					// "";//MyTools.Bytes2HexString(sr.msgId);
 
 					int iRespResult = sr.result;
 
@@ -147,8 +146,8 @@ public class SMSRecive implements Runnable {
 
 							statDev = -1;
 
-						handle.receiveReport(this.ISMGID, msgId, linkId, reportDestCpn, strSpcode, strCpn, submitTime,
-								doneTime, statDev, stat2);
+						handle.receiveReport(this.ISMGID, msgId, linkId, reportDestCpn, strSpcode, strCpn, submitTime, doneTime,
+								statDev, stat2);
 
 						// handle.receiveReport(this.ISMGID,msgId,reportDestCpn,strSpcode,strCpn,submitTime,doneTime,statDev);
 

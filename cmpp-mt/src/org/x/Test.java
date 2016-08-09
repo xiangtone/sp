@@ -18,8 +18,8 @@ import org.common.util.ConnectionService;
 import com.xiangtone.util.DBForLocal;
 import com.xiangtone.util.DBForLog;
 
-import comsd.commerceware.cmpp.CMPP;
-import comsd.commerceware.cmpp.OutOfBoundsException;
+import comsd.CMPP;
+import comsd.OutOfBoundsException;
 
 public class Test {
 	// private static Logger logger = Logger.getLogger(.class);

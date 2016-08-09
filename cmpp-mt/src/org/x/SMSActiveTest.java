@@ -1,12 +1,13 @@
 package org.x;
 
-import comsd.commerceware.cmpp.*;
 import java.lang.*;
 import java.io.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.xiangtone.util.FormatSysTime;
+
+import comsd.*;
 
 public class SMSActiveTest implements Runnable {
 	CMPP p = null;// new CMPP();

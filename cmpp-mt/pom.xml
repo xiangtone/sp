@@ -97,7 +97,7 @@
 			<!-- Enabling the use of FTP -->
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
+				<artifactId>wagon-ssh</artifactId>
 				<version>1.0-beta-6</version>
 			</extension>
 		</extensions>
@@ -108,8 +108,8 @@
 			<properties>
 				<runtime.env>packageConfig\vgame</runtime.env>
 				<final.name>cmpp-mt</final.name>
-				<ftp.server.id>HYServer</ftp.server.id>
-				<ftp.to.url>ftp://121.40.137.243/tomcat_9010/swap_dir/</ftp.to.url>
+				<ftp.server.id>cmppServer</ftp.server.id>
+				<ftp.to.url>sftp://121.40.125.15:12980/home/smsdevp/newApp/mt</ftp.to.url>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
