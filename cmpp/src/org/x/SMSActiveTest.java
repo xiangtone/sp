@@ -37,13 +37,13 @@ public class SMSActiveTest implements Runnable {
 					p.cmppActiveTest(cmppcon.con);
 					Thread.currentThread().sleep(5000);
 				} catch (Exception e) {
-					logger.error("testActive exception msg--Exception:",e);
+					logger.error("testActive exception msg--Exception:", e);
 
 					logger.info("heartbeat down...");
 					p.cmppDisconnectFromIsmg(con);
 					cmppcon.destroy();
 					try {
-						Thread.currentThread().sleep(10 * 1000);
+						Thread.currentThread().sleep(35 * 1000);
 						cmppcon = CMPPSingleConnect.getInstance();
 						con = cmppcon.con;
 						logger.info("try reconnect");
@@ -54,7 +54,7 @@ public class SMSActiveTest implements Runnable {
 			}
 
 		} catch (Exception e) {
-			logger.error("",e);
+			logger.error("", e);
 		}
 	}
 }
