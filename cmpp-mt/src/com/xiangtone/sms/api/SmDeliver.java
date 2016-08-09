@@ -63,7 +63,7 @@ public class SmDeliver {
 
 	// set linkid //add at 061120
 	public void setLinkID(String linkid) throws Exception {
-		logger.debug("linkid is:" + linkid);
+		logger.info("linkid is:" + linkid);
 		if (linkid == null) {// change at 061204
 			byte[] _linkid = new byte[20];
 			bc.AddByte(StateCode.LINK_ID);

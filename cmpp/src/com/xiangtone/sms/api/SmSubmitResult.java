@@ -78,7 +78,7 @@ public class SmSubmitResult extends SmResult {
 					break;
 				case 12:
 					linkid = deByteCode.asciiz(valueLen);
-					logger.debug("linkid value is:" + linkid);
+					logger.info("linkid value is:" + linkid);
 					break;
 				case 14:
 					msgId = deByteCode.asciiz(valueLen);

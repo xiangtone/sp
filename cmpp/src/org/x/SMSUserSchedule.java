@@ -75,13 +75,14 @@ public class SMSUserSchedule {
 			this.vcpID = 1;
 			this.spCode = spcode;
 			String content = info.toUpperCase().trim();
-
+			logger.debug("spcode:"+spcode+", info:"+info);
 			if (isItemExist(content)) {
 				if (this.spCode.length() > 8) {
 					this.spCode = this.spCode.substring(0, 8);
 					this.spCode += "" + this.gameID;// change at 070201
 					this.actionCode = "";
 					this.gameCode = content;
+					logger.debug("ItemExist");
 					return;
 				}
 
@@ -245,17 +246,18 @@ public class SMSUserSchedule {
 	}
 
 	private boolean isItemExist(String strGameCode) {
-
 		boolean flag = false;
+		logger.debug("flag:"+flag);
 		try {
 			strSql = "select * from sms_gamelist where gamename='" + strGameCode + "' and ismgid='" + ismgId + "'";
+			logger.debug(strSql);
 			rs = db.executeQuery(strSql);
 			if (rs.next()) {
 				flag = true;
 				this.gameID = new Integer(rs.getInt("gameid")).toString();
 				this.gameCode = rs.getString("gamename");
-
 				this.vcpID = rs.getInt("vcpid");
+				logger.debug("gameID:"+gameID+", gameCode:"+gameCode+", vcpID:"+vcpID);
 			}
 		} catch (Exception e) {
 			logger.error(strSql,e);

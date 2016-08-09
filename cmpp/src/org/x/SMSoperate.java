@@ -290,14 +290,12 @@ public class SMSoperate {
 
 			strContent = strContent.toUpperCase().trim();
 
-			logger.debug("mo.content:" + strContent);
-
-			logger.debug("spcode :" + deliverSpCode);
+			logger.debug("mo.content:" + strContent+", spcode :" + deliverSpCode);
 
 			// 处理长号//061116
-
+			logger.debug("start getUserDetail");
 			smsus.getUserDetail(this.deliverSpCode, strContent);
-
+			logger.debug("end getUserDetail");
 			// logger.debug("this.deliverSpCode:"+deliverSpCode);
 
 			// 处理长号//061116
@@ -372,7 +370,7 @@ public class SMSoperate {
 
 			smsmo.setLinkID(this.linkid);
 
-			logger.debug(smsus.getUSchedSpCode());
+//			logger.debug(smsus.getUSchedSpCode());
 
 			logger.debug("linkid is:" + this.linkid);
 
@@ -400,9 +398,7 @@ public class SMSoperate {
 
 			}
 
-		}
-
-		catch (Exception e) {
+		} catch (Exception e) {
 
 			logger.error("", e);
 

@@ -193,7 +193,7 @@ public class SMSMO {
 			strSql += ",serveraction='" + serverAction + "'";
 			strSql += ",delivertime='" + deliverTime + "'";
 			strSql += ",linkid='" + linkID + "'";
-			logger.debug(strSql);
+			logger.info(strSql);
 			dblocal.executeUpdate(strSql);
 		} catch (SQLException e) {
 			logger.error(strSql,e);

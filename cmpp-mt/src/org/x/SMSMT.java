@@ -234,7 +234,7 @@ public class SMSMT {
 			strSql += ",submit_msgid=''";
 			strSql += ",submit_result=" + submitResult;
 			strSql += ",submit_seq=" + submitSeq;
-			logger.debug(strSql);
+			logger.info(strSql);
 			db.executeUpdate(strSql);
 			// MtsMtHandle mtsMtLog = new MtsMtHandle();
 			// mtsMtLog.insertMtlog(strSql);

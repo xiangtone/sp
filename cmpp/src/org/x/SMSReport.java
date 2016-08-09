@@ -58,11 +58,11 @@ public class SMSReport {
 		 * sb.append("stat:" + stat_dev + ".");
 		 */
 		try {
-			LOG.debug(strSql);
+			LOG.info(strSql);
 			db.executeUpdate(strSql);
-			LOG.debug(tempStrSql);
+			LOG.info(tempStrSql);
 			db.executeUpdate(tempStrSql);
-			LOG.debug(companyStrSql);
+			LOG.info(companyStrSql);
 			db.executeUpdate(companyStrSql);
 			// System.out.println("start to insert temprept");
 			// mydb.execUpdate(tempstr_sql);

@@ -221,7 +221,7 @@ public class SMSMT {
 			strSql += ",submit_msgid='" + submitMsgID + "'";
 			strSql += ",submit_result=" + submitResult;
 			strSql += ",submit_seq=" + submitSeq;
-			logger.debug(strSql);
+			logger.info(strSql);
 			db.executeUpdate(strSql);
 		} catch (SQLException e) {
 			logger.error(strSql,e);
@@ -234,7 +234,7 @@ public class SMSMT {
 		try {
 			strSql = "update sms_mtlog set submit_seq = 0 ,submit_msgid='" + msg_id + "',submit_result=" + submit_result
 					+ " where submit_seq = " + seq + " and ismgid ='" + ismgid + "' order by id desc limit 1";
-			logger.debug(strSql);
+//			System.out.println(strSql);
 			db.executeUpdate(strSql);
 		} catch (SQLException e) {
 			logger.error(strSql,e);
@@ -248,7 +248,7 @@ public class SMSMT {
 			strSql = "update sms_mtlog set submit_seq = 0 ,submit_msgid='" + this.submitMsgID + "',submit_result="
 					+ this.submitResult + " where submit_seq = " + this.submitSeq + " and ismgid ='" + this.ismgID
 					+ "' order by id desc limit 1";
-			logger.debug(strSql);
+//			System.out.println(strSql);
 			db.executeUpdate(strSql);
 		} catch (SQLException e) {
 			logger.error(strSql,e);

@@ -135,9 +135,7 @@ public final class CMPP {
 			p.pkHead.pkSeq = in.readInt();
 
 			// System.out.println();
-			logger.debug("readHeadPkLen:" + p.pkHead.pkLen);
-			logger.debug("readHeadPkCmd:" + p.pkHead.pkCmd);
-			logger.info("readHeadPkSeq:" + p.pkHead.pkSeq);
+			logger.debug("readHeadPkLen:" + p.pkHead.pkLen+", readHeadPkCmd:" + p.pkHead.pkCmd+", readHeadPkSeq:" + p.pkHead.pkSeq);
 		} catch (IOException e) {
 			logger.error("readHead", e);
 			throw e;
@@ -173,8 +171,7 @@ public final class CMPP {
 
 	protected void sendHeader(byte[] buf, CmppeHead ch) throws IOException {
 
-		logger.debug("send ch.pkLen:" + ch.pkLen);
-		logger.debug("send ch.pkCmd:" + ch.pkCmd);
+		logger.debug("send ch.pkLen:" + ch.pkLen+", send ch.pkCmd:" + ch.pkCmd);
 		tools.strcpy(buf, ch.pkLen, 0);
 		tools.strcpy(buf, ch.pkCmd, 4);
 		tools.strcpy(buf, ch.pkSeq, 8);
@@ -268,7 +265,7 @@ public final class CMPP {
 			out.write(buf, 0, 12); // 测试信息体为空
 			logger.debug(Arrays.toString(buf));
 			out.flush();
-			logger.debug("have send it");
+//			logger.debug("have send it");
 			conn.seq++;
 			if (conn.seq == 0x7fffffff)
 				conn.seq = 1;
@@ -388,33 +385,33 @@ public final class CMPP {
 
 			case -2147483647:
 				CmppeLoginResult cl = (CmppeLoginResult) cr;
-				logger.debug("------------login resp----------: VERSION = " + cl.version);
-				logger.debug("------------login resp----------: STAT = " + ((CmppeResult) (cl)).stat);
+//				logger.debug("------------login resp----------: VERSION = " + cl.version);
+//				logger.debug("------------login resp----------: STAT = " + ((CmppeResult) (cl)).stat);
 				break;
 
 			case -2147483646:
-				logger.debug("------------logout resp----------: STAT = " + cr.stat);
+//				logger.debug("------------logout resp----------: STAT = " + cr.stat);
 				break;
 
 			case -2147483644:
 				CmppeSubmitResult sr = (CmppeSubmitResult) cr;
 				sr.flag = 0;
-				logger.debug("------------submit resp----------: STAT = " + sr.stat + " SEQ = " + sr.seq);
+//				logger.debug("------------submit resp----------: STAT = " + sr.stat + " SEQ = " + sr.seq);
 				break;
 
 			case 5: // '\005'
-				logger.debug("------------deliver---------: STAT = 0");
+//				logger.debug("------------deliver---------: STAT = 0");
 				CmppeDeliverResult cd = (CmppeDeliverResult) cr;
 				cmppSendDeliverResp(con, cd);
-				logger.debug("----------send deliver -------ok");
+//				logger.debug("----------send deliver -------ok");
 				break;
 
 			case -2147483641:
-				logger.debug("---------cancel-----------: STAT = " + cr.stat);
+//				logger.debug("---------cancel-----------: STAT = " + cr.stat);
 				break;
 
 			case -2147483640:
-				logger.info("---------active resp-----------: STAT " + cr.stat);
+//				logger.debug("---------active resp-----------: STAT " + cr.stat);
 				break;
 
 			default:

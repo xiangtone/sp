@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 public class TlsmsPublic {
 	public static void main(String[] args){
 		try{
+			
 			SMSIsmgInfo info = new SMSIsmgInfo("config.ini");
 			info.loadParam();
 			info.printParam();
