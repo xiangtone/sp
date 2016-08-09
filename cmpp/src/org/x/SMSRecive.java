@@ -13,7 +13,6 @@ package org.x;
 
 import org.apache.log4j.Logger;
 
-import com.xiangtone.util.FormatSysTime;
 import com.xiangtone.util.IntByteConvertor;
 
 import comsd.CMPP;
@@ -66,7 +65,7 @@ public class SMSRecive implements Runnable {
 				// SMSoperate handle = new SMSoperate();
 
 				p.readPa(con);
-				Thread.currentThread().sleep(100);
+				Thread.currentThread().sleep(10);
 				if (sr.flag == 0) // submit resp
 
 				{
@@ -74,9 +73,9 @@ public class SMSRecive implements Runnable {
 					sr.flag = -1; // ¸´Î»
 
 					String strRespMsgId = IntByteConvertor.getLong(sr.msgId, 0) + "";// MyTools.Bytes2HexString(sr.msgId);MyTools.Bytes2HexString(sr.msgId);//new
-																						// String(sr.msgId2)//IntByteConvertor.getLong(sr.msgId,0)
-																						// +
-																						// "";//MyTools.Bytes2HexString(sr.msgId);
+					// String(sr.msgId2)//IntByteConvertor.getLong(sr.msgId,0)
+					// +
+					// "";//MyTools.Bytes2HexString(sr.msgId);
 
 					int iRespResult = sr.result;
 
@@ -173,8 +172,8 @@ public class SMSRecive implements Runnable {
 							statDev = -1;
 
 						try {
-							handle.receiveReport(this.ISMGID, msgId, linkId, reportDestCpn, strSpcode, strCpn,
-									submitTime, doneTime, statDev, stat2);
+							handle.receiveReport(this.ISMGID, msgId, linkId, reportDestCpn, strSpcode, strCpn, submitTime, doneTime,
+									statDev, stat2);
 						} catch (Exception e) {
 							logger.error("", e);
 						}
