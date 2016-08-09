@@ -7,6 +7,9 @@ public class SdkSpTroneModel {
 	private String name;
 	private int operatorId;
 	private String CteateDate;
+	//sdksp的字段
+	private String fullName;
+	private String shortName;
 	public int getId() {
 		return id;
 	}
@@ -42,6 +45,18 @@ public class SdkSpTroneModel {
 	}
 	public void setCteateDate(String cteateDate) {
 		CteateDate = cteateDate;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	public String getShortName() {
+		return shortName;
+	}
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 	
 

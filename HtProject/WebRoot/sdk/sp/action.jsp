@@ -13,7 +13,6 @@
 
 if(type==-1){
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
-	System.out.println(id);
 	String fullName = StringUtil.getString(request.getParameter("full_name"), "");
 	String shortName = StringUtil.getString(request.getParameter("short_name"), "");
 	String remark = StringUtil.getString(request.getParameter("remark"), "");	
