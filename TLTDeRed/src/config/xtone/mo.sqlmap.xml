@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="gbk" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+  <sqlMap resource="org/xtone/mo/model/sqlmap/company_mo.xml"/>
+  <sqlMap resource="org/xtone/mo/model/sqlmap/tempcompany_mo.xml"/>
+   <sqlMap resource="org/xtone/mo/model/sqlmap/threadsMo.xml"/>
+</sqlMapConfig>

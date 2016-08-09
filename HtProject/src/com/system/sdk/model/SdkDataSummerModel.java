@@ -7,6 +7,7 @@ public class SdkDataSummerModel
 	private int activityRows;//活跃用户
 	private int troneRequestRows;//通道请求数
 	private int troneEffectRequestRows;//有效通道请求数
+	private float effectAmount;//理论计费金额
 	private int troneOrderRows;//指令成功数
 	private int msgRows;//短息成功数
 	private int sucRows;//计费成功数
@@ -84,5 +85,12 @@ public class SdkDataSummerModel
 	{
 		this.title = title;
 	}
+	public float getEffectAmount() {
+		return effectAmount;
+	}
+	public void setEffectAmount(float effectAmount) {
+		this.effectAmount = effectAmount;
+	}
+	
 	
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="MonthSuccCpnNum">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+
+			<select id="queryDayByCpn" parameterClass="map" resultClass="dto">
+		    <![CDATA[
+			    select cpn,count(distinct linkid) as num
+			    from smscompanymts.$tableName$ 
+			    where addate >=#startTime# and addate<=#endTime#
+			    and sendstate='DELIVRD'
+			    group by cpn
+		    ]]>
+		</select>
+		
+		<select id="queryIfCpn" parameterClass="map" resultClass="dto">
+		    select cpn from smscompanymts.month_succ_cpn_num where cpn=#cpn#
+		</select>
+		
+		<insert id="addMonthSuccCpnNum" parameterClass="map">
+		    insert into smscompanymts.month_succ_cpn_num(cpn,succNum)
+		    values(#cpn#,#succNum#)
+		</insert>
+		
+		<update id="updateMonthSuccCpnNum" parameterClass="map">
+		    update  smscompanymts.month_succ_cpn_num set succNum=succNum+$succNum$
+		    where cpn=#cpn#
+	    </update>
+</sqlMap>

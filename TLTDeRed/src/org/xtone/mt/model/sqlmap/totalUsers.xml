@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="totalUsers">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	
+	<select id="queryMoUsers" parameterClass="map" resultClass="java.lang.Integer">
+	    <![CDATA[
+	          select count(distinct cpn) as num  from smscompanymos.$tableNameMo$
+	    ]]>
+	</select>	
+	
+	<select id="queryMtUsers" parameterClass="map" resultClass="java.lang.Integer">
+	    <![CDATA[
+	          select count(distinct cpn) as num  from smscompanymts.$tableNameMt$
+	    ]]>
+	</select>	
+
+	<insert  id="addUsersNum" parameterClass="dto">
+         insert into smscompanymts.usersnum
+              (usermo,
+               usermt,
+               day) 
+         values
+             (#usermo#,
+              #usermt#,
+              #day#)
+	</insert>
+	
+	
+</sqlMap>

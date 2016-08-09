@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AlterTable">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	
+	    <insert id="insertYestedayMt" parameterClass="dto">
+	      INSERT INTO $tablename$(company,game,content,cpn,msgid,linkid,submit_linkid,submitmsgid,addate,sendstate,comprecstat,province,postcode,lostflag,pmid,mt_syn_status)
+			select  company,game,content,cpn,msgid,linkid,submit_linkid,submitmsgid,addate,sendstate,comprecstat,province,postcode,lostflag,pmid,'0'
+			from tempcompany_mt where  left(addate,10)=#yesterday# 
+	    </insert>
+	
+		<update id="updateTable" parameterClass="dto">
+		   alter table tempcompany_mt rename to $newTable$
+		</update>
+		
+	    <update id="createTable" parameterClass="dto">
+			    CREATE TABLE tempcompany_mt (
+						`id`  int(11) NOT NULL AUTO_INCREMENT ,
+						`company`  varchar(10) NOT NULL DEFAULT '' ,
+						`game`  varchar(10) NOT NULL DEFAULT '' ,
+						`content`  varchar(160) NOT NULL DEFAULT '' ,
+						`cpn`  varchar(15) NOT NULL DEFAULT '' ,
+						`msgid`  varchar(20) NOT NULL DEFAULT '' ,
+						`linkid`  varchar(20) NOT NULL DEFAULT '' ,
+						`submit_linkid`  varchar(20) NOT NULL DEFAULT '' ,
+						`submitmsgid`  varchar(20) NOT NULL DEFAULT '' ,
+						`addate`  datetime NULL DEFAULT NULL ,
+						`sendstate`  varchar(20) NOT NULL DEFAULT '0000' ,
+						`comprecstat`  varchar(10) NOT NULL DEFAULT '' ,
+						`province`  varchar(10) NOT NULL DEFAULT '' ,
+						`postcode`  varchar(4) NOT NULL DEFAULT '' ,
+						`lostflag`  varchar(4) NOT NULL DEFAULT '' ,
+						`pmid`  varchar(10) NOT NULL DEFAULT '' ,
+						`recp`  varchar(10) NOT NULL DEFAULT '' ,
+						 PRIMARY KEY (`id`),
+						INDEX `msgid` (`msgid`),
+							INDEX `linkid` (`linkid`),
+							INDEX `submitmsgid` (`submitmsgid`),
+							INDEX `cpn` (`cpn`)
+						)
+						TYPE=MyISAM
+						AUTO_INCREMENT=1
+						CHECKSUM=0
+						ROW_FORMAT=DYNAMIC
+						DELAY_KEY_WRITE=0
+		</update>
+		
+		<insert id="insertTempcompany_mt" parameterClass="dto">
+		  insert into tempcompany_mt  select * from $newTable$ where left(addate,10)=#addate#
+		</insert>
+		
+</sqlMap>

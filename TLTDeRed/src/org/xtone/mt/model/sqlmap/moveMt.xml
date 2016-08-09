@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MonthMt">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+		<insert id="addMonthMtForLost" parameterClass="dto">
+		    insert into smscompanymts.$tableMonth$(cpid,serviceid,phone,province_id,areaCode,createtime,lostflag)
+				select 'tltd',game,cpn,province,postcode,addate,lostflag from smscompanymts.$tableDay$ 
+				where lostflag='1'  group by linkid
+		</insert>
+		<insert id="addMonthMtForSucc" parameterClass="dto">
+		    insert into smscompanymts.$tableMonth$(cpid,serviceid,phone,province_id,areaCode,createtime,lostflag)
+				select company,game,cpn,province,postcode,addate,'0' from smscompanymts.$tableDay$  
+				where sendstate='DELIVRD' group by linkid
+		</insert>
+</sqlMap>

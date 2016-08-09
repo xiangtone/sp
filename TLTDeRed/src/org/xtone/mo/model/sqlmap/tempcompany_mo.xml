@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Tempcompany_mo">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+		<select id="queryTempMo" parameterClass="map" resultClass="dto">
+		 <![CDATA[
+		                select a.id as id,
+		                      a.company as company,
+						       b.partnerName as companyName,
+						       c.gamename as gameName,
+						       a.cpn as cpn,
+						       a.linkid as linkid,
+						       a.addate as addate,
+                                a.tocompstat  as tocompstat,
+						        a.comprecstat as comprecstat
+					  from smscompanymos.tempcompany_mo as a,
+					       smscompanymos.partners as b,
+					       smscompanymos.companygames c
+		             where a.company=b.partner
+		                   and a.game=c.gamecode
+		                   ]]>
+		             <isNotEmpty prepend="and" property="cpn">
+				        a.cpn = #cpn#
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="gameName">
+				        c.gameName like '%$gameName$%'
+				       
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="companyName">
+				       
+				        b.partnerName like '%$companyName$%'
+				     </isNotEmpty>
+				    
+				     
+				     <isNotEmpty prepend="and" property="addate1">
+				         a.addate >= #addate1#
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="addate2">
+				        <![CDATA[ a.addate <= #addate2#]]>
+				     </isNotEmpty>
+				    
+				     
+				     
+				     <isNotEmpty prepend="and" property="tocompstat">
+						     <isEqual  property="tocompstat" compareValue="1"> 
+						            <![CDATA[ a.tocompstat = '1']]>
+						     </isEqual>
+						      <isEqual  property="tocompstat" compareValue="0"> 
+						            <![CDATA[a.tocompstat != '1']]>
+						     </isEqual>
+				</isNotEmpty>  
+				
+				<isNotEmpty prepend="and" property="comprecstat">
+						     <isEqual  property="comprecstat" compareValue="0"> 
+						            <![CDATA[ a.comprecstat = '0']]>
+						     </isEqual>
+						      <isEqual  property="comprecstat" compareValue="1"> 
+						            <![CDATA[a.comprecstat != '0']]>
+						     </isEqual>
+				</isNotEmpty>   
+				      
+				     order by a.addate desc	
+		</select>
+		
+		
+		
+	<select id="queryTempMoForCount" parameterClass="map" resultClass="java.lang.Integer">
+		 <![CDATA[
+		               select  count(*) as count
+					  from smscompanymos.tempcompany_mo as a,
+					       smscompanymos.partners as b,
+					       smscompanymos.companygames c
+		             where a.company=b.partner
+		                   and a.game=c.gamecode
+		                   ]]>
+		             <isNotEmpty prepend="and" property="cpn">
+				        a.cpn = #cpn#
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="gameName">
+				        c.gameName like '%$gameName$%'
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="companyName">
+				        b.partnerName like '%$companyName$%'
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="addate1">
+				         a.addate >= #addate1#
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="addate2">
+				        <![CDATA[ a.addate <= #addate2#]]>
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="tocompstat">
+						     <isEqual  property="tocompstat" compareValue="1"> 
+						            <![CDATA[ a.tocompstat = '1']]>
+						     </isEqual>
+						      <isEqual  property="tocompstat" compareValue="0"> 
+						            <![CDATA[a.tocompstat != '1']]>
+						     </isEqual>
+				</isNotEmpty>  
+				
+				<isNotEmpty prepend="and" property="comprecstat">
+						     <isEqual  property="comprecstat" compareValue="0"> 
+						            <![CDATA[ a.comprecstat = '0']]>
+						     </isEqual>
+						      <isEqual  property="comprecstat" compareValue="1"> 
+						            <![CDATA[a.comprecstat != '0']]>
+						     </isEqual>
+				</isNotEmpty>   
+				      
+	</select>
+		
+		
+		
+</sqlMap>
