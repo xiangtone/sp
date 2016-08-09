@@ -108,8 +108,8 @@
 			<properties>
 				<runtime.env>packageConfig\vgame</runtime.env>
 				<final.name>cmpp-mt</final.name>
-				<ftp.server.id>HYServer</ftp.server.id>
-				<ftp.to.url>ftp://121.40.137.243/tomcat_9010/swap_dir/</ftp.to.url>
+				<ftp.server.id>cmppServer</ftp.server.id>
+				<ftp.to.url>sftp://121.40.125.15:12980/home/smsdevp/newApp/mt</ftp.to.url>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
