@@ -89,7 +89,7 @@ public final class CmppeDeliverResult extends CmppeResult {
 			// reserve = deByteCode.asciiz(8);
 			// byte[] linkids = deByteCode.getBytes(20);
 
-			logger.info("linkid is" + linkid);
+			logger.info("linkid:" + linkid);
 			STAT = 0;
 		} catch (Exception e) {
 			logger.error("",e);
