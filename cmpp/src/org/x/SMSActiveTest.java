@@ -8,15 +8,9 @@ package org.x;
 
 import org.apache.log4j.Logger;
 
-/**
- * @author Administrator
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-import comsd.commerceware.cmpp.CMPP;
-import comsd.commerceware.cmpp.CmppLogin;
-import comsd.commerceware.cmpp.ConnDesc;
+import comsd.CMPP;
+import comsd.CmppLogin;
+import comsd.ConnDesc;
 
 public class SMSActiveTest implements Runnable {
 

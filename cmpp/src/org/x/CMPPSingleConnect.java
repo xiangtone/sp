@@ -6,14 +6,6 @@ package org.x;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 
-/**
- * @author Administrator
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-import comsd.commerceware.cmpp.*;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -21,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import com.xiangtone.util.ConfigManager;
 import com.xiangtone.util.MailUtil;
+
+import comsd.*;
 
 public class CMPPSingleConnect {
 	static private Logger logger = Logger.getLogger(CMPPSingleConnect.class);

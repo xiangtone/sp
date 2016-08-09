@@ -16,11 +16,11 @@ import org.apache.log4j.Logger;
 import com.xiangtone.util.FormatSysTime;
 import com.xiangtone.util.IntByteConvertor;
 
-import comsd.commerceware.cmpp.CMPP;
-import comsd.commerceware.cmpp.CmppeDeliverResult;
-import comsd.commerceware.cmpp.CmppeResult;
-import comsd.commerceware.cmpp.CmppeSubmitResult;
-import comsd.commerceware.cmpp.ConnDesc;
+import comsd.CMPP;
+import comsd.CmppeDeliverResult;
+import comsd.CmppeResult;
+import comsd.CmppeSubmitResult;
+import comsd.ConnDesc;
 
 public class SMSRecive implements Runnable {
 
