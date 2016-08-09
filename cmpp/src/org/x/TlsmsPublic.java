@@ -1,5 +1,7 @@
 package org.x;
 
+import java.sql.Connection;
+
 /*
  * Created on 2006-11-15
  *
@@ -16,6 +18,10 @@ public class TlsmsPublic {
 	public static void main(String[] args) {
 		try {
 
+			Connection connection = org.common.util.ConnectionService.getInstance().getConnectionForLocal();
+			connection.close();
+			connection = com.xiangtone.util.ConnectionService.getInstance().getConnectionForRead();
+			connection.close();
 			SMSIsmgInfo info = new SMSIsmgInfo("config.ini");
 			info.loadParam();
 			info.printParam();

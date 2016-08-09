@@ -26,7 +26,7 @@ public class ConnectionService {
 
 	private DataSource dsLog = setupDataSource(DB_READ);
 
-	public synchronized Connection getConnectionForLog() {
+	public synchronized Connection getConnectionForRead() {
 		try {
 			return dsLog.getConnection();
 		} catch (SQLException ex) {
@@ -78,7 +78,7 @@ public class ConnectionService {
 	public static void main(String[] args) {
 		System.out.println(ConfigManager.getConfigData("log.url"));
 
-		ConnectionService.getInstance().getConnectionForLog();
+		ConnectionService.getInstance().getConnectionForRead();
 
 		System.out.println(ConfigManager.getConfigData("local.url"));
 	}

@@ -18,7 +18,7 @@ public class DBForRead {
 
 	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionService.getInstance().getConnectionForLog();
+			connection = ConnectionService.getInstance().getConnectionForRead();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
@@ -26,7 +26,7 @@ public class DBForRead {
 
 	public ResultSet executeQuery(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionService.getInstance().getConnectionForLog();
+			connection = ConnectionService.getInstance().getConnectionForRead();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		resultSet = preparedStatement.executeQuery();
