@@ -73,7 +73,7 @@ public class SMSBinary {
 		// default:
 		// db = new Mysqldb();
 		// }
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		ResultSet rs = null;
 		byte[] buffer = null;
 		byte[][] temp = new byte[20][161];

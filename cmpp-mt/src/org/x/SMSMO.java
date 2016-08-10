@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import org.apache.log4j.Logger;
 
 import com.xiangtone.util.DBForLocal;
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 
 /**
  * A class respresenting a set of packet and byte couters. It is bservable to
@@ -227,7 +227,7 @@ public class SMSMO {
 
 	public String getMOCorpID(String cpn) {
 		String strSql = null;
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		try {
 			ResultSet rs = null;
 			strSql = "select corp_id from sms_user where cpn='" + cpn + "'";
@@ -251,7 +251,7 @@ public class SMSMO {
 	 */
 	public String getGameID(int vcpid, String servername) {
 		String strSql = null;
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		try {
 			ResultSet rs = null;
 			strSql = "select gameid from sms_gamelist where vcpid=" + vcpid + " and gamename='" + servername + "'";
@@ -271,7 +271,7 @@ public class SMSMO {
 
 	public String getImsgID(String scpn) {
 		String strSql = null;
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		try {
 			ResultSet rs = null;
 			strSql = " select ismgid from sms_user where cpn='" + scpn + "'";

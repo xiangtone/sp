@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 
 import com.xiangtone.util.DBForLocal;
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 
 import java.sql.*;
 

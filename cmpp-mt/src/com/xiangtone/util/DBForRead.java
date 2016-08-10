@@ -1,4 +1,4 @@
-package com.xt.util;
+package com.xiangtone.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,19 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
-public class DBForLog {
-	private static Logger logger = Logger.getLogger(DBForLog.class);
+public class DBForRead {
+	private static Logger logger = Logger.getLogger(DBForRead.class);
 
 	private Connection connection = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 
-	public DBForLog() {
+	public DBForRead() {
 	}
 
 	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionService.getInstance().getConnectionForLog();
+			connection = ConnectionService.getInstance().getConnectionForRead();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
@@ -26,7 +26,7 @@ public class DBForLog {
 
 	public ResultSet executeQuery(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionService.getInstance().getConnectionForLog();
+			connection = ConnectionService.getInstance().getConnectionForRead();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		resultSet = preparedStatement.executeQuery();

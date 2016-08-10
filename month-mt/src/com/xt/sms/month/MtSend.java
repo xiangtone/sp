@@ -2,7 +2,7 @@ package com.xt.sms.month;
 
 import com.xt.sms.mt.MessageSubmit;
 import com.xt.util.DBForLocal;
-import com.xt.util.DBForLog;
+import com.xt.util.DBForRead;
 import com.xt.util.DateTimeTool;
 import java.io.File;
 import java.io.PrintStream;
@@ -20,7 +20,7 @@ public class MtSend implements Runnable {
 	private static boolean ifsend = true;
 
 	private DBForLocal dbLocal = new DBForLocal();
-	private DBForLog dbLog = new DBForLog();
+	private DBForRead dbLog = new DBForRead();
 
 	private Map<String, Map<String, String>> serviceMap = new HashMap();
 	private Map<String, List<String>> messagesMap = new HashMap();

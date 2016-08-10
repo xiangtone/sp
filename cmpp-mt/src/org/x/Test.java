@@ -16,7 +16,7 @@ import org.common.util.ConfigManager;
 import org.common.util.ConnectionService;
 
 import com.xiangtone.util.DBForLocal;
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 
 import comsd.CMPP;
 import comsd.OutOfBoundsException;
@@ -26,6 +26,22 @@ public class Test {
 	private static Logger logger = Logger.getLogger(Test.class);
 
 	public static void main(String[] args) {
+		DBForLocal l=new DBForLocal();
+		DBForRead r=new DBForRead();
+		String sql="SELECT * FROM `tbl_base_users` WHERE id=1";
+		try {
+			ResultSet rs=l.executeQuery(sql);
+			if(rs.next()){
+				System.out.println("l£º"+rs.getString(1));
+			}
+			ResultSet rs2=r.executeQuery(sql);
+			if(rs2.next()){
+				System.out.println("r£º"+rs2.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(ConfigManager.getConfigData("log.initialSize"));
 		try {
 			URL url=new URL("https://www.baidu.com");
@@ -71,5 +87,6 @@ public class Test {
 		// logger.error("e");
 		// logger.error("e");
 		// logger.error("e");
+		
 	}
 }

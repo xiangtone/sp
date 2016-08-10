@@ -2,7 +2,9 @@ package com.xt.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 
@@ -11,6 +13,7 @@ public class DBForLocal {
 
 	private Connection connection = null;
 	private PreparedStatement preparedStatement = null;
+	private ResultSet resultSet = null;
 
 	public DBForLocal() {
 	}
@@ -31,7 +34,24 @@ public class DBForLocal {
 		return preparedStatement.executeUpdate();
 	}
 
+	public ResultSet executeQuery(String sqlStr) throws SQLException {
+		if (connection == null) {
+			connection = ConnectionService.getInstance().getConnectionForLocal();
+		}
+		preparedStatement = connection.prepareStatement(sqlStr);
+		resultSet = preparedStatement.executeQuery();
+		return resultSet;
+	}
+
 	public void close() {
+		if (this.resultSet != null) {
+			try {
+				this.resultSet.close();
+			} catch (SQLException localSQLException1) {
+				this.logger.error("ResultSet close", localSQLException1);
+			}
+			this.resultSet = null;
+		}
 		if (this.preparedStatement != null) {
 			try {
 				this.preparedStatement.close();

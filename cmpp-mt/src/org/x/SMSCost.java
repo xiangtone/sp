@@ -10,7 +10,7 @@ import java.sql.*;
 import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 
 public class SMSCost {
 	private static Logger logger = Logger.getLogger(SMSCost.class);
@@ -69,7 +69,7 @@ public class SMSCost {
 
 	public void lookupInfofeeByServerIDIOD(String serverID) {
 		String strSql=null;
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		try {
 			ResultSet rs = null;
 			strSql = "select *  from sms_cost where serverid='" + serverID + "'";
@@ -95,7 +95,7 @@ public class SMSCost {
 
 	public void lookupInfofeeByServerIDPUSH(String serverID) {
 		String strSql = null;
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		try {
 			ResultSet rs = null;
 			strSql = "select *  from sms_cost where serverid='" + serverID + "'";

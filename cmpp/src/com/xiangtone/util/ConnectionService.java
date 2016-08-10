@@ -61,6 +61,13 @@ public class ConnectionService {
 		ds.setLogAbandoned(true);
 		ds.setMinEvictableIdleTimeMillis(30 * 1000);
 		ds.setTimeBetweenEvictionRunsMillis(10 * 1000);
+		ds.setTestWhileIdle(true);
+		ds.setTestOnBorrow(false);
+		ds.setTestOnReturn(false);
+		ds.setValidationQuery("select 1");
+		ds.setValidationQueryTimeout(1);
+		ds.setTimeBetweenEvictionRunsMillis(30000);
+		ds.setNumTestsPerEvictionRun(20);
 		return ds;
 	}
 

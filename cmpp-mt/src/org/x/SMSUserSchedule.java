@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 import org.common.util.ConnectionService;
 
-import com.xiangtone.util.DBForLog;
+import com.xiangtone.util.DBForRead;
 
 /**
  * this Class operate gamelisttbl
@@ -236,7 +236,7 @@ public class SMSUserSchedule {
 	}
 
 	public boolean isItemExist(String strGameCode) {
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		String strSql=null;
 		ResultSet rs=null;
 		boolean flag = false;
@@ -261,7 +261,7 @@ public class SMSUserSchedule {
 	}
 
 	public boolean isGameIDExist(String gameId) {
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		String strSql=null;
 		ResultSet rs=null;
 		boolean flag = false;
@@ -290,7 +290,7 @@ public class SMSUserSchedule {
 	 * 如果存在合作伙伴id 就返回 不存在就使用默认
 	 */
 	public boolean isCorpIDExist(String id) {
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		String strSql=null;
 		ResultSet rs=null;
 		strSql = "select * from sms_company where corp_id='" + id + "'";
@@ -314,7 +314,7 @@ public class SMSUserSchedule {
 	 *
 	 */
 	private String getServerIDbyServerName(String servername) {
-		DBForLog db=new DBForLog();
+		DBForRead db=new DBForRead();
 		String strSql=null;
 		ResultSet rs=null;
 		strSql = "select * from sms_cost where servername='" + servername + "' and spid='916006' limit 1";
