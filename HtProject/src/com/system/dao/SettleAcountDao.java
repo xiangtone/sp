@@ -147,11 +147,72 @@ public class SettleAcountDao
 		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		sql += " WHERE g.`js_type` = " + jsType;
 		
-		sql += " ) a WHERE a.cp_id NOT IN ( SELECT cp_id FROM daily_config.`tbl_cp_billing` WHERE js_type = " + jsType;
+		sql += " ) a ";
+		
+		sql += "WHERE a.cp_id NOT IN ( SELECT cp_id FROM daily_config.`tbl_cp_billing` WHERE js_type = " + jsType;
 		
 		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
 				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date)));";
 		
+		return (List<SpFinanceShowModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpFinanceShowModel> list = new ArrayList<SpFinanceShowModel>();
+				SpFinanceShowModel model = null;
+				
+				while(rs.next())
+				{
+					model = new SpFinanceShowModel();
+					
+					model.setSpId(rs.getInt("cp_id"));
+					model.setShortName(StringUtil.getString(rs.getString("cp_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+					model.setOperatorName(StringUtil.getString(rs.getString("name_cn"), ""));
+					model.setAmount(rs.getFloat("amounts"));
+					model.setJiesuanlv(rs.getFloat("jiesuanlv"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SpFinanceShowModel> loadCpSettleAccountDataAll(String startDate,String endDate,int cpId,int jsType)
+	{
+		String sql = "SELECT a.* FROM (";
+		
+		sql += " SELECT a.*,g.`rate` jiesuanlv,CONCAT(j.`name_cn`,'-',i.name) name_cn ";
+		sql += " FROM ( ";
+		sql += " SELECT  f.id cp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` cp_name, ";
+		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
+		sql += " FROM daily_log.tbl_cp_mr_summer a ";
+		sql += " LEFT JOIN    daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN  daily_config.tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN daily_config.tbl_cp f ON b.cp_id = f.id ";
+		sql += " WHERE a.mr_date >= '" + startDate + "' ";
+		sql += " AND a.mr_date <= '" + endDate + "' ";
+		
+		if(cpId>0)
+		{
+			sql += " AND f.id = " + cpId;
+		}
+		
+		sql += " GROUP BY f.id,d.id ";
+		sql += " ORDER BY cp_name,sp_trone_name ";
+		sql += " )a  ";
+		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON a.cp_id = g.cp_id AND a.sp_trone_id = g.sp_trone_id ";
+		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " WHERE g.`js_type` = " + jsType;
+		
+		sql += " ) a ";
 		
 		return (List<SpFinanceShowModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -224,7 +285,10 @@ public class SettleAcountDao
 	public List<SettleAccountModel> loadCpSettleAccountData(int cpId,String startDate,String endDate,int dateType)
 	{
 		String sql = "SELECT c.`name`,CONCAT(k.`name_cn`,'-',j.name) name_cn,SUM(a.amount) total_amount,f.rate jiesuanlv";
-			sql += " FROM daily_log.`tbl_cp_mr_summer` a";
+			//sql += " FROM daily_log.`tbl_cp_mr_summer` a";
+			
+			sql += " FROM (SELECT * FROM daily_log.`tbl_cp_mr_summer` WHERE mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "') a";
+			
 			sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
 			sql += " LEFT JOIN daily_config.tbl_trone e ON b.`trone_id` = e.`id`";
 			sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON e.`sp_trone_id` = c.`id`";
@@ -236,8 +300,11 @@ public class SettleAcountDao
 			
 			sql += " where a.`cp_id` =  " + cpId;
 			sql += " and f.js_type = " + dateType;
-			sql += " and a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
+			
+			//sql += " and a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
+			
 			sql += " group by c.id";
+			sql += " ORDER BY name_cn,name";
 		
 		return (List<SettleAccountModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{

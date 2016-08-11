@@ -19,6 +19,9 @@
 	int dateType = StringUtil.getInteger(request.getParameter("datetype"), -1);
 	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
 	boolean isExport = StringUtil.getInteger(request.getParameter("export"), -1) == 1 ;
+	
+	System.out.println("isExport:" + isExport + ";" + request.getQueryString());
+	
 	List<CpModel> cpList = new CpServer().loadCp();
 	String display = "";
 	Map<String, List<SpFinanceShowModel>> map = null;
@@ -67,7 +70,7 @@
 	else
 	{
 		if(isNotFirstLoad)
-			map = new SettleAccountServer().loadCpSettleAccountData(startDate, endDate,cpId,dateType);
+			map = new SettleAccountServer().loadCpSettleAccountDataAll(startDate, endDate,cpId,dateType);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -120,31 +123,15 @@
 	
 	function exportCpBillData(startDate,endDate,cpId,jsType)
 	{
-		window.location.href = "cpexport_all.jsp?export=1&js_type=" + jsType + "&cpid=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate;
+		window.location.href = "cpexport_all.jsp?export=1&datetype=" + jsType + "&cp_id=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate;
 	}
 	
-	function exportBill(startDate,endDate,cpId,jsType)
-	{
-		getAjaxValue("action.jsp?js_type=" + jsType + "&cpid=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate,onExportBillResult);
-	}
-	
-	function onExportBillResult(data)
-	{
-		if("OK" == data.trim())
-		{
-			alert("开始对帐成功");
-		}
-		else
-		{
-			alert("已存在相同的对帐单");	
-		}
-	}
 	
 </script>
 <body>
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
-			<form action="cpexport.jsp" method="post" id="exportform">
+			<form action="cpexport_all.jsp" method="post" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
 					<dd class="dd01_me">开始日期</dd>
@@ -232,7 +219,7 @@
 												+ StringUtil.getDecimalFormat(sfsModel.getAmount()
 														* sfsModel.getJiesuanlv())
 												+ "</td><td rowspan='" + tmpList.size()
-												+ "'><a href='#' onclick=exportBill(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>对帐</a></td></tr>");
+												+ "'><a href='javascript:;' onclick=exportCpBillData(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>导出</a></td></tr>");
 									}
 									else
 									{
