@@ -184,16 +184,68 @@
 		$("#sel_status").val(<%= status %>);
 	});
 	
+	var confirmBillingList = new Array();
 	
 	function showConfirmDialog(id)
 	{
+		for(var i=0; i<confirmBillingList.length; i++)
+		{
+			if(confirmBillingList[i]==id)
+			{
+				//$( "#dialog" ).dialog("close");
+				alert("这个已经对帐完毕了");	
+				return;
+			}
+		}
+		
 		//亢龙信息[2016-07-04-2016-07-10][对公周结]
 		$("#lab_title").text($("#lab_cp_name_" + id).text() + "[" + $("#lab_start_date_" + id).text() + "至" + $("#lab_end_date_" + id).text() + "][" + $("#lab_js_name_" + id).text() + "]");
 		
-		$( "#dialog" ).dialog();
+  		$("#lab_amount").text($("#lab_amount_" + id).text());
+  		$("#lab_pre_billing").text($("#lab_pre_billing_" + id).text());
+  		$("#lab_acture_billing").val($("#lab_pre_billing_" + id).text());
+  		
+  		$("#btn_confirm").click(function(){
+  			confirmActureBilling(id);
+  		});
 		
+		$( "#dialog" ).dialog();
 	}
 	
+	function confirmActureBilling(id)
+	{
+		var actureBilling = parseFloat($("#lab_acture_billing").val()).toFixed(2);
+		
+		if(isNaN(actureBilling) || actureBilling < 0)
+		{
+			alert("难道你能真付给对方这样的钱？");
+			return;
+		}
+		
+		getAjaxValue("action.jsp?type=2&id=" + id + "&money=" + actureBilling,onConfirmCpBilling);
+		
+		$( "#dialog" ).dialog("close");
+	}
+	
+	function onConfirmCpBilling(data)
+	{
+		console.log(data);
+		if(!(data==null || data==""))
+		{
+			var strData = data.split(",");
+			if("OK"==strData[0])
+			{
+				confirmBillingList.push(strData[1]);
+				alert("已经完成对帐！");
+				return;
+			}
+			else
+			{
+				alert("完成对帐失败！");	
+				return;
+			}
+		}
+	}
 	
 </script>
 
@@ -308,7 +360,7 @@
 					<td><%= model.getRemark() %></td>
 					<td><%= model.getCreateDate() %></td>
 					<td><%= statusData[model.getStatus()] %></td>
-					<td>
+					<td style="text-align: left">
 						<a href="cpbillingdetail.jsp?pagetype=1&query=<%= query %>&cpbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>
@@ -326,17 +378,15 @@
 		</table>
 	</div>
 	<div id="dialog" title="对帐完成" >
-  		<label id="lab_title" style="font-weight: bold;">亢龙信息[2016-07-04-2016-07-10][对公周结]</label>
+  		<label id="lab_title" style="font-weight: bold;">等你等到我心疼！</label>
   		<br />
   		信息费：<label id="lab_amount">123456</label>
   		<br />
-  		核减费用：<label id="lab_reduce_amount">123456</label>
+  		预支付：<label id="lab_pre_billing">123456</label>
   		<br />
-  		预支付：<label id="lab_pre_amount">123456</label>
+  		<label style="font-weight: bold;">实际支付：</label><input id="lab_acture_billing" type="text" value="123456" style="background-color: #ccc" />
   		<br />
-  		<label style="font-weight: bold;">实际支付：</label><input type="text" value="123456" style="background-color: #ccc" />
-  		<br />
-  		<input style="float: right;font-size: 14px;font-weight: bold;" type="button" value="确定">
+  		<input id="btn_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="确定" >
 	</div>
 </body>
 </html>

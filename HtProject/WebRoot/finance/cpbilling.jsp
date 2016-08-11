@@ -120,10 +120,10 @@
 	
 	String pageData = PageUtil.initPageQuery("cpbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"待审核","CP对帐中","CP已对帐"};
+	String[] statusData = {"待审核","CP对帐中","CP已对帐","已付款"};
 	
 	String[] btnStrings = {"<a href='#' onclick='sendCpBillingToCp(helloisthereany)'>审核</a> <a href='#' onclick='delCpBilling(helloisthereany)'>删除</a> <a href='#' onclick='reExportCpBilling(helloisthereany)'>重新生成</a>",
-			"<a href='#' onclick='confirmCpBillingForCp(helloisthereany)'>CP审核</a> <a href='#' onclick='reCallCpBillingFromCpStatus(helloisthereany)'>撤回</a>",""};
+			"<a href='#' onclick='confirmCpBillingForCp(helloisthereany)'>CP审核</a> <a href='#' onclick='reCallCpBillingFromCpStatus(helloisthereany)'>撤回</a>","",""};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -285,6 +285,7 @@
 					<td>结算类型</td>
 					<td>信息费</td>
 					<td>应支付</td>
+					<td>实际支付</td>
 					<td>备注</td>
 					<td>创建时间</td>
 					<td>状态</td>
@@ -305,10 +306,11 @@
 					<td><%= model.getJsName() %></td>
 					<td><%= model.getAmount() %></td>
 					<td><%=model.getPreBilling() %></td>
+					<td><%= model.getActureBilling() %></td>
 					<td><%=model.getRemark() %></td>
 					<td><%= model.getCreateDate() %></td>
 					<td><%= statusData[model.getStatus()] %></td>
-					<td>
+					<td style="text-align: left">
 						<a href="cpbillingdetail.jsp?query=<%= query %>&cpbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>

@@ -56,17 +56,17 @@
 <style type="text/css">
 a:link {
 font-size: 14px;
-color: #663300;
+color: #00c0ff;
 text-decoration: none;
 }
 a:visited {
 font-size: 14px;
-color: #663300;
+color: #00c0ff;
 text-decoration: none;
 }
 a:hover {
 font-size: 14px;
-color: #663300;
+color: #00c0ff;
 text-decoration: underline;
 }
 </style> 
