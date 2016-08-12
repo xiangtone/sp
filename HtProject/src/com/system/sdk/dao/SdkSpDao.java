@@ -11,6 +11,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcGameControl;
 import com.system.database.QueryCallBack;
 import com.system.sdk.model.SdkSpModel;
+import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
 public class SdkSpDao {
@@ -95,13 +96,13 @@ public class SdkSpDao {
 	
 	public boolean addSdkSp(SdkSpModel model)
 	{
-		String sql="insert into daily_config.tbl_sdk_sp(full_name,short_name,remark) value('"+model.getFullName()+"','"+model.getShortName()+"','"+model.getRemark()+"')";
+		String sql="insert into daily_config.tbl_sdk_sp(full_name,short_name,remark) value('"+SqlUtil.sqlEncode(model.getFullName())+"','"+SqlUtil.sqlEncode(model.getShortName())+"','"+SqlUtil.sqlEncode(model.getRemark())+"')";
 		return new JdbcGameControl().execute(sql);
 	}
 
 	public boolean updateSdkSp(SdkSpModel model)
 	{
-		String sql="update daily_config.tbl_sdk_sp set full_name='"+model.getFullName()+"',short_name='"+model.getShortName()+"',remark='"+model.getRemark()+"' where id="+model.getId();
+		String sql="update daily_config.tbl_sdk_sp set full_name='"+SqlUtil.sqlEncode(model.getFullName())+"',short_name='"+SqlUtil.sqlEncode(model.getShortName())+"',remark='"+SqlUtil.sqlEncode(model.getRemark())+"' where id="+model.getId();
 		return new JdbcGameControl().execute(sql);
 	}
 	
