@@ -27,7 +27,7 @@ public class UpDataDetailDao {
 		sql+=" LEFT JOIN daily_config.tbl_city city ON city.id=api.city";
 		sql+=" LEFT JOIN daily_config.tbl_province pro ON pro.id=city.province_id";
 		sql+=" LEFT JOIN daily_config.tbl_sp sp ON sp.id= trone.sp_id ";
-		sql+=" LEFT JOIN daily_config.tbl_api_order_status st ON api.status=st.id";
+		sql+=" LEFT JOIN daily_config.tbl_api_order_status st ON api.status=st.code";
 		sql+=" LEFT JOIN daily_config.tbl_sp_trone spTrone ON spTrone.id=trone.sp_trone_id WHERE 1=1";
 		sql+=" AND firstDate>='"+startDate+"' AND firstDate<='"+endDate+"'";
 		//spId
