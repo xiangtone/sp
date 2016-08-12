@@ -30,6 +30,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	int userId = ((UserModel)session.getAttribute("user")).getId();
+
 	String defaultStartDate = StringUtil.getMonthHeadDate();
 	String defaultEndDate = StringUtil.getMonthEndDate();
 
@@ -49,6 +51,10 @@
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
 	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
 	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
+	
+	
+	//当前下游用户只能看得到当前自己的数据
+	cpCommerceUserId = userId;
 
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
 	//List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
@@ -424,7 +430,8 @@ function arrayReverse(arr) {
 							<option value="8">省份</option>
 							<option value="9">城市</option>
 							<!-- <option value="11">按小时</option> -->
-							<option value="13">CP商务</option>
+							<!-- <option value="13">CP商务</option> -->
+							<!-- <option value="12">SP商务</option> -->
 							<option value="14">运营商</option>
 							<option value="15">数据类型</option>
 							<option value="16">第一业务线</option>
@@ -442,8 +449,8 @@ function arrayReverse(arr) {
 				<tr>
 					<td>序号</td>
 					<td onclick="TableSorter('table_id',1,'date')"><%=titles[sortType - 1]%></td>
-					<td onclick="TableSorter('table_id',5,'float')">推送量(条)</td>
-					<td onclick="TableSorter('table_id',7,'float')">推送金额(元)</td>
+					<td onclick="TableSorter('table_id',2,'float')">推送量(条)</td>
+					<td onclick="TableSorter('table_id',3,'float')">推送金额(元)</td>
 				</tr>
 			</thead>
 			<tbody>

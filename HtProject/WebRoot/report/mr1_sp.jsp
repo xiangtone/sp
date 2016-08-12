@@ -30,6 +30,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	int userId = ((UserModel)session.getAttribute("user")).getId();
+
 	String defaultStartDate = StringUtil.getMonthHeadDate();
 	String defaultEndDate = StringUtil.getMonthEndDate();
 
@@ -52,6 +54,9 @@
 
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
+	
+	//当前上游用户只能看得到当前自己的数据
+	spCommerceUserId = userId;
 
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"), -1);
 	//List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
@@ -423,6 +428,7 @@ function arrayReverse(arr) {
 							<option value="5">第三方支付</option>
 						</select>
 					</dd>
+					<!--  
 					<dd class="dd01_me">SP商务</dd>
 					<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user"
@@ -437,6 +443,7 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
+					-->
 					<dd class="dd01_me" style="font-weight: bold; font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式"
@@ -450,7 +457,8 @@ function arrayReverse(arr) {
 							<option value="8">省份</option>
 							<option value="9">城市</option>
 							<!-- <option value="11">按小时</option> -->
-							<option value="12">SP商务</option>
+							<!-- <option value="12">SP商务</option> -->
+							<!-- <option value="13">CP商务</option> -->
 							<option value="14">运营商</option>
 							<option value="15">数据类型</option>
 							<option value="16">第一业务线</option>

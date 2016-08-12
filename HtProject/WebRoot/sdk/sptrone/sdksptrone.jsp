@@ -94,7 +94,6 @@
 					<td><%=model.getName()%></td>
 					<td>
 						<a href="sdksptroneedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a>
-						<a href="action.jsp?type=3&id=<%= model.getId() %>" onclick="if(confirm('确定删除?')==false)return false">删除</a>
 					</td>
 				</tr>
 				<%

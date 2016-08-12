@@ -97,6 +97,11 @@ public class CpBillingServer
 		return true;
 	}
 	
+	public void updateCpBillingActurePay(int cpBillingId,float money)
+	{
+		new CpBillingDao().updateCpBillingActurePay(cpBillingId, money);
+	}
+	
 	public void delCpBilling(int cpBillingId)
 	{
 		new CpBillingDao().delCpBilling(cpBillingId);

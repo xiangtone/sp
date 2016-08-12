@@ -258,7 +258,7 @@ public class CpBillingDao
 		sql += " LEFT JOIN daily_config.`tbl_product_1` d ON c.`product_1_id` = d.`id` ";
 		sql += " LEFT JOIN daily_config.`tbl_operator` e ON d.`operator_id` = e.`id` ";
 		
-		sql += " WHERE 1=1 AND a.status = 0 AND a.cp_billing_id =" + cpBillingId ;
+		sql += " WHERE 1=1 AND a.status = 0 AND a.cp_billing_id =" + cpBillingId + " order by name_cn,name";
 		
 		return (List<SettleAccountModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -436,6 +436,13 @@ public class CpBillingDao
 		params.put(3, result[2]);
 		params.put(4, cpBillingId);
 		control.execute(sqlUpdate, params);
+	}
+	
+	
+	public void updateCpBillingActurePay(int cpBillingId,float money)
+	{
+		String sql = "UPDATE daily_config.`tbl_cp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + cpBillingId;
+		new JdbcControl().execute(sql);
 	}
 	
 	/**

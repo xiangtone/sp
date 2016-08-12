@@ -78,6 +78,30 @@ public class SettleAccountServer
 		return map;
 	}
 	
+	public Map<String, List<SpFinanceShowModel>> loadCpSettleAccountDataAll(String startDate,String endDate,int cpId,int jsType)
+	{
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadCpSettleAccountDataAll(startDate, endDate,cpId,jsType);
+		
+		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
+		
+		List<SpFinanceShowModel> tmpList = null;
+		
+		for(SpFinanceShowModel model : list)
+		{
+			if(map.containsKey(model.getShortName()))
+			{
+				tmpList = map.get(model.getShortName());
+			}
+			else
+			{
+				tmpList = new ArrayList<SpFinanceShowModel>();
+				map.put(model.getShortName(), tmpList);
+			}
+			tmpList.add(model);
+		}
+		return map;
+	}
+	
 	//channelType 1 SP 2 CP
 	public void exportSettleAccount(int channelType,int dateType,String channelName,String startDate,String endDate,List<SettleAccountModel> list,OutputStream os)
 	{

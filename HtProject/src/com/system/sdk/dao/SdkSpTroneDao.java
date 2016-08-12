@@ -11,6 +11,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcGameControl;
 import com.system.database.QueryCallBack;
 import com.system.sdk.model.SdkSpTroneModel;
+import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
 public class SdkSpTroneDao {
@@ -124,11 +125,11 @@ public class SdkSpTroneDao {
 		});
 	}
 	public boolean updateSdkSpTrone(SdkSpTroneModel model){
-		String sql="update daily_config.tbl_sdk_sp_trone set sp_id="+model.getSpId()+",sp_trone_id="+model.getSpTroneId()+",name='"+model.getName()+"',operator_id="+model.getOperatorId()+" where id="+model.getId();
+		String sql="update daily_config.tbl_sdk_sp_trone set sp_id="+model.getSpId()+",sp_trone_id="+model.getSpTroneId()+",name='"+SqlUtil.sqlEncode(model.getName())+"',operator_id="+model.getOperatorId()+" where id="+model.getId();
 		return new JdbcGameControl().execute(sql);
 	}
 	public boolean addSdkSpTrone(SdkSpTroneModel model){
-		String sql="insert into daily_config.tbl_sdk_sp_trone(sp_id,sp_trone_id,name,operator_id) value("+model.getSpId()+","+model.getSpTroneId()+",'"+model.getName()+"',"+model.getOperatorId()+")";
+		String sql="insert into daily_config.tbl_sdk_sp_trone(sp_id,sp_trone_id,name,operator_id) value("+model.getSpId()+","+model.getSpTroneId()+",'"+SqlUtil.sqlEncode(model.getName())+"',"+model.getOperatorId()+")";
 		return new JdbcGameControl().execute(sql);
 	}
 	public boolean deleteSdkSpTrone(int id){
