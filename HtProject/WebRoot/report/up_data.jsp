@@ -184,7 +184,7 @@
 						<dd class="dd04_me">
 						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;" ></select>
 					</dd>
-					<br /><br /><br />
+					<div style="clear: both;"><br /></div>
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp" title="选择CP" style="width: 110px;" onclick="namePicker(this,cpList,onCpDataSelect)">
