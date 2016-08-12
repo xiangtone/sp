@@ -30,6 +30,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	int userId = ((UserModel)session.getAttribute("user")).getId();
+
 	String defaultStartDate = StringUtil.getMonthHeadDate();
 	String defaultEndDate = StringUtil.getMonthEndDate();
 
@@ -52,16 +54,19 @@
 
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
+	
+	//当前上游用户只能看得到当前自己的数据
+	spCommerceUserId = userId;
 
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"), -1);
-	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
+	//List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
 	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
 			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId, cpCommerceUserId,
 			sortType);
 
 	List<SpModel> spList = new SpServer().loadSp();
-	List<CpModel> cpList = new CpServer().loadCp();
+	//List<CpModel> cpList = new CpServer().loadCp();
 	List<TroneModel> troneList = new TroneServer().loadTroneList();
 	//List<TroneOrderModel> troneOrderList = new TroneOrderServer().loadTroneOrderList();
 
@@ -187,10 +192,6 @@ function arrayReverse(arr) {
 		spList.push(new joSelOption(<%=spModel.getId()%>,1,'<%=spModel.getShortName()%>'));
 		<%}%>
 	
-	var cpList = new Array();
-	<%for (CpModel cpModel : cpList) {%>
-		cpList.push(new joSelOption(<%=cpModel.getId()%>,1,'<%=cpModel.getShortName()%>'));
-		<%}%>
 	
 	function onSpDataSelect(joData)
 	{
@@ -342,7 +343,7 @@ function arrayReverse(arr) {
 <body>
 	<div class="main_content">
 		<div class="content">
-			<form action="mr1_sp.jsp" method="get" style="margin-top: 10px">
+			<form action="mr1_single_sp.jsp" method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
@@ -372,8 +373,7 @@ function arrayReverse(arr) {
 					</dd>
 					<dd class="dd01_me">SP业务</dd>
 					<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;"
-							onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
+						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;" ></select>
 					</dd>
 					<dd class="dd01_me">SP通道</dd>
 					<dd class="dd04_me">
@@ -390,26 +390,6 @@ function arrayReverse(arr) {
 							<option value="3">第三方支付</option>
 						</select>
 					</dd>
-					<br />
-					<br />
-					<br />
-					<!--
-					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP"
-							style="width: 110px;"
-							onclick="namePicker(this,cpList,onCpDataSelect)">
-							<option value="-1">全部</option>
-							<%
-								for (CpModel cp : cpList) {
-							%>
-							<option value="<%=cp.getId()%>"><%=cp.getShortName()%></option>
-							<%
-								}
-							%>
-						</select>
-					</dd>
-					-->
 					<!--  
 					<dd>
 						<dd class="dd01_me">业务</dd>
@@ -437,6 +417,7 @@ function arrayReverse(arr) {
 						</select>
 					</dd>
 					-->
+					<div style="clear: both;"><br /></div>
 					<dd class="dd01_me">运营商</dd>
 					<dd class="dd04_me">
 						<select name="operator" id="sel_operator" style="width: 100px;">
@@ -447,6 +428,7 @@ function arrayReverse(arr) {
 							<option value="5">第三方支付</option>
 						</select>
 					</dd>
+					<!--  
 					<dd class="dd01_me">SP商务</dd>
 					<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user"
@@ -454,21 +436,6 @@ function arrayReverse(arr) {
 							<option value="-1">全部</option>
 							<%
 								for (UserModel commerceUser : userList) {
-							%>
-							<option value="<%=commerceUser.getId()%>"><%=commerceUser.getNickName()%></option>
-							<%
-								}
-							%>
-						</select>
-					</dd>
-					<!--
-					<dd class="dd01_me">CP商务</dd>
-					<dd class="dd04_me">
-						<select name="cp_commerce_user" id="sel_cp_commerce_user"
-							style="width: 100px;">
-							<option value="-1">全部</option>
-							<%
-								for (UserModel commerceUser : cpCommerceUserList) {
 							%>
 							<option value="<%=commerceUser.getId()%>"><%=commerceUser.getNickName()%></option>
 							<%
@@ -487,17 +454,11 @@ function arrayReverse(arr) {
 							<option value="4">SP</option>
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
-							<!--  
-							<option value="5">CP</option>
-							<option value="7">CP通道</option>
-							-->
 							<option value="8">省份</option>
 							<option value="9">城市</option>
 							<!-- <option value="11">按小时</option> -->
-							<option value="12">SP商务</option>
-							<!--  
-							<option value="13">CP商务</option>
-							-->
+							<!-- <option value="12">SP商务</option> -->
+							<!-- <option value="13">CP商务</option> -->
 							<option value="14">运营商</option>
 							<option value="15">数据类型</option>
 							<option value="16">第一业务线</option>

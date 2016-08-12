@@ -347,7 +347,7 @@ function arrayReverse(arr) {
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="mr2_daily_sp.jsp"  method="get">
+			<form action="mr2.jsp"  method="get">
 				<dl>
 					<dd class="dd01_me" onclick="openDetailData('aaa')">开始日期</dd>
 					<dd class="dd03_me">
@@ -438,7 +438,6 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
-					<!--
 					<dd class="dd01_me">CP商务</dd>
 						<dd class="dd04_me">
 						<select name="cp_commerce_user" id="sel_cp_commerce_user" style="width: 100px;">
@@ -453,7 +452,6 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
-					-->
 					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式">
@@ -461,10 +459,8 @@ function arrayReverse(arr) {
 							<option value="4">SP</option>
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
-							<!-- 
 							<option value="5">CP</option>
 							<option value="7">CP业务</option>
-							-->
 							<!-- 暂时先隐藏 -->
 							<!--
 							<option value="2">周数</option>
@@ -473,9 +469,7 @@ function arrayReverse(arr) {
 							<option value="8">省份</option>
 							<option value="9">城市</option>
 							<option value="12">SP商务</option>
-							<!--  
 							<option value="13">CP商务</option>
-							-->
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
@@ -491,7 +485,12 @@ function arrayReverse(arr) {
 					<td>序号</td>
 					<td onclick="TableSorter('table_id',1,'date')"><%= titles[sortType-1] %></td>
 					<td onclick="TableSorter('table_id',2,'float')">数据量(条)</td>
+					<td onclick="TableSorter('table_id',3,'float')">失败量(条)</td>
+					<td onclick="TableSorter('table_id',4,'float')">推送量(条)</td>
 					<td onclick="TableSorter('table_id',5,'float')">金额(元)</td>
+					<td onclick="TableSorter('table_id',6,'float')">失败金额(元 )</td>
+					<td onclick="TableSorter('table_id',7,'float')">推送金额(元)</td>
+					<td onclick="TableSorter('table_id',8,'String')">失败率</td>
 				</tr>
 			</thead>
 			<tbody>		
@@ -505,7 +504,12 @@ function arrayReverse(arr) {
 					<td><a href="detail.jsp?date=<%= date %>&sp_id=<%= spId %>&cp_id=<%= cpId %>&sp_trone_id=<%= spTroneId %>&trone_id=<%= troneId %>&show_type=<%= sortType %>&joinid=<%= model.getJoinId() %>&title=<%= StringUtil.encodeUrl(model.getTitle1(),"UTF-8") %>" 
 					target="_blank"><%= model.getTitle1() %></a></td>
 					<td><%= model.getDataRows() %></td>
+					<td><%= model.getDataRows() - model.getShowDataRows()  %></td>
+					<td><%= model.getShowDataRows() %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getAmount()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
+					<td><%= StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows()) %></td>
 				</tr>
 						<%
 					}
@@ -515,7 +519,12 @@ function arrayReverse(arr) {
 					<td></td>
 					<td></td>
 					<td>总数据量(条)：<%= dataRows %></td>
+					<td>总失败量(条)：<%= dataRows - showDataRows  %> </td>
+					<td>总推送量(条)：<%= showDataRows %></td>
 					<td>总金额(元)：<%= StringUtil.getDecimalFormat(amount) %></td>
+					<td>总失败金额(元 )：<%= StringUtil.getDecimalFormat(amount - showAmount) %></td>
+					<td>总推送金额(元)：<%= StringUtil.getDecimalFormat(showAmount) %></td>
+					<td>总失败率：<%= StringUtil.getPercent(dataRows - showDataRows, dataRows) %></td>
 				</tr>
 			</tbody>
 		</table>

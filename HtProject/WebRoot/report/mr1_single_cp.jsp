@@ -30,6 +30,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	int userId = ((UserModel)session.getAttribute("user")).getId();
+
 	String defaultStartDate = StringUtil.getMonthHeadDate();
 	String defaultEndDate = StringUtil.getMonthEndDate();
 
@@ -49,9 +51,13 @@
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
 	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
 	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
+	
+	
+	//当前下游用户只能看得到当前自己的数据
+	cpCommerceUserId = userId;
 
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
-	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
+	//List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"), -1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
@@ -60,16 +66,16 @@
 			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId, cpCommerceUserId,
 			sortType);
 
-	List<SpModel> spList = new SpServer().loadSp();
+	//List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
-	List<TroneModel> troneList = new TroneServer().loadTroneList();
+	//List<TroneModel> troneList = new TroneServer().loadTroneList();
 	//List<TroneOrderModel> troneOrderList = new TroneOrderServer().loadTroneOrderList();
 
 	List<TroneOrderModel> troneOrderList = new ArrayList();
 
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<CityModel> cityList = new CityServer().loadCityList();
-	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
+	//List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
 
 	List<MrReportModel> list = (List<MrReportModel>) map.get("list");
 
@@ -180,12 +186,6 @@ function arrayReverse(arr) {
 	return arr;
 }
 
-
-
-	var spList = new Array();
-	<%for (SpModel spModel : spList) {%>
-		spList.push(new joSelOption(<%=spModel.getId()%>,1,'<%=spModel.getShortName()%>'));
-		<%}%>
 	
 	var cpList = new Array();
 	<%for (CpModel cpModel : cpList) {%>
@@ -235,29 +235,22 @@ function arrayReverse(arr) {
 	<%for (CityModel city : cityList) {%>
 	cityList.push(new joCity(<%=city.getId()%>,<%=city.getProvinceId()%>,'<%=city.getName()%>'));<%}%>
 		
-	var troneList = new Array();
-	<%for (TroneModel trone : troneList) {%>
-	troneList.push(new joTrone(<%=trone.getId()%>,<%=trone.getSpId()%>,'<%=trone.getSpShortName() + "-" + trone.getTroneName()%>'));<%}%>
 	
 	var troneOrderList = new Array();
 	<%for (TroneOrderModel troneOrder : troneOrderList) {%>
 	troneOrderList.push(new joTroneOrder(<%=troneOrder.getId()%>,<%=troneOrder.getCpId()%>,'<%=troneOrder.getCpShortName() + "-" + troneOrder.getOrderTroneName()%>'));<%}%>
 	
-	var spTroneArray = new Array();
-	<%for (SpTroneModel spTroneModel : spTroneList) {%>
-	spTroneArray.push(new joBaseObject(<%=spTroneModel.getId()%>,<%=spTroneModel.getSpId()%>,'<%=spTroneModel.getSpTroneName()%>'));	
-		<%}%>
 	
 	$(function()
 	{
 		$("#sel_sort_type").val(<%=sortType%>);
 		
 		//SP的二级联动
-		$("#sel_sp").val(<%=spId%>);
-		$("#sel_sp").change(troneChange);
-		troneChange();
-		$("#sel_sp_trone").val(<%=spTroneId%>);
-		$("#sel_trone").val(<%=troneId%>);
+		//$("#sel_sp").val(<%=spId%>);
+		//$("#sel_sp").change(troneChange);
+		//troneChange();
+		//$("#sel_sp_trone").val(<%=spTroneId%>);
+		//$("#sel_trone").val(<%=troneId%>);
 		
 		//CP的二级联动
 		$("#sel_cp").val(<%=cpId%>);	
@@ -277,16 +270,6 @@ function arrayReverse(arr) {
 		$("#sel_cp_commerce_user").val(<%=cpCommerceUserId%>);
 	});
 	
-
-	
-	var npSpTroneArray = new Array();
-	
-	<%for (SpTroneModel spTroneModel : spTroneList) {%>
-		npSpTroneArray.push(new joSelOption(<%=spTroneModel.getId()%>,<%=spTroneModel.getSpId()%>,'<%=spTroneModel.getSpTroneName()%>'));
-<%}%>
-	function npSpTroneChange(jodata) {
-		$("#sel_sp_trone").val(jodata.id);
-	}
 
 	function troneChange() {
 		var spId = $("#sel_sp").val();
@@ -342,7 +325,7 @@ function arrayReverse(arr) {
 <body>
 	<div class="main_content">
 		<div class="content">
-			<form action="mr1_sp.jsp" method="get" style="margin-top: 10px">
+			<form action="mr1_single_cp.jsp" method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
@@ -355,30 +338,6 @@ function arrayReverse(arr) {
 						<input name="enddate" type="text" value="<%=endDate%>"
 							onclick="WdatePicker({isShowClear:false,readOnly:true})"
 							style="width: 100px;">
-					</dd>
-					<dd class="dd01_me">SP</dd>
-					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" style="width: 110px;"
-							title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
-							<option value="-1">全部</option>
-							<%
-								for (SpModel sp : spList) {
-							%>
-							<option value="<%=sp.getId()%>"><%=sp.getShortName()%></option>
-							<%
-								}
-							%>
-						</select>
-					</dd>
-					<dd class="dd01_me">SP业务</dd>
-					<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;"
-							onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
-					</dd>
-					<dd class="dd01_me">SP通道</dd>
-					<dd class="dd04_me">
-						<select name="trone" id="sel_trone" title="请选择通道"
-							style="width: 110px;"></select>
 					</dd>
 					<dd class="dd01_me">数据类型</dd>
 					<dd class="dd04_me">
@@ -393,7 +352,6 @@ function arrayReverse(arr) {
 					<br />
 					<br />
 					<br />
-					<!--
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp" title="选择CP"
@@ -409,7 +367,6 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
-					-->
 					<!--  
 					<dd>
 						<dd class="dd01_me">业务</dd>
@@ -447,21 +404,6 @@ function arrayReverse(arr) {
 							<option value="5">第三方支付</option>
 						</select>
 					</dd>
-					<dd class="dd01_me">SP商务</dd>
-					<dd class="dd04_me">
-						<select name="commerce_user" id="sel_commerce_user"
-							style="width: 100px;">
-							<option value="-1">全部</option>
-							<%
-								for (UserModel commerceUser : userList) {
-							%>
-							<option value="<%=commerceUser.getId()%>"><%=commerceUser.getNickName()%></option>
-							<%
-								}
-							%>
-						</select>
-					</dd>
-					<!--
 					<dd class="dd01_me">CP商务</dd>
 					<dd class="dd04_me">
 						<select name="cp_commerce_user" id="sel_cp_commerce_user"
@@ -476,7 +418,6 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
-					-->
 					<dd class="dd01_me" style="font-weight: bold; font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式"
@@ -484,20 +425,13 @@ function arrayReverse(arr) {
 							<option value="1">日期</option>
 							<option value="2">周数</option>
 							<option value="3">月份</option>
-							<option value="4">SP</option>
-							<option value="10">SP业务</option>
-							<option value="6">SP通道</option>
-							<!--  
 							<option value="5">CP</option>
 							<option value="7">CP通道</option>
-							-->
 							<option value="8">省份</option>
 							<option value="9">城市</option>
 							<!-- <option value="11">按小时</option> -->
-							<option value="12">SP商务</option>
-							<!--  
-							<option value="13">CP商务</option>
-							-->
+							<!-- <option value="13">CP商务</option> -->
+							<!-- <option value="12">SP商务</option> -->
 							<option value="14">运营商</option>
 							<option value="15">数据类型</option>
 							<option value="16">第一业务线</option>
@@ -515,8 +449,8 @@ function arrayReverse(arr) {
 				<tr>
 					<td>序号</td>
 					<td onclick="TableSorter('table_id',1,'date')"><%=titles[sortType - 1]%></td>
-					<td onclick="TableSorter('table_id',2,'float')">数据量(条)</td>
-					<td onclick="TableSorter('table_id',3,'float')">金额(元)</td>
+					<td onclick="TableSorter('table_id',2,'float')">推送量(条)</td>
+					<td onclick="TableSorter('table_id',3,'float')">推送金额(元)</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -527,8 +461,8 @@ function arrayReverse(arr) {
 				<tr>
 					<td><%=index++%></td>
 					<td><%=model.getTitle1()%></td>
-					<td><%=model.getDataRows()%></td>
-					<td><%=StringUtil.getDecimalFormat(model.getAmount())%></td>
+					<td><%=model.getShowDataRows()%></td>
+					<td><%=StringUtil.getDecimalFormat(model.getShowAmount())%></td>
 				</tr>
 				<%
 					}
@@ -538,8 +472,8 @@ function arrayReverse(arr) {
 				<tr>
 					<td></td>
 					<td></td>
-					<td>总数据量(条)：<%=dataRows%></td>
-					<td>总金额(元)：<%=StringUtil.getDecimalFormat(amount)%></td>
+					<td>总推送量(条)：<%=showDataRows%></td>
+					<td>总推送金额(元)：<%=StringUtil.getDecimalFormat(showAmount)%></td>
 				</tr>
 			</tbody>
 		</table>
