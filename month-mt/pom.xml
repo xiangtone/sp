@@ -102,6 +102,8 @@
 			<properties>
 				<runtime.env>packageConfig\vgame</runtime.env>
 				<final.name>month-mt</final.name>
+				<ftp.server.id>cmppServer</ftp.server.id>
+				<ftp.to.url>sftp://121.40.125.15:12980/home/smsdevp/newApp/month</ftp.to.url>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>

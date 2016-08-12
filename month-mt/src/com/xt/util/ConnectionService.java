@@ -64,7 +64,7 @@ public class ConnectionService {
 		ds.setTestWhileIdle(true);
 		ds.setTestOnBorrow(false);
 		ds.setTestOnReturn(false);
-		ds.setValidationQuery("select 1");
+		ds.setValidationQuery("select 1 from dual");
 		ds.setValidationQueryTimeout(1);
 		ds.setTimeBetweenEvictionRunsMillis(30000);
 		ds.setNumTestsPerEvictionRun(20);

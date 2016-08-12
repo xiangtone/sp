@@ -84,7 +84,7 @@ public class SmSubmitResult extends SmResult {
 					break;
 				case 14:
 					msgId = deByteCode.asciiz(valueLen);
-//					logger.debug("msgId value is:" + msgId);
+					logger.debug("msgId value is:" + msgId);
 					break;
 				default:
 					stat = "01"; // 无效的消息类型

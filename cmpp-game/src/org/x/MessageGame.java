@@ -50,8 +50,8 @@ public class MessageGame {
 			 * File("app_nameGd.properties"); } else { f = new
 			 * File("app_name.properties"); }
 			 */
-			logger.debug("appNameFj.properties.....");
-			f = new File("appNameFj.properties");
+			logger.debug("app_name_fj.properties.....");
+			f = new File("app_name_fj.properties");
 
 			FileInputStream ins = new FileInputStream(f);
 			if (ins != null) {

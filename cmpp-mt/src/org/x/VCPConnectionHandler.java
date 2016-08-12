@@ -70,7 +70,7 @@ public class VCPConnectionHandler implements Runnable {
 				String linkId = sm.getLinkId();
 				int feeCpnType = sm.getFeecpnType();
 				String msgId = sm.getMsgId();
-//				logger.debug("linkid is:" + linkId+", feecpntype:" + feeCpnType+", msgid is:" + msgId+", destcpn:" + destCpn +", feeCpn:" + feeCpn);
+				logger.debug("linkid is:" + linkId+", feecpntype:" + feeCpnType+", msgid is:" + msgId+", destcpn:" + destCpn +", feeCpn:" + feeCpn);
 
 				////////////////////////
 				if (ismgId == null || ismgId.equals(""))

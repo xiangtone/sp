@@ -214,7 +214,7 @@ public class SMSMT {
 		String strSql=null;
 		try {
 			strSql = "insert into sms_mtlog set ";
-			strSql += " vcpid=" + vcpID;
+			strSql += "vcpid=" + vcpID;
 			strSql += ",ismgid='" + ismgID + "'";
 			strSql += ",comp_msgid='" + submitMsgID + "'";// 用于标识下发的信息的Id
 			strSql += ",corpid='" + corpID + "'";
