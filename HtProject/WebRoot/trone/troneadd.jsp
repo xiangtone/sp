@@ -52,7 +52,9 @@
 	}
 	
 	var spTroneList = new Array();
-	<%for(SpTroneModel spTrone : spTroneList){%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>',<%= spTrone.getTroneApiId() %>));<%}%>
+	<%for(SpTroneModel spTrone : spTroneList){
+		if(spTrone.getStatus()==1){
+	%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>',<%= spTrone.getTroneApiId() %>));<%}}%>
 
 	var spApiUrlList = new Array();
 	<%for(SpApiUrlModel spTrone : spApiUrlList){%>spApiUrlList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%=spTrone.getName() %>'));<%}%>
