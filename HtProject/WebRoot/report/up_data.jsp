@@ -15,9 +15,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String defaultStartDate = StringUtil.getMonthHeadDate() + " 00:00:00";
+	String defaultStartDate = StringUtil.getDefaultDate() + " 00:00:00";
 
-	String defaultEndDate = StringUtil.getDefaultDate() + " 23:59:59";
+	String defaultEndDate = StringUtil.getMonthEndDate() + " 23:59:59";
 	
 	String startDate = StringUtil
 			.getString(request.getParameter("startdate"), defaultStartDate);

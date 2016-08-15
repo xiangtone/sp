@@ -20,7 +20,7 @@ public class UpDataDetailDao {
 		sql+="cp.short_name as cp_short_name,cp.id cp_id,api.trone_id,trone_order_id,api_id, imei,imsi ,mobile,";
 		sql+="pro.name,FirstDate,SecondDate,cp_verifyCode,api.status,sp_Linkid,api.api_exdata,";
 		sql+="api.sp_exField,api.clientip  ,api.port,api.msg ,api.lac,api.cid,api.packagename,sp.id as sp_id,spTrone.name AS sp_trone_name,st.description";
-		sql+=" FROM( SELECT * FROM daily_log.tbl_api_order_"+table+"  ORDER BY id DESC LIMIT 20000) api";
+		sql+=" FROM( SELECT * FROM daily_log.tbl_api_order_"+table+" where firstDate>='"+startDate+"' AND firstDate<='"+endDate+"' ORDER BY id DESC LIMIT 1000) api";
 		sql+=" LEFT JOIN daily_config.tbl_trone trone ON trone.id=api.trone_id";
 		sql+=" LEFT JOIN daily_config.tbl_trone_order cptrone ON cptrone.id=api.trone_order_id";
 		sql+=" LEFT JOIN daily_config.tbl_cp cp ON cp.id=cptrone.cp_id";
@@ -29,7 +29,7 @@ public class UpDataDetailDao {
 		sql+=" LEFT JOIN daily_config.tbl_sp sp ON sp.id= trone.sp_id ";
 		sql+=" LEFT JOIN daily_config.tbl_api_order_status st ON api.status=st.code";
 		sql+=" LEFT JOIN daily_config.tbl_sp_trone spTrone ON spTrone.id=trone.sp_trone_id WHERE 1=1";
-		sql+=" AND firstDate>='"+startDate+"' AND firstDate<='"+endDate+"'";
+		//sql+=" AND firstDate>='"+startDate+"' AND firstDate<='"+endDate+"'";
 		//spId
 		if(spId>0)
 		{
