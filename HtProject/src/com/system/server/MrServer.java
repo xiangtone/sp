@@ -81,6 +81,14 @@ public class MrServer
 			int cityId, int spCommerceUserId,int cpCommerceUserId,int sortType)
 	{
 		String tableName = StringUtil.getMonthFormat(startDate);
+		
+		String curDate = StringUtil.getDefaultDate();
+		
+		if(curDate.equalsIgnoreCase(startDate))
+		{
+			tableName = "daily";
+		}
+		
 		return new MrDao().getMrTodayData(tableName, startDate, spId,spTroneId, troneId,
 				cpId, troneOrderId, provinceId, cityId,spCommerceUserId, cpCommerceUserId,sortType);
 	}

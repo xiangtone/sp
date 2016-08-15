@@ -844,7 +844,6 @@ public class MrDao
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";		
 		
-		
 		JdbcControl control = new JdbcControl();
 		
 		final List<Object> datalist = new ArrayList<Object>();

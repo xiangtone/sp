@@ -481,7 +481,6 @@ function arrayReverse(arr) {
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
-					<dd class="dd01_me"><a style="color:blue;" href="mr_lr_daily.jsp?<%= request.getQueryString() %>">查看利润</a></dd>
 				</dl>
 			</form>
 		</div>
