@@ -230,11 +230,14 @@ public class AnalyMrDailyServer
 	public void startAnalyDailyMr()
 	{
 		log.info("start analy mr daily");
+		
 		String startDate = StringUtil.getPreDayOfMonth();
+		
+		String today = StringUtil.getDefaultDate();
 		
 		delThirdPaySummerData(startDate,startDate);
 		
-		delMrDailyData(startDate,startDate);
+		delMrDailyData(today,today);
 		
 		analyMrDailyWithDate(startDate,startDate);
 		log.info("start analy cp mr daily");

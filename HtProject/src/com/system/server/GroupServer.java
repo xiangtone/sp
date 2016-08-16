@@ -52,6 +52,7 @@ public class GroupServer
 	{
 		GroupDao dao = new GroupDao();
 		dao.delGroupRightById(groupId);
-		dao.addGroupRight(groupId, right);
+		if(right!=null && !right.isEmpty())
+			dao.addGroupRight(groupId, right);
 	}
 }
