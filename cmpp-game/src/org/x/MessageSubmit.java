@@ -6,7 +6,7 @@ import com.xiangtone.sms.api.ConnDesc;
 import com.xiangtone.sms.api.Message;
 import com.xiangtone.sms.api.SmSubmit;
 import com.xiangtone.util.ConfigManager;
-import com.xiangtone.util.DBForLocal;
+import com.xiangtone.util.DBForWrite;
 
 public class MessageSubmit {
 	private static Logger logger = Logger.getLogger(MessageSubmit.class);
@@ -108,7 +108,7 @@ public class MessageSubmit {
 		strSql += ",servername='" + gameCode + "',content='" + content + "'";
 		strSql += ",feetype='" + feeType + "',sendtime='" + sendTime + "'";
 		logger.info(strSql);
-		DBForLocal db=new DBForLocal();
+		DBForWrite db=new DBForWrite();
 		try {
 			db.executeUpdate(strSql);
 		} catch (Exception e) {

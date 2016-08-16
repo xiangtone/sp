@@ -4,29 +4,41 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.apache.log4j.Logger;
 
-public class DBForRead {
-	private static Logger logger = Logger.getLogger(DBForRead.class);
+import org.apache.log4j.Logger;
+import org.common.util.ConnectionService;
+
+import com.mysql.jdbc.ConnectionGroupManager;
+
+public class DBForMonth {
+	private static Logger logger = Logger.getLogger(DBForMonth.class);
 
 	private Connection connection = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 
-	public DBForRead() {
+	public DBForMonth() {
 	}
 
 	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionSmsgame_platform.getInstance().getConnectionForRead();
+			connection = ConnectionSmscompanymonthorders.getInstance().getConnectionForMonth();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
 	}
 
+	public int executeUpdate(String sqlStr) throws SQLException {
+		if (connection == null) {
+			connection = ConnectionSmscompanymonthorders.getInstance().getConnectionForMonth();
+		}
+		preparedStatement = connection.prepareStatement(sqlStr);
+		return preparedStatement.executeUpdate();
+	}
+
 	public ResultSet executeQuery(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionSmsgame_platform.getInstance().getConnectionForRead();
+			connection = ConnectionSmscompanymonthorders.getInstance().getConnectionForMonth();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		resultSet = preparedStatement.executeQuery();
@@ -59,5 +71,4 @@ public class DBForRead {
 			this.connection = null;
 		}
 	}
-
 }

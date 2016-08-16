@@ -4,29 +4,38 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.apache.log4j.Logger;
 
-public class DBForRead {
-	private static Logger logger = Logger.getLogger(DBForRead.class);
+public class DBForMO {
+	private static Logger logger = Logger.getLogger(DBForMO.class);
 
 	private Connection connection = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 
-	public DBForRead() {
+	public DBForMO() {
 	}
 
 	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionSmsgame_platform.getInstance().getConnectionForRead();
+			connection = ConnectionSmscompanymos.getInstance().getConnectionForMO();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
 	}
 
+	public int executeUpdate(String sqlStr) throws SQLException {
+		if (connection == null) {
+			connection = ConnectionSmscompanymos.getInstance().getConnectionForMO();
+		}
+		preparedStatement = connection.prepareStatement(sqlStr);
+		return preparedStatement.executeUpdate();
+	}
+
 	public ResultSet executeQuery(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionSmsgame_platform.getInstance().getConnectionForRead();
+			connection = ConnectionSmscompanymos.getInstance().getConnectionForMO();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		resultSet = preparedStatement.executeQuery();
@@ -59,5 +68,4 @@ public class DBForRead {
 			this.connection = null;
 		}
 	}
-
 }
