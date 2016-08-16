@@ -9,7 +9,7 @@ import java.sql.*;
 
 import org.apache.log4j.Logger;
 
-import com.xiangtone.util.DBForLocal;
+import com.xiangtone.util.DBForWrite;
 
 public class MessageDeliver {
 	private static Logger logger = Logger.getLogger(MessageDeliver.class);
@@ -57,7 +57,7 @@ public class MessageDeliver {
 	}
 
 	protected void insertMOLog() {
-		DBForLocal db=new DBForLocal();
+		DBForWrite db=new DBForWrite();
 		try {
 			strSql = "insert into sms_molog set vcpid=" + vcpid + ",ismgid='" + ismgCode + "',spcode='" + spCode + "'";
 			strSql += ",cpn='" + mobileCode + "',servername='" + gameCode + "',serveraction='" + actionCode + "'";

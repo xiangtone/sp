@@ -6,21 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
-import org.common.util.ConnectionService;
 
-public class DBForLocal {
-	private static Logger logger = Logger.getLogger(DBForLocal.class);
+public class DBForMT {
+	private static Logger logger = Logger.getLogger(DBForMT.class);
 
 	private Connection connection = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 
-	public DBForLocal() {
+	public DBForMT() {
 	}
 
 	public PreparedStatement iniPreparedStatement(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionService.getInstance().getConnectionForLocal();
+			connection = ConnectionSmscompanymts.getInstance().getConnectionForMT();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement;
@@ -28,7 +27,7 @@ public class DBForLocal {
 
 	public int executeUpdate(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionService.getInstance().getConnectionForLocal();
+			connection = ConnectionSmscompanymts.getInstance().getConnectionForMT();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		return preparedStatement.executeUpdate();
@@ -36,7 +35,7 @@ public class DBForLocal {
 
 	public ResultSet executeQuery(String sqlStr) throws SQLException {
 		if (connection == null) {
-			connection = ConnectionService.getInstance().getConnectionForLocal();
+			connection = ConnectionSmscompanymts.getInstance().getConnectionForMT();
 		}
 		preparedStatement = connection.prepareStatement(sqlStr);
 		resultSet = preparedStatement.executeQuery();

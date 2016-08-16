@@ -1,5 +1,7 @@
 package org.x;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -10,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.common.util.ConfigManager;
@@ -24,8 +27,30 @@ import comsd.OutOfBoundsException;
 public class Test {
 	// private static Logger logger = Logger.getLogger(.class);
 	private static Logger logger = Logger.getLogger(Test.class);
+	private void init() {
+		try {
+			Properties Props = new Properties();
+			File f = new File("config.properties");
 
+			FileInputStream ins = new FileInputStream(f);
+			if (ins != null) {
+				Props = new Properties();
+				Props.load(ins);
+			} else {
+				// String strDate = saveLog.formatDate();
+				// saveLog.error(strDate+"--API_GET--Can not read the properties
+				// file");
+				logger.debug("app_name.properties is not exist");
+			}
+		} catch (Exception e) {
+//			logger.error("", e);
+			e.printStackTrace();
+		}
+
+		return;
+	}
 	public static void main(String[] args) {
+		new Test().init();
 		Socket s=new Socket();
 		try {
 			s.close();
