@@ -1,3 +1,5 @@
+<%@page import="com.system.server.UpDataTypeServer"%>
+<%@page import="com.system.model.UpDataTypeModel"%>
 <%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.server.ServiceCodeServer"%>
 <%@page import="com.system.model.ServiceCodeModel"%>
@@ -33,6 +35,7 @@
 	List<SpTroneApiModel> spTroneApiList = new SpTroneApiServer().loadSpTroneApi();
 	List<List<ServiceCodeModel>> serviceCodeList = new ServiceCodeServer().loadServiceCode();
 	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
+	List<UpDataTypeModel> upDatatypeList=new UpDataTypeServer().loadUpDataType();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -90,7 +93,11 @@
 			$("#sel_js_type").focus();
 			return;
 		}
-		
+		if ($("#up_data_type").val() == "-1") {
+			alert("请输入上量类型");
+			$("#up_data_type").focus();
+			return;
+		}
 		var rate = parseFloat($("#input_jiesuanlv").val());
 		
 		if(isNaN(rate) || rate>=10 || rate<=0)
@@ -188,6 +195,8 @@
 		$("#input_month_limit").val("<%=spTroneModel.getMonthLimit()%>");
 		$("#input_user_day_limit").val("<%=spTroneModel.getUserDayLimit()%>");
 		$("#input_user_month_limit").val("<%=spTroneModel.getUserMonthLimit()%>");
+		$("#up_data_type").val("<%=spTroneModel.getUpDataType()%>");
+		
 		<%
 		if(spTroneModel.getApiStatus()==1){
 		%>
@@ -198,6 +207,9 @@
 		
 		var provinceIds = "<%=spTroneModel.getProvinces()%>";
 		var provinces = provinceIds.split(",");
+		setRadioCheck("limit_type",
+				<%=spTroneModel.getLimiteType()%>
+					);
 		setRadioCheck("trone_type",
 <%=spTroneModel.getTroneType()%>
 	);
@@ -234,9 +246,13 @@
 		$("#input_shield_start").val("<%=spTroneModel.getShieldStart()%>");
 		$("#input_shield_end").val("<%=spTroneModel.getShieldEnd()%>");
 		
+		$("#up_data_type").val("<%=spTroneModel.getUpDataType()%>");
 		
 		var provinceIds = "<%=spTroneModel.getProvinces()%>";
 		var provinces = provinceIds.split(",");
+		setRadioCheck("limit_type",
+				<%=spTroneModel.getLimiteType()%>
+					);
 		setRadioCheck("trone_type",
 <%=spTroneModel.getTroneType()%>
 	);
@@ -409,6 +425,23 @@
 						<input type="text" name="sp_trone_name_1" title="业务名称"
 							id="input_sp_trone_name" style="width: 200px">
 					</dd>
+					<br />
+					<br />
+					<br />
+					<dd class="dd01_me">上量类型</dd>
+					<dd class="dd04_me">
+						<select name="up_data_type" id="up_data_type" title="上量类型" style="width: 200px" >
+							<option value="-1">请选择上量类型</option>
+								<%
+									for(UpDataTypeModel  upDataTypeModel : upDatatypeList)
+									{
+										%>
+								<option value="<%= upDataTypeModel.getId() %>"><%= upDataTypeModel.getName() %></option>		
+										<%
+									}
+								%>
+						</select>
+					</dd>
 
 					<br /> <br /> <br />
 					<dd class="dd01_me">结算类型</dd>
@@ -452,7 +485,7 @@
 						<input type="radio" name="trone_type" style="width: 35px;float:left" value="3" >
 						<label style="font-size: 14px;float:left">第三方支付</label>
 					</dd>
-
+					
 					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">状态</dd>
@@ -491,7 +524,17 @@
 							%>
 						</select>
 					</dd>
-					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">限量类型</dd>
+					<dd class="dd03_me">
+						<input type="radio" name="limit_type" style="width: 35px;float:left" value="0" checked="checked" >
+						<label style="font-size: 14px;float:left">元</label>
+						<input type="radio" name="limit_type" style="width: 35px;float:left" value="1" >
+						<label style="font-size: 14px;float:left">条数</label>
+					</dd>
 					<br />
 					<br />
 					<br />
