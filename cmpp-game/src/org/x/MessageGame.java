@@ -16,7 +16,7 @@ import com.xiangtone.util.*;
 
 public class MessageGame {
 	private static Logger logger = Logger.getLogger(MessageGame.class);
-	private Properties Props = new Properties();
+	private Properties props = new Properties();
 	private Vector destSet = new Vector(1, 5);
 	private Vector feeSet = new Vector(1, 5);
 	private Vector msgSet = new Vector(1, 5);
@@ -29,46 +29,94 @@ public class MessageGame {
 
 	Socket s = null;
 	String ismgid = "00";
+	
+//	Properties m_props;
 
 	public MessageGame(String ismgid) {
 		this.ismgid = ismgid;
-		init(ismgid);
+//		init(ismgid);
+		init();
 	}
-
-	private void init(String ismgStr) {
+	public static InputStream getResourceAsStream(String resource) throws IOException {
+		InputStream in = null;
+		ClassLoader loader = ConfigManager.class.getClassLoader();
 		try {
-
-			File f = null;
-			/*
-			 * if(ismgStr.equals("01")) { f = new
-			 * File("app_name_bj.properties"); } else if(ismgStr.equals("06")) {
-			 * logger.debug("app_name_ln.properties....."); f = new
-			 * File("app_name_ln.properties"); } else if(ismgStr.equals("08")) {
-			 * f = new File("app_name_hl.properties"); } else
-			 * if(ismgStr.equals("15")) { f = new File("app_nameSd.properties");
-			 * } else if(ismgStr.equals("19")) { f = new
-			 * File("app_nameGd.properties"); } else { f = new
-			 * File("app_name.properties"); }
-			 */
-			logger.debug("app_name_fj.properties.....");
-			f = new File("app_name_fj.properties");
-
-			FileInputStream ins = new FileInputStream(f);
-			if (ins != null) {
-				Props = new Properties();
-				Props.load(ins);
-			} else {
-				// String strDate = saveLog.formatDate();
-				// saveLog.error(strDate+"--API_GET--Can not read the properties
-				// file");
-				logger.debug("app_name.properties is not exist");
+			if (loader != null) {
+				in = loader.getResourceAsStream(resource);
+			}
+			if (in == null) {
+				in = ClassLoader.getSystemResourceAsStream(resource);
+			}
+			if (in == null) {
+				File file = new File(System.getProperty("user.dir") + "/" + resource);
+				if (file.exists()) {
+					in = new FileInputStream(System.getProperty("user.dir") + "/" + resource);
+				}
+			}
+			if (in == null) {
+				String filePath = Thread.currentThread().getContextClassLoader().getResource("").toString()
+						.replaceAll("file:", "") + resource;
+				if (filePath.indexOf(":") == 2)
+					filePath = filePath.substring(1, filePath.length());
+				File file = new File(filePath);
+				if (file.exists()) {
+					in = new FileInputStream(filePath);
+				}
 			}
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (in == null)
+			throw new IOException("Could not find resource " + resource);
+		return in;
+	}
+
+	private void init() {
+		props = new Properties();
+		try {
+			props.load(getResourceAsStream("app_name_fj.properties"));
+//			System.out.println(props.getProperty("SHZBZJ"));
+		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("", e);
 		}
-
-		return;
 	}
+//	private void init(String ismgStr) {
+//		try {
+//
+//			File f = null;
+//			/*
+//			 * if(ismgStr.equals("01")) { f = new
+//			 * File("app_name_bj.properties"); } else if(ismgStr.equals("06")) {
+//			 * logger.debug("app_name_ln.properties....."); f = new
+//			 * File("app_name_ln.properties"); } else if(ismgStr.equals("08")) {
+//			 * f = new File("app_name_hl.properties"); } else
+//			 * if(ismgStr.equals("15")) { f = new File("app_nameSd.properties");
+//			 * } else if(ismgStr.equals("19")) { f = new
+//			 * File("app_nameGd.properties"); } else { f = new
+//			 * File("app_name.properties"); }
+//			 */
+//			logger.debug("app_name_fj.properties.....");
+//			f = new File("app_name_fj.properties");
+//
+//			FileInputStream ins = new FileInputStream(f);
+//			if (ins != null) {
+//				Props = new Properties();
+//				Props.load(ins);
+//			} else {
+//				// String strDate = saveLog.formatDate();
+//				// saveLog.error(strDate+"--API_GET--Can not read the properties
+//				// file");
+//				logger.debug("app_name.properties is not exist");
+//			}
+//		} catch (Exception e) {
+//			logger.error("", e);
+//			e.printStackTrace();
+//		}
+//
+//		return;
+//	}
 
 	/******************************************************************
 	 * 功能：构造函数:: 输入参数说明： 1.内存中队列的句柄；
@@ -94,9 +142,9 @@ public class MessageGame {
 		itemaction = itemaction.toUpperCase();
 
 		// 返回KEY VALUE，取得类名
-		String className = Props.getProperty(itemname, "paramName");
+		String className = props.getProperty(itemname, "paramName");
 		// 取得文件中的对应方法名的串
-		String classMethod = Props.getProperty(itemname + ".METHOD", "paramName");
+		String classMethod = props.getProperty(itemname + ".METHOD", "paramName");
 		logger.debug("itemname:" + itemname + "---itemaction:" + itemaction + "--classname:" + className
 				+ "---classMethod:" + classMethod);
 
@@ -260,5 +308,9 @@ public class MessageGame {
 			}
 		}
 	}
-
+	public static void main(String[] args) {
+		System.out.println("1");
+		new MessageGame("");
+		
+	}
 }

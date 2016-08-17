@@ -8,29 +8,29 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 
-public class ConnectionService {
-	private static Logger myLogger = Logger.getLogger(ConnectionService.class);
-	private static final String DB_READ = "read";
-	private static ConnectionService instance = new ConnectionService();
+public class ConnectionSmscompanymos {
+	private static Logger logger = Logger.getLogger(ConnectionSmscompanymos.class);
+	private static final String DB_MO = "mo";
+	private static ConnectionSmscompanymos instance = new ConnectionSmscompanymos();
 
-	private ConnectionService() {
+	private ConnectionSmscompanymos() {
 	}
 
 	static {
 		getInstance();
 	}
 
-	public static ConnectionService getInstance() {
+	public static ConnectionSmscompanymos getInstance() {
 		return instance;
 	}
 
-	private DataSource dsLog = setupDataSource(DB_READ);
+	private DataSource ds = setupDataSource(DB_MO);
 
-	public synchronized Connection getConnectionForRead() {
+	public synchronized Connection getConnectionForMO() {
 		try {
-			return dsLog.getConnection();
+			return ds.getConnection();
 		} catch (SQLException ex) {
-			myLogger.error("Connection", ex);
+			logger.error("Connection", ex);
 		}
 		return null;
 	}
@@ -85,7 +85,7 @@ public class ConnectionService {
 	public static void main(String[] args) {
 		System.out.println(ConfigManager.getConfigData("log.url"));
 
-		ConnectionService.getInstance().getConnectionForRead();
+		ConnectionSmscompanymos.getInstance().getConnectionForMO();
 
 		System.out.println(ConfigManager.getConfigData("local.url"));
 	}
