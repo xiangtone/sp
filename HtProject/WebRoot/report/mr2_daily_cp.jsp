@@ -490,8 +490,8 @@ function arrayReverse(arr) {
 				<tr>
 					<td>序号</td>
 					<td onclick="TableSorter('table_id',1,'date')"><%= titles[sortType-1] %></td>
-					<td onclick="TableSorter('table_id',4,'float')">推送量(条)</td>
-					<td onclick="TableSorter('table_id',7,'float')">推送金额(元)</td>
+					<td onclick="TableSorter('table_id',2,'float')">推送量(条)</td>
+					<td onclick="TableSorter('table_id',3,'float')">推送金额(元)</td>
 				</tr>
 			</thead>
 			<tbody>		
