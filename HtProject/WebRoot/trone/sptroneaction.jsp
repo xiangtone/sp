@@ -41,7 +41,9 @@
 	String shieldStart=StringUtil.getString(request.getParameter("shield_start"), "");
 	String shieldEnd=StringUtil.getString(request.getParameter("shield_end"), "");
 	String remark=StringUtil.getString(request.getParameter("remark"), "");
-
+	//增加的限量类型和上量类型
+	int upDataType=StringUtil.getInteger(request.getParameter("up_data_type"), -1);
+	int limiteType=StringUtil.getInteger(request.getParameter("limit_type"), -1);
 	
 	//更新SP业务默认结算率
 	if(type==1)
@@ -71,6 +73,10 @@
 	model.setShieldStart(shieldStart);
 	model.setShieldEnd(shieldEnd);
 	model.setRemark(remark);
+	//新增的限量类型和上量类型
+	model.setUpDataType(upDataType);
+	model.setLimiteType(limiteType);
+	
 	
 	if(id==-1)
 		new SpTroneServer().addSpTrone(model); 

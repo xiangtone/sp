@@ -381,11 +381,12 @@ public class SpTroneDao
 	
 	public SpTroneModel loadSpTroneById(int id)
 	{
-		String sql = "SELECT  a.*,b.short_name,c.`name_cn`,d.id trone_api_id,d.name trone_api_name   ";
+		String sql = "SELECT  a.*,b.short_name,c.`name_cn`,d.id trone_api_id,d.name trone_api_name,td.name as up_data_type_name  ";
 		sql += " FROM daily_config.`tbl_sp_trone` a";
 		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_operator` c ON a.operator = c.`id`";
 		sql += " LEFT JOIN daily_config.tbl_sp_trone_api d on a.trone_api_id = d.id";
+		sql += " LEFT JOIN daily_config.tbl_up_data_type td on a.up_data_type=td.id";
 		sql += " WHERE a.id = " + id;
 		
 		return (SpTroneModel)new JdbcControl().query(sql, new QueryCallBack()
@@ -420,6 +421,10 @@ public class SpTroneDao
 					model.setShieldStart(StringUtil.getString(rs.getString("shield_start_hour"),"00:00"));
 					model.setShieldEnd(StringUtil.getString(rs.getString("shield_end_hour"),"00:00"));
 					model.setRemark(StringUtil.getString(rs.getString("ramark"), ""));
+					
+					model.setLimiteType(rs.getInt("limit_type"));
+					model.setUpDataType(rs.getInt("up_data_type"));
+					model.setUpDataName(StringUtil.getString(rs.getString("up_data_type_name"), ""));
 					return model;
 				}
 				
@@ -430,11 +435,11 @@ public class SpTroneDao
 	
 	public boolean addSpTrone(SpTroneModel model)
 	{
-		String sql = "insert into daily_config.tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,day_limit,month_limit,user_day_limit,user_month_limit,product_id,js_type,is_on_api,shield_start_hour,shield_end_hour,ramark) values("
+		String sql = "insert into daily_config.tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,day_limit,month_limit,user_day_limit,user_month_limit,product_id,js_type,is_on_api,shield_start_hour,shield_end_hour,ramark,up_data_type,limit_type) values("
 				+ model.getSpId() + ",'" + model.getSpTroneName() + "',"
 				+ model.getOperator() + "," + model.getJieSuanLv() + ",'"
 				+ model.getProvinces() + "',now()," + model.getTroneType() + ","+ model.getTroneApiId() +","+ model.getStatus() +"," + model.getDayLimit() + "," 
-				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ","+model.getApiStatus()+",'"+model.getShieldStart()+"','"+model.getShieldEnd()+"','"+SqlUtil.sqlEncode(model.getRemark())+"' )";
+				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ","+model.getApiStatus()+",'"+model.getShieldStart()+"','"+model.getShieldEnd()+"','"+SqlUtil.sqlEncode(model.getRemark())+"',"+model.getUpDataType()+","+model.getLimiteType()+" )";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -447,7 +452,7 @@ public class SpTroneDao
 				+ "',trone_type = " + model.getTroneType() + ",trone_api_id = " 
 				+ model.getTroneApiId() + ",status = " + model.getStatus() + ",day_limit=" + model.getDayLimit() + ",month_limit=" + model.getMonthLimit() + ",user_day_limit=" 
 				+ model.getUserDayLimit() + ",user_month_limit=" + model.getUserMonthLimit() + ", product_id = " + model.getServiceCodeId() + ",js_type = " + model.getJsTypes() + ",is_on_api="+model.getApiStatus()+""
-				+ ",shield_start_hour='"+model.getShieldStart()+"',shield_end_hour='"+model.getShieldEnd()+"',ramark='"+SqlUtil.sqlEncode(model.getRemark())+"' where id =" + model.getId();
+				+ ",shield_start_hour='"+model.getShieldStart()+"',shield_end_hour='"+model.getShieldEnd()+"',ramark='"+SqlUtil.sqlEncode(model.getRemark())+"',up_data_type="+model.getUpDataType()+",limit_type="+model.getLimiteType()+" where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}

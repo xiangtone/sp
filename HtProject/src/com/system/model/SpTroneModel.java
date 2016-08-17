@@ -30,6 +30,10 @@ public class SpTroneModel
 	private String shieldEnd;  //屏蔽结束时间
 	private String remark;
 	
+	private int upDataType;
+	private int limiteType;
+	private String upDataName;
+	
 	public int getTroneType()
 	{
 		return troneType;
@@ -213,6 +217,24 @@ public class SpTroneModel
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public int getUpDataType() {
+		return upDataType;
+	}
+	public void setUpDataType(int upDataType) {
+		this.upDataType = upDataType;
+	}
+	public int getLimiteType() {
+		return limiteType;
+	}
+	public void setLimiteType(int limiteType) {
+		this.limiteType = limiteType;
+	}
+	public String getUpDataName() {
+		return upDataName;
+	}
+	public void setUpDataName(String upDataName) {
+		this.upDataName = upDataName;
 	}
 	
 	
