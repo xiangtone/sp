@@ -96,7 +96,7 @@ public final class CMPP {
 			tools.strcpy(buf, ch.pkLen, 0);
 			tools.strcpy(buf, ch.pkCmd, 4);
 			tools.strcpy(buf, ch.pkSeq, 8);
-			logger.debug(Arrays.toString(buf));
+//			logger.debug(Arrays.toString(buf));
 
 			out.write(buf, 0, ch.pkLen);
 			out.flush();
@@ -263,7 +263,7 @@ public final class CMPP {
 			tools.strcpy(buf, ch.pkCmd, 4);
 			tools.strcpy(buf, ch.pkSeq, 8);
 			out.write(buf, 0, 12); // 测试信息体为空
-			logger.debug(Arrays.toString(buf));
+//			logger.debug(Arrays.toString(buf));
 			out.flush();
 //			logger.debug("have send it");
 			conn.seq++;
