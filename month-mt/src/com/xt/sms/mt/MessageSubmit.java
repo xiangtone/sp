@@ -125,10 +125,11 @@ public class MessageSubmit {
 			myLogger.debug(this.conn.sock);
 			this.xtsms.sendSmSubmit(this.conn, this.sub);
 			this.xtsms.readPa(this.conn);
-			this.xtsms.disconnectFromServer(this.conn);
 			myLogger.debug("提交成功...");
 		} catch (Exception e) {
 			myLogger.error("sendResultToSmsPlatform",e);
+		}finally {
+			this.xtsms.disconnectFromServer(this.conn);
 		}
 	}
 }

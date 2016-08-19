@@ -15,9 +15,6 @@
     </extensions>
     <resources>
       <resource>
-        <directory>${runtime.env}/</directory>
-      </resource>
-      <resource>
         <directory>src</directory>
       </resource>
     </resources>
@@ -80,6 +77,8 @@
       <id>vgame</id>
       <properties>
         <final.name>month-mt</final.name>
+        <ftp.to.url>sftp://121.40.125.15:12980/home/smsdevp/newApp/month</ftp.to.url>
+        <ftp.server.id>cmppServer</ftp.server.id>
         <runtime.env>packageConfig\vgame</runtime.env>
       </properties>
     </profile>

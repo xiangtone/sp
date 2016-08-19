@@ -1,6 +1,7 @@
 package com.xt.sms.month;
 
 import com.xt.sms.mt.MessageSubmit;
+import com.xt.util.ConfigManager;
 import com.xt.util.DBForLocal;
 import com.xt.util.DBForRead;
 import com.xt.util.DateTimeTool;
@@ -21,6 +22,7 @@ public class MtSend implements Runnable {
 
 	private DBForLocal dbLocal = new DBForLocal();
 	private DBForRead dbLog = new DBForRead();
+	private long sleep=Long.valueOf(ConfigManager.getConfigData("sleep", "10000"));
 
 	private Map<String, Map<String, String>> serviceMap = new HashMap();
 	private Map<String, List<String>> messagesMap = new HashMap();
@@ -28,6 +30,7 @@ public class MtSend implements Runnable {
 
 	public static void main(String[] args) {
 		MtSend ms = new MtSend();
+		logger.debug("start");
 		Thread t = new Thread(ms);
 		t.start();
 	}
@@ -64,10 +67,12 @@ public class MtSend implements Runnable {
 				this.dbLocal.close();
 				this.dbLog.close();
 			}
-			// logger.debug("sleep 60s.");
+			 logger.debug("sleep "+sleep+"s");
+			
 			try {
-				Thread.sleep(60000L);
+				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -245,6 +250,7 @@ public class MtSend implements Runnable {
 	}
 
 	private void filterSendList(List<Map<String, String>> list) {
+		int sendCount=Integer.valueOf(ConfigManager.getConfigData("send_count","15"));
 		long millis = System.currentTimeMillis();
 		int enoughCount = 0;
 		int notEnoughCount = 0;
@@ -279,10 +285,10 @@ public class MtSend implements Runnable {
 						sendMT(map, msg);
 						sendMtCount += msg.length;
 						sendMtTmpCount += msg.length;
-						if (sendMtTmpCount >= 18) {
+						if (sendMtTmpCount >= sendCount) {
 							long curMillis = System.currentTimeMillis();
 							long sendMillis = curMillis - millis;
-							logger.debug("RetainedUser send 18 time " + sendMillis + " ms.");
+							logger.debug("RetainedUser send "+sendCount+" time " + sendMillis + " ms.");
 							if (sendMillis < 1000L) {
 								long sleepMillis = 1000L - sendMillis;
 								logger.debug("RetainedUser sleep " + sleepMillis + " ms.");
@@ -385,11 +391,12 @@ public class MtSend implements Runnable {
 	private void sendRetainedUser() {
 		int id = 0;
 		List sendList = new ArrayList();
+		String limit=ConfigManager.getConfigData("retained_user_limit","30");
 		do {
 			sendList.clear();
 			String sql = "select id,company,cpn,serviceid,msgid,provid from companys_user where (state = '1' or state='3') and firstsend = 1 and sendate <= '"
 					+ DateTimeTool.getToday() + "' " + "and (UNIX_TIMESTAMP(now())-UNIX_TIMESTAMP(addate))>=3600*72 "
-					+ "and id > " + id + " " + "order by id limit 5000";
+					+ "and id > " + id + " " + "order by id limit "+limit;
 			logger.debug(sql);
 			try {
 				ResultSet rs = dbLog.executeQuery(sql);
@@ -423,8 +430,9 @@ public class MtSend implements Runnable {
 
 	private void sendNewUser() {
 		List sendList = new ArrayList();
-
-		String sql = "select id,company,cpn,serviceid,msgid,provid from companys_user where (state = '1' or state='3') and firstsend = 0 order by id limit 1000";
+		String limit=ConfigManager.getConfigData("new_user_limit","30");
+		int sendCount=Integer.valueOf(ConfigManager.getConfigData("send_count","15"));
+		String sql = "select id,company,cpn,serviceid,msgid,provid from companys_user where (state = '1' or state='3') and firstsend = 0 order by id limit "+limit;
 		logger.debug(sql);
 
 		try {
@@ -475,10 +483,10 @@ public class MtSend implements Runnable {
 					sendMT(map, msg);
 					sendMtCount += msg.length;
 					sendMtTmpCount += msg.length;
-					if (sendMtTmpCount >= 18) {
+					if (sendMtTmpCount >= sendCount) {
 						long curMillis = System.currentTimeMillis();
 						long sendMillis = curMillis - millis;
-						logger.debug("NewUser send 18 time " + sendMillis + " ms.");
+						logger.debug("NewUser send "+sendCount+" time " + sendMillis + " ms.");
 						if (sendMillis < 1000L) {
 							long sleepMillis = 1000L - sendMillis;
 							logger.debug("NewUser sleep " + sleepMillis + " ms.");

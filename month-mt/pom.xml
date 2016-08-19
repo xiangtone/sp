@@ -21,9 +21,6 @@
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>${runtime.env}/</directory>
-			</resource>
-			<resource>
 				<directory>src</directory>
 			</resource>
 		</resources>
