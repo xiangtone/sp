@@ -17,7 +17,7 @@ public class SmDeliverAckResult extends SmResult {
 	public void readInBytes(byte[] b) // throws Exception
 	{
 		try {
-			logger.debug("readInBytes"+Arrays.toString(b));
+//			logger.debug("readInBytes"+Arrays.toString(b));
 			deByteCode = new DeByteCode(b);
 			while (deByteCode.offset < b.length) {
 				byte type = deByteCode.int8();

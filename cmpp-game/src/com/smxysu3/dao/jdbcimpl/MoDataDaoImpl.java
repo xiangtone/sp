@@ -69,10 +69,10 @@ public class MoDataDaoImpl implements MoDataDao {
 			prepareStatement.setString(9, moData.getComprecstat());
 			prepareStatement.setString(10, moData.getRecp());
 			prepareStatement.setInt(11, moData.getMoState());
-			logger.debug("Company" + moData.getCompany() + ", Game" + moData.getGame() + ", Userinput"
-					+ moData.getUserinput() + ", Cpn" + moData.getCpn() + ", Msgid" + moData.getMsgid() + ", Linkid"
-					+ moData.getLinkid() + ", Addate" + moData.getAddate() + ", Tocompstat" + moData.getTocompstat()
-					+ ", Comprecstat" + moData.getComprecstat() + ", Recp" + moData.getRecp() + ", MoState"
+			logger.debug("Company:" + moData.getCompany() + ", Game:" + moData.getGame() + ", Userinput:"
+					+ moData.getUserinput() + ", Cpn:" + moData.getCpn() + ", Msgid:" + moData.getMsgid() + ", Linkid:"
+					+ moData.getLinkid() + ", Addate:" + moData.getAddate() + ", Tocompstat:" + moData.getTocompstat()
+					+ ", Comprecstat:" + moData.getComprecstat() + ", Recp:" + moData.getRecp() + ", MoState:"
 					+ moData.getMoState());
 			prepareStatement.executeUpdate();
 		} catch (SQLException e) {

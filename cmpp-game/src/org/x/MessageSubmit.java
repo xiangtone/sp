@@ -147,10 +147,11 @@ public class MessageSubmit {
 			logger.debug(conn.sock);
 			xtsms.sendSmSubmit(conn, sub); // 提交信息
 			xtsms.readPa(conn);// 读取返回
-			xtsms.disconnectFromServer(conn);
 			logger.debug("提交成功。。");
 		} catch (Exception e) {
 			logger.error("", e);
+		}finally{
+			xtsms.disconnectFromServer(conn);
 		}
 	}
 
