@@ -313,7 +313,7 @@ $(function()
 					<td onclick="TableSorter('table_id',5,'float')">有效通道请求(条)</td>
 					<td onclick="TableSorter('table_id',6,'float')">理论计费金额(元)</td>
 					<td onclick="TableSorter('table_id',7,'float')">指令成功(条 )</td>
-					<td onclick="TableSorter('table_id',8,'float')">短息成功(条)</td>
+					<td onclick="TableSorter('table_id',8,'float')">短信成功(条)</td>
 					<td onclick="TableSorter('table_id',9,'float')">计费成功(条)</td>
 					<td onclick="TableSorter('table_id',10,'float')">计费金额(元)</td>
 					<td onclick="TableSorter('table_id',11,'String')">转化率</td>
