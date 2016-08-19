@@ -92,7 +92,9 @@
 	}
 	
 	var spTroneList = new Array();
-	<%for(SpTroneModel spTrone : spTroneList){%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>'));<%}%>
+	<%for(SpTroneModel spTrone : spTroneList){
+		if(spTrone.getStatus()==1){
+	%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>'));<%}}%>
 	
 	var cpPushUrlList = new Array();
 	<%
