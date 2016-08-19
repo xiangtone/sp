@@ -112,7 +112,7 @@ public class SMSMOtoVCP {
 			stat = xtdeliverAck.getAckStat();
 			logger.debug("stat:" + stat);
 			logger.debug("xtconn:" + xtconn);
-			xtsms.disConnectFromServer(xtconn);
+			
 		} catch (Exception e) {
 			// Logger myLogger = Logger.getLogger("MsgSendLogger");
 			// Logger mySonLogger = Logger.getLogger("myLogger.mySonLogger");
@@ -121,6 +121,8 @@ public class SMSMOtoVCP {
 			// mo2vcp--Exception:" + e.toString());
 			logger.error("¶Ï¿ªÁ¬½Ó", e);
 			e.printStackTrace();
+		}finally{
+			xtsms.disConnectFromServer(xtconn);
 		}
 		return stat;
 	}

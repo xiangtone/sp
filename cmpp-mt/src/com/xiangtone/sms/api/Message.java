@@ -33,13 +33,14 @@ public class Message {
 	// disconnect from xtsms platform server
 	public void disConnectFromServer(ConnDesc conn) {
 		try {
-			conn.sock.getOutputStream().close();
-			conn.sock.getInputStream().close();
-			conn.sock.close();
-			conn.sock = null;
-			// conn.sock.close();
+			if ((conn.sock != null) && (!conn.sock.isClosed())) {
+				conn.sock.getOutputStream().close();
+				conn.sock.getInputStream().close();
+				conn.sock.close();
+				conn.sock = null;
+			}
 		} catch (Exception e) {
-			logger.error("disconnectFromServer", e);
+			logger.error("disconnectFromServer",e);
 			return;
 		}
 	}

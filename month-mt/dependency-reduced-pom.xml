@@ -9,7 +9,7 @@
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ftp</artifactId>
+        <artifactId>wagon-ssh</artifactId>
         <version>1.0-beta-6</version>
       </extension>
     </extensions>
@@ -25,6 +25,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
         <configuration>
           <target>1.6</target>
           <source>1.6</source>
@@ -44,7 +45,7 @@
               <transformers>
                 <transformer>
                   <manifestEntries>
-                    <Main-Class>com.xt.sms.month.MtSend</Main-Class>
+                    <Main-Class>org.x.MtSend</Main-Class>
                   </manifestEntries>
                 </transformer>
               </transformers>
@@ -80,6 +81,8 @@
       <id>vgame</id>
       <properties>
         <final.name>month-mt</final.name>
+        <ftp.to.url>sftp://121.40.125.15:12980/home/smsdevp/newApp/month</ftp.to.url>
+        <ftp.server.id>cmppServer</ftp.server.id>
         <runtime.env>packageConfig\vgame</runtime.env>
       </properties>
     </profile>

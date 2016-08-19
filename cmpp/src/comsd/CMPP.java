@@ -373,7 +373,7 @@ public final class CMPP {
 				tools.strcpy(buf, ch.pkCmd, 4);
 				tools.strcpy(buf, ch.pkSeq, 8);
 				out.write(buf, 0, 12); // 测试信息体为空
-				LOG.debug(Arrays.toString(buf));
+//				LOG.debug(Arrays.toString(buf));
 				out.flush();
 				conn.seq++;
 				if (conn.seq == 0x7fffffff)

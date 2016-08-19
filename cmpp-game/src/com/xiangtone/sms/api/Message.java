@@ -33,12 +33,14 @@ public class Message {
 	// disconnect from xtsms platform server
 	public void disconnectFromServer(ConnDesc conn) {
 		try {
-			conn.sock.getOutputStream().close();
-			conn.sock.getInputStream().close();
-			conn.sock.close();
-			conn.sock = null;
-			// conn.sock.close();
+			if ((conn.sock != null) && (!conn.sock.isClosed())) {
+				conn.sock.getOutputStream().close();
+				conn.sock.getInputStream().close();
+				conn.sock.close();
+				conn.sock = null;
+			}
 		} catch (Exception e) {
+			logger.error("disconnectFromServer",e);
 			return;
 		}
 	}
@@ -186,13 +188,11 @@ public class Message {
 			ack.AddInt16((short) (3 + len1)); // add length
 			ack.addAsciiz(ackCode, len1); // add value string
 			byte[] b = ack.getBytes();
-			logger.debug(Arrays.toString(b));
-			// for(int i=0;i<b.length;i++)
-			// System.out.print(b[i]+",");
+			// logger.debug(Arrays.toString(b));
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
-			logger.error("smSendSubmitAck",e);
+			logger.error("smSendSubmitAck", e);
 			throw e;
 		}
 
@@ -213,13 +213,11 @@ public class Message {
 			ack.AddInt16((short) (3 + len1)); // add length
 			ack.addAsciiz(ackCode, len1); // add value string
 			byte[] b = ack.getBytes();
-			logger.debug(Arrays.toString(b));
-			// for(int i=0;i<b.length;i++)
-			// System.out.print(b[i]+",");
+			// logger.debug(Arrays.toString(b));
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
-			logger.error("smSendDeliverAck",e);
+			logger.error("smSendDeliverAck", e);
 			throw e;
 		}
 
@@ -235,7 +233,7 @@ public class Message {
 		readHead(in, pack); // read header
 		logger.debug("totalLen:" + pack.pkHead.pkLen);
 		byte packbuf[] = new byte[pack.pkHead.pkLen - 8];
-		logger.debug(Arrays.toString(packbuf));
+		// logger.debug(Arrays.toString(packbuf));
 		in.read(packbuf); // read body message
 		//////////////////// add at 061206
 		/*

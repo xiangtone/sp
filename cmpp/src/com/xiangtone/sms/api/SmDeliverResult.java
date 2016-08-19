@@ -18,7 +18,7 @@ public class SmDeliverResult extends SmResult {
 	{
 		try {
 
-			logger.debug(Arrays.toString(b));
+//			logger.debug(Arrays.toString(b));
 			deByteCode = new DeByteCode(b);
 			while (deByteCode.offset < b.length) {
 				byte type = deByteCode.int8();

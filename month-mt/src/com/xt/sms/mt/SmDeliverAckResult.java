@@ -13,7 +13,7 @@ public class SmDeliverAckResult extends SmResult {
 
 	public void readInBytes(byte[] b) {
 		try {
-			myLogger.debug(Arrays.toString(b));
+//			myLogger.debug(Arrays.toString(b));
 			this.deByteCode = new DeByteCode(b);
 			while (this.deByteCode.offset < b.length) {
 				byte type = this.deByteCode.int8();

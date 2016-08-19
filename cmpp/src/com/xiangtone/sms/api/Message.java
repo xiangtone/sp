@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 public class Message {
 	private static Logger logger = Logger.getLogger(Message.class);
+
 	public Message() {
 	}
 
@@ -32,13 +33,15 @@ public class Message {
 	// disconnect from xtsms platform server
 	public void disconnectFromServer(ConnDesc conn) {
 		try {
-			conn.sock.getOutputStream().close();
-			conn.sock.getInputStream().close();
-			conn.sock.close();
-			conn.sock = null;
-			// conn.sock.close();
+			if ((conn.sock != null) && (!conn.sock.isClosed())) {
+				conn.sock.getOutputStream().close();
+				conn.sock.getInputStream().close();
+				conn.sock.close();
+				conn.sock = null;
+			}
 		} catch (Exception e) {
-			logger.error("",e);
+			logger.error("disconnectFromServer",e);
+			return;
 		}
 	}
 
@@ -64,7 +67,7 @@ public class Message {
 			out = null;
 			throw e;
 		} catch (Exception e) {
-			logger.error("",e);
+			logger.error("", e);
 		}
 
 	}
@@ -88,9 +91,9 @@ public class Message {
 			out.flush();
 
 		} catch (IOException e) {
-			logger.error("",e);
+			logger.error("", e);
 		} catch (Exception e) {
-			logger.error("",e);
+			logger.error("", e);
 		}
 
 	}
@@ -102,7 +105,7 @@ public class Message {
 			p.pkHead.pkCmd = in.readInt();
 			logger.debug("readHead ...pkCmd:" + p.pkHead.pkCmd);
 		} catch (IOException e) {
-			logger.error("",e);
+			logger.error("", e);
 		}
 		return true;
 	}
@@ -117,7 +120,7 @@ public class Message {
 
 			out.write(bc.getBytes());
 		} catch (IOException e) {
-			logger.error("",e);
+			logger.error("", e);
 			throw e;
 		}
 	}
@@ -156,13 +159,13 @@ public class Message {
 				break;
 			}
 		} catch (Exception e) {
-			logger.error("",e);
+			logger.error("", e);
 		} finally {
 			try {
 				if (conn.sock != null)
 					conn.sock.close();
 			} catch (Exception e) {
-				logger.error("",e);
+				logger.error("", e);
 			}
 		}
 	}
@@ -182,11 +185,11 @@ public class Message {
 			ack.AddInt16((short) (3 + len1)); // add length
 			ack.addAsciiz(ackCode, len1); // add value string
 			byte[] b = ack.getBytes();
-			Arrays.toString(b);
+			// Arrays.toString(b);
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
-			logger.error("",e);
+			logger.error("", e);
 		}
 
 	}
@@ -211,7 +214,7 @@ public class Message {
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {
-			logger.error("",e);
+			logger.error("", e);
 		}
 
 	}
@@ -242,7 +245,7 @@ public class Message {
 				ssr.packCmd = 1;
 				return ssr;
 			} catch (Exception e1) {
-				logger.error("",e1);
+				logger.error("", e1);
 			}
 			// break;
 		case 2:
@@ -253,7 +256,7 @@ public class Message {
 				ssra.packCmd = 2;
 				return ssra;
 			} catch (Exception e) {
-				logger.error("",e);
+				logger.error("", e);
 			}
 
 		case 3:
@@ -264,7 +267,7 @@ public class Message {
 				sdr.packCmd = 3;
 				return sdr;
 			} catch (Exception e2) {
-				logger.error("",e2);
+				logger.error("", e2);
 			}
 			// break;
 		case 4:
@@ -275,7 +278,7 @@ public class Message {
 				adar.packCmd = 4;
 				return adar;
 			} catch (Exception e) {
-				logger.error("",e);
+				logger.error("", e);
 			}
 
 		default:
