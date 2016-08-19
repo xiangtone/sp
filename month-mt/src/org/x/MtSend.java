@@ -1,4 +1,4 @@
-package com.xt.sms.month;
+package org.x;
 
 import com.xt.sms.mt.MessageSubmit;
 import com.xt.util.ConfigManager;

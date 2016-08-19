@@ -21,12 +21,16 @@
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
+				<directory>${runtime.env}/</directory>
+			</resource>
+			<resource>
 				<directory>src</directory>
 			</resource>
 		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<target>1.6</target>
 					<source>1.6</source>
@@ -48,7 +52,7 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
-										<Main-Class>com.xt.sms.month.MtSend</Main-Class>
+										<Main-Class>org.x.MtSend</Main-Class>
 									</manifestEntries>
 								</transformer>
 							</transformers>
@@ -88,7 +92,7 @@
 			<!-- Enabling the use of FTP -->
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
+				<artifactId>wagon-ssh</artifactId>
 				<version>1.0-beta-6</version>
 			</extension>
 		</extensions>
