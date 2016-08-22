@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
+import org.common.util.ConfigManager;
 
 public class ConnectionService {
 	private static Logger myLogger = Logger.getLogger(ConnectionService.class);
@@ -83,10 +84,12 @@ public class ConnectionService {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(ConfigManager.getConfigData("log.url"));
-
-		ConnectionService.getInstance().getConnectionForRead();
-
+		System.out.println(ConfigManager.getConfigData("read.url"));
+		try {
+			ConnectionService.getInstance().getConnectionForRead();
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
 		System.out.println(ConfigManager.getConfigData("local.url"));
 	}
 }

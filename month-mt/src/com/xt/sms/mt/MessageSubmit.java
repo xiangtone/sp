@@ -1,9 +1,9 @@
 package com.xt.sms.mt;
 
-import com.xt.util.ConfigManager;
 import java.io.PrintStream;
 
 import org.apache.log4j.Logger;
+import org.common.util.ConfigManager;
 
 public class MessageSubmit {
 	private static Logger myLogger = Logger.getLogger(MessageSubmit.class);

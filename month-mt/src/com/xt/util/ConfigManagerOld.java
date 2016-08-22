@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ConfigManager {
+public class ConfigManagerOld {
 	private static final String CONFIG_PATH = "config.properties";
 	private static Properties prop = null;
 	private static long lastModifyTime = 0;
 
-	private ConfigManager() {
+	private ConfigManagerOld() {
 	}
 
 	public static InputStream getResourceAsStream(String resource) throws IOException {
 		InputStream in = null;
-		ClassLoader loader = ConfigManager.class.getClassLoader();
+		ClassLoader loader = ConfigManagerOld.class.getClassLoader();
 		if (loader != null)
 			in = loader.getResourceAsStream(resource);
 		if (in == null)
@@ -70,7 +70,7 @@ public class ConfigManager {
 
 	public static void main(String[] args) {
 		// System.out.println(System.getProperty("java.class.path").split(";")[0]);
-		System.out.println(ConfigManager.getConfigData("sms_serverip", "cao"));
-		System.out.println(ConfigManager.getConfigData("sms_serverport"));
+		System.out.println(ConfigManagerOld.getConfigData("sms_serverip", "cao"));
+		System.out.println(ConfigManagerOld.getConfigData("sms_serverport"));
 	}
 }

@@ -1,7 +1,6 @@
 package org.x;
 
 import com.xt.sms.mt.MessageSubmit;
-import com.xt.util.ConfigManager;
 import com.xt.util.DBForLocal;
 import com.xt.util.DBForRead;
 import com.xt.util.DateTimeTool;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.common.util.ConfigManager;
 
 public class MtSend implements Runnable {
 	private static Logger logger = Logger.getLogger(MtSend.class);
@@ -22,7 +22,7 @@ public class MtSend implements Runnable {
 
 	private DBForLocal dbLocal = new DBForLocal();
 	private DBForRead dbLog = new DBForRead();
-	private long sleep=Long.valueOf(ConfigManager.getConfigData("sleep", "10000"));
+	private long sleep = Long.valueOf(ConfigManager.getConfigData("sleep", "10000"));
 
 	private Map<String, Map<String, String>> serviceMap = new HashMap();
 	private Map<String, List<String>> messagesMap = new HashMap();
@@ -63,12 +63,8 @@ public class MtSend implements Runnable {
 				}
 			} catch (Exception e) {
 				logger.error("", e);
-			} finally {
-				this.dbLocal.close();
-				this.dbLog.close();
 			}
-			 logger.debug("sleep "+sleep+"s");
-			
+			// logger.debug("sleep "+sleep+"s");
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
@@ -77,7 +73,7 @@ public class MtSend implements Runnable {
 		}
 	}
 
-	private void loadServicePrice(){
+	private void loadServicePrice() {
 		if (this.serviceMap.size() > 0) {
 			this.serviceMap.clear();
 		}
@@ -101,7 +97,9 @@ public class MtSend implements Runnable {
 			}
 		} catch (SQLException e) {
 			logger.error(sql, e);
-		} 
+		} finally {
+			this.dbLog.close();
+		}
 	}
 
 	private void loadMessages() {
@@ -129,6 +127,8 @@ public class MtSend implements Runnable {
 				logger.debug("'" + serverid + "' : " + ((List) this.messagesMap.get(serverid)).size());
 		} catch (SQLException e) {
 			logger.error(sql, e);
+		} finally {
+			this.dbLog.close();
 		}
 
 	}
@@ -158,6 +158,8 @@ public class MtSend implements Runnable {
 				logger.debug("'" + serverid + "' : " + ((List) this.messagesSpecialMap.get(serverid)).size());
 		} catch (SQLException e) {
 			logger.error(sql, e);
+		} finally {
+			this.dbLog.close();
 		}
 
 	}
@@ -176,12 +178,14 @@ public class MtSend implements Runnable {
 			return count;
 		} catch (SQLException e) {
 			logger.error(sql, e);
+		} finally {
+			this.dbLog.close();
 		}
 		return count;
 
 	}
 
-	private int updateCompanysUser(String id, String msgid, String sendate){
+	private int updateCompanysUser(String id, String msgid, String sendate) {
 		String sql = "update companys_user set msgid = " + msgid + "," + "sendate = '" + sendate + "',"
 				+ "firstsend = '1'," + "sendflag = '1'," + "sendedtime = now() " + "where id = " + id;
 		logger.debug(sql);
@@ -189,22 +193,26 @@ public class MtSend implements Runnable {
 			return this.dbLocal.executeUpdate(sql);
 		} catch (SQLException e) {
 			logger.error(sql, e);
+		} finally {
+			this.dbLocal.close();
 		}
 		return 0;
 	}
 
-	private int updateCompanysUser(String id, String sendate){
+	private int updateCompanysUser(String id, String sendate) {
 		String sql = "update companys_user set sendate = '" + sendate + "' where id = " + id;
 		logger.debug(sql);
 		try {
 			return this.dbLocal.executeUpdate(sql);
 		} catch (SQLException e) {
 			logger.error(sql, e);
+		} finally {
+			this.dbLocal.close();
 		}
 		return 0;
 	}
 
-	private int insertSendRecord(Map<String, String> map){
+	private int insertSendRecord(Map<String, String> map) {
 		String sql = "insert into sendrecord_month(cpn, serviceid, senddate, provid, sendtime, msg) values('"
 				+ (String) map.get("cpn") + "', " + "'" + (String) map.get("serviceid") + "', " + "'"
 				+ DateTimeTool.getToday() + "', " + "'" + (String) map.get("provid") + "', " + "now(), " + "'"
@@ -214,6 +222,8 @@ public class MtSend implements Runnable {
 			return this.dbLocal.executeUpdate(sql);
 		} catch (SQLException e) {
 			logger.error(sql, e);
+		} finally {
+			this.dbLocal.close();
 		}
 		return 0;
 	}
@@ -250,7 +260,7 @@ public class MtSend implements Runnable {
 	}
 
 	private void filterSendList(List<Map<String, String>> list) {
-		int sendCount=Integer.valueOf(ConfigManager.getConfigData("send_count","15"));
+		int sendCount = Integer.valueOf(ConfigManager.getConfigData("send_count", "15"));
 		long millis = System.currentTimeMillis();
 		int enoughCount = 0;
 		int notEnoughCount = 0;
@@ -288,7 +298,7 @@ public class MtSend implements Runnable {
 						if (sendMtTmpCount >= sendCount) {
 							long curMillis = System.currentTimeMillis();
 							long sendMillis = curMillis - millis;
-							logger.debug("RetainedUser send "+sendCount+" time " + sendMillis + " ms.");
+							logger.debug("RetainedUser send " + sendCount + " time " + sendMillis + " ms.");
 							if (sendMillis < 1000L) {
 								long sleepMillis = 1000L - sendMillis;
 								logger.debug("RetainedUser sleep " + sleepMillis + " ms.");
@@ -391,12 +401,12 @@ public class MtSend implements Runnable {
 	private void sendRetainedUser() {
 		int id = 0;
 		List sendList = new ArrayList();
-		String limit=ConfigManager.getConfigData("retained_user_limit","30");
+		String limit = ConfigManager.getConfigData("retained_user_limit", "30");
 		do {
 			sendList.clear();
 			String sql = "select id,company,cpn,serviceid,msgid,provid from companys_user where (state = '1' or state='3') and firstsend = 1 and sendate <= '"
 					+ DateTimeTool.getToday() + "' " + "and (UNIX_TIMESTAMP(now())-UNIX_TIMESTAMP(addate))>=3600*72 "
-					+ "and id > " + id + " " + "order by id limit "+limit;
+					+ "and id > " + id + " " + "order by id limit " + limit;
 			logger.debug(sql);
 			try {
 				ResultSet rs = dbLog.executeQuery(sql);
@@ -420,6 +430,8 @@ public class MtSend implements Runnable {
 				}
 			} catch (SQLException e) {
 				logger.error(sql, e);
+			} finally {
+				this.dbLog.close();
 			}
 
 			logger.debug("retained sendList : " + sendList.size());
@@ -430,9 +442,10 @@ public class MtSend implements Runnable {
 
 	private void sendNewUser() {
 		List sendList = new ArrayList();
-		String limit=ConfigManager.getConfigData("new_user_limit","30");
-		int sendCount=Integer.valueOf(ConfigManager.getConfigData("send_count","15"));
-		String sql = "select id,company,cpn,serviceid,msgid,provid from companys_user where (state = '1' or state='3') and firstsend = 0 order by id limit "+limit;
+		String limit = ConfigManager.getConfigData("new_user_limit", "30");
+		int sendCount = Integer.valueOf(ConfigManager.getConfigData("send_count", "15"));
+		String sql = "select id,company,cpn,serviceid,msgid,provid from companys_user where (state = '1' or state='3') and firstsend = 0 order by id limit "
+				+ limit;
 		logger.debug(sql);
 
 		try {
@@ -457,6 +470,8 @@ public class MtSend implements Runnable {
 			}
 		} catch (SQLException e1) {
 			logger.error(sql, e1);
+		} finally {
+			this.dbLog.close();
 		}
 
 		logger.debug("new user sendList : " + sendList.size());
@@ -486,7 +501,7 @@ public class MtSend implements Runnable {
 					if (sendMtTmpCount >= sendCount) {
 						long curMillis = System.currentTimeMillis();
 						long sendMillis = curMillis - millis;
-						logger.debug("NewUser send "+sendCount+" time " + sendMillis + " ms.");
+						logger.debug("NewUser send " + sendCount + " time " + sendMillis + " ms.");
 						if (sendMillis < 1000L) {
 							long sleepMillis = 1000L - sendMillis;
 							logger.debug("NewUser sleep " + sleepMillis + " ms.");

@@ -22,9 +22,15 @@
 		<resources>
 			<resource>
 				<directory>${runtime.env}/</directory>
+				<excludes>
+					<exclude>**/config.properties</exclude>
+				</excludes>
 			</resource>
 			<resource>
 				<directory>src</directory>
+				<excludes>
+					<exclude>**/config.properties</exclude>
+				</excludes>
 			</resource>
 		</resources>
 		<plugins>
