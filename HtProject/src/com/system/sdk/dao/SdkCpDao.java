@@ -14,7 +14,7 @@ public class SdkCpDao {
 	@SuppressWarnings("unchecked")
 	public List<SdkCpModel>loadSdkCp(){
 
-		String sql="SELECT * FROM daily_config.tbl_sdk_cp ORDER BY id DESC";
+		String sql="SELECT * FROM daily_config.tbl_sdk_cp order by convert(name using gbk) asc";
 		return (List<SdkCpModel>)new JdbcGameControl().query(sql, new QueryCallBack()
 		{
 			@Override

@@ -55,6 +55,8 @@
 	int troneId=StringUtil.getInteger(request.getParameter("trone_id"), -1);
 	int spTroneId=StringUtil.getInteger(request.getParameter("sp_trone_id"), -1);
 	int showType=StringUtil.getInteger(request.getParameter("showType"), 1);
+	//添加省份查询
+	int provinceId=StringUtil.getInteger(request.getParameter("province_id"), -1);
 	// 1:天  2:周  3：月  4：CP 5:APP 6:channel 7:sp_trone_id 8:trone_id 9:province_id
 	String[] titles = {"日期", "周数", "月份", "CP", "APP", "渠道", "SP业务", "通道", "省份"};
 	List<SdkCpModel>  cpList=new SdkCpServer().loadSdkCp();
@@ -64,7 +66,7 @@
 	List<SdkSpTroneModel> spTroneList=new SdkSpTroneServer().loadSdkSpTrone();
 	List<SdkTroneModel> sdkTroneList=new SdkTroneServer().loadSdkTrone();
 	List<ProvinceModel> provinceList=new ProvinceServer().loadProvince();
-	Map<String,Object> map=new SdkDataSummerServer().loadSdkDataSummerModel(cpId, channelId, appId, troneId, spTroneId, startDate, endDate, showType);
+	Map<String,Object> map=new SdkDataSummerServer().loadSdkDataSummerModel(cpId, channelId, appId, troneId, spTroneId, startDate, endDate, showType,provinceId);
 	List<SdkDataSummerModel> dataSummerList=(List<SdkDataSummerModel>)map.get("list");
 	Integer countActRows=(Integer)map.get("countActRows");
 	Integer countUserRows=(Integer)map.get("countUserRows"); 
@@ -190,7 +192,8 @@ $(function()
 			$("#app_id").val(<%=appId%>);
 			$("#sdk_channel_id").val(<%=channelId%>);
 			$("#showType").val(<%=showType%>);
-			
+			$("#province_id").val(<%=provinceId%>);
+
 		
 		});
 
@@ -238,6 +241,20 @@ $(function()
 								}
 							%>
 						</select>
+						<dd class="dd01_me">省份</dd>
+					<dd class="dd04_me">
+						<select name="province_id" id="province_id" style="width: 110px;"
+							title="选择省份" >
+							<option value="-1">全部</option>
+							<%
+								for (ProvinceModel provinceModel : provinceList) {
+							%>
+							<option value="<%=provinceModel.getId()%>"><%=provinceModel.getName()%></option>
+							<%
+								}
+							%>
+						</select>
+					</dd>
 					</dd><div style="clear: both;"><br /><div/>
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
