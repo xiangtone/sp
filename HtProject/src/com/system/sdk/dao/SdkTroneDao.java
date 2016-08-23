@@ -13,7 +13,7 @@ import com.system.util.StringUtil;
 public class SdkTroneDao {
 	@SuppressWarnings("unchecked")
 	public List<SdkTroneModel>loadSdkTrone(){
-		String sql="SELECT * FROM daily_config.tbl_sdk_trone ORDER BY id DESC";
+		String sql="SELECT * FROM daily_config.tbl_sdk_trone order by convert(name using gbk) asc";
 		return (List<SdkTroneModel>)new JdbcGameControl().query(sql, new QueryCallBack()
 		{
 			@Override

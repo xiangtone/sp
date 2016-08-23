@@ -14,7 +14,7 @@ public class SdkChannelDao {
 	@SuppressWarnings("unchecked")
 	public List<SdkChannelModel>loadSdkChannel(){
 	
-	String sql="SELECT * FROM daily_config.tbl_sdk_channel ORDER BY id DESC";
+	String sql="SELECT * FROM daily_config.tbl_sdk_channel order by convert(channel_name using gbk) asc";
 	return (List<SdkChannelModel>)new JdbcGameControl().query(sql, new QueryCallBack()
 	{
 		@Override

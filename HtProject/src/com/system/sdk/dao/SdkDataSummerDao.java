@@ -15,7 +15,7 @@ import com.system.util.StringUtil;
 public class SdkDataSummerDao
 {
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> loadSdkDataSummer(int cpId,int channelId,int appId,int troneId,int spTroneId,String startDate,String endDate,int showType)
+	public Map<String, Object> loadSdkDataSummer(int cpId,int channelId,int appId,int troneId,int spTroneId,String startDate,String endDate,int showType,int provinceId)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		String[] joinQuery = getShowType(showType);
@@ -37,6 +37,9 @@ public class SdkDataSummerDao
 		if(appId>0)
 		{
 			query += " AND e.sdk_app_id = " + appId;
+		}
+		if(provinceId>0){
+			query += " AND a.province_id = "+provinceId;
 		}
 		
 		String troneQuery = "";
@@ -212,9 +215,6 @@ public class SdkDataSummerDao
 		return result;
 	}
 	
-	public static void main(String[] args)
-	{
-		new SdkDataSummerDao().loadSdkDataSummer(0, 0, 0, 0, 0, "2016-07-02","2016-09-02",1);
-	}
+	
 	
 }

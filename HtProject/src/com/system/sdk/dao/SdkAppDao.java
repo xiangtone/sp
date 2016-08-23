@@ -13,7 +13,7 @@ import com.system.util.StringUtil;
 public class SdkAppDao {
 	@SuppressWarnings("unchecked")
 	public List<SdkAppModel> loadSdkApp(){
-		String sql="SELECT * FROM daily_config.tbl_sdk_app ORDER BY id DESC";
+		String sql="SELECT * FROM daily_config.tbl_sdk_app order by convert(name using gbk) asc";
 		return (List<SdkAppModel>)new JdbcGameControl().query(sql, new QueryCallBack()
 		{
 			@Override

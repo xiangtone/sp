@@ -17,7 +17,7 @@ import com.system.util.StringUtil;
 public class SdkSpTroneDao {
 	@SuppressWarnings("unchecked")
 	public List<SdkSpTroneModel>loadSdkSpTrone(){
-		String sql="SELECT * FROM daily_config.tbl_sdk_sp_trone ORDER BY id DESC";
+		String sql="SELECT * FROM daily_config.tbl_sdk_sp_trone order by convert(name using gbk) asc";
 		return (List<SdkSpTroneModel>)new JdbcGameControl().query(sql, new QueryCallBack()
 		{
 			@Override
