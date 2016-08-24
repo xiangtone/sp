@@ -50,15 +50,15 @@ public class Test {
 		return;
 	}
 	public static void main(String[] args) {
-		new Test().init();
-		Socket s=new Socket();
-		try {
-			s.close();
-			s=null;
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		new Test().init();
+//		Socket s=new Socket();
+//		try {
+//			s.close();
+//			s=null;
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 //		DBForLocal l=new DBForLocal();
 //		DBForRead r=new DBForRead();
 //		String sql="SELECT * FROM `tbl_base_users` WHERE id=1";
@@ -120,6 +120,5 @@ public class Test {
 		// logger.error("e");
 		// logger.error("e");
 		// logger.error("e");
-		
 	}
 }
