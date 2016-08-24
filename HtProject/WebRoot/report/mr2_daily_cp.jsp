@@ -504,7 +504,7 @@ function arrayReverse(arr) {
 					<td><%= index++ %></td>
 					<td><a href="detail.jsp?date=<%= date %>&sp_id=<%= spId %>&cp_id=<%= cpId %>&sp_trone_id=<%= spTroneId %>&trone_id=<%= troneId %>&show_type=<%= sortType %>&joinid=<%= model.getJoinId() %>&title=<%= StringUtil.encodeUrl(model.getTitle1(),"UTF-8") %>" 
 					target="_blank"><%= model.getTitle1() %></a></td>
-					<td><%= model.getDataRows() %></td>
+					<td><%= model.getShowDataRows() %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
 				</tr>
 						<%

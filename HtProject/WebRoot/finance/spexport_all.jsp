@@ -14,14 +14,14 @@
 	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
 	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
-	int dateType = StringUtil.getInteger(request.getParameter("datetype"), 1);
+	int dateType = StringUtil.getInteger(request.getParameter("datetype"), -1);
 	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
 	List<SpModel> spList = new SpServer().loadSp();
 	String display = "";
 	Map<String, List<SpFinanceShowModel>> map = null;
 	if (spId > 0 && isNotFirstLoad) {
 		SettleAccountServer accountServer = new SettleAccountServer();
-		List<SettleAccountModel> list = accountServer.loadSpSettleAccountList(spId, startDate, endDate);
+		List<SettleAccountModel> list = accountServer.loadSpSettleAccountList(spId, startDate, endDate,dateType);
 		if (list != null && list.size() > 0) {
 			String spName = "";
 			for (SpModel sp : spList) {
@@ -55,7 +55,8 @@
 			display = "alert('没有相应的数据');";
 		}
 	} else if (spId < 0 && isNotFirstLoad) {
-		map = new SettleAccountServer().loadSpSettleAccountData(startDate, endDate);
+		
+		map = new SettleAccountServer().loadSpSettleAccountDataAll(startDate,endDate,spId,dateType);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -89,7 +90,7 @@
 <body>
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
-			<form action="spexport.jsp" method="post" id="exportform">
+			<form action="spexport_all.jsp" method="post" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
 					<dd class="dd01_me">开始日期</dd>
@@ -163,7 +164,7 @@
 												+ StringUtil.getDecimalFormat(sfsModel.getAmount()
 														* sfsModel.getJiesuanlv())
 												+ "</td><td rowspan='" + tmpList.size()
-												+ "'><a href='spexport.jsp?startdate="
+												+ "'><a href='spexport_all.jsp?startdate="
 												+ startDate + "&enddate=" + endDate
 												+ "&sp_id=" + sfsModel.getSpId()
 												+ "&load=1&datetype=" + dateType

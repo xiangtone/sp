@@ -194,9 +194,11 @@ background: url(../images/lock.png)no-repeat 8px 14px;
 .login-para {
   float: right;
 }
+/*
 .login-top input[type="checkbox"] {
   display: none;
 }
+*/
 .login-top.checkbox input {
 	position: absolute;
 	left: -9999px;

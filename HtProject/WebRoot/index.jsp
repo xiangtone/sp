@@ -11,12 +11,12 @@
 		out.print("<script>window.location.href='login.jsp'</script>");
 		return;
 	}
-	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台");
+	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台ss");
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>运营管理平台</title>
+<title><%= sysTitle %></title>
 </head>
 <frameset rows="80,*" cols="*" frameborder="no" border="0"
 	framespacing="0">
