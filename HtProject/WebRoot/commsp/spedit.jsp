@@ -74,7 +74,7 @@
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
-				<dd class="ddbtn" style="width: 200px">
+				<dd class="ddbtn" >
 				<label>SP修改</label>
 				</dd>
 			</dl>

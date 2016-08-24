@@ -26,6 +26,8 @@ public class TroneOrderModel
 	private String provinceList;
 	private String province;
 	
+	private int commerceUserId;
+	
 	public float getPrice()
 	{
 		return price;
@@ -210,5 +212,13 @@ public class TroneOrderModel
 	{
 		this.province = province;
 	}
+	public int getCommerceUserId() {
+		return commerceUserId;
+	}
+	public void setCommerceUserId(int commerceUserId) {
+		this.commerceUserId = commerceUserId;
+	}
+	
+	
 	
 }

@@ -16,9 +16,16 @@
 <%@page import="java.util.List"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="com.system.util.StringUtil"%>
+<%@page import="com.system.model.UserModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	UserModel user = (UserModel)session.getAttribute("user");
+	int userId=-1;
+	if(user!=null){
+		userId=user.getId();
+	}
+
 	List<SpModel> spList = new SpServer().loadSp();
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<SpTroneApiModel> spTroneApiList = new SpTroneApiServer().loadSpTroneApi();
@@ -62,10 +69,11 @@ $(function()
 	<%
 	for(SpModel spModel : spList)
 	{
+		if(spModel.getCommerceUserId()==userId){
 		%>
 		spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
 		<%
-	}
+	}}
 	%>
 	function apiStatus(){
 		 switch($("input[name=api_status]:checked").attr("id")){
@@ -223,6 +231,7 @@ $(function()
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
+			
 				<dd class="ddbtn" style="width: 200px">
 				<label>增加业务</label>
 				</dd>
@@ -237,10 +246,11 @@ $(function()
 							<%
 								for (SpModel sp : spList)
 								{
+									if(userId==sp.getCommerceUserId()){
 							%>
 							<option value="<%=sp.getId()%>"><%=sp.getShortName()%></option>
 							<%
-								}
+								}}
 							%>
 						</select>
 					</dd>

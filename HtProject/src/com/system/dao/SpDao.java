@@ -249,4 +249,83 @@ public class SpDao
 		return new JdbcControl().execute(sql);
 	}
 	
+	public Map<String, Object> loadSp(int pageIndex,String keyWord,int userId)
+	{
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_sp a left join daily_config.tbl_user b on a.commerce_user_id = b.id where 1=1 ";
+		
+		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
+		
+		if(!StringUtil.isNullOrEmpty(keyWord))
+		{
+			sql += " AND (full_name LIKE '%" + keyWord + "%' or short_name LIKE '%"+ keyWord +"%' or b.nick_name like '%" + keyWord + "%' or a.id = '" + keyWord + "' )";
+		}else{
+			sql +=" AND a.commerce_user_id="+userId;
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		sql += " order by a.id desc ";
+		JdbcControl control = new JdbcControl();
+		map.put("rows",control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"), new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+					return rs.getInt(1);
+				
+				return 0;
+			}
+		}));
+		
+		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " * ") + limit, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpModel> list = new ArrayList<SpModel>();
+				while(rs.next())
+				{
+					SpModel model = new SpModel();
+					
+					model.setId(rs.getInt("id"));
+					
+					model.setShortName(StringUtil.getString(rs.getString("short_name"), ""));
+					model.setFullName(StringUtil.getString(rs.getString("full_name"), ""));
+					model.setContactPerson(StringUtil.getString(rs.getString("contract_person"), ""));
+					model.setQq(StringUtil.getString(rs.getString("qq"), ""));
+					model.setPhone(StringUtil.getString(rs.getString("phone"), ""));
+					model.setMail(StringUtil.getString(rs.getString("mail"), ""));
+					model.setAddress(StringUtil.getString(rs.getString("address"), ""));
+					model.setContractStartDate(StringUtil.getString(rs.getString("contract_start_date"), ""));
+					model.setContractEndDate(StringUtil.getString(rs.getString("contract_end_date"), ""));
+					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setCommerceUserName(StringUtil.getString(rs.getString("nick_name"), ""));
+					
+					list.add(model);
+				}
+				return list;
+			}
+		}));
+		
+		return map;
+	}
+	public Integer checkAdd(int userId,int commerceId){
+		Map<String, Object> map=new HashMap<String, Object>();
+		String sql="select count(*) FROM daily_config.`tbl_group_user` a LEFT JOIN daily_config.tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
+		JdbcControl control = new JdbcControl();
+		map.put("rows",control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+					return rs.getInt(1);
+				
+				return 0;
+			}
+		}));
+		int count=(Integer) map.get("rows");
+		return count;
+	}
 }

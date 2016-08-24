@@ -15,10 +15,15 @@
 <%@page import="java.util.List"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="com.system.util.StringUtil"%>
+<%@page import="com.system.model.UserModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-
+	UserModel user = (UserModel)session.getAttribute("user");
+	int userId=-1;
+	if(user!=null){
+		userId=user.getId();
+	}
 	String query = StringUtil.getString(request.getParameter("query"),"");
 
 	int troneId = StringUtil.getInteger(request.getParameter("id"), -1);
@@ -56,10 +61,11 @@
 	<%
 	for(SpModel spModel : spList)
 	{
+		if(spModel.getCommerceUserId()==userId){
 		%>
 		spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
 		<%
-	}
+	}}
 	%>
 
 	function joSpTrone(id,spId,troneName,spTroneApiId)
@@ -277,9 +283,11 @@
 							<%
 								for (SpModel sp : spList)
 								{
+									if(sp.getCommerceUserId()==userId){
 							%>
 							<option value="<%=sp.getId()%>"><%=sp.getShortName()%></option>
 							<%
+									}
 								}
 							%>
 						</select>
