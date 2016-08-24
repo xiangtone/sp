@@ -208,7 +208,7 @@
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
-				<dd class="ddbtn" >
+				<dd class="ddbtn" style="width: 200px">
 				<label>增加通道</label>
 				</dd>
 			</dl>

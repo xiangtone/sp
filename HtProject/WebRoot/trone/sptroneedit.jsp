@@ -339,11 +339,15 @@
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
+				<dd class="ddbtn" style="width: 200px">
+				<label>修改SP业务</label>
+				</dd>
+			</dl>
+			<dl>
 				<form action="sptroneaction.jsp?query=<%=query%>" method="post"
 					id="addform">
 					<table>
 						<thead>
-							<td style="text-align: left">修改SP业务</td>
 							<input type="hidden" value="<%=spTroneModel.getId()%>"
 								name="id" />
 						</thead>

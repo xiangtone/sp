@@ -33,6 +33,8 @@ public class SpTroneModel
 	private int upDataType;
 	private int limiteType;
 	private String upDataName;
+	//商务ID
+	private int commerceUserId;
 	
 	public int getTroneType()
 	{
@@ -235,6 +237,12 @@ public class SpTroneModel
 	}
 	public void setUpDataName(String upDataName) {
 		this.upDataName = upDataName;
+	}
+	public int getCommerceUserId() {
+		return commerceUserId;
+	}
+	public void setCommerceUserId(int commerceUserId) {
+		this.commerceUserId = commerceUserId;
 	}
 	
 	

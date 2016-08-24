@@ -1,9 +1,3 @@
-<%@page import="com.system.server.TronePayCodeServer"%>
-<%@page import="com.system.model.TronePayCodeModel"%>
-<%@page import="com.system.util.Base64UTF"%>
-<%@page import="com.system.util.PageUtil"%>
-<%@page import="com.system.model.TroneModel"%>
-<%@page import="com.system.server.TroneServer"%>
 <%@page import="com.system.server.SpApiUrlServer"%>
 <%@page import="com.system.model.SpApiUrlModel"%>
 <%@page import="com.system.server.SpTroneServer"%>
@@ -15,28 +9,18 @@
 <%@page import="java.util.List"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="com.system.util.StringUtil"%>
+<%@page import="com.system.model.UserModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-
-	String query = StringUtil.getString(request.getParameter("query"),"");
-
-	int troneId = StringUtil.getInteger(request.getParameter("id"), -1);
-	int copy = StringUtil.getInteger(request.getParameter("copy"), -1);
-	TroneServer troneServer = new TroneServer();
-	TroneModel model = troneServer.getTroneById(troneId);
-	if(model==null)
-	{
-		response.sendRedirect("trone.jsp");
-		return;
+	UserModel user = (UserModel)session.getAttribute("user");
+	int userId=-1;
+	if(user!=null){
+		userId=user.getId();
 	}
 	List<SpModel> spList = new SpServer().loadSp();
 	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
 	List<SpApiUrlModel> spApiUrlList = new SpApiUrlServer().loadSpApiUrl();
-	
-	//把tbl_trone_paycode的数据找出来
-	TronePayCodeModel tronePayCodeModel = new TronePayCodeServer().getTronePayCode(model.getId());
-	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -46,20 +30,22 @@
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
-<script type="text/javascript" src="../sysjs/base.js"></script>
+<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
 <script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/base.js"></script>
 <script type="text/javascript">
 
 	var spList = new Array();
 	<%
 	for(SpModel spModel : spList)
 	{
+		if(spModel.getCommerceUserId()==userId){
 		%>
 		spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
 		<%
-	}
+	}}
 	%>
 
 	function joSpTrone(id,spId,troneName,spTroneApiId)
@@ -78,7 +64,7 @@
 	%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>',<%= spTrone.getTroneApiId() %>));<%}}%>
 
 	var spApiUrlList = new Array();
-	<%for(SpApiUrlModel  spTrone : spApiUrlList){%>spApiUrlList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%=spTrone.getName() %>'));<%}%>
+	<%for(SpApiUrlModel spTrone : spApiUrlList){%>spApiUrlList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%=spTrone.getName() %>'));<%}%>
 	
 	function spChange()
 	{
@@ -104,7 +90,6 @@
 		}
 		
 		showOrHideApiArea(false);
-		console.log("here spChange");
 	}
 	
 	function spTroneChange()
@@ -123,7 +108,12 @@
 				break;
 			}
 		}
-		console.log("here spTroneChange");
+	}
+	
+	function showOrHideApiArea(isShow)
+	{
+		document.getElementById("div_sp_trone_api").style.display = isShow ? "block" : "none";
+		document.getElementById("hid_exist_pay_code").value = isShow ? 1 : 0 ;
 	}
 	
 	$(function()
@@ -131,35 +121,7 @@
 		//SP的二级联动
 		$("#sel_sp").change(spChange);
 		$("#sel_sp_trone").change(spTroneChange);
-		resetForm();
 	});
-	
-	function resetForm()
-	{
-		$("#sel_sp").val("<%= model.getSpId() %>");
-		spChange();
-		$("#sel_sp_trone").val("<%= model.getSpTroneId() %>");
-		$("#sel_api_url").val("<%= model.getSpApiUrlId() %>");
-		$("#input_trone_name").val("<%= model.getTroneName() %>");
-		$("#input_trone_order").val("<%= model.getOrders() %>");
-		$("#input_trone_num").val("<%= model.getTroneNum() %>");
-		$("#input_price").val("<%= model.getPrice() %>");
-		
-		document.getElementById("chk_status").checked = <%= model.getStatus()==1 ? "true" : "false" %>;
-		setRadioCheck("dynamic",<%= model.getDynamic() %>);
-		setRadioCheck("match_price",<%= model.getMatchPrice() %>);
-		
-		$("#hid_exist_pay_code").val("<%= tronePayCodeModel==null ? 0 : 1 %>");
-		$("#hid_trone_pay_code_id").val("<%= tronePayCodeModel != null ? tronePayCodeModel.getId() : "" %>");
-		
-		$("#input_paycode").val("<%= tronePayCodeModel != null ? tronePayCodeModel.getPayCode() : "" %>");
-		$("#input_app_id").val("<%= tronePayCodeModel != null ? tronePayCodeModel.getAppId() : "" %>");
-		$("#input_channel_id").val("<%= tronePayCodeModel != null ? tronePayCodeModel.getChannelId() : "" %>");
-		
-		showOrHideApiArea(<%= tronePayCodeModel==null ? false : true %>);
-		
-		spTroneChange();
-	}
 	
 	function subForm() 
 	{
@@ -231,9 +193,7 @@
 				return;	
 			}
 		}
-		
-		//alert(document.getElementById("dynamic").value + "---" + document.getElementById("match_price").value);
-		
+
 		document.getElementById("addform").submit();
 	}
 	
@@ -243,7 +203,6 @@
 		spChange();
 	}
 	
-	
 	//声明整数的正则表达式
 	function isNum(a)
 	{
@@ -251,25 +210,18 @@
 		return reg.test(a);
 	}
 
-	function showOrHideApiArea(isShow)
-	{
-		document.getElementById("div_sp_trone_api").style.display = isShow ? "block" : "none";
-		document.getElementById("hid_exist_pay_code").value = isShow ? 1 : 0 ;
-	}
-	
 </script>
 <body>
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
 				<dd class="ddbtn" style="width: 200px">
-				<label>通道<%= copy==1 ? "复制" : "修改"  %></label>
+				<label >增加通道</label>
 				</dd>
 			</dl>
 			<br />	<br />		
 			<dl>
-				<form action="troneaction.jsp?query=<%= query %>" method="post" id="addform">
-					<input type="hidden" value="<%= copy==1 ? -1 : model.getId() %>" name="id" />
+				<form action="troneaction.jsp" method="post" id="addform">
 					<dd class="dd01_me">SP名称</dd>
 					<dd class="dd04_me">
 						<select name="sp_id" id="sel_sp" title="选择SP" style="width: 200px" onclick="namePicker(this,spList,onSpDataSelect)">
@@ -277,10 +229,11 @@
 							<%
 								for (SpModel sp : spList)
 								{
+									if(sp.getCommerceUserId()==userId){
 							%>
 							<option value="<%=sp.getId()%>"><%=sp.getShortName()%></option>
 							<%
-								}
+								}}
 							%>
 						</select>
 					</dd>
@@ -351,7 +304,7 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">状态</dd>
 					<dd class="dd03_me">
-						<input type="checkbox" name="status" style="width: 35px;float:left" checked="checked"  value="1" id="chk_status" >
+						<input type="checkbox" name="status" style="width: 35px;float:left" checked="checked"  id="chk_status" >
 						<label style="font-size: 14px;">启用</label>
 					</dd>
 					
@@ -361,7 +314,7 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">是否模糊</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="dynamic" style="width: 35px;float:left" value="0" >
+						<input type="radio" name="dynamic" style="width: 35px;float:left" value="0" checked="checked" >
 						<label style="font-size: 14px;float:left">否</label>
 						<input type="radio" name="dynamic" style="width: 35px;float:left" value="1" >
 						<label style="font-size: 14px;float:left">是</label>
@@ -373,7 +326,7 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">匹配价格</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="match_price" style="width: 35px;float:left" value="0" >
+						<input type="radio" name="match_price" style="width: 35px;float:left" value="0" checked="checked" >
 						<label style="font-size: 14px;float:left">否</label>
 						<input type="radio" name="match_price" style="width: 35px;float:left" value="1" >
 						<label style="font-size: 14px;float:left">是</label>
@@ -381,9 +334,8 @@
 					
 					<div style="clear: both;padding-bottom: 25px"></div>
 					
-					<div  id="div_sp_trone_api" >
+					<div  id="div_sp_trone_api" style="display: none" >
 						<input type="hidden" value="1" id="hid_exist_pay_code" name="exist_pay_code" />
-						<input type="hidden" value="1" id="hid_trone_pay_code_id" name="trone_pay_code_id" />
 						<dd class="dd00_me"></dd>
 						<dd class="dd01_me">PayCode</dd>
 						<dd class="dd03_me">
@@ -418,15 +370,11 @@
 						<input type="button" value="提 交" onclick="subForm()">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
-						<input type="button" value="重 置" onclick="resetForm()">
-					</dd>
-					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
 						<input type="button" value="返 回" onclick="history.go(-1)">
 					</dd>
 				</form>
 			</dl>
 		</div>
-
 	</div>
 </body>
 </html>
