@@ -181,12 +181,62 @@ function arrayReverse(arr) {
 	}
 	return arr;
 }
+function troneObj(id,spTroneId,name)
+{
+	var obj = {};
+	obj.id = id ;
+	obj.spTroneId = spTroneId;
+	obj.name = name;
+	return obj;
+}
+<!--SP通道 -->
+var troneArray =new Array();
+<%
+for(SdkTroneModel troneModel : sdkTroneList)
+{
+	%>
+	troneArray.push(new troneObj(<%= troneModel.getTroneId() %>,<%=troneModel.getSpTroneId()%>,'<%=troneModel.getName()%>'));
+	<%
+}
+%>
+<!--SP业务 -->
+var spTroneList=new Array;
+<%
+for(SdkSpTroneModel spTroneModel : spTroneList)
+{
+	%>
+	spTroneList.push(new selObj(<%= spTroneModel.getSpTroneId() %>,'<%=spTroneModel.getName()%>','<%=spTroneModel.getName()%>'));
+	<%
+}
+%>
+<!--APP-->
+var appArray=new Array;
+<%
+for(SdkAppModel appModel : appList)
+{
+	%>
+	appArray.push(new selObj(<%= appModel.getSdkAppId() %>,'<%=appModel.getName()%>','<%=appModel.getName()%>'));
+	<%
+}
+%>
+<!--渠道-->
+var channelArray=new Array;
+<%
+for( SdkChannelModel channelModel : channelList)
+{
+	%>
+	channelArray.push(new selObj(<%= channelModel.getSdkChannelId() %>,'<%=channelModel.getChannelName()%>','<%=channelModel.getChannelName()%>'));
+	<%
+}
+%>
 
 $(function()
 		{
 			$("#startdate").val(<%=startDate%>);
 			$("#enddate").val(<%=endDate%>);
 			$("#sp_trone_id").val(<%=spTroneId%>);
+			$("#sp_trone_id").change(spTroneChange);
+			spTroneChange();
 			$("#trone_id").val(<%=troneId%>);
 			$("#cp_id").val(<%=cpId%>);
 			$("#app_id").val(<%=appId%>);
@@ -196,6 +246,45 @@ $(function()
 
 		
 		});
+
+function onSpTroneDataSelect(joData)
+{
+	$("#sp_trone_id").val(joData.id);
+	spTroneChange();
+}
+<!--APP-->
+function onAppDataSelect(joData)
+{
+	$("#app_id").val(joData.id);
+}
+<!--渠道-->
+function onChannelDataSelect(joData)
+{
+	$("#sdk_channel_id").val(joData.id);
+}
+function selObj(id,name,text)
+{
+	var obj = {};
+	obj.id = id;
+	obj.value = name;
+	obj.text = text;
+	obj.pyText = pinyin.getCamelChars(text);
+	return obj;
+}
+
+function spTroneChange()
+{
+	var spTroneId = $("#sp_trone_id").val();
+	$("#trone_id").empty(); 
+	$("#trone_id").append("<option value='-1'>请选择</option>");
+	for(i=0; i<troneArray.length; i++)
+	{
+		if(troneArray[i].spTroneId==spTroneId)
+		{
+			$("#trone_id").append("<option value='" + troneArray[i].id + "'>" + troneArray[i].name + "</option>");
+		}
+	}
+}
 
 </script>
 <body>
@@ -218,7 +307,7 @@ $(function()
 					<dd class="dd01_me">SP业务</dd>
 					<dd class="dd04_me">
 						<select name="sp_trone_id" id="sp_trone_id" style="width: 110px;"
-							title="选择SP业务" >
+							title="选择SP业务" onclick="namePicker(this,spTroneList,onSpTroneDataSelect)">
 							<option value="-1">全部</option>
 							<%
 								for (SdkSpTroneModel spTrone : spTroneList) {
@@ -232,14 +321,7 @@ $(function()
 					<dd class="dd01_me">SP通道</dd>
 					<dd class="dd04_me">
 						<select name="trone_id" id="trone_id" style="width: 110px;">
-						<option value="-1">全部</option>
-							<%
-								for (SdkTroneModel trone : sdkTroneList) {
-							%>
-							<option value="<%=trone.getTroneId()%>"><%=trone.getName()%></option>
-							<%
-								}
-							%>
+						
 						</select>
 						<dd class="dd01_me">省份</dd>
 					<dd class="dd04_me">
@@ -271,7 +353,7 @@ $(function()
 					</dd>
 					<dd class="dd01_me">APP</dd>
 					<dd class="dd04_me">
-						<select name="app_id" id="app_id" style="width: 110px;">
+						<select name="app_id" id="app_id" style="width: 110px;" onclick="namePicker(this,appArray,onAppDataSelect)">
 						<option value="-1">全部</option>
 							<%
 								for (SdkAppModel appModel : appList) {
@@ -285,8 +367,8 @@ $(function()
 					
 					<dd class="dd01_me">渠道</dd>
 					<dd class="dd04_me">
-						<select name="sdk_channel_id" id="sdk_channel_id" title="请选择渠道"
-							style="width: 110px;">
+						<select name="sdk_channel_id" id="sdk_channel_id" title="请选择渠道" onclick="namePicker(this,channelArray,onChannelDataSelect)"
+							style="width: 110px;" >
 						<option value="-1">全部</option>
 							<%
 								for (SdkChannelModel channelModel : channelList) {
