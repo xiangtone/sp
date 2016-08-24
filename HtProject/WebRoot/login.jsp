@@ -1,11 +1,46 @@
+<%@page import="com.system.util.StringUtil"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.cache.RightConfigCacheMgr"%>
 <%@page import="com.system.model.UserModel"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+<%
+	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台");
+
+	boolean isLoginOut = StringUtil.getString(request.getParameter("login"), "nonono").equalsIgnoreCase("out");
+	
+	String userName = "";
+	
+	String pwd = "";
+	
+	if(!isLoginOut)
+	{
+		Cookie cookies[] = request.getCookies();
+		Cookie sCookie = null;
+		String sValue = null;
+		String sName = null;
+		for(int i=0; i<cookies.length; i++)
+		{
+			sCookie = cookies[i];
+			
+			if("USER_NAME".equalsIgnoreCase(sCookie.getName()))
+			{
+				userName = sCookie.getValue();	
+			}
+			
+			if("USER_PWD".equalsIgnoreCase(sCookie.getName()))
+			{
+				pwd = sCookie.getValue();	
+			}
+		}
+	}
+%>
+	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>运营管理平台-登录</title>
+<title><%= sysTitle + "-登录"  %></title>
 <script type="text/javascript" src="sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="sysjs/jquery.md5.js"></script>
 <script type="text/javascript">
@@ -52,8 +87,11 @@
 
 	document.onkeypress = keypress;
 
-	$(function() {
+	$(function() 
+	{
 		$("#name").focus();
+		$("#chk_re_name").attr("checked",<%= !StringUtil.isNullOrEmpty(userName) %>);
+		$("#chk_re_pwd").attr("checked",<%= !StringUtil.isNullOrEmpty(pwd) %>);
 	});
 
 	function resetMsg() {
@@ -65,7 +103,7 @@
 		var result = "";
 		$.ajax({
 			url : "loginaction.jsp",
-			data : "username=" + userName + "&pwd=" + password,
+			data : "username=" + userName + "&pwd=" + password + "&rename=" + ($("#chk_re_name").is(':checked')==true ? 1 : -1) + "&repwd=" + ($("#chk_re_pwd").is(':checked')==true ? 1 : -1) ,
 			cache : false,
 			async : false,
 			success : function(html) {
@@ -74,6 +112,27 @@
 		});
 		return result;
 	}
+	
+	function rememberUserName()
+	{
+		var nameCheck = $("#chk_re_name").is(':checked');
+		if(!nameCheck)
+		{
+			$("#chk_re_pwd").attr("checked",false);
+		}
+	}
+	
+	function rememberUserPwd()
+	{
+		var nameCheck = $("#chk_re_name").is(':checked');
+		var pwdCheck = $("#chk_re_pwd").is(':checked');
+		
+		if(!nameCheck)
+		{
+			$("#chk_re_pwd").attr("checked",false);
+		}
+	}
+	
 </script>
 
 
@@ -99,11 +158,15 @@
 		<div class="login-main">
 			<div class="login-top">
 				<h1 style="color: #A6A6A6">系统登录</h1>
-				<input type="text" id="name" placeholder="用户名" required="">
-				<input type="password" id="pwd" placeholder="密码" required="">
+				<input type="text" id="name" placeholder="用户名" required="" value="<%= userName %>">
+				<input type="password" id="pwd" placeholder="密码" required="" value = "<%= pwd %>">
 				<div class="login-bottom">
 					<div class="login-check"></div>
-
+				</div>
+				<div style="margin-bottom: 20px;">
+					<label><input type="checkbox" id="chk_re_name" style="border: 1px red solid;" onclick="rememberUserName()" />记住用户名</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<label><input type="checkbox" id="chk_re_pwd" onclick="rememberUserPwd()" />记住密码</label>
 				</div>
 				<input type="submit"  value="登录" onclick="subForm()"  />
 				<div class="clear" style="height: 20px; color: red; display: none"
