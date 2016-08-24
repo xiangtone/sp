@@ -189,7 +189,7 @@
 	{
 		if(confirm("CP是否已确认数据正确？审核后将会进入财务对帐流程！"))
 		{
-			window.location.href = "cpbilling.jsp?type=5&cpbillingid=" + id;
+			window.location.href = "cpbilling.jsp?type=5&cpbillingid=" + id + "&<%= Base64UTF.decode(query) %>";
 		}
 	}
 	
