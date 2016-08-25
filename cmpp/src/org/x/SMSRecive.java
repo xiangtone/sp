@@ -81,11 +81,11 @@ public class SMSRecive implements Runnable {
 
 					int iRespSeq = sr.seq;
 
-					logger.debug("sr.result:" + iRespResult);
-
-					logger.debug("sr.seq:" + iRespSeq);
-
-					logger.debug("sr.msgId:" + strRespMsgId);
+//					logger.debug("sr.result:" + iRespResult);
+//
+//					logger.debug("sr.seq:" + iRespSeq);
+//
+//					logger.debug("sr.msgId:" + strRespMsgId);
 
 					handle.receiveSubmitResp(this.ISMGID, (int) iRespSeq, (String) strRespMsgId, (int) iRespResult);
 
@@ -127,15 +127,15 @@ public class SMSRecive implements Runnable {
 
 					String linkId = cd.getLinkId();
 
-					logger.debug("content:" + cd.getMessage());
+//					logger.debug("content:" + cd.getMessage());
 
 					byte[] strContent = cd.getMessage();
 
 					int iReportFlag = cd.getRegisteredDelivery();
 
-					logger.debug("iReportFlag:" + iReportFlag);
-
-					logger.debug("strSpcode:" + strSpcode);
+//					logger.debug("iReportFlag:" + iReportFlag);
+//
+//					logger.debug("strSpcode:" + strSpcode);
 
 					// myLogger.info(FormatSysTime.getCurrentTimeA() + " new
 					// msg--spcode:"
@@ -147,7 +147,7 @@ public class SMSRecive implements Runnable {
 
 					{
 
-						logger.debug("状态报告信息....");
+//						logger.debug("状态报告信息....");
 
 						String reportDestCpn = cd.getDestCpn();
 
@@ -159,7 +159,7 @@ public class SMSRecive implements Runnable {
 
 						String stat2 = cd.getStat();
 
-						logger.debug("stat2:" + stat2);
+//						logger.debug("stat2:" + stat2);
 
 						int statDev = 0;
 

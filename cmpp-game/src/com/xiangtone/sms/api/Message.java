@@ -104,7 +104,7 @@ public class Message {
 		try {
 			p.pkHead.pkLen = in.readInt();
 			p.pkHead.pkCmd = in.readInt();
-			logger.debug("readHead ...pkCmd:" + p.pkHead.pkCmd);
+//			logger.debug("readHead ...pkCmd:" + p.pkHead.pkCmd);
 		} catch (IOException e) {
 			logger.error("readHead", e);
 			throw e;
@@ -138,22 +138,22 @@ public class Message {
 			switch (sr.packCmd) {
 			case 1: // StateCode.smSubmit
 				SmSubmitResult ssr = (SmSubmitResult) sr;
-				logger.debug("----receiver vcp ------stat=" + ssr.stat);
-				logger.debug("----receiver vcp submit message------");
+//				logger.debug("----receiver vcp ------stat=" + ssr.stat);
+//				logger.debug("----receiver vcp submit message------");
 				smSendSubmitAck(conn, ssr.stat);
 				break;
 			case 2: // StatCode.smSubmitAck
 				SmSubmitAckResult ssra = (SmSubmitAckResult) sr;
-				logger.debug("--------" + ssra.stat);
+//				logger.debug("--------" + ssra.stat);
 				break;
 			case 3:
 				SmDeliverResult sdr = (SmDeliverResult) sr;
-				logger.debug(" ------receiver platform-----stat =" + sdr.stat);
+//				logger.debug(" ------receiver platform-----stat =" + sdr.stat);
 				smSendDeliverAck(conn, sdr.stat);
 				break;
 			case 4:
 				SmDeliverAckResult sdar = (SmDeliverAckResult) sr;
-				logger.debug("---------deliverAck-----:" + sdar.stat);
+//				logger.debug("---------deliverAck-----:" + sdar.stat);
 				break;
 
 			default:
@@ -231,7 +231,7 @@ public class Message {
 		in = new DataInputStream(conn.sock.getInputStream());
 
 		readHead(in, pack); // read header
-		logger.debug("totalLen:" + pack.pkHead.pkLen);
+//		logger.debug("totalLen:" + pack.pkHead.pkLen);
 		byte packbuf[] = new byte[pack.pkHead.pkLen - 8];
 		// logger.debug(Arrays.toString(packbuf));
 		in.read(packbuf); // read body message
@@ -244,7 +244,7 @@ public class Message {
 		switch (pack.pkHead.pkCmd) {
 
 		case 1:
-			logger.debug("------- Case 1 -------");
+//			logger.debug("------- Case 1 -------");
 			SmSubmitResult ssr = new SmSubmitResult();
 			try {
 				ssr.readInBytes(packbuf); // 处理信息体
@@ -255,7 +255,7 @@ public class Message {
 			}
 			// break;
 		case 2:
-			logger.debug("-------case 2--------");
+//			logger.debug("-------case 2--------");
 			SmSubmitAckResult ssra = new SmSubmitAckResult();
 			try {
 				ssra.readInBytes(packbuf);
@@ -266,7 +266,7 @@ public class Message {
 			}
 
 		case 3:// 平台上行信息
-			logger.debug("-------Case 3 --------");
+//			logger.debug("-------Case 3 --------");
 			SmDeliverResult sdr = new SmDeliverResult();
 			try {
 				sdr.readInBytes(packbuf);
@@ -277,7 +277,7 @@ public class Message {
 			}
 			// break;
 		case 4:
-			logger.debug("-----case 4------");
+//			logger.debug("-----case 4------");
 			SmDeliverAckResult adar = new SmDeliverAckResult();
 			try {
 				adar.readInBytes(packbuf);

@@ -113,19 +113,19 @@ public class MessageSubmit {
 			this.sub.setMediaType(this.mediaType);
 			this.sub.setContent(this.content);
 			this.sub.setRegisteredDelivery(this.delivery);
-			myLogger.debug("开始连接... 发送MT信息...");
+//			myLogger.debug("开始连接... 发送MT信息...");
 
 			String smsServerIp = (String) ConfigManager.getConfigData("sms_server_ip",
 					"xiangtoneServerip not found!");
 			String smsServerPort = (String) ConfigManager.getConfigData("sms_server_port",
 					"xiangtoneServerport not found!");
-			myLogger.debug(smsServerIp+":"+smsServerPort);
+//			myLogger.debug(smsServerIp+":"+smsServerPort);
 
 			this.xtsms.connectToServer(smsServerIp, Integer.parseInt(smsServerPort), this.conn);
-			myLogger.debug(this.conn.sock);
+//			myLogger.debug(this.conn.sock);
 			this.xtsms.sendSmSubmit(this.conn, this.sub);
 			this.xtsms.readPa(this.conn);
-			myLogger.debug("提交成功...");
+//			myLogger.debug("提交成功...");
 		} catch (Exception e) {
 			myLogger.error("sendResultToSmsPlatform",e);
 		}finally {

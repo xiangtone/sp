@@ -92,7 +92,7 @@ public class Message {
 		try {
 			p.pkHead.pkLen = in.readInt();
 			p.pkHead.pkCmd = in.readInt();
-			myLogger.debug("readHead ...pkCmd:" + p.pkHead.pkCmd);
+//			myLogger.debug("readHead ...pkCmd:" + p.pkHead.pkCmd);
 		} catch (IOException e) {
 			myLogger.error("readHead",e);
 			throw e;
@@ -119,22 +119,22 @@ public class Message {
 			switch (sr.packCmd) {
 			case 1:
 				SmSubmitResult ssr = (SmSubmitResult) sr;
-				myLogger.debug("----receiver vcp ------stat=" + SmSubmitResult.stat);
-				myLogger.debug("----receiver vcp submit message------");
+//				myLogger.debug("----receiver vcp ------stat=" + SmSubmitResult.stat);
+//				myLogger.debug("----receiver vcp submit message------");
 				smSendSubmitAck(conn, SmSubmitResult.stat);
 				break;
 			case 2:
 				SmSubmitAckResult ssra = (SmSubmitAckResult) sr;
-				myLogger.debug("--------" + ssra.stat);
+//				myLogger.debug("--------" + ssra.stat);
 				break;
 			case 3:
 				SmDeliverResult sdr = (SmDeliverResult) sr;
-				myLogger.debug(" ------receiver platform-----stat =" + SmDeliverResult.stat);
+//				myLogger.debug(" ------receiver platform-----stat =" + SmDeliverResult.stat);
 				smSendDeliverAck(conn, SmDeliverResult.stat);
 				break;
 			case 4:
 				SmDeliverAckResult sdar = (SmDeliverAckResult) sr;
-				myLogger.debug("---------deliverAck-----:" + sdar.stat);
+//				myLogger.debug("---------deliverAck-----:" + sdar.stat);
 				break;
 			default:
 				myLogger.debug("---------Error packet-----------");
@@ -208,13 +208,13 @@ public class Message {
 		in = new DataInputStream(conn.sock.getInputStream());
 
 		readHead(in, pack);
-		myLogger.debug("totalLen:" + pack.pkHead.pkLen);
+//		myLogger.debug("totalLen:" + pack.pkHead.pkLen);
 		byte[] packbuf = new byte[pack.pkHead.pkLen - 8];
 		in.read(packbuf);
 
 		switch (pack.pkHead.pkCmd) {
 		case 1:
-			myLogger.debug("------- Case 1 -------");
+//			myLogger.debug("------- Case 1 -------");
 			SmSubmitResult ssr = new SmSubmitResult();
 			try {
 				ssr.readInBytes(packbuf);
@@ -225,7 +225,7 @@ public class Message {
 				throw new UnknownPackException();
 			}
 		case 2:
-			myLogger.debug("-------case 2--------");
+//			myLogger.debug("-------case 2--------");
 			SmSubmitAckResult ssra = new SmSubmitAckResult();
 			try {
 				ssra.readInBytes(packbuf);
@@ -236,7 +236,7 @@ public class Message {
 				throw new UnknownPackException();
 			}
 		case 3:
-			myLogger.debug("-------Case 3 --------");
+//			myLogger.debug("-------Case 3 --------");
 			SmDeliverResult sdr = new SmDeliverResult();
 			try {
 				sdr.readInBytes(packbuf);
@@ -247,7 +247,7 @@ public class Message {
 				throw new UnknownPackException();
 			}
 		case 4:
-			myLogger.debug("-----case 4------");
+//			myLogger.debug("-----case 4------");
 			SmDeliverAckResult sdar = new SmDeliverAckResult();
 			try {
 				sdar.readInBytes(packbuf);

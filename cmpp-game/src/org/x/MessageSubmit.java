@@ -140,14 +140,14 @@ public class MessageSubmit {
 					"xiangtone_serverip not found!");
 			String smsServerport = (String) ConfigManager.getInstance().getConfigData("sms_serverport",
 					"xiangtone_serverport not found!");
-			logger.debug(smsServerip);
-			logger.debug(smsServerport);
+//			logger.debug(smsServerip);
+//			logger.debug(smsServerport);
 
 			xtsms.connectToServer(smsServerip, Integer.parseInt(smsServerport), conn); // 连接服务器
-			logger.debug(conn.sock);
+//			logger.debug(conn.sock);
 			xtsms.sendSmSubmit(conn, sub); // 提交信息
 			xtsms.readPa(conn);// 读取返回
-			logger.debug("提交成功。。");
+//			logger.debug("提交成功。。");
 		} catch (Exception e) {
 			logger.error("", e);
 		}finally{

@@ -145,8 +145,8 @@ public class MessageGame {
 		String className = props.getProperty(itemname, "paramName");
 		// 取得文件中的对应方法名的串
 		String classMethod = props.getProperty(itemname + ".METHOD", "paramName");
-		logger.debug("itemname:" + itemname + "---itemaction:" + itemaction + "--classname:" + className
-				+ "---classMethod:" + classMethod);
+//		logger.debug("itemname:" + itemname + "---itemaction:" + itemaction + "--classname:" + className
+//				+ "---classMethod:" + classMethod);
 
 		// if(className.equals("paramName"))
 		// className="ERROR";
@@ -169,7 +169,7 @@ public class MessageGame {
 												msgSet, costSet, ismgSet, linkidSet, cpntypeSet, msgIdSet })
 								.toString());
 
-				logger.debug("feetype" + feeType);
+//				logger.debug("feetype" + feeType);
 			} catch (Exception e) {
 				logger.error("", e);
 				e.printStackTrace();
@@ -230,8 +230,8 @@ public class MessageGame {
 		int i7 = cpntypeSet.size();
 		int i5 = ismgSet.size();
 		int i8 = msgIdSet.size();
-		logger.debug(
-				"i1:" + i1 + "  i2:" + i2 + "  i3:" + i3 + "  i4:" + i4 + "  i5:" + i5 + "  i6:" + i6 + "  i7:" + i7);
+//		logger.debug(
+//				"i1:" + i1 + "  i2:" + i2 + "  i3:" + i3 + "  i4:" + i4 + "  i5:" + i5 + "  i6:" + i6 + "  i7:" + i7);
 		String strFeeType = (new Integer(feetype)).toString();
 		try {
 			for (int i = 0; i < i1 && i < i2 && i < i3 && i < i4 && i < i6 && i < i7 && i < i8; i++) {
@@ -243,7 +243,7 @@ public class MessageGame {
 				String ismgID = ismgCode;
 				ismgID = (String) ismgSet.get(i);
 				String _msgId = (String) msgIdSet.get(i);
-				logger.debug("------msgId value is:" + _msgId);
+//				logger.debug("------msgId value is:" + _msgId);
 				int tempCpntype = ((Integer) cpntypeSet.get(i)).intValue();
 				/*
 				 * logger.debug(":::::::::::::::::::");
@@ -289,7 +289,7 @@ public class MessageGame {
 					ms.setSendTime(FormatSysTime.getCurrentTimeA());
 					ms.sendResultToSmsPlatform();
 					ms.insertMTlog();
-					logger.debug("insert mt log ...OK!!");
+//					logger.debug("insert mt log ...OK!!");
 
 				}
 
