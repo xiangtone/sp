@@ -31,14 +31,14 @@ public final class CmppeDeliverResult extends CmppeResult {
 
 	public void readInBytes(byte[] b) throws Exception {
 		try {
-			logger.debug("the b length is:" + b.length);
+//			logger.debug("the b length is:" + b.length);
 			deByteCode = new DeByteCode(b);
 
 			msgId = deByteCode.getBytes(8);
 
 			dstAddr = deByteCode.asciiz(21);
 			svcType = deByteCode.asciiz(10);
-			logger.debug("dstAddr" + dstAddr);
+//			logger.debug("dstAddr" + dstAddr);
 			// logger.debug("svcType:"+svcType);
 			tpPid = deByteCode.int8();
 			tpUdhi = deByteCode.int8();
@@ -47,14 +47,14 @@ public final class CmppeDeliverResult extends CmppeResult {
 			// srcAddr = deByteCode.asciiz(21);
 			srcAddr = deByteCode.asciiz(32);
 			srcType = deByteCode.int8();
-			logger.debug("srcAddr:" + srcAddr);
+//			logger.debug("srcAddr:" + srcAddr);
 			registeredDelivery = deByteCode.int8();
-			logger.debug("registeredDelivery:" + registeredDelivery);
+//			logger.debug("registeredDelivery:" + registeredDelivery);
 			smLen = deByteCode.int8();
 			int bb = smLen;
 			if (smLen < 0)
 				bb += 256;
-			logger.debug("smLen:" + bb);
+//			logger.debug("smLen:" + bb);
 			if (registeredDelivery == 0) {
 				// shortMsg = deByteCode.getBytes(bb);
 				shortMsg = deByteCode.getBytes(bb);
@@ -89,7 +89,7 @@ public final class CmppeDeliverResult extends CmppeResult {
 			// reserve = deByteCode.asciiz(8);
 			// byte[] linkids = deByteCode.getBytes(20);
 
-			logger.info("linkid:" + linkid);
+//			logger.info("linkid:" + linkid);
 			STAT = 0;
 		} catch (Exception e) {
 			logger.error("",e);
@@ -204,14 +204,7 @@ public final class CmppeDeliverResult extends CmppeResult {
 	}
 
 	public void printAll() {
-		logger.debug("---dataCoding : " + dataCoding);
-		logger.debug("---cpn: " + srcAddr);
-		logger.debug("---spcode:" + dstAddr);
-		logger.debug("---shortMsg:" + shortMsg);
-		logger.debug("---svcType:" + svcType);
-		logger.debug("---registeredDelivery:" + registeredDelivery);
-		logger.debug("---tpUdhi:" + tpUdhi);
-		logger.debug("---linkid:" + linkid);
+		logger.debug("---dataCoding : " + dataCoding+"---cpn: " + srcAddr+"---spcode:" + dstAddr+"---shortMsg:" + shortMsg+"---svcType:" + svcType+"---registeredDelivery:" + registeredDelivery+"---tpUdhi:" + tpUdhi+"---linkid:" + linkid);
 	}
 
 }

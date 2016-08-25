@@ -81,7 +81,7 @@ public class SMSoperate {
 
 		try {
 
-			logger.debug(srcCpn.length());
+//			logger.debug(srcCpn.length());
 
 			if (srcCpn.trim().length() > 11)
 
@@ -290,12 +290,12 @@ public class SMSoperate {
 
 			strContent = strContent.toUpperCase().trim();
 
-			logger.debug("mo.content:" + strContent+", spcode :" + deliverSpCode);
+//			logger.debug("mo.content:" + strContent+", spcode :" + deliverSpCode);
 
 			// 处理长号//061116
-			logger.debug("start getUserDetail");
+//			logger.debug("start getUserDetail");
 			smsus.getUserDetail(this.deliverSpCode, strContent);
-			logger.debug("end getUserDetail");
+//			logger.debug("end getUserDetail");
 			// logger.debug("this.deliverSpCode:"+deliverSpCode);
 
 			// 处理长号//061116
@@ -372,7 +372,7 @@ public class SMSoperate {
 
 //			logger.debug(smsus.getUSchedSpCode());
 
-			logger.debug("linkid is:" + this.linkid);
+//			logger.debug("linkid is:" + this.linkid);
 
 			// 加入监控模块
 
@@ -388,7 +388,7 @@ public class SMSoperate {
 
 			String stat = smsTovcp.sendMoSmsToVcp(smsmo);
 
-			logger.debug("派发并发送结果:" + stat);
+//			logger.debug("派发并发送结果:" + stat);
 
 			// 如果发送不成功,应该进一步处理
 

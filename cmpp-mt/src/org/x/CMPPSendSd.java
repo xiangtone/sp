@@ -137,7 +137,7 @@ public class CMPPSendSd implements CMPPSend {
 
 	public void send(byte[] submitContent) {
 
-		logger.debug("send sms by qw's gateway---mt.cpn:" + mt.feeCpn +"mt.feeCode:" + mt.feeCode+ "mt.infoFee:" + mt.infoFee);
+//		logger.debug("send sms by qw's gateway---mt.cpn:" + mt.feeCpn +"mt.feeCode:" + mt.feeCode+ "mt.infoFee:" + mt.infoFee);
 
 		try {
 			// msgId
@@ -145,7 +145,7 @@ public class CMPPSendSd implements CMPPSend {
 			// logger.debug("msgid value is at sd" + tempMsgId);
 			// logger.debug(tempMsgId);
 			long intMsgId = (new Long(tempMsgId)).longValue();
-			logger.debug(intMsgId);
+//			logger.debug(intMsgId);
 			byte[] msgId = new byte[8];// 初始值为0
 
 			IntByteConvertor.putLong(msgId, intMsgId, 0);
@@ -260,14 +260,14 @@ public class CMPPSendSd implements CMPPSend {
 
 			}
 			con = instance.con;
-			logger.debug(con.sock);
+//			logger.debug(con.sock);
 			// int seq = -1;
 			// logger.debug("before ");
 
 			int seq = p.cmppSubmit(con, sub);
 			mt.submitSeq = seq;
 			mt.insertMTLog();
-			logger.debug("seq提交成功:" + seq);
+//			logger.debug("seq提交成功:" + seq);
 			// Thread.currentThread().sleep(100);
 			// myLogger.info(FormatSysTime.getCurrentTimeA() + " send
 			// msg--spcode:" +

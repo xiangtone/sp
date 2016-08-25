@@ -99,7 +99,7 @@ public class SMSRecive implements Runnable {
 
 					cd.STAT = -1;
 
-					logger.debug("有消息上来了...");
+//					logger.debug("有消息上来了...");
 
 					/////////////////////////////
 
@@ -184,7 +184,7 @@ public class SMSRecive implements Runnable {
 
 					}
 
-					cd.printAll(); // 打印mo消息;
+//					cd.printAll(); // 打印mo消息;
 
 					handle.setDeliverIsmgID(strIsmgid);
 

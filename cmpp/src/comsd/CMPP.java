@@ -26,7 +26,7 @@ public final class CMPP {
 		Socket s = null;
 		try {
 			s = new Socket(host, port);
-			LOG.debug(s);
+//			LOG.debug(s);
 			s.setSoTimeout(0x927c0);
 		} catch (IOException e) {
 			LOG.error("", e);
@@ -169,7 +169,7 @@ public final class CMPP {
 		int idLen = cl.icpId.length;
 
 		int authLen = cl.icpAuth.length;
-		LOG.debug("authLen:" + authLen);
+//		LOG.debug("authLen:" + authLen);
 
 		strcpy(md5Byte, cl.icpId, 0, idLen);
 		strcpy(md5Byte, cl.icpAuth, 15, authLen);
@@ -203,9 +203,9 @@ public final class CMPP {
 			tools.strcpy(buf, ch.pkLen, 0);
 			tools.strcpy(buf, ch.pkCmd, 4);
 			tools.strcpy(buf, ch.pkSeq, 8);
-			for (int i = 0; i < ch.pkLen; i++) {
-				System.out.print(buf[i] + ",");
-			}
+//			for (int i = 0; i < ch.pkLen; i++) {
+//				System.out.print(buf[i] + ",");
+//			}
 
 			out.write(buf, 0, ch.pkLen);
 			out.flush();
@@ -280,8 +280,8 @@ public final class CMPP {
 
 	protected void sendHeader(byte[] buf, CmppeHead ch) throws IOException {
 
-		LOG.debug("send ch.pkLen:" + ch.pkLen);
-		LOG.debug("send ch.pkCmd:" + ch.pkCmd);
+//		LOG.debug("send ch.pkLen:" + ch.pkLen);
+//		LOG.debug("send ch.pkCmd:" + ch.pkCmd);
 		tools.strcpy(buf, ch.pkLen, 0);
 		tools.strcpy(buf, ch.pkCmd, 4);
 		tools.strcpy(buf, ch.pkSeq, 8);
@@ -417,7 +417,7 @@ public final class CMPP {
 				LOG.error("", e);
 				throw e;
 			}
-			LOG.info("cmppSendActiveResp:end");
+//			LOG.info("cmppSendActiveResp:end");
 		}
 	}
 
@@ -428,8 +428,8 @@ public final class CMPP {
 		CmppeHead ch = new CmppeHead();
 		new CmppePack();
 		try {
-			LOG.debug("srcId value is:" + new String(cs.srcTerminalId));
-			LOG.debug("socket is:" + conn.sock);
+//			LOG.debug("srcId value is:" + new String(cs.srcTerminalId));
+//			LOG.debug("socket is:" + conn.sock);
 			OutputStream os = conn.sock.getOutputStream();
 			int len = 12;
 			len += tools.strcpy(buf, cs.msgId, len);
@@ -470,11 +470,11 @@ public final class CMPP {
 			tools.strcpy(buf, ch.pkCmd, 4);
 			tools.strcpy(buf, ch.pkSeq, 8);
 
-			for (int i = 0; i < len; i++)
-				System.out.print(buf[i] + ",");
+//			for (int i = 0; i < len; i++)
+//				System.out.print(buf[i] + ",");
 			os.write(buf, 0, len); // Ð´
 			os.flush();
-			LOG.debug("write finished");
+//			LOG.debug("write finished");
 			userSeq = conn.seq;
 			conn.seq++;
 			if (conn.seq == 0x7fffffff)
@@ -492,33 +492,33 @@ public final class CMPP {
 			switch (cr.packId) {
 
 			case -2147483648:
-				LOG.debug("get nack pack");
+//				LOG.debug("get nack pack");
 				break;
 
 			case -2147483647:
 				CmppeLoginResult cl = (CmppeLoginResult) cr;
-				LOG.debug("------------login resp----------: VERSION = " + cl.version);
-				LOG.debug("------------login resp----------: STAT = " + ((CmppeResult) (cl)).stat);
+//				LOG.debug("------------login resp----------: VERSION = " + cl.version);
+//				LOG.debug("------------login resp----------: STAT = " + ((CmppeResult) (cl)).stat);
 				break;
 
 			case -2147483646:
-				LOG.debug("------------logout resp----------: STAT = " + cr.stat);
+//				LOG.debug("------------logout resp----------: STAT = " + cr.stat);
 				break;
 
 			case -2147483644:
 				CmppeSubmitResult sr = (CmppeSubmitResult) cr;
 				sr.flag = 0;
-				LOG.debug("------------submit resp----------: STAT = " + sr.stat + " SEQ = " + sr.seq);
+//				LOG.debug("------------submit resp----------: STAT = " + sr.stat + " SEQ = " + sr.seq);
 				break;
 
 			case 5: // '\005'
-				LOG.debug("------------deliver---------: STAT = 0");
+//				LOG.debug("------------deliver---------: STAT = 0");
 				CmppeDeliverResult cd = (CmppeDeliverResult) cr;
 				cmppSendDeliverResp(con, cd);
-				LOG.debug("----------send deliver -------ok");
+//				LOG.debug("----------send deliver -------ok");
 				break;
 			case -2147483641:
-				LOG.debug("---------cancel-----------: STAT = " + cr.stat);
+//				LOG.debug("---------cancel-----------: STAT = " + cr.stat);
 				break;
 
 			case -2147483640:
@@ -553,7 +553,7 @@ public final class CMPP {
 				if (pack.pkHead.pkCmd != 8) {
 					break;
 				} else {
-					LOG.debug("receive gateway active");
+//					LOG.debug("receive gateway active");
 					// LOG.debug("receive gateway active...");
 					cmppSendActiveResp(conn, pack.pkHead.pkSeq); // if
 					// pkCmd
@@ -618,16 +618,16 @@ public final class CMPP {
 				return sr;
 			}
 			sr.result = in.readInt();// change at 061208
-			LOG.debug("submit result is:::::" + sr.result);
+//			LOG.debug("submit result is:::::" + sr.result);
 
 			return sr;
 
 		case 5: // '\005' get mo
-			LOG.debug("------- Case 5 -------");
+//			LOG.debug("------- Case 5 -------");
 			CmppeDeliverResult cd = new CmppeDeliverResult();
 			try {
 				byte packbuf[] = new byte[pack.pkHead.pkLen - 12];
-				LOG.debug(" " + (pack.pkHead.pkLen - 12) + " in available:" + in.available());
+//				LOG.debug(" " + (pack.pkHead.pkLen - 12) + " in available:" + in.available());
 				in.read(packbuf);
 				cd.readInBytes(packbuf); // ½âÎödeliverÐÅÏ¢
 
@@ -668,7 +668,7 @@ public final class CMPP {
 			// LOG.info("cmppSendDeliverResp:begin" + " " + cd.msgId);
 			// check msgId
 			if (cd.msgId.length != 8) {
-				LOG.error("cd.msgId:" + cd.msgId + " is wrong");
+//				LOG.error("cd.msgId:" + cd.msgId + " is wrong");
 				return;
 			}
 			CmppeHead ch = new CmppeHead();

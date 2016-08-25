@@ -18,7 +18,7 @@ public class Message {
 		try {
 			localSocket = new Socket(host, port);
 			localSocket.setSoTimeout(600000);
-			myLogger.debug(localSocket.toString());
+//			myLogger.debug(localSocket.toString());
 		} catch (IOException localIOException) {
 			myLogger.error("connectToServer",localIOException);
 			throw localIOException;
@@ -48,7 +48,7 @@ public class Message {
 			int bodyLen = buf.length;
 			byte[] header = new byte[8];
 			ByteCode bc = new ByteCode(8);
-			myLogger.debug(8 + bodyLen);
+//			myLogger.debug(8 + bodyLen);
 			bc.AddInt(8 + bodyLen);
 			bc.AddInt(3);
 

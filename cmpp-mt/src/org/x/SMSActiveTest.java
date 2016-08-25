@@ -27,7 +27,7 @@ public class SMSActiveTest implements Runnable {
 		try {
 			int i = 0;
 			while (true) {
-				logger.debug("send active test");
+				System.out.println("send active test");
 				try {
 					p.cmppActiveTest(cmppcon.con);
 					Thread.currentThread().sleep(5000);

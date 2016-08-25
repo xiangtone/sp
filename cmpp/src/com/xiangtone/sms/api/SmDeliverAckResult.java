@@ -21,12 +21,12 @@ public class SmDeliverAckResult extends SmResult {
 				byte type = deByteCode.int8();
 				short len = deByteCode.int16();
 				int valueLen = len - 3;
-				logger.debug("type:" + type);
+//				logger.debug("type:" + type);
 				switch (type) {
 				case 100:
 					errorCode = deByteCode.asciiz(valueLen);
 					stat = errorCode;
-					logger.debug("stat:" + stat);
+//					logger.debug("stat:" + stat);
 					break;
 
 				default:

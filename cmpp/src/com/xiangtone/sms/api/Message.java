@@ -22,7 +22,7 @@ public class Message {
 		try {
 			s = new Socket(host, port);
 			s.setSoTimeout(0x927c0);
-			logger.debug(s.toString());
+//			logger.debug(s.toString());
 		} catch (IOException e) {
 			throw e;
 		}
@@ -55,7 +55,7 @@ public class Message {
 			int bodyLen = buf.length; // 信息体长度
 			byte[] header = new byte[8]; // 信息头
 			ByteCode bc = new ByteCode(8);
-			logger.debug(8 + bodyLen);
+//			logger.debug(8 + bodyLen);
 			bc.AddInt(8 + bodyLen); // 信息头 add total length
 			bc.AddInt(StateCode.SM_DELIVER); // 信息头 add message type
 			// bc.AddInt(3);
@@ -209,8 +209,8 @@ public class Message {
 			ack.AddInt16((short) (3 + len1)); // add length
 			ack.addAsciiz(ackCode, len1); // add value string
 			byte[] b = ack.getBytes();
-			for (int i = 0; i < b.length; i++)
-				System.out.print(b[i] + ",");
+//			for (int i = 0; i < b.length; i++)
+//				System.out.print(b[i] + ",");
 			out.write(ack.getBytes());
 
 		} catch (Exception e) {

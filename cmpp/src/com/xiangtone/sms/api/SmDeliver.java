@@ -32,7 +32,7 @@ public class SmDeliver {
 
 	// set sp_code
 	public void setSpCode(String spCode) throws Exception {
-		logger.debug("sm_deliver: " + spCode);
+//		logger.debug("sm_deliver: " + spCode);
 		bc.AddByte(StateCode.SP_CODE);
 		bc.AddShort((short) (3 + spCode.getBytes().length));
 		bc.AddBytes(spCode.getBytes());
@@ -49,7 +49,7 @@ public class SmDeliver {
 
 	// set game_action
 	public void setActionCode(String gameAction) throws Exception {
-		logger.debug("sm_deliver_action:" + gameAction);
+//		logger.debug("sm_deliver_action:" + gameAction);
 		bc.AddByte(StateCode.ACTION_CODE);
 		bc.AddShort((short) (3 + gameAction.getBytes().length));
 		bc.AddBytes(gameAction.getBytes());
@@ -65,7 +65,7 @@ public class SmDeliver {
 
 	// set linkid //add at 061120
 	public void setLinkID(String linkid) throws Exception {
-		logger.info("linkid is:" + linkid);
+//		logger.info("linkid is:" + linkid);
 		if (linkid == null) {// change at 061204
 			byte[] _linkid = new byte[20];
 			bc.AddByte(StateCode.LINK_ID);

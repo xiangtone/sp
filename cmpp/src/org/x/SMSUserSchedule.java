@@ -75,20 +75,19 @@ public class SMSUserSchedule {
 			this.vcpID = 1;
 			this.spCode = spcode;
 			String content = info.toUpperCase().trim();
-			logger.debug("spcode:" + spcode + ", info:" + info);
+//			logger.debug("spcode:" + spcode + ", info:" + info);
 			if (isItemExist(content)) {
 				if (this.spCode.length() > 8) {
 					this.spCode = this.spCode.substring(0, 8);
 					this.spCode += "" + this.gameID;// change at 070201
 					this.actionCode = "";
 					this.gameCode = content;
-					logger.debug("ItemExist");
+//					logger.debug("ItemExist");
 					return;
 				}
 
 			}
-			logger.debug("game id:" + this.gameID);
-			logger.debug("spcode:" + this.spCode);
+//			logger.debug("game id:" + this.gameID+", spcode:" + this.spCode);
 			int offset = content.indexOf(" ", 0);// еп╤о©у╦Я
 			if (offset > 0) {
 				gameCode = content.substring(0, offset);
@@ -105,7 +104,7 @@ public class SMSUserSchedule {
 			}
 
 			int len = spCode.length();
-			logger.debug("this length is:" + len);
+//			logger.debug("this length is:" + len);
 			String strspcode = "";
 			String strgame = "";
 			switch (len) {
@@ -146,8 +145,8 @@ public class SMSUserSchedule {
 					this.gameCode = "ERROR";
 					this.spCode = strspcode;
 				}
-				logger.debug("***********this.vcpID:" + this.vcpID);
-				logger.debug("***********this.vcpID:" + this.spCode);
+//				logger.debug("***********this.vcpID:" + this.vcpID);
+//				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN1:
@@ -164,8 +163,8 @@ public class SMSUserSchedule {
 					this.gameCode = "ERROR";
 					this.spCode = strspcode;
 				}
-				logger.debug("***********this.vcpID:" + this.vcpID);
-				logger.debug("***********this.vcpID:" + this.spCode);
+//				logger.debug("***********this.vcpID:" + this.vcpID);
+//				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN2:
@@ -182,8 +181,8 @@ public class SMSUserSchedule {
 					this.gameCode = "ERROR";
 					this.spCode = strspcode;
 				}
-				logger.debug("***********this.vcpID:" + this.vcpID);
-				logger.debug("***********this.vcpID:" + this.spCode);
+//				logger.debug("***********this.vcpID:" + this.vcpID);
+//				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN3:
@@ -200,8 +199,8 @@ public class SMSUserSchedule {
 					this.gameCode = "ERROR";
 					this.spCode = strspcode;
 				}
-				logger.debug("***********this.vcpID:" + this.vcpID);
-				logger.debug("***********this.vcpID:" + this.spCode);
+//				logger.debug("***********this.vcpID:" + this.vcpID);
+//				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			case SPCODE_LEN + GAME_LEN4:
@@ -218,8 +217,8 @@ public class SMSUserSchedule {
 					this.gameCode = "ERROR";
 					this.spCode = strspcode;
 				}
-				logger.debug("***********this.vcpID:" + this.vcpID);
-				logger.debug("***********this.vcpID:" + this.spCode);
+//				logger.debug("***********this.vcpID:" + this.vcpID);
+//				logger.debug("***********this.vcpID:" + this.spCode);
 
 				break;
 			default:

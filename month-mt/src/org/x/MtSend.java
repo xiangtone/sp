@@ -285,8 +285,8 @@ public class MtSend implements Runnable {
 					int feeCount = price / 2 + 1;
 
 					if (succCount < feeCount) {
-						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : " + succCount
-								+ " not_enough.");
+//						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : " + succCount
+//								+ " not_enough.");
 						notEnoughCount++;
 						getMessage(map);
 						updateCompanysUser(id, (String) map.get("msgid"), DateTimeTool.getTomorrow());
@@ -308,8 +308,8 @@ public class MtSend implements Runnable {
 							millis = System.currentTimeMillis();
 						}
 					} else {
-						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : " + succCount
-								+ " enough.");
+//						logger.debug("price : " + price + " fee_count : " + feeCount + " succ_count : " + succCount
+//								+ " enough.");
 						enoughCount++;
 						updateCompanysUser(id, DateTimeTool.getNextMonthFirstday());
 					}
@@ -322,11 +322,7 @@ public class MtSend implements Runnable {
 				logger.error("error service : " + id + ", " + company + ", " + cpn + ", " + serviceid, e);
 			}
 		}
-		logger.debug("total :  " + list.size());
-		logger.debug("enoughCount : " + enoughCount);
-		logger.debug("sendMtCount : " + sendMtCount);
-		logger.debug("notEnoughCount : " + notEnoughCount);
-		logger.debug("errorCount : " + errorCount);
+		logger.debug("total :  " + list.size()+", enoughCount : " + enoughCount+", sendMtCount : " + sendMtCount+", notEnoughCount : " + notEnoughCount+", errorCount : " + errorCount);
 	}
 
 	private void sendMT(Map<String, String> map, String[] msg) {
@@ -371,12 +367,12 @@ public class MtSend implements Runnable {
 			ms.setMsgId(msgId);
 			ms.setSendTime(DateTimeTool.getCurrentTime());
 
-			logger.debug("destCpn : '" + ms.destCpn + "', " + "feeCpn : '" + ms.feeCpn + "', " + "cpnType : '"
-					+ ms.cpntype + "', " + "linkid : '" + ms.linkId + "', " + "content : '" + ms.content + "', "
-					+ "serverID : '" + ms.serverID + "', " + "vcpID : '" + ms.vcpID + "', " + "provID : '" + ms.provID
-					+ "', " + "spCode : '" + ms.spCode + "', " + "feeType : '" + ms.feeType + "', " + "mediaType : '"
-					+ ms.mediaType + "', " + "delivery : '" + ms.delivery + "', " + "gameCode : '" + ms.gameCode + "', "
-					+ "msgId : '" + ms.msgId + "'");
+//			logger.debug("destCpn : '" + ms.destCpn + "', " + "feeCpn : '" + ms.feeCpn + "', " + "cpnType : '"
+//					+ ms.cpntype + "', " + "linkid : '" + ms.linkId + "', " + "content : '" + ms.content + "', "
+//					+ "serverID : '" + ms.serverID + "', " + "vcpID : '" + ms.vcpID + "', " + "provID : '" + ms.provID
+//					+ "', " + "spCode : '" + ms.spCode + "', " + "feeType : '" + ms.feeType + "', " + "mediaType : '"
+//					+ ms.mediaType + "', " + "delivery : '" + ms.delivery + "', " + "gameCode : '" + ms.gameCode + "', "
+//					+ "msgId : '" + ms.msgId + "'");
 			ms.sendResultToSmsPlatform();
 		}
 	}
@@ -501,10 +497,9 @@ public class MtSend implements Runnable {
 					if (sendMtTmpCount >= sendCount) {
 						long curMillis = System.currentTimeMillis();
 						long sendMillis = curMillis - millis;
-						logger.debug("NewUser send " + sendCount + " time " + sendMillis + " ms.");
 						if (sendMillis < 1000L) {
 							long sleepMillis = 1000L - sendMillis;
-							logger.debug("NewUser sleep " + sleepMillis + " ms.");
+							logger.debug("NewUser send " + sendCount + " time " + sendMillis + " ms.NewUser sleep " + sleepMillis + " ms.");
 							Thread.sleep(sleepMillis);
 						}
 						sendMtTmpCount = 0;
@@ -519,8 +514,6 @@ public class MtSend implements Runnable {
 				logger.error("error service : " + id + ", " + company + ", " + cpn + ", " + serviceid, e);
 			}
 		}
-		logger.debug("total :  " + sendList.size());
-		logger.debug("sendMtCount : " + sendMtCount);
-		logger.debug("errorCount : " + errorCount);
+		logger.debug("total :  " + sendList.size()+", sendMtCount : " + sendMtCount+", errorCount : " + errorCount);
 	}
 }

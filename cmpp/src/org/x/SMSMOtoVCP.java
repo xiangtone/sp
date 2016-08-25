@@ -31,10 +31,7 @@ public class SMSMOtoVCP {
 	public String sendMoSmsToVcp(SMSMO smsmo) {
 		String stat = "-1";
 		try {
-			logger.debug("send..cpn:" + smsmo.getCpn());
-			logger.debug("send..spcode:" + smsmo.getSpCode());
-			logger.debug("send.serverAction:" + smsmo.getServerAction());
-			logger.info("send.serverAction:" + smsmo.getLinkID());
+//			logger.debug("send cpn:" + smsmo.getCpn()+", send spcode:" + smsmo.getSpCode()+", send serverAction:" + smsmo.getServerAction()+", send serverAction:" + smsmo.getLinkID());
 
 			xtdeliver = new SmDeliver();
 			xtdeliver.setMobileCode(smsmo.getCpn());
@@ -46,22 +43,22 @@ public class SMSMOtoVCP {
 			xtdeliver.setLinkID(smsmo.getLinkID());
 			xtdeliver.setMsgId(smsmo.getMsgId());
 
-			logger.debug("开始连接...发送mo消息....");
+//			logger.debug("开始连接...发送mo消息....");
 
 			int vcpID = smsmo.getVcpID();
-			logger.debug("派发给的vcpID:" + vcpID);
+//			logger.debug("派发给的vcpID:" + vcpID);
 
 			switch (vcpID) {
 			case 1:
-				logger.debug(vcpIp1);
+//				logger.debug(vcpIp1);
 				xtsms.connectToServer(vcpIp1, Integer.parseInt(vcpPort1), xtconn); // 连接服务器
 				break;
 			case 2:
-				logger.debug(vcpIp2);
+//				logger.debug(vcpIp2);
 				xtsms.connectToServer(vcpIp2, Integer.parseInt(vcpPort2), xtconn);
 				break;
 			default:
-				logger.debug(vcpIp1);
+//				logger.debug(vcpIp1);
 				xtsms.connectToServer(vcpIp1, Integer.parseInt(vcpPort1), xtconn); // 连接服务器
 				break;
 			}
@@ -70,8 +67,7 @@ public class SMSMOtoVCP {
 			xtsms.readPa(xtconn);// 读取返回
 
 			stat = xtDeliverAck.getAckStat();
-			logger.debug("stat:::::" + stat);
-			logger.debug("xtconn::::" + xtconn);
+//			logger.debug("stat:" + stat+", xtconn:" + xtconn);
 		} catch (Exception e) {
 			logger.error("",e);
 		}finally{

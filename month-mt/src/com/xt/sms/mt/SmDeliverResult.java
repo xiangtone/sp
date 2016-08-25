@@ -29,35 +29,35 @@ public class SmDeliverResult extends SmResult {
 				switch (type) {
 				case 1:
 					mobileCode = this.deByteCode.asciiz(valueLen);
-					myLogger.debug("mobileCode:" + mobileCode);
+//					myLogger.debug("mobileCode:" + mobileCode);
 					break;
 				case 2:
 					gameCode = this.deByteCode.asciiz(valueLen);
-					myLogger.debug("gameCode:" + gameCode);
+//					myLogger.debug("gameCode:" + gameCode);
 					break;
 				case 3:
 					actionCode = this.deByteCode.asciiz(valueLen);
-					myLogger.debug("actionCode:" + actionCode);
+//					myLogger.debug("actionCode:" + actionCode);
 					break;
 				case 4:
 					spCode = this.deByteCode.asciiz(valueLen);
-					myLogger.debug("spCode:" + spCode);
+//					myLogger.debug("spCode:" + spCode);
 					break;
 				case 5:
 					ismgCode = this.deByteCode.asciiz(valueLen);
-					myLogger.debug("ismgCode:" + ismgCode);
+//					myLogger.debug("ismgCode:" + ismgCode);
 					break;
 				case 12:
 					linkId = this.deByteCode.asciiz(valueLen);
-					myLogger.debug("Linkid:" + linkId);
+//					myLogger.debug("Linkid:" + linkId);
 					break;
 				case 13:
 					cpnType = this.deByteCode.int8();
-					myLogger.debug("cpnType:" + cpnType);
+//					myLogger.debug("cpnType:" + cpnType);
 					break;
 				case 14:
 					msgId = this.deByteCode.asciiz(valueLen);
-					myLogger.debug("msgId:" + msgId);
+//					myLogger.debug("msgId:" + msgId);
 					break;
 				case 6:
 				case 7:

@@ -32,35 +32,35 @@ public class SmDeliverResult extends SmResult {
 
 				case 1:
 					mobileCode = deByteCode.asciiz(valueLen);
-					logger.debug("mobileCode:" + mobileCode);
+//					logger.debug("mobileCode:" + mobileCode);
 					break;
 				case 2:
 					gameCode = deByteCode.asciiz(valueLen);
-					logger.debug("gameCode:" + gameCode);
+//					logger.debug("gameCode:" + gameCode);
 					break;
 				case 3:
 					actionCode = deByteCode.asciiz(valueLen);
-					logger.debug("actionCode:" + actionCode);
+//					logger.debug("actionCode:" + actionCode);
 					break;
 				case 4:
 					spCode = deByteCode.asciiz(valueLen);
-					logger.debug("spCode:" + spCode);
+//					logger.debug("spCode:" + spCode);
 					break;
 				case 5:
 					ismgCode = deByteCode.asciiz(valueLen);
-					logger.debug("ismgCode:" + ismgCode);
+//					logger.debug("ismgCode:" + ismgCode);
 					break;
 				case 12:
 					linkId = deByteCode.asciiz(valueLen);
-					logger.debug("linkId:" + linkId);
+//					logger.debug("linkId:" + linkId);
 					break;
 				case 13:
 					cpnType = deByteCode.int8();
-					logger.debug("cpnType:" + cpnType);
+//					logger.debug("cpnType:" + cpnType);
 					break;
 				case 14:
 					msgId = deByteCode.asciiz(valueLen);
-					logger.debug("msgId:" + msgId);
+//					logger.debug("msgId:" + msgId);
 					break;
 				default:
 					stat = "01"; // 无效的消息类型

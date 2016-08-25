@@ -19,12 +19,12 @@ public class SmSubmitAckResult extends SmResult {
 				byte type = this.deByteCode.int8();
 				short len = this.deByteCode.int16();
 				int valueLen = len - 3;
-				myLogger.debug("type:" + type);
+//				myLogger.debug("type:" + type);
 				switch (type) {
 				case 100:
 					this.errorCode = this.deByteCode.asciiz(valueLen);
 					this.stat = this.errorCode;
-					myLogger.debug("stat:" + this.stat);
+//					myLogger.debug("stat:" + this.stat);
 					break;
 				default:
 					this.stat = "-1";

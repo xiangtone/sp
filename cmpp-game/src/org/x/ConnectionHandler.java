@@ -28,7 +28,7 @@ public class ConnectionHandler implements Runnable {
 		try {
 
 			mess.readPa(con); // 读取提交信息
-			logger.debug("sm.stat:" + sm.stat);
+//			logger.debug("sm.stat:" + sm.stat);
 			// sm.stat = "00";
 			if (sm.stat.equals("00")) // mo信息上来了
 			{
@@ -45,10 +45,7 @@ public class ConnectionHandler implements Runnable {
 				String ismgCode = sm.getIsmgCode();
 				String msgId = sm.getMsgId();
 				///////// add at 061121
-				logger.debug("mobileCode:" + mobileCode);
-				logger.debug("gameCode:" + gameCode);
-				logger.debug("actionCode:" + actionCode);
-				logger.debug("msgId:" + msgId);
+//				logger.debug("mobileCode:" + mobileCode+", gameCode:" + gameCode+", actionCode:" + actionCode+", msgId:" + msgId);
 				String linkid = sm.getLinkId();
 				int cpnType = sm.getCpntype();
 				int vcpid = 1; // xiangtone vcpid =2;
@@ -60,14 +57,10 @@ public class ConnectionHandler implements Runnable {
 					actionCode = "";
 				actionCode = actionCode.trim().toUpperCase();
 
-				logger.debug("M:" + mobileCode + "--G:" + gameCode + "--Cmd:" + actionCode);
+//				logger.debug("M:" + mobileCode + "--G:" + gameCode + "--Cmd:" + actionCode);
 
 				// 游戏派发 并发送
-				logger.debug("mobileCode..." + mobileCode);
-				logger.debug("gameCode:" + gameCode);
-				logger.debug("actionCode:" + actionCode);
-				logger.debug("spCode:" + spCode);
-				logger.debug("ismgCode:" + ismgCode);
+//				logger.debug("mobileCode:" + mobileCode+", gameCode:" + gameCode+", actionCode:" + actionCode+", spCode:" + spCode+", ismgCode:" + ismgCode);
 				MessageGame sms = new MessageGame(ismgCode);
 				sms.multiDispatch(mobileCode, gameCode, actionCode, spCode, ismgCode, linkid, cpnType, msgId);// add
 
