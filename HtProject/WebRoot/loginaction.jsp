@@ -27,9 +27,9 @@
 				
 				if(rePwd==1)
 				{
-					Cookie cookiePwd= new Cookie("USER_PWD",StringUtil.getMd5String(password, 32));
+					Cookie cookiePwd= new Cookie("USER_PWD",password.length()==32 ? password : StringUtil.getMd5String(password, 32));
 
-					cookiePwd.setMaxAge(30);
+					cookiePwd.setMaxAge(604800);
 
 					response.addCookie(cookiePwd);
 				}

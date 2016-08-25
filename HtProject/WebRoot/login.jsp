@@ -20,18 +20,25 @@
 		Cookie sCookie = null;
 		String sValue = null;
 		String sName = null;
-		for(int i=0; i<cookies.length; i++)
+		
+		if(cookies!=null)
 		{
-			sCookie = cookies[i];
-			
-			if("USER_NAME".equalsIgnoreCase(sCookie.getName()))
+			for(int i=0; i<cookies.length; i++)
 			{
-				userName = sCookie.getValue();	
-			}
-			
-			if("USER_PWD".equalsIgnoreCase(sCookie.getName()))
-			{
-				pwd = sCookie.getValue();	
+				sCookie = cookies[i];
+				
+				if(sCookie==null)
+					continue;
+				
+				if("USER_NAME".equalsIgnoreCase(sCookie.getName()))
+				{
+					userName = sCookie.getValue();	
+				}
+				
+				if("USER_PWD".equalsIgnoreCase(sCookie.getName()))
+				{
+					pwd = sCookie.getValue();	
+				}
 			}
 		}
 	}
@@ -164,7 +171,7 @@
 					<div class="login-check"></div>
 				</div>
 				<div style="margin-bottom: 20px;">
-					<label><input type="checkbox" id="chk_re_name" style="border: 1px red solid;" onclick="rememberUserName()" />记住用户名</label>
+					<label><input type="checkbox" id="chk_re_name" onclick="rememberUserName()" />记住用户名</label>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<label><input type="checkbox" id="chk_re_pwd" onclick="rememberUserPwd()" />记住密码</label>
 				</div>

@@ -164,6 +164,40 @@ public class SpTroneRateDao
 		return rows>0;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<SpTroneRateModel> loadSpTroneRateList(int spId,int jsType,String startDate,String endDate)
+	{
+		String sql = "SELECT a.id,b.id sp_trone_id,a.`rate`,a.`start_date`,a.`end_date`,b.sp_id FROM daily_config.`tbl_sp_trone_rate` a";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
+		sql += " WHERE b.`js_type` = " + jsType + " AND '" + startDate + "' >= a.`start_date` AND end_date <= '" + endDate + "'";
+		sql += " AND b.`sp_id` = " + spId;
+		
+		return (List<SpTroneRateModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpTroneRateModel> list = new ArrayList<SpTroneRateModel>();
+				
+				while(rs.next())
+				{
+					SpTroneRateModel model = new SpTroneRateModel();
+					
+					model.setId(rs.getInt("id"));
+					model.setSpTroneId(rs.getInt("sp_trone_id"));
+					model.setRate(rs.getFloat("rate"));
+					model.setStartDate(rs.getString("start_date"));
+					model.setEndDate(rs.getString("end_date"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+		
+	}
+	
 	public static void main(String[] args)
 	{
 		new SpTroneRateDao().isRateDateCross(1, "2016-04-03", "2016-04-22");

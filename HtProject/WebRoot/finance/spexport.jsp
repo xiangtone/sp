@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="com.system.vmodel.SpFinanceShowModel"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.system.model.SettleAccountModel"%>
@@ -14,14 +15,14 @@
 	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
 	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
-	int dateType = StringUtil.getInteger(request.getParameter("datetype"), 1);
+	int dateType = StringUtil.getInteger(request.getParameter("datetype"), -1);
 	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
 	List<SpModel> spList = new SpServer().loadSp();
 	String display = "";
 	Map<String, List<SpFinanceShowModel>> map = null;
 	if (spId > 0 && isNotFirstLoad) {
 		SettleAccountServer accountServer = new SettleAccountServer();
-		List<SettleAccountModel> list = accountServer.loadSpSettleAccountList(spId, startDate, endDate);
+		List<SettleAccountModel> list = new ArrayList<SettleAccountModel>(); //accountServer.loadSpSettleAccountList(spId, startDate, endDate);
 		if (list != null && list.size() > 0) {
 			String spName = "";
 			for (SpModel sp : spList) {
@@ -55,7 +56,7 @@
 			display = "alert('没有相应的数据');";
 		}
 	} else if (spId < 0 && isNotFirstLoad) {
-		map = new SettleAccountServer().loadSpSettleAccountData(startDate, endDate);
+		map = new SettleAccountServer().loadSpSettleAccountData(startDate, endDate,spId,dateType);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -66,6 +67,7 @@
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
+<script type="text/javascript" src="../sysjs/base.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 
@@ -85,6 +87,25 @@
 
 		document.getElementById("exportform").submit();
 	}
+	
+	function exportBill(startDate,endDate,spId,jsType)
+	{
+		getAjaxValue("action.jsp?type=3&js_type=" + jsType + "&cpid=" + spId + "&startdate=" + startDate + "&enddate=" + endDate,onExportBillResult);
+	}
+	
+	function onExportBillResult(data)
+	{
+		if("OK" == data.trim())
+		{
+			alert("开始对帐成功");
+		}
+		else
+		{
+			alert("已存在相同的对帐单");	
+		}
+	}
+	
+	
 </script>
 <body>
 	<div class="main_content">
@@ -163,11 +184,7 @@
 												+ StringUtil.getDecimalFormat(sfsModel.getAmount()
 														* sfsModel.getJiesuanlv())
 												+ "</td><td rowspan='" + tmpList.size()
-												+ "'><a href='spexport.jsp?startdate="
-												+ startDate + "&enddate=" + endDate
-												+ "&sp_id=" + sfsModel.getSpId()
-												+ "&load=1&datetype=" + dateType
-												+ "'>导出</a></td></tr>");
+												+ "'><a href='#' onclick=exportBill(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>对帐</a></td></tr>");
 									}
 									else
 									{

@@ -29,9 +29,9 @@ public class SettleAccountServer
 		return list;
 	}
 	
-	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountData(String startDate,String endDate)
+	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType)
 	{
-		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountData(startDate, endDate);
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountData(startDate, endDate,spId,jsType);
 		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
 		
 		List<SpFinanceShowModel> tmpList = null;
