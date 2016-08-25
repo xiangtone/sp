@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.system.dao.SpTroneDao;
 import com.system.model.SpTroneModel;
+import com.system.util.ConfigManager;
+import com.system.util.StringUtil;
 
 public class SpTroneServer
 {
@@ -65,5 +67,18 @@ public class SpTroneServer
 	public boolean updateSpTroneRate(int id,float rate)
 	{
 		return new SpTroneDao().updateSpTroneRate(id, rate);
+	}
+	public int checkAdd(int userId){
+		int commerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
+		int count=new SpTroneDao().checkAdd(userId,commerceId);
+		if(count>=1){
+			return 1;//在商务组里
+		}else{
+			return 0;
+		}
+	}
+	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord,int userId)
+	{
+		return new SpTroneDao().loadSpTroneList(pageIndex,keyWord,userId);
 	}
 }	

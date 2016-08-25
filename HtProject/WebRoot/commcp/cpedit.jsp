@@ -2,21 +2,23 @@
 <%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.ConfigManager"%>
 <%@page import="java.util.List"%>
-<%@page import="com.system.server.SpServer"%>
-<%@page import="com.system.model.SpModel"%>
+<%@page import="com.system.server.CpServer"%>
+<%@page import="com.system.model.CpModel"%>
 <%@page import="com.system.util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	UserModel user = (UserModel)session.getAttribute("user");
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
-	SpModel model = new SpServer().loadSpById(id);
+	CpModel model = new CpServer().loadCpById(id);
 	if(model==null)
 	{
-		response.sendRedirect("sp.jsp");
+		response.sendRedirect("cp.jsp");
 		return;
 	}
-	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
-	List<UserModel> list = new UserServer().loadUserByGroupId(spCommerceId);
+	List<CpModel> list = new CpServer().loadCp();
+	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
+	List<UserModel> userList = new UserServer().loadUserByGroupId(cpCommerceId);
 	String query = StringUtil.getString(request.getParameter("query"), "");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -30,6 +32,22 @@
 <script type="text/javascript" src="../sysjs/base.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
+	
+	function joCpChannel(name)
+	{
+		var obj = {};
+		obj.name = name;
+		return obj;
+	}
+	var cpChannelArray = new Array();
+	<%
+		for(CpModel cp : list)
+		{
+			%>
+			cpChannelArray.push(new joCpChannel('<%= cp.getShortName() %>'));	
+			<%
+		}
+	%>
 	
 	$(function()
 	{
@@ -47,23 +65,38 @@
 		$("#input_address").val("<%= model.getAddress() %>");
 		$("#input_contract_start_date").val("<%= model.getContractStartDate() %>");
 		$("#input_contract_end_date").val("<%= model.getContractEndDate() %>");
-		$("#sel_commerce_user_id").val("<%= model.getCommerceUserId() %>");
+		$("#sel_commerce_user_id").val("<%= model.getCommerceUserId() %>");ssssssssssssss
 	}
 	
 	function subForm() 
 	{
 		if (isNullOrEmpty($("#input_full_name").val())) 
 		{
-			alert("请输入SP全称");
+			alert("请输入CP全称");
 			$("#input_full_name").focus();
 			return;
 		}
 		
 		if (isNullOrEmpty($("#input_short_name").val())) 
 		{
-			alert("请输入SP简称");
+			alert("请输入CP简称");
 			$("#input_short_name").focus();
 			return;
+		}
+		
+		if (!isNullOrEmpty($("#input_short_name").val())) 
+		{
+			var emp = '<%=model.getShortName()%>';
+			var name = $("#input_short_name").val();
+			for(i=0; i<cpChannelArray.length; i++)
+			{
+				if(cpChannelArray[i].name==name && name!=emp)
+				{
+					alert("该CP简称已存在");
+					$("#input_short_name").focus();
+					return;
+				}
+			}
 		}
 		
 		document.getElementById("addform").submit();
@@ -74,17 +107,17 @@
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
-				<dd class="ddbtn" style="width: 200px">
-				<label>SP修改</label>
+				<dd class="ddbtn" >
+				<label>CP修改</label>
 				</dd>
 			</dl>
 			<br />	<br />		
 			<dl>
-				<form action="action.jsp?query=<%= query %>" method="post"  id="addform">
+				<form action="action.jsp?query=<%= query %>" method="post" id="addform">
 					<input type="hidden" value="<%= model.getId() %>" name="id" />
 										
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">SP全称</dd>
+					<dd class="dd01_me">CP全称</dd>
 					<dd class="dd03_me">
 						<input type="text" name="full_name" id="input_full_name"
 							style="width: 200px">
@@ -94,7 +127,7 @@
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">SP简称</dd>
+					<dd class="dd01_me">CP简称</dd>
 					<dd class="dd03_me">
 						<input type="text" name="short_name" id="input_short_name"
 							style="width: 200px">
@@ -116,16 +149,10 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">商务</dd>
 					<dd class="dd04_me">
-						<select name="commerce_user_id" id="sel_commerce_user_id" style="width:120px">
-							<option value="-1">请选择</option>
-							<%
-							for(UserModel userModel : list)
-							{
-								%>
-							<option value="<%= userModel.getId() %>"><%= userModel.getNickName() %></option>	
-								<%
-							}
-							%>
+						<select name="commerce_user_id" id="sel_commerce_user_id">
+							
+							<option value="<%= user.getId() %>"><%= user.getNickName() %></option>	
+		
 						</select>
 					</dd>
 					

@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.system.dao.CpDao;
+import com.system.dao.SpDao;
 import com.system.model.CpModel;
+import com.system.util.ConfigManager;
+import com.system.util.StringUtil;
 
 public class CpServer {
 	public List<CpModel> loadCp() {
@@ -45,6 +48,19 @@ public class CpServer {
 
 	public boolean updateCpAccount(int cpId, int userId) {
 		return new CpDao().updateCpAccount(cpId, userId);
+	}
+	public int checkAdd(int userId){
+		int commerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
+		int count=new CpDao().checkAdd(userId,commerceId);
+		if(count>=1){
+			return 1;//在商务组里
+		}else{
+			return 0;
+		}
+	}
+	
+	public Map<String, Object> loadCp(int pageIndex, String keyWord,int userId) {
+		return new CpDao().loadCp(pageIndex, keyWord,userId);
 	}
 
 }

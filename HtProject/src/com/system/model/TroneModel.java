@@ -17,6 +17,8 @@ public class TroneModel
 	private String spTroneName;
 	private int matchPrice;
 	
+	private int commerceUserId;
+	
 	public int getId()
 	{
 		return id;
@@ -129,6 +131,13 @@ public class TroneModel
 	{
 		this.matchPrice = matchPrice;
 	}
+	public int getCommerceUserId() {
+		return commerceUserId;
+	}
+	public void setCommerceUserId(int commerceUserId) {
+		this.commerceUserId = commerceUserId;
+	}
+	
 	
 	
 }
