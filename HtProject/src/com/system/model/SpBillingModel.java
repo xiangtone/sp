@@ -1,19 +1,18 @@
 package com.system.model;
 
-public class CpBillingModel
+public class SpBillingModel
 {
 	private int id;
 	private String startDate;
 	private String endDate;
-	private int cpId;
-	private String cpName;
+	private int spId;
+	private String spName;
 	private int jsType;
 	private String jsName;
 	private float taxRate;
 	private float preBilling;
 	private float actureBilling;
 	private float amount;
-	private float reduceAmount;
 	private int status;
 	private String remark;
 	private String payTime;
@@ -43,13 +42,21 @@ public class CpBillingModel
 	{
 		this.endDate = endDate;
 	}
-	public int getCpId()
+	public int getSpId()
 	{
-		return cpId;
+		return spId;
 	}
-	public void setCpId(int cpId)
+	public void setSpId(int spId)
 	{
-		this.cpId = cpId;
+		this.spId = spId;
+	}
+	public String getSpName()
+	{
+		return spName;
+	}
+	public void setSpName(String spName)
+	{
+		this.spName = spName;
 	}
 	public int getJsType()
 	{
@@ -58,6 +65,14 @@ public class CpBillingModel
 	public void setJsType(int jsType)
 	{
 		this.jsType = jsType;
+	}
+	public String getJsName()
+	{
+		return jsName;
+	}
+	public void setJsName(String jsName)
+	{
+		this.jsName = jsName;
 	}
 	public float getTaxRate()
 	{
@@ -83,6 +98,14 @@ public class CpBillingModel
 	{
 		this.actureBilling = actureBilling;
 	}
+	public float getAmount()
+	{
+		return amount;
+	}
+	public void setAmount(float amount)
+	{
+		this.amount = amount;
+	}
 	public int getStatus()
 	{
 		return status;
@@ -107,22 +130,6 @@ public class CpBillingModel
 	{
 		this.payTime = payTime;
 	}
-	public String getCpName()
-	{
-		return cpName;
-	}
-	public void setCpName(String cpName)
-	{
-		this.cpName = cpName;
-	}
-	public String getJsName()
-	{
-		return jsName;
-	}
-	public void setJsName(String jsName)
-	{
-		this.jsName = jsName;
-	}
 	public String getCreateDate()
 	{
 		return createDate;
@@ -131,20 +138,5 @@ public class CpBillingModel
 	{
 		this.createDate = createDate;
 	}
-	public float getAmount()
-	{
-		return amount;
-	}
-	public void setAmount(float amount)
-	{
-		this.amount = amount;
-	}
-	public float getReduceAmount()
-	{
-		return reduceAmount;
-	}
-	public void setReduceAmount(float reduceAmount)
-	{
-		this.reduceAmount = reduceAmount;
-	}
+	
 }

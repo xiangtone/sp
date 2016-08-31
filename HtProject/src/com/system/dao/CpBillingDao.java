@@ -369,7 +369,6 @@ public class CpBillingDao
 							model.setPreBilling(rs.getFloat("pre_billing"));
 							model.setActureBilling(rs.getFloat("acture_billing"));
 							model.setReduceAmount(rs.getFloat("reduce_amount"));
-							model.setPreActureBilling(rs.getFloat("acture_pre_billing"));
 							model.setStatus(rs.getInt("status"));
 							model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 							model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
@@ -418,8 +417,7 @@ public class CpBillingDao
 	{
 		String sql = "SELECT  SUM(amount) amount, ";
 		sql += " SUM(amount*rate) pre_billing, ";
-		sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount, ";
-		sql += " SUM(amount*rate - CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) acture_pre_billing  ";
+		sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount ";
 		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` WHERE cp_billing_id = " + cpBillingId + " AND STATUS = 0; ";
 
 		
@@ -431,19 +429,18 @@ public class CpBillingDao
 			{
 				if(rs.next())
 				{
-					float[] result = {rs.getFloat("amount"),rs.getFloat("reduce_amount"),rs.getFloat("pre_billing"),rs.getFloat("acture_pre_billing")};
+					float[] result = {rs.getFloat("amount"),rs.getFloat("reduce_amount"),rs.getFloat("pre_billing")};
 					return result;
 				}
 				return null;
 			}
 		});
-		String sqlUpdate = "UPDATE daily_config.`tbl_cp_billing` SET amount = ?,reduce_amount = ?,pre_billing = ?,acture_pre_billing = ? WHERE id = ? ";
+		String sqlUpdate = "UPDATE daily_config.`tbl_cp_billing` SET amount = ?,reduce_amount = ?,pre_billing = ?  WHERE id = ? ";
 		Map<Integer, Object> params = new HashMap<Integer, Object>();
 		params.put(1, result[0]);
 		params.put(2, result[1]);
 		params.put(3, result[2]);
-		params.put(4, result[3]);
-		params.put(5, cpBillingId);
+		params.put(4, cpBillingId);
 		control.execute(sqlUpdate, params);
 	}
 	

@@ -307,9 +307,9 @@
 					<td><%=model.getEndDate()%></td>
 					<td><%= model.getJsName() %></td>
 					<td><%= model.getAmount() %></td>
-					<td><%=model.getPreBilling() %></td>
+					<td><%= model.getPreBilling() %></td>
 					<td><%= model.getReduceAmount() %></td>
-					<td><%= model.getPreActureBilling() %></td>
+					<td><%= model.getPreBilling() - model.getReduceAmount() %></td>
 					<td><%= model.getActureBilling() %></td>
 					<td><%=model.getRemark() %></td>
 					<td><%= model.getCreateDate() %></td>
