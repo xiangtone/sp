@@ -35,6 +35,7 @@ public class CpBillingDetailDao
 					model.setId(rs.getInt("id"));
 					model.setCpBillingId(cpBillingId);
 					model.setReduceAmount(rs.getFloat("reduce_amount"));
+					model.setReduceType(rs.getInt("reduce_type"));
 					model.setRate(rs.getFloat("rate"));
 					model.setStatus(rs.getInt("status"));
 					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
@@ -67,6 +68,7 @@ public class CpBillingDetailDao
 					model.setId(rs.getInt("id"));
 					model.setCpBillingId(rs.getInt("cp_billing_id"));
 					model.setReduceAmount(rs.getFloat("reduce_amount"));
+					model.setReduceType(rs.getInt("reduce_type"));
 					model.setRate(rs.getFloat("rate"));
 					model.setStatus(rs.getInt("status"));
 					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
@@ -84,7 +86,9 @@ public class CpBillingDetailDao
 	 */
 	public void updateSingleCpBillingSpTroneDetail(CpBillingSptroneDetailModel model)
 	{
-		String sql = "update daily_log.`tbl_cp_billing_sp_trone` set reduce_amount = " + model.getReduceAmount() + "  , status = " + model.getStatus() + ", remark = '" + SqlUtil.sqlEncode(model.getRemark()) + "' where id = " + model.getId();
+		String sql = "update daily_log.`tbl_cp_billing_sp_trone` set reduce_amount = " 
+				+ model.getReduceAmount() + "  , status = " + model.getStatus() + ", remark = '" + SqlUtil.sqlEncode(model.getRemark()) 
+				+ "',reduce_type = " + model.getReduceType() + " where id = " + model.getId();
 		
 		new JdbcControl().execute(sql);		
 	}

@@ -26,6 +26,7 @@
 	}
 	List<CpBillingSptroneDetailModel> list = new CpBillingDetailServer().loadCpBillingSpTroneDetail(cpBillingId);
 	String[] statusStr = {"正常","不结算"};
+	String[] reduceType = {"信息费","结算款"};
 	String query = StringUtil.getString(request.getParameter("query"), "");
 	
 	boolean isEditAble = billingModel.getStatus()== 0;
@@ -85,6 +86,7 @@ text-decoration: underline;
 					<td>信息费</td>
 					<td>结算率</td>
 					<td>核减费用</td>
+					<td>核减类型</td>
 					<td>应支付</td>
 					<td>备注</td>
 					<td>状态</td>
@@ -103,6 +105,7 @@ text-decoration: underline;
 					<td><%= model.getAmount() %></td>
 					<td><%= model.getRate() %></td>
 					<td><%= model.getReduceAmount()  %></td>
+					<td><%= reduceType[model.getReduceType()] %></td>
 					<td><%= (model.getAmount()-model.getReduceAmount())*model.getRate() %></td>
 					<td><%= model.getRemark() %></td>
 					<td><%= statusStr[model.getStatus()] %></td>

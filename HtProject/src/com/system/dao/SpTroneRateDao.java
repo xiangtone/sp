@@ -200,6 +200,7 @@ public class SpTroneRateDao
 	
 	public static void main(String[] args)
 	{
+		
 		new SpTroneRateDao().isRateDateCross(1, "2016-04-03", "2016-04-22");
 	}
 	

@@ -11,8 +11,10 @@ public class CpBillingModel
 	private String jsName;
 	private float taxRate;
 	private float preBilling;
+	private float preActureBilling;
 	private float actureBilling;
 	private float amount;
+	private float reduceAmount;
 	private int status;
 	private String remark;
 	private String payTime;
@@ -138,7 +140,20 @@ public class CpBillingModel
 	{
 		this.amount = amount;
 	}
-	
-	
-	
+	public float getPreActureBilling()
+	{
+		return preActureBilling;
+	}
+	public void setPreActureBilling(float preActureBilling)
+	{
+		this.preActureBilling = preActureBilling;
+	}
+	public float getReduceAmount()
+	{
+		return reduceAmount;
+	}
+	public void setReduceAmount(float reduceAmount)
+	{
+		this.reduceAmount = reduceAmount;
+	}
 }
