@@ -14,6 +14,7 @@ public class CpBillingSptroneDetailModel
 	private String mrDate;
 	private float amount;
 	private float reduceAmount;
+	private int reduceType;
 	private float rate;
 	private String remark;
 	private int status;
@@ -97,6 +98,14 @@ public class CpBillingSptroneDetailModel
 	public void setRemark(String remark)
 	{
 		this.remark = remark;
+	}
+	public int getReduceType()
+	{
+		return reduceType;
+	}
+	public void setReduceType(int reduceType)
+	{
+		this.reduceType = reduceType;
 	}
 	
 }

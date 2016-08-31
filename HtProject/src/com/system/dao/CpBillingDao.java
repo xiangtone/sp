@@ -12,7 +12,6 @@ import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.CpBillingModel;
 import com.system.model.CpBillingSpTroneModel;
-import com.system.model.CpBillingSptroneDetailModel;
 import com.system.model.CpBillingTroneOrderDetailModel;
 import com.system.model.SettleAccountModel;
 import com.system.util.SqlUtil;
@@ -250,7 +249,7 @@ public class CpBillingDao
 	@SuppressWarnings("unchecked")
 	public List<SettleAccountModel> exportExcelData(int cpBillingId)
 	{
-		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,a.amount,a.reduce_amount,a.rate ";
+		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,a.amount,a.reduce_amount,a.rate,a.reduce_type ";
 		
 		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` a ";
 		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
@@ -277,6 +276,7 @@ public class CpBillingDao
 					model.setAmount(rs.getFloat("amount"));
 					model.setReduceAmount(rs.getFloat("reduce_amount"));
 					model.setJiesuanlv(rs.getFloat("rate"));
+					model.setReduceType(rs.getInt("reduce_type"));
 					
 					list.add(model);
 				}
@@ -347,7 +347,7 @@ public class CpBillingDao
 				}));
 
 		map.put("list", control.query(
-				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.amount,a.create_date,a.id,a.`cp_id`,b.`short_name` cp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status ") + limit,
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.`short_name` cp_name,c.`name` js_name ") + limit,
 				new QueryCallBack()
 				{
 					@Override
@@ -368,6 +368,8 @@ public class CpBillingDao
 							model.setTaxRate(rs.getFloat("tax_rate"));
 							model.setPreBilling(rs.getFloat("pre_billing"));
 							model.setActureBilling(rs.getFloat("acture_billing"));
+							model.setReduceAmount(rs.getFloat("reduce_amount"));
+							model.setPreActureBilling(rs.getFloat("acture_pre_billing"));
 							model.setStatus(rs.getInt("status"));
 							model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 							model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
@@ -414,7 +416,13 @@ public class CpBillingDao
 	 */
 	public void updateCpBilling(int cpBillingId)
 	{
-		String sql = "SELECT  SUM(amount) amount,SUM(reduce_amount) reduce_amount,SUM((amount-reduce_amount)*rate) pre_billing FROM daily_log.`tbl_cp_billing_sp_trone` WHERE cp_billing_id = " + cpBillingId + " AND STATUS = 0";
+		String sql = "SELECT  SUM(amount) amount, ";
+		sql += " SUM(amount*rate) pre_billing, ";
+		sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount, ";
+		sql += " SUM(amount*rate - CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) acture_pre_billing  ";
+		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` WHERE cp_billing_id = " + cpBillingId + " AND STATUS = 0; ";
+
+		
 		JdbcControl control = new JdbcControl();
 		float[] result = (float[])control.query(sql, new QueryCallBack()
 		{
@@ -423,18 +431,19 @@ public class CpBillingDao
 			{
 				if(rs.next())
 				{
-					float[] result = {rs.getFloat("amount"),rs.getFloat("reduce_amount"),rs.getFloat("pre_billing")};
+					float[] result = {rs.getFloat("amount"),rs.getFloat("reduce_amount"),rs.getFloat("pre_billing"),rs.getFloat("acture_pre_billing")};
 					return result;
 				}
 				return null;
 			}
 		});
-		String sqlUpdate = "UPDATE daily_config.`tbl_cp_billing` SET amount = ?,reduce_amount = ?,pre_billing = ? WHERE id = ? ";
+		String sqlUpdate = "UPDATE daily_config.`tbl_cp_billing` SET amount = ?,reduce_amount = ?,pre_billing = ?,acture_pre_billing = ? WHERE id = ? ";
 		Map<Integer, Object> params = new HashMap<Integer, Object>();
 		params.put(1, result[0]);
 		params.put(2, result[1]);
 		params.put(3, result[2]);
-		params.put(4, cpBillingId);
+		params.put(4, result[3]);
+		params.put(5, cpBillingId);
 		control.execute(sqlUpdate, params);
 	}
 	

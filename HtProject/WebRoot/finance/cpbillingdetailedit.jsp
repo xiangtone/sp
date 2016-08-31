@@ -11,6 +11,7 @@
 	int cpBillingId = StringUtil.getInteger(request.getParameter("cpbillingid"), -1);
 	CpBillingModel billingModel = new CpBillingServer().getCpBillingModel(cpBillingId);
 	int typeId = StringUtil.getInteger(request.getParameter("type"), -1);
+	int reduceType = StringUtil.getInteger(request.getParameter("reduce_type"),0);
 	String query = StringUtil.getString(request.getParameter("query"), "");
 	CpBillingDetailServer detailServer = new CpBillingDetailServer();
 	CpBillingSptroneDetailModel model = detailServer.getSingleCpBillingSpTroneDetailModel(id);
@@ -25,6 +26,7 @@
 		model.setReduceAmount(reduceAmount);
 		model.setStatus(status);
 		model.setRemark(remark);
+		model.setReduceType(reduceType);
 		detailServer.updateSingleCpBillingSpTroneDetail(model);
 		response.sendRedirect("cpbillingdetail.jsp?query=" + Base64UTF.decode(query) + "&cpbillingid=" + cpBillingId);
 		return;
@@ -100,6 +102,18 @@
 					<dd class="dd01_me">核减费用</dd>
 					<dd class="dd03_me">
 						<input type="text" name="reduce_amount" id="input_reduce_amount" value="<%= model.getReduceAmount() %>" style="width: 200px">
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">核减类型</dd>
+					<dd class="dd03_me">
+						<input type="radio" name="reduce_type" style="width: 35px;float:left" value="0" checked="checked" >
+						<label style="font-size: 14px;float:left">信息费</label>
+						<input type="radio" name="reduce_type" style="width: 35px;float:left" value="1" >
+						<label style="font-size: 14px;float:left">结算款</label>
 					</dd>
 					
 					<br />

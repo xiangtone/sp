@@ -90,7 +90,7 @@
 	
 	function exportBill(startDate,endDate,spId,jsType)
 	{
-		getAjaxValue("action.jsp?type=3&js_type=" + jsType + "&cpid=" + spId + "&startdate=" + startDate + "&enddate=" + endDate,onExportBillResult);
+		getAjaxValue("action.jsp?type=3&js_type=" + jsType + "&spid=" + spId + "&startdate=" + startDate + "&enddate=" + endDate,onExportBillResult);
 	}
 	
 	function onExportBillResult(data)

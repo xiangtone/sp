@@ -49,6 +49,15 @@ public class ExcelManager
 		return map;
 	}
 	
+	/**
+	 * 
+	 * @param dateType 结算类型
+	 * @param date 日期
+	 * @param channelName 渠道或是上游名称
+	 * @param list 数据
+	 * @param demoPath EXECL路径 
+	 * @param os 数据流
+	 */
 	public void writeSettleAccountToExcel(String dateType, String date,
 			String channelName, List<SettleAccountModel> list, String demoPath,OutputStream os)
 	{
@@ -91,10 +100,20 @@ public class ExcelManager
 				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
 				cell.setCellValue(model.getAmount());
 				
-				//核减信息费
+				//核减结算款
 				cell = row.createCell(7);
 				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
-				cell.setCellValue(model.getReduceAmount());
+				
+				//核减信息费要转为核减结算款
+				if(model.getReduceType()==0)
+				{
+					cell.setCellValue(model.getReduceAmount()*model.getJiesuanlv());
+				}
+				else if(model.getReduceType()==1)
+				{
+					cell.setCellValue(model.getReduceAmount());
+				}
+				
 				
 				cell = row.createCell(8);
 				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
@@ -102,7 +121,8 @@ public class ExcelManager
 				
 				cell = row.createCell(9);
 				cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
-				cell.setCellFormula("(G"+ (4+i) +"-H" + (4+i) + ")*I"+ (4+i));
+				
+				cell.setCellFormula("G"+ (4+i) +"*I" + (4+i) + "-H"+ (4+i));
 				
 				tempSpTroneNameLength = model.getSpTroneName().getBytes("GBK").length;
 				tempProductLineLength = model.getOperatorName().getBytes("GBK").length;
