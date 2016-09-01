@@ -57,7 +57,7 @@
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
 	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
-			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId, cpCommerceUserId,
+			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId+"", cpCommerceUserId+"",
 			sortType);
 
 	List<SpModel> spList = new SpServer().loadSp();

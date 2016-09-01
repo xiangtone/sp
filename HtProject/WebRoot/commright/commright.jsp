@@ -46,12 +46,10 @@
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript">
-	
-
-	
-	
-
-
+$(function()
+		{	
+			$("#type").val('<%=type%>');
+		});
 </script>
 
 <body>
@@ -87,6 +85,7 @@
 					<td>序号</td>
 					<td>商务类型</td>
 					<td>商务</td>
+					<td>授权商务</td>
 					<td>操作</td>
 				</tr>
 			</thead>
@@ -100,6 +99,7 @@
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
 					<td><%=model.getType()==0?"SP商务":"CP商务"%></td>
 					<td><%=model.getUserName()%></td>
+					<td><%=model.getRightListName()%></td>
 					<td>
 						<a href="commrightedit.jsp?query=<%= query %>&id=<%= model.getId() %>" onclick="return checkUser('<%=model.getId()%>')">修改</a>
 						<a href="action.jsp?act=1&id=<%= model.getId()%>" onclick="if(confirm('确定删除?')==false)return false">删除</a>

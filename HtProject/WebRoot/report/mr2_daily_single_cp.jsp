@@ -1,3 +1,4 @@
+<%@page import="com.system.server.CommRightServer"%>
 <%@page import="com.system.server.UserServer"%>
 <%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.model.UserModel"%>
@@ -48,6 +49,11 @@
 	
 	//当前下游用户只能看得到当前自己的数据
 	cpCommerceUserId = userId;
+	//查询CP权限 1表示CP商务
+	String cprigthList=new CommRightServer().getRightListByUserId(userId, 1);
+	if(cprigthList==null||"".equals(cprigthList)){
+		cprigthList=userId+"";
+	}
 	
 	
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
@@ -55,7 +61,7 @@
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId,cpCommerceUserId,sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId+"",cprigthList,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -479,8 +485,8 @@ function arrayReverse(arr) {
 							<option value="9">城市</option>
 							<!--  
 							<option value="12">SP商务</option>
-							<option value="13">CP商务</option>
 							-->
+							<option value="13">CP商务</option>
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">

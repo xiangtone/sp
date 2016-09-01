@@ -141,8 +141,33 @@ function subForm()
 			return;
 		}
 	}
-	
+	var id='<%=id%>';
+	var userId=-1;
+	if(type=='0'){
+		userId=$("#sel_commerce_sp_user_id").val();
+	}else{
+		userId=$("#sel_commerce_cp_user_id").val();
+	}
+	var result=ajaxCheck(userId, type,id);
+	if(result=='1'){
+		alert("数据已存在！");
+		return ;
+	}
 	document.getElementById("addform").submit();
+}
+
+function ajaxCheck(userId, type,id) {
+	var result = "";
+	$.ajax({
+		url : "action.jsp",
+		data : "user_id=" + userId + "&type=" + type+"&id="+id+"&act=2",
+		cache : false,
+		async : false,
+		success : function(html) {
+			result = $.trim(html);
+		}
+	});
+	return result;
 }
 
 //$(function(){ $("#sel_commerce_user_id").val(""); });
@@ -237,21 +262,13 @@ function getCount(items)
 
 						<%
 							for (UserModel spUser : commSpList) {
-								if(user.getId()==spUser.getId()){
 						%>
-						<dd class="dd01"><%=spUser.getNickName()%>
-							<input style="" type="checkbox" checked="checked" title="<%=spUser.getNickName()%>"
-								class="chpro" name="area" value="<%=spUser.getId()%>">
-						</dd>
-						<%
-							}else{
-						%>
+
 							<dd class="dd01"><%=spUser.getNickName()%>
 							<input style="" type="checkbox" title="<%=spUser.getNickName()%>"
 								class="chpro" name="area" value="<%=spUser.getId()%>">
 						</dd>
 						<%
-							}
 							}
 						%>
 						<input type="button" onclick="allCkb('area')"
@@ -269,21 +286,12 @@ function getCount(items)
 
 						<%
 							for (UserModel cpUser : commCpList) {
-								if(user.getId()==cpUser.getId()){
-						%>
-						<dd class="dd01"><%=cpUser.getNickName()%>
-							<input style="" type="checkbox" checked="checked" title="<%=cpUser.getNickName()%>"
-								class="chpro" name="cparea" value="<%=cpUser.getId()%>">
-						</dd>
-						<%
-							}else{
 						%>
 							<dd class="dd01"><%=cpUser.getNickName()%>
 							<input style="" type="checkbox" title="<%=cpUser.getNickName()%>"
 								class="chpro" name="cparea" value="<%=cpUser.getId()%>">
 						</dd>
 						<%
-							}
 							}
 						%>
 						<input type="button" onclick="allCkb('cparea')"

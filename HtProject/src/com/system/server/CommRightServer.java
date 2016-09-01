@@ -1,8 +1,10 @@
 package com.system.server;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.system.dao.CommRightDao;
+import com.system.dao.CpBankInfoDao;
 import com.system.dao.SpDao;
 import com.system.model.CommRightModel;
 
@@ -22,5 +24,11 @@ public class CommRightServer {
 	}
 	public boolean deleteCommRight(int id){
 		return new CommRightDao().deleteCommRight(id);
+	}
+	public String getRightListByUserId(int userId,int type){
+		return new CommRightDao().getRightListByUserId(userId, type);
+	}
+	public static Map<String,Integer> checkData(int userId,int type,int id){
+			return new CommRightDao().checkData(userId, type,id);
 	}
 }

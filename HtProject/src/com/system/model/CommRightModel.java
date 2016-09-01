@@ -6,6 +6,7 @@ public class CommRightModel {
 	private int userId;
 	private String userName;
 	private String rightList;
+	private String rightListName;
 	private String remark;
 	public String getUserName() {
 		return userName;
@@ -42,6 +43,12 @@ public class CommRightModel {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getRightListName() {
+		return rightListName;
+	}
+	public void setRightListName(String rightListName) {
+		this.rightListName = rightListName;
 	}
 	
 
