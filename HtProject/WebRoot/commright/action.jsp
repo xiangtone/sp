@@ -5,18 +5,26 @@
 <%@page import="com.system.server.SpServer"%>
 <%@page import="com.system.util.StringUtil"%>
 <%@page import="com.system.model.UserModel" %>
+<%@page import="java.util.Map" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
 	String query = StringUtil.getString(request.getParameter("query"), "");
 	int act = StringUtil.getInteger(request.getParameter("act"), -1);
-
 	if(act==1){
 		if(id>0){
 			new CommRightServer().deleteCommRight(id);
 		}
 		response.sendRedirect("commright.jsp?"+ Base64UTF.decode(query));
+	}else if(act==2){
+			int type = StringUtil.getInteger(request.getParameter("type"),0);
+			int userId = StringUtil.getInteger(request.getParameter("user_id"),-1);
+			int types = StringUtil.getInteger(request.getParameter("type"), -1);		
+			Map<String,Integer> map= CommRightServer.checkData(userId,type,id);
+			int flag=(Integer)map.get("flag");
+			out.clear();
+			out.print(flag); 
 	}else{
 	int type = StringUtil.getInteger(request.getParameter("type"),0);
 	int commSpUser = StringUtil.getInteger(request.getParameter("commerce_sp_user_id"), -1);

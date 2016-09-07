@@ -1,3 +1,4 @@
+<%@page import="com.system.server.CommRightServer"%>
 <%@page import="com.system.server.UserServer"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.ConfigManager"%>
@@ -55,6 +56,11 @@
 	
 	//当前下游用户只能看得到当前自己的数据
 	cpCommerceUserId = userId;
+	//查询cp权限 1表示CP商务
+	String cprightList=new CommRightServer().getRightListByUserId(userId, 1);
+	if(cprightList==null||"".equals(cprightList)){
+		cprightList=userId+"";
+	}
 
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
 	//List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
@@ -63,7 +69,7 @@
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
 	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
-			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId, cpCommerceUserId,
+			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId+"", cprightList,
 			sortType);
 
 	//List<SpModel> spList = new SpServer().loadSp();
@@ -430,7 +436,7 @@ function arrayReverse(arr) {
 							<option value="8">省份</option>
 							<option value="9">城市</option>
 							<!-- <option value="11">按小时</option> -->
-							<!-- <option value="13">CP商务</option> -->
+							<option value="13">CP商务</option> 
 							<!-- <option value="12">SP商务</option> -->
 							<option value="14">运营商</option>
 							<option value="15">数据类型</option>

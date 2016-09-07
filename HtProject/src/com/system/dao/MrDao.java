@@ -19,7 +19,7 @@ public class MrDao
 {
 	public Map<String, Object> getMrAnalyData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -52,11 +52,11 @@ public class MrDao
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
 		
-		if(spCommerceUserId>0)
-			query += " and d.commerce_user_id = " + spCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(spCommerceUserId)||"-1".equals(spCommerceUserId)))
+			query += " and d.commerce_user_id in (" + spCommerceUserId+")";
 		
-		if(cpCommerceUserId>0)
-			query += " and e.commerce_user_id = " + cpCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(cpCommerceUserId)||"-1".equals(cpCommerceUserId)))
+			query += " and e.commerce_user_id in (" + cpCommerceUserId+")";
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -148,7 +148,7 @@ public class MrDao
 	
 	public Map<String, Object> getThirdPayMrData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -181,11 +181,19 @@ public class MrDao
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
 		
-		if(spCommerceUserId>0)
-			query += " and d.commerce_user_id = " + spCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(spCommerceUserId)||"-1".equals(spCommerceUserId))){
+			query += " and d.commerce_user_id in (" + spCommerceUserId+")";
+		}
 		
-		if(cpCommerceUserId>0)
-			query += " and e.commerce_user_id = " + cpCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(cpCommerceUserId)||"-1".equals(cpCommerceUserId))){
+			query += " and e.commerce_user_id in (" + cpCommerceUserId+")";
+		}
+		
+//		if(spCommerceUserId>0)
+//			query += " and d.commerce_user_id = " + spCommerceUserId;
+//		
+//		if(cpCommerceUserId>0)
+//			query += " and e.commerce_user_id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -277,7 +285,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrAnalyLrData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -310,11 +318,18 @@ public class MrDao
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
 		
-		if(spCommerceUserId>0)
-			query += " and d.commerce_user_id = " + spCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(spCommerceUserId)||"-1".equals(spCommerceUserId))){
+			query += " and d.commerce_user_id in (" + spCommerceUserId+")";
+		}
 		
-		if(cpCommerceUserId>0)
-			query += " and e.commerce_user_id = " + cpCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(cpCommerceUserId)||"-1".equals(cpCommerceUserId))){
+			query += " and e.commerce_user_id in (" + cpCommerceUserId+")";
+		}
+//		if(spCommerceUserId>0)
+//			query += " and d.commerce_user_id = " + spCommerceUserId;
+//		
+//		if(cpCommerceUserId>0)
+//			query += " and e.commerce_user_id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -648,7 +663,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrTodayLrData(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId,String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -674,12 +689,18 @@ public class MrDao
 		
 		if(spTroneId>0)
 			query += " and h.id = " + spTroneId;
+		if(!(StringUtil.isNullOrEmpty(spCommerceUserId)||"-1".equals(spCommerceUserId))){
+			query += " and j.id in (" + spCommerceUserId+")";
+		}
 		
-		if(spCommerceUserId>0)
-			query += " and j.id = " + spCommerceUserId;
-		
-		if(cpCommerceUserId>0)
-			query += " and k.id = " + cpCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(cpCommerceUserId)||"-1".equals(cpCommerceUserId))){
+			query += " and k.id in (" + cpCommerceUserId+")";
+		}
+//		if(spCommerceUserId>0)
+//			query += " and j.id = " + spCommerceUserId;
+//		
+//		if(cpCommerceUserId>0)
+//			query += " and k.id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -777,7 +798,7 @@ public class MrDao
 	//2016.08.01 重新启用，因为有个小时的时间不能处理。。痛苦
 	public Map<String, Object> getMrTodayData(String tableName,String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId,String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -803,12 +824,16 @@ public class MrDao
 		
 		if(spTroneId>0)
 			query += " and h.id = " + spTroneId;
-		
-		if(spCommerceUserId>0)
-			query += " and j.id = " + spCommerceUserId;
-		
-		if(cpCommerceUserId>0)
-			query += " and k.id = " + cpCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(spCommerceUserId)||"-1".equals(spCommerceUserId))){
+			query += " and j.id in (" + spCommerceUserId+")";
+		}
+//		if(spCommerceUserId>0)
+//			query += " and j.id = " + spCommerceUserId;
+		if(!(StringUtil.isNullOrEmpty(cpCommerceUserId)||"-1".equals(cpCommerceUserId))){
+			query += " and k.id in (" + cpCommerceUserId+")";
+		}
+//		if(cpCommerceUserId>0)
+//			query += " and k.id = " + cpCommerceUserId;
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -1326,17 +1351,17 @@ public class MrDao
 	
 	public static void main(String[] args)
 	{
-		Map<String, Object> map =new MrDao().getMrAnalyData("2015-09-27", "2015-09-27", 0, 0,0, 0, 0, 0, 0, -1,-1,-1,-1,1);
-		
-//		map.put("datarows", datalist.get(0));
-//		map.put("showdatarows", datalist.get(1));
-//		map.put("amount", datalist.get(2));
-//		map.put("showamount", datalist.get(3));
-		
-		System.out.println(map.get("datarows"));
-		System.out.println(map.get("showdatarows"));
-		System.out.println(map.get("amount"));
-		System.out.println(map.get("showamount"));
+//		//Map<String, Object> map =new MrDao().getMrAnalyData("2015-09-27", "2015-09-27", 0, 0,0, 0, 0, 0, 0, -1,-1,-1,-1,1);
+//		
+////		map.put("datarows", datalist.get(0));
+////		map.put("showdatarows", datalist.get(1));
+////		map.put("amount", datalist.get(2));
+////		map.put("showamount", datalist.get(3));
+//		
+//		System.out.println(map.get("datarows"));
+//		System.out.println(map.get("showdatarows"));
+//		System.out.println(map.get("amount"));
+//		System.out.println(map.get("showamount"));
 		
 	}
 	/**
@@ -1420,5 +1445,5 @@ public class MrDao
 
 		return map;
 	}
-	
+
 }

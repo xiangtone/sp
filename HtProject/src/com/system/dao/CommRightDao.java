@@ -11,7 +11,6 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.CommRightModel;
-import com.system.model.SpModel;
 import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
@@ -61,6 +60,7 @@ public class CommRightDao {
 					model.setRightList(StringUtil.getString(rs.getString("right_list"), ""));
 					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					model.setUserName(StringUtil.getString(rs.getString("nick_name"),""));
+					model.setRightListName(getRightListName(model.getRightList()));
 					
 					list.add(model);
 				}
@@ -115,5 +115,77 @@ public class CommRightDao {
 	public boolean deleteCommRight(int id){
 		String sql="delete from daily_config.tbl_ds_user_right where id="+id;
 		return new JdbcControl().execute(sql);
+	}
+	
+	public String getRightListByUserId(int userId,int type){
+		String sql="select right_list from daily_config.tbl_ds_user_right ur where ur.user_id="+userId+" and type="+type;
+		return (String)new JdbcControl().query(sql, new QueryCallBack() {
+			
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				while(rs.next())
+				{					
+					return StringUtil.getString(rs.getString("right_list"), "");
+				}
+				return null;
+			}
+		});
+		
+	}
+	/**
+	 * 数据校验
+	 * @param cpId
+	 * @param type
+	 * @param status
+	 * @param id
+	 * @return
+	 */
+	public Map<String, Integer> checkData(int userId,int type,int id){
+
+		final Map<String,Integer> map=new HashMap<String, Integer>();
+		map.put("flag", 0);
+		String sql ="select count(*) as sm from daily_config.tbl_ds_user_right where user_id="+userId+" and type="+type+" and id!="+id;
+		JdbcControl control=new JdbcControl();
+		control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+				{
+					Integer count=(Integer)rs.getInt("sm");
+					if(count>=1){
+						map.put("flag", 1);//存在
+					}
+				}
+				return null;
+			}
+		});
+	
+		return map;
+	
+	}
+	public String getRightListName(String rightListId){
+		String sql="select u.nick_name from daily_config.tbl_user u where id in ("+rightListId+")";
+		return (String)new JdbcControl().query(sql, new QueryCallBack() {
+			
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				String rightListName="";
+				while(rs.next())
+				{
+					if(!StringUtil.isNullOrEmpty(StringUtil.getString(rs.getString("nick_name"), ""))){
+						rightListName+=StringUtil.getString(rs.getString("nick_name"),"")+",";
+					}
+				}
+				if(StringUtil.isNullOrEmpty(rightListName)){
+					return rightListName;
+				}else{
+					return rightListName.substring(0, rightListName.length()-1);
+				}
+			}
+		});
 	}
 }
