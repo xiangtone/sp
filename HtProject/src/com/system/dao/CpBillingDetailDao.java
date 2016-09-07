@@ -72,6 +72,7 @@ public class CpBillingDetailDao
 					model.setRate(rs.getFloat("rate"));
 					model.setStatus(rs.getInt("status"));
 					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
+					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					
 					return model;
 				}

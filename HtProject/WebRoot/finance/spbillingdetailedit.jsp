@@ -36,8 +36,6 @@
 		return;
 	}
 	
-	reduceType = model.getReduceType();
-	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -58,7 +56,7 @@
 	
 	$(function(){
 		setRadioCheck("status",<%= model.getStatus() %>);
-		setRadioCheck("reduce_type",<%= reduceType %>);
+		setRadioCheck("reduce_type",<%= model.getReduceType() %>);
 	});
 	
 </script>
@@ -141,7 +139,7 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">备注</dd>
 					<dd class="dd03_me">
-						<input type="text" name="remark" id="input_remark" style="width: 200px">
+						<input type="text" name="remark" id="input_remark" style="width: 200px" value="<%= model.getRemark() %>" />
 					</dd>
 
 					<br />

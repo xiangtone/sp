@@ -76,7 +76,7 @@ text-decoration: underline;
 	<div class="main_content">
 		<div class="content" style="margin-left: 20px;font-weight: bold;font-size:small; ;float: left;padding-top: 5px">
 			<%= billingModel.getSpName() + "["+ billingModel.getStartDate() +"-"+ billingModel.getEndDate() +"]["+ billingModel.getJsName() +"]帐单详细" %>
-			&nbsp;&nbsp;&nbsp; <a href="<%= returnUrls[pageType] %>?<%= Base64UTF.decode(query) %>">返  回</a>
+			&nbsp;&nbsp;&nbsp; <a href="<%= returnUrls[pageType] %>?type=-1&<%= Base64UTF.decode(query) %>">返  回</a>
 		</div>
 		<table cellpadding="0" cellspacing="0" style="padding-top: 5px;">
 			<thead>
