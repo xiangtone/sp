@@ -16,7 +16,6 @@
     <filter-name>characterEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  <!-- 
   <filter>
     <filter-name>AccessFilter</filter-name>
     <filter-class>com.system.web.filter.AccessFilter</filter-class>
@@ -24,7 +23,7 @@
   <filter-mapping>
     <filter-name>AccessFilter</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping> -->
+  </filter-mapping> 
   <servlet>
     <servlet-name>CacheInit</servlet-name>
     <servlet-class>com.system.servlet.LoadCacheServlet</servlet-class>

@@ -95,8 +95,7 @@
 	
 	String[] statusData = {"待审核","CP对帐中","CP已对帐","已付款"};
 	
-	String[] btnStrings = {"<a href='#' onclick='sendCpBillingToCp(helloisthereany)'>审核</a> <a href='#' onclick='delCpBilling(helloisthereany)'>删除</a> <a href='#' onclick='reExportCpBilling(helloisthereany)'>重新生成</a>",
-			"<a href='#' onclick='confirmCpBillingForCp(helloisthereany)'>CP审核</a> <a href='#' onclick='reCallCpBillingFromCpStatus(helloisthereany)'>撤回</a>","<a href='#' onclick='showConfirmDialog(helloisthereany)''>完成对帐</a>",""};
+	String[] btnStrings = {"","","<a href='#' onclick='showConfirmDialog(helloisthereany)''>完成对帐</a>",""};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -106,7 +105,7 @@
 <title>翔通运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
- <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
@@ -198,7 +197,6 @@
 			}
 		}
 		
-		//亢龙信息[2016-07-04-2016-07-10][对公周结]
 		$("#lab_title").text($("#lab_cp_name_" + id).text() + "[" + $("#lab_start_date_" + id).text() + "至" + $("#lab_end_date_" + id).text() + "][" + $("#lab_js_name_" + id).text() + "]");
 		
   		$("#lab_amount").text($("#lab_amount_" + id).text());
@@ -229,7 +227,6 @@
 	
 	function onConfirmCpBilling(data)
 	{
-		console.log(data);
 		if(!(data==null || data==""))
 		{
 			var strData = data.split(",");

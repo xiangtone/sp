@@ -1,3 +1,7 @@
+<%@page import="com.system.model.SpBillingSptroneDetailModel"%>
+<%@page import="com.system.server.SpBillingDetailServer"%>
+<%@page import="com.system.server.SpBillingServer"%>
+<%@page import="com.system.model.SpBillingModel"%>
 <%@page import="com.system.util.Base64UTF"%>
 <%@page import="com.system.model.CpBillingSptroneDetailModel"%>
 <%@page import="com.system.server.CpBillingDetailServer"%>
@@ -8,13 +12,13 @@
 	pageEncoding="UTF-8"%>
 <%
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
-	int cpBillingId = StringUtil.getInteger(request.getParameter("cpbillingid"), -1);
-	CpBillingModel billingModel = new CpBillingServer().getCpBillingModel(cpBillingId);
+	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
+	SpBillingModel spBillingModel = new SpBillingServer().getSpBillingModel(spBillingId);
 	int typeId = StringUtil.getInteger(request.getParameter("type"), -1);
 	int reduceType = StringUtil.getInteger(request.getParameter("reduce_type"),0);
 	String query = StringUtil.getString(request.getParameter("query"), "");
-	CpBillingDetailServer detailServer = new CpBillingDetailServer();
-	CpBillingSptroneDetailModel model = detailServer.getSingleCpBillingSpTroneDetailModel(id);
+	SpBillingDetailServer detailServer = new SpBillingDetailServer();
+	SpBillingSptroneDetailModel model = detailServer.getSingleSpBillingSpTroneDetailModel(id);
 	
 	float reduceAmount = StringUtil.getFloat(request.getParameter("reduce_amount"), 0);
 	
@@ -27,8 +31,8 @@
 		model.setStatus(status);
 		model.setRemark(remark);
 		model.setReduceType(reduceType);
-		detailServer.updateSingleCpBillingSpTroneDetail(model);
-		response.sendRedirect("cpbillingdetail.jsp?query=" + Base64UTF.decode(query) + "&cpbillingid=" + cpBillingId);
+		detailServer.updateSingleSpBillingSpTroneDetail(model);
+		response.sendRedirect("spbillingdetail.jsp?query=" + Base64UTF.decode(query) + "&spbillingid=" + spBillingId);
 		return;
 	}
 	
@@ -49,7 +53,7 @@
 	
 	function backDetail()
 	{
-		window.location.href = "cpbillingdetail.jsp?query=<%= Base64UTF.decode(query) %>&cpbillingid=<%= cpBillingId %>";
+		window.location.href = "spbillingdetail.jsp?query=<%= Base64UTF.decode(query) %>&spbillingid=<%= spBillingId %>";
 	}
 	
 	$(function(){
@@ -63,12 +67,12 @@
 		<div class="content" style="margin-top: 10px">
 			<dl>
 				<dd class="ddbtn" style="width:400px">
-				<label ><%= billingModel.getCpName() + "["+ billingModel.getStartDate() +"-"+ billingModel.getEndDate() +"]["+ billingModel.getJsName() +"]帐单详细" %></label>
+				<label ><%= spBillingModel.getSpName() + "["+ spBillingModel.getStartDate() +"-"+ spBillingModel.getEndDate() +"]["+ spBillingModel.getJsName() +"]帐单详细" %></label>
 				</dd>
 			</dl>
 			<br />	<br />		
 			<dl>
-				<form action="cpbillingdetailedit.jsp?query=<%= query %>&cpbillingid=<%= cpBillingId %>" method="post" id="addform">
+				<form action="spbillingdetailedit.jsp?query=<%= query %>&spbillingid=<%= spBillingId %>" method="post" id="addform">
 					<input type="hidden" value="<%= model.getId() %>" name="id" />
 					<input type="hidden" value="1" name="type" />
 					<dd class="dd00_me"></dd>

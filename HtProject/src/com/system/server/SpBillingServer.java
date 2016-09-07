@@ -1,10 +1,15 @@
 package com.system.server;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.system.dao.SpBillingDao;
 import com.system.dao.SpTroneRateDao;
+import com.system.database.JdbcControl;
+import com.system.database.QueryCallBack;
 import com.system.model.SettleAccountModel;
 import com.system.model.SpBillingModel;
 import com.system.model.SpBillingSpTroneModel;
@@ -84,4 +89,69 @@ public class SpBillingServer
 	{
 		return new SpBillingDao().loadSpBilling(startDate, endDate, spId,jsType,status,pageIndex);
 	}
+
+	/**
+	 * 调整SP对应的业务数据后，重新进行计算信息费、核减费用、应结费用等
+	 * @param cpBillingId
+	 */
+	public void updateSpBilling(int spBillingId)
+	{
+		String sql = "SELECT  SUM(amount) amount, ";
+		sql += " SUM(amount*rate) pre_billing, ";
+		sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount ";
+		sql += " FROM daily_log.`tbl_sp_billing_sp_trone` WHERE sp_billing_id = " + spBillingId + " AND STATUS = 0; ";
+
+		
+		JdbcControl control = new JdbcControl();
+		float[] result = (float[])control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+				{
+					float[] result = {rs.getFloat("amount"),rs.getFloat("reduce_amount"),rs.getFloat("pre_billing")};
+					return result;
+				}
+				return null;
+			}
+		});
+		String sqlUpdate = "UPDATE daily_config.`tbl_sp_billing` SET amount = ?,reduce_amount = ?,pre_billing = ?  WHERE id = ? ";
+		Map<Integer, Object> params = new HashMap<Integer, Object>();
+		params.put(1, result[0]);
+		params.put(2, result[1]);
+		params.put(3, result[2]);
+		params.put(4, spBillingId);
+		control.execute(sqlUpdate, params);
+	}
+	
+	public void reExportSpBillint(int spBillingId)
+	{
+		SpBillingDao dao = new SpBillingDao();
+		SpBillingModel model = dao.getSpBillingModel(spBillingId);
+		dao.delSpBilling(spBillingId);
+		startExportSpBilling(model.getSpId(),model.getJsType(),model.getStartDate(),model.getEndDate());
+	}
+	
+	public void delSpBilling(int spBillingId)
+	{
+		SpBillingDao dao = new SpBillingDao();
+		dao.delSpBilling(spBillingId);
+	}
+	
+	public void updateSpBillingStatus(int spBillingId,int status)
+	{
+		new SpBillingDao().updateSpBillingStatus(spBillingId, status);
+	}
+	
+	public boolean recallSpBilling(int spBillingId)
+	{
+		return new SpBillingDao().recallSpBilling(spBillingId);
+	}
+	
+	public void updateSpBillingActurePay(int spBillingId,float money)
+	{
+		new SpBillingDao().updateSpBillingActurePay(spBillingId, money);
+	}
+	
 }

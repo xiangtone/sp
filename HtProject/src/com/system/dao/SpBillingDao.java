@@ -10,7 +10,6 @@ import java.util.Map;
 import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
-import com.system.model.CpBillingModel;
 import com.system.model.SettleAccountModel;
 import com.system.model.SpBillingModel;
 import com.system.model.SpBillingSpTroneModel;
@@ -141,6 +140,7 @@ public class SpBillingDao
 					model.setAmount(rs.getFloat("amount"));
 					model.setReduceAmount(rs.getFloat("reduce_amount"));
 					model.setJiesuanlv(rs.getFloat("rate"));
+					model.setReduceType(rs.getInt("reduce_type"));
 					
 					list.add(model);
 				}
@@ -157,7 +157,7 @@ public class SpBillingDao
 	 */
 	public SpBillingModel getSpBillingModel(int id)
 	{
-		String sql = "SELECT a.create_date,a.id,a.amount,a.`sp_id`,b.`short_name` sp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status";
+		String sql = "SELECT a.*,b.`short_name` sp_name,c.`name` js_name";
 		sql += " FROM daily_config.`tbl_sp_billing` a";
 		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
@@ -186,6 +186,7 @@ public class SpBillingDao
 					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
 					model.setAmount(rs.getFloat("amount"));
+					model.setReduceAmount(rs.getFloat("reduce_amount"));
 					
 					return model;
 				}
@@ -255,7 +256,7 @@ public class SpBillingDao
 				}));
 
 		map.put("list", control.query(
-				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.amount,a.create_date,a.id,a.`sp_id`,b.`short_name` sp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status ") + limit,
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.`short_name` sp_name,c.`name` js_name") + limit,
 				new QueryCallBack()
 				{
 					@Override
@@ -280,6 +281,7 @@ public class SpBillingDao
 							model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 							model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
 							model.setAmount(rs.getFloat("amount"));
+							model.setReduceAmount(rs.getFloat("reduce_amount"));
 							
 							list.add(model);
 						}
@@ -289,5 +291,65 @@ public class SpBillingDao
 
 		return map;
 	}
+	
+	/**
+	 * 删除指定对帐单
+	 * @param spBillingId
+	 */
+	public void delSpBilling(int spBillingId)
+	{
+		String sql1 = "DELETE FROM daily_config.`tbl_sp_billing` WHERE id = " + spBillingId;
+		String sql2 = "DELETE FROM daily_log.tbl_sp_billing_sp_trone where sp_billing_id = " + spBillingId;
+		JdbcControl control = new JdbcControl();
+		control.execute(sql1);
+		control.execute(sql2);
+	}
+	
+	/**
+	 * 更新帐单状态
+	 * @param spBillingId
+	 * @param status
+	 */
+	public void updateSpBillingStatus(int spBillingId,int status)
+	{
+		String sql = "UPDATE daily_config.`tbl_sp_billing` SET STATUS = " + status + " WHERE id = " + spBillingId;
+		new JdbcControl().execute(sql);
+	}
+	
+	public boolean recallSpBilling(int spBillingId)
+	{
+		String sql = "select status from daily_config.tbl_sp_billing where id = " + spBillingId;
+		
+		JdbcControl control = new JdbcControl();
+		
+		int status = (Integer)control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+				{
+					return rs.getInt("status");
+				}
+				
+				return -1;
+			}
+		});
+		
+		if(status==1)
+		{
+			control.execute("UPDATE daily_config.`tbl_sp_billing` SET STATUS = 0 WHERE id = " + spBillingId);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void updateSpBillingActurePay(int spBillingId,float money)
+	{
+		String sql = "UPDATE daily_config.`tbl_sp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + spBillingId;
+		new JdbcControl().execute(sql);
+	}
+	
 	
 }

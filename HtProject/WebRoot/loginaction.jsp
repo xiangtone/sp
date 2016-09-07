@@ -33,6 +33,41 @@
 
 					response.addCookie(cookiePwd);
 				}
+				else
+				{
+					Cookie cookies[] = request.getCookies();
+					Cookie sCookie = null;
+					String sValue = null;
+					String sName = null;
+					for(int i=0; i<cookies.length; i++)
+					{
+						sCookie = cookies[i];
+						
+						if("USER_PWD".equalsIgnoreCase(sCookie.getName()))
+						{
+							sCookie.setMaxAge(0);   
+					        response.addCookie(sCookie); 
+					        break;
+						}
+					}
+				}
+			}
+			else
+			{
+				Cookie cookies[] = request.getCookies();
+				Cookie sCookie = null;
+				String sValue = null;
+				String sName = null;
+				for(int i=0; i<cookies.length; i++)
+				{
+					sCookie = cookies[i];
+					
+					if("USER_NAME".equalsIgnoreCase(sCookie.getName()) || "USER_PWD".equalsIgnoreCase(sCookie.getName()))
+					{
+						sCookie.setMaxAge(0);   
+				        response.addCookie(sCookie); 
+					}
+				}
 			}
 		}
 	}

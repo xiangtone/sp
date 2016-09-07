@@ -28,7 +28,7 @@
 	
 	SpBillingServer server = new SpBillingServer();
 	
-	int status = StringUtil.getInteger(request.getParameter("status"), -1);
+	int status = StringUtil.getInteger(request.getParameter("status"), 1);
 	
 	boolean isRecall = false;
 	
@@ -124,8 +124,7 @@
 	
 	String[] statusData = {"待审核","已审核","已收款"};
 	
-	String[] btnStrings = {" <a href='#' onclick='sendToFinance(helloisthereany)'>审核</a>&nbsp;&nbsp;<a href='#' onclick='delSpBilling(helloisthereany)'>删除</a>&nbsp;&nbsp;<a href='#' onclick='reExportSpBilling(helloisthereany)'>重新生成</a>",
-			"<a href='#' onclick='reCallSpBillingBack(helloisthereany)'>撤回</a>","",""};
+	String[] btnStrings = {"","<a href='#' onclick='showConfirmDialog(helloisthereany)''>完成对帐</a>","",""};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -135,12 +134,14 @@
 <title>翔通运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
 <script type="text/javascript" src="../sysjs/base.js"></script>
 <script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <script type="text/javascript">
 
 	var spList = new Array();
@@ -202,11 +203,83 @@
 		$("#sel_status").val(<%= status %>);
 	});
 	
+	var confirmBillingList = new Array();
+	
+	function showConfirmDialog(id)
+	{
+		for(var i=0; i<confirmBillingList.length; i++)
+		{
+			if(confirmBillingList[i]==id)
+			{
+				//$( "#dialog" ).dialog("close");
+				alert("这个已经对帐完毕了");	
+				return;
+			}
+		}
+		
+		$("#lab_title").text($("#lab_sp_name_" + id).text() + "[" + $("#lab_start_date_" + id).text() + "至" + $("#lab_end_date_" + id).text() + "][" + $("#lab_js_name_" + id).text() + "]");
+		
+  		$("#lab_amount").text($("#lab_amount_" + id).text());
+  		$("#lab_pre_billing").text($("#lab_pre_billing_" + id).text());
+  		$("#lab_acture_billing").val($("#lab_pre_billing_" + id).text());
+  		
+  		$("#btn_confirm").click(function(){
+  			confirmActureBilling(id);
+  		});
+		
+		$( "#dialog" ).dialog();
+	}
+	
+	function confirmActureBilling(id)
+	{
+		var actureBilling = parseFloat($("#lab_acture_billing").val()).toFixed(2);
+		
+		if(isNaN(actureBilling) || actureBilling < 0)
+		{
+			alert("难道你能真的能收到这样的钱？");
+			return;
+		}
+		
+		getAjaxValue("action.jsp?type=4&id=" + id + "&money=" + actureBilling,onConfirmSpBilling);
+		
+		$( "#dialog" ).dialog("close");
+	}
+	
+	function onConfirmSpBilling(data)
+	{
+		if(!(data==null || data==""))
+		{
+			var strData = data.split(",");
+			if("OK"==strData[0])
+			{
+				confirmBillingList.push(strData[1]);
+				alert("已经完成对帐！");
+				return;
+			}
+			else
+			{
+				alert("完成对帐失败！");	
+				return;
+			}
+		}
+	}
+	
 </script>
-<body>
+
+<style type="text/css">
+.ui-button-icon-only .ui-icon{left:0}
+.ui-button-icon-only .ui-icon, 
+.ui-button-text-icon-primary .ui-icon, 
+.ui-button-text-icon-secondary .ui-icon, 
+.ui-button-text-icons .ui-icon, 
+.ui-button-icons-only .ui-icon
+{top:0}
+</style>
+
+<body style="min-height: 2000px">
 	<div class="main_content">
 		<div class="content" >
-			<form action="spbilling.jsp"  method="get" style="margin-top: 10px">
+			<form action="cwspbilling.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me" style="margin-left: -10px;">开始日期</dd>
 					<dd class="dd03_me">
@@ -293,14 +366,15 @@
 				%>
 				<tr>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
-					<td><%=model.getSpName() %></td>
-					<td><%=model.getStartDate() %></td>
-					<td><%=model.getEndDate()%></td>
-					<td><%= model.getJsName() %></td>
-					<td><%= model.getAmount() %></td>
+					
+					<td><label id="lab_sp_name_<%= model.getId() %>"><%=model.getSpName() %></label> </td>
+					<td><label id="lab_start_date_<%= model.getId() %>"><%=model.getStartDate() %></label></td>
+					<td><label id="lab_end_date_<%= model.getId() %>"><%=model.getEndDate()%></label></td>
+					<td><label id="lab_js_name_<%= model.getId() %>"><%= model.getJsName() %></label></td>
+					<td><label id="lab_amount_<%= model.getId() %>"><%= model.getAmount() %></label></td>
 					<td><%=model.getPreBilling() %></td>
 					<td><%= model.getReduceAmount() %></td>
-					<td><%= model.getPreBilling() - model.getReduceAmount() %> </td>
+					<td><label id="lab_pre_billing_<%= model.getId() %>"><%= model.getPreBilling() - model.getReduceAmount() %></label></td>
 					<td><%= model.getActureBilling() %></td>
 					<td><%=model.getRemark() %></td>
 					<td><%= model.getCreateDate() %></td>
@@ -322,15 +396,16 @@
 			</tbody>
 		</table>
 	</div>
-	
+	<div id="dialog" title="对帐完成" >
+  		<label id="lab_title" style="font-weight: bold;">等你等到我心疼！</label>
+  		<br />
+  		信息费：<label id="lab_amount">123456</label>
+  		<br />
+  		应收：<label id="lab_pre_billing">123456</label>
+  		<br />
+  		<label style="font-weight: bold;">实际应收：</label><input id="lab_acture_billing" type="text" value="123456" style="background-color: #ccc" />
+  		<br />
+  		<input id="btn_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="确定" >
+	</div>
 </body>
 </html>
-<%
-		if(isRecall)
-		{
-			if(!isRecallSuc)
-			{
-				out.println("<script>alert('财务已审核，撤回帐单失败，请找管理员！');</script>");
-			}
-		}
-%>

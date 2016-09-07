@@ -51,6 +51,15 @@
 		
 		out.print(new SpBillingServer().exportSpBilling(spId, jsType, startDate, endDate) ? "OK" : "NO");
 	}
+	//SP帐单最终收款
+	else if(type==4)
+	{
+		int spBillingId = StringUtil.getInteger(request.getParameter("id"), -1);
+		float actureBilling = StringUtil.getFloat(request.getParameter("money"), 0.0F);
+		new SpBillingServer().updateSpBillingActurePay(spBillingId, actureBilling);
+		out.println("OK," + spBillingId);
+		return;
+	}
 	
 	
 %>

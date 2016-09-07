@@ -17,7 +17,16 @@ public class SpBillingModel
 	private String remark;
 	private String payTime;
 	private String createDate;
+	private float reduceAmount;
 	
+	public float getReduceAmount()
+	{
+		return reduceAmount;
+	}
+	public void setReduceAmount(float reduceAmount)
+	{
+		this.reduceAmount = reduceAmount;
+	}
 	public int getId()
 	{
 		return id;

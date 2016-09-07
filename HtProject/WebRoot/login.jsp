@@ -153,11 +153,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords"
 	content="Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
-<!--Google Fonts-->
-<link
-	href='http://fonts.useso.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic'
-	rel='stylesheet' type='text/css'>
-<!--Google Fonts-->
 </head>
 <body style="background-color: #F7F7F7">
 	<!--header start here-->
