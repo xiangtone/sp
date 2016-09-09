@@ -101,9 +101,9 @@ public class CpMrDao
 		sql += " FROM ";
 		sql += " ( ";
 		sql += " SELECT appkey,oprator pay_type,SUM(amount) amount,DATE_FORMAT(a.`createdate`,'%Y-%m-%d') mr_date,COUNT(*) data_rows  ";
-		sql += " FROM game_log.`tbl_xypay_201608` a  ";
-		sql += " WHERE a.`createdate` >= '2016-08-07 00:00:00'  ";
-		sql += " AND a.`createdate` <= '2016-08-07 23:59:59' ";
+		sql += " FROM game_log.`tbl_xypay_" + tableName + "` a  ";
+		sql += " WHERE a.`createdate` >= '" + startDate + " 00:00:00'  ";
+		sql += " AND a.`createdate` <= '" + endDate + " 23:59:59' ";
 		sql += " GROUP BY appkey,oprator ";
 		sql += " ) a LEFT JOIN ";
 		sql += " ( ";
