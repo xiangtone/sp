@@ -15,11 +15,13 @@
 	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int dateType = StringUtil.getInteger(request.getParameter("datetype"), -1);
-	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
+	int export=StringUtil.getInteger(request.getParameter("load"), -1);
+//	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
 	List<SpModel> spList = new SpServer().loadSp();
 	String display = "";
 	Map<String, List<SpFinanceShowModel>> map = null;
-	if (spId > 0 && isNotFirstLoad) {
+//	if (spId > 0 && isNotFirstLoad) {
+	if (spId > 0 && export==1) {
 		SettleAccountServer accountServer = new SettleAccountServer();
 		List<SettleAccountModel> list = accountServer.loadSpSettleAccountList(spId, startDate, endDate,dateType);
 		if (list != null && list.size() > 0) {
@@ -54,8 +56,8 @@
 		} else {
 			display = "alert('没有相应的数据');";
 		}
-	} else if (spId < 0 && isNotFirstLoad) {
-		
+//	} else if (spId < 0 && isNotFirstLoad) {
+	} else{	
 		map = new SettleAccountServer().loadSpSettleAccountDataAll(startDate,endDate,spId,dateType);
 	}
 %>
@@ -68,11 +70,27 @@
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
+<script type="text/javascript" src="../sysjs/base.js"></script>
+<script type="text/javascript" src="../sysjs/pinyin.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
+var spList = new Array();
+<%
+for(SpModel spModel : spList)
+{
+	%>
+	spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
+	<%
+}
+%>
+
 
 	$(function()
 	{
 		$("#sel_date_type").val("<%= dateType %>");
+		$("#sel_sp").val("<%= spId %>");
+
 	});
 
 	function subForm() 
@@ -86,13 +104,20 @@
 
 		document.getElementById("exportform").submit();
 	}
+	
+	function onSpDataSelect(joData)
+	{
+		$("#sel_sp").val(joData.id);
+	}
 </script>
 <body>
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<form action="spexport_all.jsp" method="post" id="exportform">
 				<dl>
-					<input type="hidden" value="1" name="load" />
+				 
+					<input type="hidden" value="2" name="load" />
+					
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
 						<input name="startdate" type="text" value="<%=startDate%>"
@@ -102,6 +127,20 @@
 					<dd class="dd03_me">
 						<input name="enddate" type="text" value="<%=endDate%>"
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
+					</dd>
+						<dd class="dd01_me">SP</dd>
+					<dd class="dd04_me">
+						<select name="sp_id" id="sel_sp"  style="width: 120px" onclick="namePicker(this,spList,onSpDataSelect)">
+							<option value="-1">全部</option>
+							<%
+								for (SpModel sp : spList)
+								{
+							%>
+							<option value="<%=sp.getId()%>"><%=sp.getShortName()%></option>
+							<%
+								}
+							%>
+						</select>
 					</dd>
 					<dd class="dd01_me">结算类型</dd>
 					<dd class="dd04_me">
