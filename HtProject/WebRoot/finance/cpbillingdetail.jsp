@@ -106,7 +106,7 @@ text-decoration: underline;
 					<td><%= model.getRate() %></td>
 					<td><%= model.getReduceAmount()  %></td>
 					<td><%= reduceType[model.getReduceType()] %></td>
-					<td><%= (model.getAmount()-model.getReduceAmount())*model.getRate() %></td>
+					<td><%=model.getReduceType()==0?(model.getAmount()-model.getReduceAmount())*model.getRate():model.getAmount()*model.getRate()-model.getReduceAmount() %></td>
 					<td><%= model.getRemark() %></td>
 					<td><%= statusStr[model.getStatus()] %></td>
 					<%=
