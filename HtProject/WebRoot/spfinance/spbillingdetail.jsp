@@ -11,7 +11,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	DecimalFormat df = new DecimalFormat("0.0");
+	DecimalFormat df=new DecimalFormat("0.0");
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
 	int pageType = StringUtil.getInteger(request.getParameter("pagetype"), 0);

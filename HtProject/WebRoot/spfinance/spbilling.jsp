@@ -18,11 +18,14 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.text.DecimalFormat" %>
+<%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 	DecimalFormat df = new DecimalFormat("0.0");
+	UserModel user=(UserModel)session.getAttribute("user");
+	int userId=user.getId();
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
@@ -102,7 +105,7 @@
 	
 	String endDate = StringUtil.getString(request.getParameter("enddate"), "");
 
-	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,status,pageIndex);
+	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,userId,status,pageIndex);
 		
 	List<SpBillingModel> list = (List<SpBillingModel>)map.get("list");
 	
@@ -298,9 +301,9 @@
 					<td><%=model.getStartDate() %></td>
 					<td><%=model.getEndDate()%></td>
 					<td><%= model.getJsName() %></td>
-					<td><%= df.format(model.getAmount())  %></td>
+					<td><%= df.format(model.getAmount()) %></td>
 					<td><%=df.format(model.getPreBilling()) %></td>
-					<td><%= df.format(model.getReduceAmount()) %></td>
+					<td><%=df.format(model.getReduceAmount()) %></td>
 					<td><%= df.format(model.getPreBilling() - model.getReduceAmount()) %> </td>
 					<td><%= df.format(model.getActureBilling()) %></td>
 					<td><%=model.getRemark() %></td>

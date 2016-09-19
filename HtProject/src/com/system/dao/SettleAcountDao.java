@@ -465,6 +465,168 @@ public class SettleAcountDao
 			}
 		});
 	}
+	/**
+	 * SP用户查看自己的账务基础
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsType
+	 * @param userId
+	 * @return
+	 */
+	 
+	@SuppressWarnings("unchecked")
+	public List<SpFinanceShowModel> loadSpSettleAccountDataAll(String startDate,String endDate,int spId,int jsType,int userId)
+	{
+		String sql = "SELECT a.* FROM (";
+		
+		sql += " SELECT a.*,CONCAT(j.`name_cn`,'-',i.name) name_cn ";
+		sql += " FROM ( ";
+		sql += " SELECT  f.id sp_id,d.jiesuanlv,d.js_type,d.id sp_trone_id,d.`product_id`,f.`short_name` sp_name, ";
+		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
+		sql += " FROM daily_log.tbl_mr_summer a ";
+		sql += " LEFT JOIN    daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN  daily_config.tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
+		sql += " WHERE a.mr_date >= '" + startDate + "' ";
+		sql += " AND a.mr_date <= '" + endDate + "' ";
+		sql += " AND (f.commerce_user_id="+userId+" or f.commerce_user_id in ("+getRigthListByUser(userId)+"))";
+		
+		if(spId>0)
+		{
+			sql += " AND f.id = " + spId;
+		}
+		
+		sql += " GROUP BY f.id,d.id ";
+		sql += " ORDER BY sp_name,sp_trone_name ";
+		sql += " )a  ";
+		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " WHERE a.`js_type` = " + jsType;
+		
+		sql += " ) a ";
+		
+		return (List<SpFinanceShowModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpFinanceShowModel> list = new ArrayList<SpFinanceShowModel>();
+				SpFinanceShowModel model = null;
+				
+				while(rs.next())
+				{
+					model = new SpFinanceShowModel();
+					
+					model.setSpId(rs.getInt("sp_id"));
+					model.setShortName(StringUtil.getString(rs.getString("sp_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+					model.setOperatorName(StringUtil.getString(rs.getString("name_cn"), ""));
+					model.setAmount(rs.getFloat("amounts"));
+					model.setJiesuanlv(rs.getFloat("jiesuanlv"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	public String getRigthListByUser(int userId){
+		String sql="select right_list from daily_config.tbl_ds_user_right ur where ur.user_id="+userId+" and ur.type=0";
+		return (String)new JdbcControl().query(sql, new QueryCallBack(){
+
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				String str=null;
+				while (rs.next()) {
+					str=StringUtil.getString(rs.getString("right_list"), "-1");
+				}
+				return str;
+			}
+			
+		});
+	}
+	/**
+	 * SP商务只能看到自己的账单基础数据
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsType
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SpFinanceShowModel> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType,int userId)
+	{
+		String sql = "SELECT a.* FROM (";
+		
+		sql += " SELECT a.*,CONCAT(j.`name_cn`,'-',i.name) name_cn ";
+		sql += " FROM ( ";
+		sql += " SELECT  f.id sp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` sp_name,d.jiesuanlv, ";
+		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
+		sql += " FROM daily_log.tbl_mr_summer a ";
+		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN daily_config.tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
+		sql += " WHERE a.mr_date >= '" + startDate + "' ";
+		sql += " AND a.mr_date <= '" + endDate + "' ";
+		sql += " AND (f.commerce_user_id="+userId+" or f.commerce_user_id in ("+getRigthListByUser(userId)+"))";
+		sql += " AND d.`js_type` = " + jsType;
+		
+		if(spId>0)
+		{
+			sql += " AND f.id = " + spId;
+		}
+		
+		sql += " GROUP BY f.id,d.id ";
+		sql += " ORDER BY sp_name,sp_trone_name ";
+		sql += " )a  ";
+		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		
+		
+		sql += " ) a ";
+		
+		sql += "WHERE a.sp_id NOT IN ( SELECT sp_id FROM daily_config.`tbl_sp_billing` WHERE js_type = " + jsType;
+		
+		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
+				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date)));";
+		
+		return (List<SpFinanceShowModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpFinanceShowModel> list = new ArrayList<SpFinanceShowModel>();
+				SpFinanceShowModel model = null;
+				
+				while(rs.next())
+				{
+					model = new SpFinanceShowModel();
+					
+					model.setSpId(rs.getInt("sp_id"));
+					model.setShortName(StringUtil.getString(rs.getString("sp_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+					model.setOperatorName(StringUtil.getString(rs.getString("name_cn"), ""));
+					model.setAmount(rs.getFloat("amounts"));
+					model.setJiesuanlv(rs.getFloat("jiesuanlv"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+		
+		
+	
+	}
+	
 	
 	
 }
