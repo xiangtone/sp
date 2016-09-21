@@ -15,6 +15,7 @@
 <%
 	UserModel user=(UserModel)session.getAttribute("user");
 	Integer userId=user.getId();
+	int rightType=1;
 	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
 	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
@@ -62,7 +63,7 @@
 		}
 //	} else if (spId < 0 && isNotFirstLoad) {
 	}else{
-		map = new SettleAccountServer().loadSpSettleAccountData(startDate, endDate,spId,dateType,userId);
+		map = new SettleAccountServer().loadSpSettleAccountData(startDate, endDate,spId,dateType,userId,rightType);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

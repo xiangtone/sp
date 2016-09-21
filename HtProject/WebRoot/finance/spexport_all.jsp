@@ -1,3 +1,4 @@
+<%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.vmodel.SpFinanceShowModel"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.system.model.SettleAccountModel"%>
@@ -11,6 +12,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	int rightType=-1;//是否进行权限控制。-1不进行权限控制
+	UserModel user=(UserModel)session.getAttribute("user");
+	int userId=user.getId();
 	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
 	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
@@ -58,7 +62,7 @@
 		}
 //	} else if (spId < 0 && isNotFirstLoad) {
 	} else{	
-		map = new SettleAccountServer().loadSpSettleAccountDataAll(startDate,endDate,spId,dateType);
+		map = new SettleAccountServer().loadSpSettleAccountDataAll(startDate,endDate,spId,dateType,userId,rightType);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

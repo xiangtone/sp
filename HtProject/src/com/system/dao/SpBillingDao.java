@@ -361,7 +361,7 @@ public class SpBillingDao
 	 * @return
 	 */
 	public Map<String, Object> loadSpBilling(String startDate, String endDate,
-			int spId,int jsType,int userId,int status,int pageIndex)
+			int spId,int jsType,int userId,int rightType,int status,int pageIndex)
 	{
 		startDate = SqlUtil.sqlEncode(startDate);
 		endDate = SqlUtil.sqlEncode(endDate);		
@@ -371,8 +371,9 @@ public class SpBillingDao
 		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
 		sql += " WHERE 1=1";
-		sql += " AND (b.commerce_user_id="+userId+" or b.commerce_user_id in ("+getRigthListByUser(userId)+"))";
-		
+		if(rightType>0){
+			sql += " AND (b.commerce_user_id="+userId+" or b.commerce_user_id in ("+getRigthListByUser(userId)+"))";
+		}
 		if(spId>0)
 		{
 			sql += " and b.id = " + spId;

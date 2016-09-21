@@ -1,3 +1,4 @@
+<%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.server.SpServer"%>
 <%@page import="com.system.model.SpModel"%>
 <%@page import="com.system.model.SpBillingModel"%>
@@ -22,6 +23,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	int rightType=-1;//是否进行权限控制。-1不进行权限控制
+	UserModel user=(UserModel)session.getAttribute("user");
+	int userId=user.getId();
 	DecimalFormat df = new DecimalFormat("0.0");
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
@@ -102,7 +106,7 @@
 	
 	String endDate = StringUtil.getString(request.getParameter("enddate"), "");
 
-	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,status,pageIndex);
+	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,userId,rightType,status,pageIndex);
 		
 	List<SpBillingModel> list = (List<SpBillingModel>)map.get("list");
 	

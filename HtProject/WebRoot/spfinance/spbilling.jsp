@@ -26,6 +26,7 @@
 	DecimalFormat df = new DecimalFormat("0.0");
 	UserModel user=(UserModel)session.getAttribute("user");
 	int userId=user.getId();
+	int rightType=1;
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
@@ -105,7 +106,7 @@
 	
 	String endDate = StringUtil.getString(request.getParameter("enddate"), "");
 
-	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,userId,status,pageIndex);
+	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,userId,rightType,status,pageIndex);
 		
 	List<SpBillingModel> list = (List<SpBillingModel>)map.get("list");
 	

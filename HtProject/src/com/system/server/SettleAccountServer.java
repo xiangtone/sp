@@ -184,9 +184,9 @@ public class SettleAccountServer
 	/*
 	 * SP商务只能看到自己的基础数据
 	 * */
-	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountDataAll(String startDate,String endDate,int spId,int jsType,int userId)
+	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountDataAll(String startDate,String endDate,int spId,int jsType,int userId,int rightType)
 	{
-		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountDataAll(startDate, endDate,spId,jsType,userId);
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountDataAll(startDate, endDate,spId,jsType,userId, rightType);
 		
 		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
 		
@@ -215,9 +215,9 @@ public class SettleAccountServer
 	 * @param jsType
 	 * @return
 	 */
-	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType,int userId)
+	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType,int userId,int rightType)
 	{
-		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountData(startDate, endDate,spId,jsType,userId);
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountData(startDate, endDate,spId,jsType,userId,rightType);
 		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
 		
 		List<SpFinanceShowModel> tmpList = null;

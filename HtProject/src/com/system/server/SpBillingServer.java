@@ -164,9 +164,9 @@ public class SpBillingServer
 	 * @return
 	 */
 	public Map<String, Object> loadSpBilling(String startDate, String endDate,
-			int spId,int jsType,int userId,int status,int pageIndex)
+			int spId,int jsType,int userId,int rightType,int status,int pageIndex)
 	{
-		return new SpBillingDao().loadSpBilling(startDate, endDate, spId,jsType,userId,status,pageIndex);
+		return new SpBillingDao().loadSpBilling(startDate, endDate, spId,jsType,userId,rightType,status,pageIndex);
 	}
 	
 }

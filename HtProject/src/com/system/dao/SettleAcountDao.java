@@ -476,7 +476,7 @@ public class SettleAcountDao
 	 */
 	 
 	@SuppressWarnings("unchecked")
-	public List<SpFinanceShowModel> loadSpSettleAccountDataAll(String startDate,String endDate,int spId,int jsType,int userId)
+	public List<SpFinanceShowModel> loadSpSettleAccountDataAll(String startDate,String endDate,int spId,int jsType,int userId,int rightType)
 	{
 		String sql = "SELECT a.* FROM (";
 		
@@ -491,8 +491,9 @@ public class SettleAcountDao
 		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
-		sql += " AND (f.commerce_user_id="+userId+" or f.commerce_user_id in ("+getRigthListByUser(userId)+"))";
-		
+		if(rightType>0){
+			sql += " AND (f.commerce_user_id="+userId+" or f.commerce_user_id in ("+getRigthListByUser(userId)+"))";
+		}
 		if(spId>0)
 		{
 			sql += " AND f.id = " + spId;
@@ -559,7 +560,7 @@ public class SettleAcountDao
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<SpFinanceShowModel> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType,int userId)
+	public List<SpFinanceShowModel> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType,int userId,int rightType)
 	{
 		String sql = "SELECT a.* FROM (";
 		
@@ -574,7 +575,9 @@ public class SettleAcountDao
 		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
-		sql += " AND (f.commerce_user_id="+userId+" or f.commerce_user_id in ("+getRigthListByUser(userId)+"))";
+		if(rightType>0){
+			sql += " AND (f.commerce_user_id="+userId+" or f.commerce_user_id in ("+getRigthListByUser(userId)+"))";
+		}
 		sql += " AND d.`js_type` = " + jsType;
 		
 		if(spId>0)
