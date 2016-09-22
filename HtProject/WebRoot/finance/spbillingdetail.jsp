@@ -11,7 +11,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	DecimalFormat df = new DecimalFormat("0.0");
+	DecimalFormat df = new DecimalFormat("0.00");
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
 	int pageType = StringUtil.getInteger(request.getParameter("pagetype"), 0);
@@ -104,12 +104,12 @@ text-decoration: underline;
 				<tr>
 					<td><%= rowNum++ %></td>
 					<td><%= model.getSpTroneName()  %></td>
-					<td><%= df.format(model.getAmount()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getAmount()) %></td>
 					<td><%= model.getRate() %></td>
-					<td><%= df.format(model.getReduceAmount())  %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getReduceAmount())  %></td>
 					<td><%= reduceType[model.getReduceType()] %></td>
-					<td><%= df.format(model.getAmount()*model.getRate()) %></td>
-					<td><%= df.format(model.getAmount()*model.getRate()- (model.getReduceType()==0 ? model.getReduceAmount() * model.getRate() : model.getReduceAmount())) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getAmount()*model.getRate()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getAmount()*model.getRate()- (model.getReduceType()==0 ? model.getReduceAmount() * model.getRate() : model.getReduceAmount())) %></td>
 					<td><%= model.getRemark() %></td>
 					<td><%= statusStr[model.getStatus()] %></td>
 					<%=

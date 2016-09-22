@@ -26,7 +26,7 @@
 	int rightType=-1;//是否进行权限控制。-1不进行权限控制
 	UserModel user=(UserModel)session.getAttribute("user");
 	int userId=user.getId();
-	DecimalFormat df = new DecimalFormat("0.0");
+	DecimalFormat df = new DecimalFormat("0.00");
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
@@ -302,11 +302,11 @@
 					<td><%=model.getStartDate() %></td>
 					<td><%=model.getEndDate()%></td>
 					<td><%= model.getJsName() %></td>
-					<td><%= df.format(model.getAmount())  %></td>
-					<td><%=df.format(model.getPreBilling()) %></td>
-					<td><%= df.format(model.getReduceAmount()) %></td>
-					<td><%= df.format(model.getPreBilling() - model.getReduceAmount()) %> </td>
-					<td><%= df.format(model.getActureBilling()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getAmount())  %></td>
+					<td><%=StringUtil.getDecimalFormat(model.getPreBilling()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getReduceAmount()) %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getPreBilling() - model.getReduceAmount()) %> </td>
+					<td><%= StringUtil.getDecimalFormat(model.getActureBilling()) %></td>
 					<td><%=model.getRemark() %></td>
 					<td><%= model.getCreateDate() %></td>
 					<td><%= statusData[model.getStatus()] %></td>
