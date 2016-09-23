@@ -1,8 +1,0 @@
-16:04:58.049 Request:{"apiExdata":"","apiOrderId":3,"cid":0,"clientIp":"125.68.124.173","cpVerifyCode":"","extrData":"xysdk0001850517","extraParams":"","iccid":"89860054221571","id":138910,"imei":"861022009339401","imsi":"460000540427407","ip":"120.26.61.129","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1196,"troneOrderId":2197,"userAgent":""} 
-16:04:58.479 http://14.17.74.121:9900/sppayv2.do?cpid=7e056f1c&imsi=460000540427407&imei=861022009339401&fee=1000&channelOrderId=api_7e056f1c_1000_21E9E&province=9&operator=1&ip=125.68.124.173&phoneType=mi3s&brand=XiaoMi&osbuild=19
-16:04:59.055 +576ms {"sid":"BB72NG8w","result":"0","tradeid":"QTRGRTQ0REY0NzM0RUNFN0VDOEFBMjZGMzQ4NzJFRjc=","smsmsg":"TU0jV0xBTiNxdmc3ZDZLeEJVUWdHNXFLUk5uZEdBPT0jNzMxNDMzNzQzI0Q3OTlCM0Y2OEUyOEZENDg=","smsport":"10658424","rc":0,"codetype":1}
-
-16:05:08.232 Request:{"apiExdata":"","apiOrderId":3,"cid":0,"clientIp":"125.68.124.173","cpVerifyCode":"","extrData":"xysdk0001850517","extraParams":"","iccid":"89860054221571","id":138910,"imei":"861022009339401","imsi":"460000540427407","ip":"120.26.61.129","isHidden":0,"lac":0,"mobile":"","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":1196,"troneOrderId":2197,"userAgent":""} 
-16:05:25.115 http://14.17.74.121:9900/sppayv2.do?cpid=7e056f1c&imsi=460000540427407&imei=861022009339401&fee=1000&channelOrderId=api_7e056f1c_1000_21E9E&province=9&operator=1&ip=125.68.124.173&phoneType=mi3s&brand=XiaoMi&osbuild=19
-16:05:25.136 +20ms {"rc":-1}
-
