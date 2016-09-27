@@ -117,6 +117,13 @@
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
+		<profile>
+			<id>szsu</id>
+			<properties>
+				<runtime.env>config\szsu</runtime.env>
+				<final.name>credit</final.name>
+			</properties>
+		</profile>
 	</profiles>
   <dependencies>
 		<dependency>
