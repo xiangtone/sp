@@ -350,6 +350,128 @@ public class SpBillingDao
 		String sql = "UPDATE daily_config.`tbl_sp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + spBillingId;
 		new JdbcControl().execute(sql);
 	}
-	
-	
+	/**
+	 * SP商务只能查看自己以及被授权的的运营账单
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsType
+	 * @param status
+	 * @param pageIndex
+	 * @return
+	 */
+	public Map<String, Object> loadSpBilling(String startDate, String endDate,
+			int spId,int jsType,int userId,int rightType,int status,int pageIndex)
+	{
+		startDate = SqlUtil.sqlEncode(startDate);
+		endDate = SqlUtil.sqlEncode(endDate);		
+		
+		String sql = "SELECT " + Constant.CONSTANT_REPLACE_STRING;
+		sql += " FROM daily_config.`tbl_sp_billing` a";
+		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
+		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
+		sql += " WHERE 1=1";
+		if(rightType>0){
+			sql += " AND (b.commerce_user_id="+userId+" or b.commerce_user_id in ("+getRigthListByUser(userId)+"))";
+		}
+		if(spId>0)
+		{
+			sql += " and b.id = " + spId;
+		}
+		
+		if(!StringUtil.isNullOrEmpty(startDate))
+		{
+			sql += " and a.start_date >= '" + startDate + "'";
+		}
+		
+		if(!StringUtil.isNullOrEmpty(endDate))
+		{
+			sql += " and a.end_date <= '" + endDate + "'";
+		}
+		
+		if(jsType>=0)
+		{
+			sql += " and a.js_type = " + jsType;
+		}
+		
+		if(status>=0)
+		{
+			sql += " and a.status = " + status;
+		}
+		
+		sql += " ORDER BY a.id DESC";
+		
+
+		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
+				+ Constant.PAGE_SIZE;
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		JdbcControl control = new JdbcControl();
+		map.put("rows", control.query(
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"),
+				new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						if (rs.next())
+							return rs.getInt(1);
+
+						return 0;
+					}
+				}));
+
+		map.put("list", control.query(
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.`short_name` sp_name,c.`name` js_name") + limit,
+				new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						List<SpBillingModel> list = new ArrayList<SpBillingModel>();
+						while (rs.next())
+						{
+							SpBillingModel model = new SpBillingModel();
+
+							model.setId(rs.getInt("id"));
+							model.setSpId(rs.getInt("sp_id"));
+							model.setSpName(StringUtil.getString(rs.getString("sp_name"), ""));
+							model.setEndDate(StringUtil.getString(rs.getString("end_date"), ""));
+							model.setStartDate(StringUtil.getString(rs.getString("start_date"), ""));
+							model.setJsType(rs.getInt("js_type"));
+							model.setJsName(StringUtil.getString(rs.getString("js_name"), ""));
+							model.setTaxRate(rs.getFloat("tax_rate"));
+							model.setPreBilling(rs.getFloat("pre_billing"));
+							model.setActureBilling(rs.getFloat("acture_billing"));
+							model.setStatus(rs.getInt("status"));
+							model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
+							model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
+							model.setAmount(rs.getFloat("amount"));
+							model.setReduceAmount(rs.getFloat("reduce_amount"));
+							
+							list.add(model);
+						}
+						return list;
+					}
+				}));
+
+		return map;
+	}
+	public String getRigthListByUser(int userId){
+		String sql="select right_list from daily_config.tbl_ds_user_right ur where ur.user_id="+userId+" and ur.type=0";
+		return (String)new JdbcControl().query(sql, new QueryCallBack(){
+
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException {
+				// TODO Auto-generated method stub
+				String str=null;
+				while (rs.next()) {
+					str=StringUtil.getString(rs.getString("right_list"), "-1");
+				}
+				return str;
+			}
+			
+		});
+	}
 }

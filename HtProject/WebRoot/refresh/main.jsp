@@ -11,6 +11,7 @@
 <%@page import="com.system.server.UserServer"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.model.ProvinceModel"%>
+<%@page import="com.system.util.ConfigManager"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -49,7 +50,10 @@
 			});	
 		}
 	}
-	
+	function cleanRefresh()
+	{
+		window.open("http://callback.n8wan.com:9191/clearcache.ashx");
+	}
 </script>
 <body>
 	<div class="main_content">
@@ -65,6 +69,10 @@
 					<dd class="ddbtn" style="margin-left: 10px;">
 						<input type="button" value="刷 新" onclick="refreshCache(1)">
 					</dd>
+					<dd class="ddbtn" style="margin-left: 10px;">
+						<input type="button" value="清除缓存" onclick="cleanRefresh()">
+					</dd>
+					
 					<br /><br />
 			</dl>
 		</div>

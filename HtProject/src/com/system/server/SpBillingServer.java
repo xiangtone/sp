@@ -153,5 +153,20 @@ public class SpBillingServer
 	{
 		new SpBillingDao().updateSpBillingActurePay(spBillingId, money);
 	}
+	/**
+	 * SP商务只能查看自己的运营账单列表
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsType
+	 * @param status
+	 * @param pageIndex
+	 * @return
+	 */
+	public Map<String, Object> loadSpBilling(String startDate, String endDate,
+			int spId,int jsType,int userId,int rightType,int status,int pageIndex)
+	{
+		return new SpBillingDao().loadSpBilling(startDate, endDate, spId,jsType,userId,rightType,status,pageIndex);
+	}
 	
 }

@@ -1,4 +1,3 @@
-<%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.server.SpServer"%>
 <%@page import="com.system.model.SpModel"%>
 <%@page import="com.system.model.SpBillingModel"%>
@@ -19,14 +18,15 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.text.DecimalFormat" %>
+<%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	int rightType=-1;//是否进行权限控制。-1不进行权限控制
+	DecimalFormat df = new DecimalFormat("0.00");
 	UserModel user=(UserModel)session.getAttribute("user");
 	int userId=user.getId();
-	DecimalFormat df = new DecimalFormat("0.00");
+	int rightType=1;
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
@@ -302,9 +302,9 @@
 					<td><%=model.getStartDate() %></td>
 					<td><%=model.getEndDate()%></td>
 					<td><%= model.getJsName() %></td>
-					<td><%= StringUtil.getDecimalFormat(model.getAmount())  %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getAmount()) %></td>
 					<td><%=StringUtil.getDecimalFormat(model.getPreBilling()) %></td>
-					<td><%= StringUtil.getDecimalFormat(model.getReduceAmount()) %></td>
+					<td><%=StringUtil.getDecimalFormat(model.getReduceAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getPreBilling() - model.getReduceAmount()) %> </td>
 					<td><%= StringUtil.getDecimalFormat(model.getActureBilling()) %></td>
 					<td><%=model.getRemark() %></td>
