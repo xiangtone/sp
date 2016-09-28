@@ -8,57 +8,111 @@ public class LvMrModel
 	int		id;
 	String	orderId;
 	int		price;
-	Date	createDate;
-	int		channelId;
+	String	appkey;
+	String	channel;
+	String	payOrderId;
+	/**
+	 * 0扣量1不扣量
+	 */
+	int		status;
 	int		levelId;
-	
+	Date	createDate;
+
 	public int getId()
 	{
 		return id;
 	}
+
 	public void setId(int id)
 	{
 		this.id = id;
 	}
+
 	public String getOrderId()
 	{
 		return orderId;
 	}
+
 	public void setOrderId(String orderId)
 	{
 		this.orderId = orderId;
 	}
+
 	public int getPrice()
 	{
 		return price;
 	}
+
 	public void setPrice(int price)
 	{
 		this.price = price;
 	}
-	public Date getCreateDate()
+
+	public String getAppkey()
 	{
-		return createDate;
+		return appkey;
 	}
-	public void setCreateDate(Date createDate)
+
+	public void setAppkey(String appkey)
 	{
-		this.createDate = createDate;
+		this.appkey = appkey;
 	}
-	public int getChannelId()
+
+	public String getChannel()
 	{
-		return channelId;
+		return channel;
 	}
-	public void setChannelId(int channelId)
+
+	public void setChannel(String channel)
 	{
-		this.channelId = channelId;
+		this.channel = channel;
 	}
+
+	public String getPayOrderId()
+	{
+		return payOrderId;
+	}
+
+	public void setPayOrderId(String payOrderId)
+	{
+		this.payOrderId = payOrderId;
+	}
+	/**
+	 * @param status
+	 *            0扣量1不扣量
+	 */
+	public int getStatus()
+	{
+		return status;
+	}
+
+	/**
+	 * @param status
+	 *            0扣量1不扣量
+	 */
+	public void setStatus(int status)
+	{
+		this.status = status;
+	}
+
 	public int getLevelId()
 	{
 		return levelId;
 	}
+
 	public void setLevelId(int levelId)
 	{
 		this.levelId = levelId;
+	}
+
+	public Date getCreateDate()
+	{
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate)
+	{
+		this.createDate = createDate;
 	}
 
 }

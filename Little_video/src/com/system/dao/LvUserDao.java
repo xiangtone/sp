@@ -113,14 +113,19 @@ public class LvUserDao
 		return;
 	}
 	
-	public void UpdateLevel(LvUserModel user)
+	public void UpdateLevel(String imei, int level ,boolean iForce)
 	{
-		String upSql = "update little_video_log." + getTabelName(user.getImei())
-				+ " set Level=? where id=?";
+		String upSql = "update little_video_log." + getTabelName(imei)
+				+ " set Level=? where imei=? ";
+		if(!iForce)
+			upSql+=" and  Level>?";
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
-		map.put(++i, user.getLevel());
-		map.put(++i, user.getId());
+		map.put(++i, level);
+		map.put(++i, imei );
+		
+		if(!iForce)
+			map.put(++i, level);
 		
 
 		JdbcControlLvLog jdbc = new JdbcControlLvLog();

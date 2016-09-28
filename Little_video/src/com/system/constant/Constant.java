@@ -33,5 +33,6 @@ public class Constant
 
 	public static final int	ORDER_METHOD_QUERY	= 0;
 	public static final int	ORDER_METHOD_CREATE	= 1;
+	public static final int	ORDER_METHOD_UPDATE	= 2;
 
 }

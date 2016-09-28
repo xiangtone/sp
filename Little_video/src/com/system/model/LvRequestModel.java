@@ -7,80 +7,85 @@ public class LvRequestModel
 {
 	int		id;
 	String	imei;
-	short	payType;
+	int		payType;
 	int		price;
-	String	orderId;
+	String	orderid;
 	Date	createDate;
-	int		channelId;
-
+	String	appkey;
+	int		level;
+	String	channel;
+	
 	public int getId()
 	{
 		return id;
 	}
-
 	public void setId(int id)
 	{
 		this.id = id;
 	}
-
 	public String getImei()
 	{
 		return imei;
 	}
-
 	public void setImei(String imei)
 	{
 		this.imei = imei;
 	}
-
-	public short getPayType()
+	public int getPayType()
 	{
 		return payType;
 	}
-
-	public void setPayType(short payType)
+	public void setPayType(int payType)
 	{
 		this.payType = payType;
 	}
-
 	public int getPrice()
 	{
 		return price;
 	}
-
 	public void setPrice(int price)
 	{
 		this.price = price;
 	}
-
-	public String getOrderId()
+	public String getOrderid()
 	{
-		return orderId;
+		return orderid;
 	}
-
-	public void setOrderId(String orderId)
+	public void setOrderid(String orderid)
 	{
-		this.orderId = orderId;
+		this.orderid = orderid;
 	}
-
 	public Date getCreateDate()
 	{
 		return createDate;
 	}
-
 	public void setCreateDate(Date createDate)
 	{
 		this.createDate = createDate;
 	}
-
-	public int getChannelId()
+	public String getAppkey()
 	{
-		return channelId;
+		return appkey;
 	}
-
-	public void setChannelId(int channelId)
+	public void setAppkey(String appkey)
 	{
-		this.channelId = channelId;
+		this.appkey = appkey;
+	}
+	public int getLevel()
+	{
+		return level;
+	}
+	public void setLevel(int level)
+	{
+		this.level = level;
+	}
+	public String getChannel()
+	{
+		return channel;
+	}
+	public void setChannel(String channel)
+	{
+		this.channel = channel;
 	}
 
 }

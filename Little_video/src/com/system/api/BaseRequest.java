@@ -9,6 +9,8 @@ public abstract class BaseRequest
 	private String imei;
 
 	private int channelId;
+	private String appkey;
+	private String channel;
 
 	@SuppressWarnings("unchecked")
 	public static <T> T ParseJson(String data, Class<? extends BaseRequest> cls)
@@ -53,6 +55,26 @@ public abstract class BaseRequest
 	public void setChannelId(int channelId)
 	{
 		this.channelId = channelId;
+	}
+
+	public String getAppkey()
+	{
+		return appkey;
+	}
+
+	public void setAppkey(String appkey)
+	{
+		this.appkey = appkey;
+	}
+
+	public String getChannel()
+	{
+		return channel;
+	}
+
+	public void setChannel(String channel)
+	{
+		this.channel = channel;
 	}
 
 }

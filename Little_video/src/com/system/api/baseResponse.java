@@ -3,7 +3,7 @@ package com.system.api;
 
 import net.sf.json.JSONObject;
 
-public abstract class baseResponse
+public class baseResponse
 {
 	private int status;
 	

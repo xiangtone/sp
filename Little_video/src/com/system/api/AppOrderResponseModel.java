@@ -7,10 +7,6 @@ public class AppOrderResponseModel extends baseResponse
 	int		levelId;
 	String	levelName;
 	int		price;
-	/**
-	 * 0 未支付，1支付成功
-	 */
-	int		isPay;
 	long	createDate;
 	int		payDate;
 
@@ -54,15 +50,6 @@ public class AppOrderResponseModel extends baseResponse
 		this.price = price;
 	}
 
-	public int getIsPay()
-	{
-		return isPay;
-	}
-
-	public void setIsPay(int isPay)
-	{
-		this.isPay = isPay;
-	}
 
 	public long getCreateDate()
 	{

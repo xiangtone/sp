@@ -46,6 +46,15 @@
 		<url-pattern>/OrderInfo</url-pattern>
 	</filter-mapping>
 
+	<filter>
+		<filter-name>callback</filter-name>
+		<filter-class>com.system.handler.bolinCallbackHttpHandler</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>callback</filter-name>
+		<url-pattern>/bolincall</url-pattern>
+	</filter-mapping>
+
 
 	<servlet>
 		<servlet-name>CacheInit</servlet-name>

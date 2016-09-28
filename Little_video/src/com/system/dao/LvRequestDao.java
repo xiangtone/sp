@@ -29,14 +29,15 @@ public class LvRequestDao
 				if (!rs.next())
 					return null;
 				LvRequestModel m = new LvRequestModel();
-				m.setChannelId(rs.getInt("channel_id"));
+				m.setChannel(StringUtil.getString(rs.getString("channel"), ""));
 				m.setCreateDate(rs.getDate("create_date"));
 				m.setId(rs.getInt("id"));
 				m.setImei(StringUtil.getString(rs.getString("imei"), ""));
-				m.setOrderId(
-						StringUtil.getString(rs.getString("order_id"), ""));
+				m.setOrderid(StringUtil.getString(rs.getString("orderid"), ""));
 				m.setPayType(rs.getShort("pay_type"));
 				m.setPrice(rs.getInt("price"));
+				m.setAppkey(StringUtil.getString(rs.getString("appKey"), ""));
+				m.setLevel(rs.getInt("level"));
 
 				return m;
 			}
@@ -49,18 +50,19 @@ public class LvRequestDao
 
 	public void InsertOrderId(LvRequestModel m)
 	{
-		String orderId = m.getOrderId();
+		String orderId = m.getOrderid();
 		if (orderId.length() < 6)
 			return;
 		String tab = getTableName(orderId);
 		String sql = "Insert into little_video_log." + tab
-				+ "(imei,pay_type,orderid,channel_id,price) values(?,?,?,?,?)";
+				+ "(imei,pay_type,orderid,channel,appkey,price) values(?,?,?,?,?,?)";
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
 		map.put(++i, m.getImei());
 		map.put(++i, m.getPayType());
-		map.put(++i, m.getOrderId());
-		map.put(++i, m.getChannelId());
+		map.put(++i, m.getOrderid());
+		map.put(++i, m.getChannel());
+		map.put(++i, m.getAppkey());
 		map.put(++i, m.getPrice());
 		JdbcControlLvLog jdbc = new JdbcControlLvLog();
 		m.setId(jdbc.insertWithGenKey(sql, map));
@@ -75,6 +77,19 @@ public class LvRequestDao
 		if (cMonth < m)
 			cYear--;
 		return String.format("tbl_rquest_%d%02d", cYear, m);
+	}
+
+	public void updateStatus(String orderId, int status, boolean iForce)
+	{
+		String tab = getTableName(orderId);
+		String sql = "update little_video_log." + tab + " set status="
+				+ Integer.toString(status) + " where ";
+		if (!iForce)
+			sql += " status<" + Integer.toString(status) + " and ";
+
+		sql += " orderId=" + StringUtil.sqlEncode(orderId, true);
+
+		new JdbcControlLvLog().execute(sql);
 	}
 
 }

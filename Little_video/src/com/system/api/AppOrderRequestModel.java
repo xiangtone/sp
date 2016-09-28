@@ -12,6 +12,8 @@ public class AppOrderRequestModel extends BaseRequest
 	String	orderId;
 	int		levelId;
 	short	payType;
+	int		payStatus;
+	int		method;
 
 	public String getOrderId()
 	{
@@ -41,6 +43,26 @@ public class AppOrderRequestModel extends BaseRequest
 	public void setPayType(short payType)
 	{
 		this.payType = payType;
+	}
+
+	public int getMethod()
+	{
+		return method;
+	}
+
+	public void setMethod(int method)
+	{
+		this.method = method;
+	}
+
+	public int getPayStatus()
+	{
+		return payStatus;
+	}
+
+	public void setPayStatus(int payStatus)
+	{
+		this.payStatus = payStatus;
 	}
 
 }

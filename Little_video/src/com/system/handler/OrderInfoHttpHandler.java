@@ -28,18 +28,40 @@ public class OrderInfoHttpHandler extends BaseFilter
 
 		AppOrderRequestModel m = BaseRequest.ParseJson(s,
 				AppOrderRequestModel.class);
+
 		result = new AppOrderResponseModel();
 
-		CreateOrder(m);
+		if (m.getMethod() == com.system.constant.Constant.ORDER_METHOD_CREATE)
+		{
+			CreateOrder(m);
+			return result;
+		}
+		else if (m
+				.getMethod() == com.system.constant.Constant.ORDER_METHOD_UPDATE)
+		{
+			UpdateOrder(m);
+			return new baseResponse();
+		}
 
 		return result;
+	}
+
+	private void UpdateOrder(AppOrderRequestModel m)
+	{
+		if (m.getPayStatus() != 1)
+			return;
+		String orderId = m.getOrderId();
+
+		new LvRequestServer().updateStatus(orderId, m.getPayStatus(), false);
 	}
 
 	private void CreateOrder(AppOrderRequestModel m)
 	{
 
 		String imei = m.getImei();
-		if (StringUtil.isNullOrEmpty(imei))
+		if (StringUtil.isNullOrEmpty(imei)
+				|| StringUtil.isNullOrEmpty(m.getAppkey())
+				|| StringUtil.isNullOrEmpty(m.getChannel()))
 		{
 			result.setStatus(com.system.constant.Constant.ERROR_MISS_PARAMETER);
 			return;
@@ -74,9 +96,13 @@ public class OrderInfoHttpHandler extends BaseFilter
 
 		LvRequestModel order = new LvRequestModel();
 		order.setImei(m.getImei());
-		order.setOrderId(orderId);
+		order.setOrderid(orderId);
 		order.setPayType(m.getPayType());
 		order.setPrice(levelInfo.getPrice());
+
+		order.setAppkey(m.getAppkey());
+		order.setChannel(m.getChannel());
+
 		new LvRequestServer().Insert(order);
 		if (order.getId() == 0)
 		{
