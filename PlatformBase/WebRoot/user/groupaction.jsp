@@ -16,6 +16,7 @@
 		String[] rights = request.getParameterValues("menu2id");
 		List<Integer> list = new ArrayList<Integer>();
 		
+		if(rights!=null)
 		for(String s : rights)
 		{
 			list.add(StringUtil.getInteger(s, -1));

@@ -41,6 +41,6 @@
 		new SpServer().addSp(model);
 	}
 	
-	response.sendRedirect("sp.jsp?"+ Base64UTF.decode(query));
+	response.sendRedirect(request.getContextPath() + "sp.jsp?"+ Base64UTF.decode(query));
 	
 %>

@@ -83,6 +83,7 @@
 				<tr>
 				    <td>序号</td>
 					<td>计费日期</td>
+					<td>渠道号</td>
 					<td>游戏名</td>
 					<td>激活数</td>
 					<td>收入</td>
@@ -97,6 +98,7 @@
 				<tr>
 					<td><%= (pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td><!-- 序号 -->
 					<td><%=model.getFee_date() %></td>
+					<td><%=model.getChannelKey() %></td>
 					<td class="or"><%=model.getAppName()%></td>
 					<td><%= model.getDataRows() %></td>
 					<td class="or"><%= StringUtil.getDecimalFormat((Double)model.getShowAmount()) %></td>

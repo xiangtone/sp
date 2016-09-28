@@ -49,7 +49,7 @@
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrTodayLrData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId,cpCommerceUserId,sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayLrData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId+"",cpCommerceUserId+"",sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();

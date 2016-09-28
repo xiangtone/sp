@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="LimitDaysCompanys">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	
+	<delete id="deleteLogLimitClose" parameterClass="map" >
+	    delete from smscompanymts.loglimitclose
+	</delete>
+	
+	<select id="queryCompanyprovswitch" parameterClass="map" resultClass="dto">
+	    SELECT 
+	           company as company,
+	           miscid as miscid,
+	           sysdate() as addate
+		FROM smscompanymts.companyprovswitch WHERE
+		   sendflag = '0' 
+		and
+		  company not in($listcompany$)
+	</select>
+	
+	<select id="queryNotlimitday" parameterClass="map" resultClass="dto">
+	    select a.company as company,
+	           b.partnerName as partnerName
+	    from smscompanymts.notlimitday a,
+	            smscompanymts.partners b 
+	    where a.company=b.partner
+	</select>
+	
+	<insert  id="addLogLimitClose" parameterClass="dto">
+		insert into smscompanymts.loglimitclose(company,miscid,addate) 
+	 	VALUES (#company#, #miscid#, #addate#)
+	</insert>
+	
+	
+	<update id="updateCompanyProvSwitch" parameterClass="dto">
+      update smscompanymts.companyprovswitch
+		<dynamic prepend="SET"> 
+			<isNotNull prepend="," property="sendflag">
+	         sendflag = #sendflag#
+			</isNotNull>
+			<isNotNull prepend="," property="addflag">
+	         addflag = #addflag#
+			</isNotNull>
+			<isNotNull prepend="," property="flag">
+	         flag = #flag#
+			</isNotNull>			
+		</dynamic> 
+	        WHERE company=#company# and miscid=#miscid#
+	</update>
+	<select id="queryLogcloseswitch" parameterClass="map" resultClass="dto">
+	    select company,miscid from smscompanymts.logcloseswitch 
+	    where left(closetime,10)=#yesterday#
+	     and company in($listcompany$)
+	</select>
+	<select id="queryLogLimitClose" parameterClass="map" resultClass="dto">
+	  select company,miscid,addate from smscompanymts.loglimitclose
+	</select>
+	<select id="queryLogLimitCloseLkxx" parameterClass="map" resultClass="dto">
+	  select company,miscid,addate from smscompanymts.loglimitclose WHERE company='lkxx'
+	</select>
+</sqlMap>

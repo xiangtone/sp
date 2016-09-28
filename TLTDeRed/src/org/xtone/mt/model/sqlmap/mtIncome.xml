@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="mtIncome">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	
+	
+	<select id="queryMtCountByMonth" parameterClass="map" resultClass="dto">
+	 <![CDATA[
+	 select sum(distmts) as total,
+	        company as company,
+	        game as game,
+	        substring(countdate,1,7)  as month 
+	     from company_mtcount 
+	     ]]>
+	     where 1=1
+			       <isNotEmpty prepend="AND" property="countdate">
+						countdate like '%$countdate$%'
+				   </isNotEmpty>	
+	      <![CDATA[
+	    group by company,substring(countdate,1,7),game
+	     ]]>
+	</select>
+	
+	
+	
+	<select id="querySmsCostByServerid" parameterClass="map" resultClass="dto">
+	  select  gamename,
+	          feecode_iod as feecode_iod,
+	          infofee as price
+	  from sms_cost 
+	   where 1=1
+		<isNotEmpty prepend="AND" property="serverid">
+			serverid = #serverid#
+		</isNotEmpty>	
+	</select>
+	
+	<insert id="addCpIncomeDetail" parameterClass="dto">
+	     insert into cp_jsincome_detail
+	                   (spname,
+	                    type,
+	                    cpid,
+	                    serviceType,
+	                    serviceName,
+	                    serviceID,
+	                    gameid,
+	                    price,
+	                    feenum,
+	                    ordernum,
+	                    linkid,
+	                    income,
+	                    tjYmonth) 
+	            values (
+	                    '通联移动',
+	                    'SMS',
+	                    #cpid#,
+	                    #serviceType#,
+	                    #serviceName#,
+	                    #feecode_iod#,
+	                    #gameid#,
+	                    #price#,
+	                    #feenum#,
+	                    '0',
+	                    '0',
+	                    #income#,
+	                    #tjYmonth#
+	                   )
+	</insert>
+	
+	
+	<update id="updateGateType1" parameterClass="dto">
+	    <![CDATA[
+	     UPDATE cp_jsincome_detail 
+	          SET gatetype = '全网' 
+	          WHERE  substring(gameid,1,1)='1'
+	     ]]>
+	</update>
+	
+	<update id="updateGateType2" parameterClass="dto">
+	    <![CDATA[
+	     UPDATE cp_jsincome_detail 
+	          SET gatetype = '宁夏' 
+	          WHERE  substring(gameid,1,1)='2'
+	     ]]>
+	</update>
+	
+	<update id="updateGateType3" parameterClass="dto">
+	    <![CDATA[
+	     UPDATE cp_jsincome_detail 
+	          SET gatetype = '四川' 
+	          WHERE  substring(gameid,1,1)='3'
+	     ]]>
+	</update>
+	
+	<update id="updateGateType4" parameterClass="dto">
+	    <![CDATA[
+	     UPDATE cp_jsincome_detail 
+	          SET gatetype = '广东' 
+	          WHERE  substring(gameid,1,1)='4'
+	     ]]>
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="queryMonthByMonth" parameterClass="map" resultClass="dto">
+	        select company,
+			         serviceid,
+			         substring(addate,1,7) as month,
+			         spid as spid,
+			         count(company) as dis 
+			   from smscompanymonthorders.$table$ 
+			     where company like '%month%'
+			       <isNotEmpty prepend="AND" property="addate">
+						substring(addate,1,7) like '%$addate$%'
+				   </isNotEmpty>	
+			   group by company,
+			            serviceid,
+			            substring(addate,1,7)
+	</select>
+	
+	
+	
+	<select id="querySmsCostByServeridMonth" parameterClass="map" resultClass="dto">
+	 select  infofee,
+	         gamename,
+	         serverid
+	         from
+	 sms_cost
+	   where 1=1
+		<isNotEmpty prepend="AND" property="feecode_iod">
+			feecode_iod = #feecode_iod#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="AND" property="spid">
+			spid = #spid#
+		</isNotEmpty>		
+	</select>
+	
+	
+	
+	
+	
+	
+	
+</sqlMap>

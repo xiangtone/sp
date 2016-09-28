@@ -5,7 +5,12 @@ public class SettleAccountModel
 	private String operatorName;
 	private String spTroneName;
 	private float amount;
+	private float reduceAmount;
 	private float jiesuanlv;
+	/**
+	 * 核减类型，0是按信息费，1是按结算款核减
+	 */
+	private int reduceType;
 	
 	public String getSpTroneName()
 	{
@@ -38,6 +43,22 @@ public class SettleAccountModel
 	public void setOperatorName(String operatorName)
 	{
 		this.operatorName = operatorName;
+	}
+	public float getReduceAmount()
+	{
+		return reduceAmount;
+	}
+	public void setReduceAmount(float reduceAmount)
+	{
+		this.reduceAmount = reduceAmount;
+	}
+	public int getReduceType()
+	{
+		return reduceType;
+	}
+	public void setReduceType(int reduceType)
+	{
+		this.reduceType = reduceType;
 	}
 	
 	

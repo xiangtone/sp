@@ -395,6 +395,7 @@ public class FeeDao
 							model = new XyUserCpsModel();
 							model.setId(rs.getInt("id"));
 						    model.setFee_date(rs.getString("fee_date"));
+						    model.setChannelKey(StringUtil.getString(rs.getString("channelkey"), ""));
 						    model.setAppName(rs.getString("appname"));
 						    model.setDataRows(rs.getInt("data_rows"));
 						    model.setShowAmount(rs.getDouble("show_amount"));

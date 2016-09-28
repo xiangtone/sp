@@ -118,6 +118,28 @@
 		document.getElementById("exportform").submit();
 	}
 	
+	function exportCpBillData(startDate,endDate,cpId,jsType)
+	{
+		window.location.href = "cpexport_all.jsp?export=1&js_type=" + jsType + "&cpid=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate;
+	}
+	
+	function exportBill(startDate,endDate,cpId,jsType)
+	{
+		getAjaxValue("action.jsp?js_type=" + jsType + "&cpid=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate,onExportBillResult);
+	}
+	
+	function onExportBillResult(data)
+	{
+		if("OK" == data.trim())
+		{
+			alert("开始对帐成功");
+		}
+		else
+		{
+			alert("已存在相同的对帐单");	
+		}
+	}
+	
 </script>
 <body>
 	<div class="main_content">
@@ -210,11 +232,7 @@
 												+ StringUtil.getDecimalFormat(sfsModel.getAmount()
 														* sfsModel.getJiesuanlv())
 												+ "</td><td rowspan='" + tmpList.size()
-												+ "'><a href='cpexport.jsp?startdate="
-												+ startDate + "&enddate=" + endDate
-												+ "&cp_id=" + sfsModel.getSpId()
-												+ "&load=1&datetype=" + dateType
-												+ "&export=1'>导出</a></td></tr>");
+												+ "'><a href='#' onclick=exportBill(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>对帐</a></td></tr>");
 									}
 									else
 									{

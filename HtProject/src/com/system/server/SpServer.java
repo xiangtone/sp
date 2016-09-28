@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.system.dao.SpDao;
 import com.system.model.SpModel;
+import com.system.util.ConfigManager;
+import com.system.util.StringUtil;
 
 public class SpServer
 {
@@ -27,6 +29,10 @@ public class SpServer
 	{
 		return new SpDao().loadSp(pageIndex, keyWord);
 	}
+	public Map<String, Object> loadSp(int pageIndex,String keyWord,int userId)
+	{
+		return new SpDao().loadSp(pageIndex, keyWord,userId);
+	}
 	
 	public SpModel loadSpById(int id)
 	{
@@ -41,5 +47,14 @@ public class SpServer
 	public boolean updateSp(SpModel model)
 	{
 		return new SpDao().updateSp(model);
+	}
+	public int checkAdd(int userId){
+		int commerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
+		int count=new SpDao().checkAdd(userId,commerceId);
+		if(count>=1){
+			return 1;//在商务组里
+		}else{
+			return 0;
+		}
 	}
 }

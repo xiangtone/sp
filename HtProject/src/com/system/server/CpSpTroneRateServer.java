@@ -1,9 +1,16 @@
 package com.system.server;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.system.dao.CpSpTroneRateDao;
 import com.system.model.CpSpTroneRateModel;
+import com.system.util.StringUtil;
 
 public class CpSpTroneRateServer
 {
@@ -46,4 +53,18 @@ public class CpSpTroneRateServer
 	{
 		new CpSpTroneRateDao().syncUnAddCpSpTroneRate();
 	}
+	
+	/**
+	 * 获取CP对应的结算类型指定时间的特殊结算率
+	 * @param cpId
+	 * @param jsType
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<CpSpTroneRateModel> loadCpSpTroneRateList(int cpId,int jsType,String startDate,String endDate)
+	{
+		return new CpSpTroneRateDao().loadCpSpTroneRateList(cpId, jsType, startDate, endDate);
+	}
+	
 }

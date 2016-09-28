@@ -7,4 +7,5 @@ public class SqlUtil {
 			return "";
 		return txt.replace("\\", "\\\\").replace("\'", "\\\'");
 	}
+	
 }

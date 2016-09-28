@@ -74,6 +74,7 @@
 			<thead>
 				<tr>
 					<td>激活日期</td>
+					<td class="or">渠道号</td>
 					<td class="or">游戏名</td>
 					<td class="or">用户激活数</td>
 				</tr>
@@ -85,6 +86,7 @@
 				%>
 				<tr>
 					<td><%=model.getActiveDate()%></td>
+					<td class="or"><%=model.getChannelKey()%></td>
 					<td class="or"><%=model.getAppName()%></td>
 					<td class="or"><%=model.getShowDataRows()%></td>
 				</tr>

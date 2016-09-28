@@ -92,7 +92,9 @@
 	}
 	
 	var spTroneList = new Array();
-	<%for(SpTroneModel spTrone : spTroneList){%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>'));<%}%>
+	<%for(SpTroneModel spTrone : spTroneList){
+		if(spTrone.getStatus()==1){
+	%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>'));<%}}%>
 	
 	var cpPushUrlList = new Array();
 	<%
@@ -252,6 +254,11 @@
 		$("#sel_trone").change(troneChange);
 		
 		troneChange();
+		
+		amountDeduct();
+		$("input[name=hold_custom]").click(function(){
+			amountDeduct();
+		});
 	});
 	
 	function subForm() 
@@ -310,6 +317,24 @@
 	{
 		var reg=/^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i;
 		return reg.test(a);
+	}
+	
+	function amountDeduct(){
+		var radioId=$("input[name=hold_custom]:checked").attr("id");
+		if(radioId=="radio_0"){
+			$("#input_hold_percent").val(0);
+			$("#input_hold_amount").val(0);
+			$("#input_hold_account").val(0);
+			$("#input_hold_percent").attr("disabled",true);
+			$("#input_hold_amount").attr("disabled",true);
+			$("#input_hold_account").attr("disabled",true);
+			
+		}
+		if(radioId=="radio_1"){
+			$("#input_hold_percent").attr("disabled",false);
+			$("#input_hold_amount").attr("disabled",false);
+			$("#input_hold_account").attr("disabled",false);
+		}
 	}
 
 </script>
@@ -416,9 +441,9 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">扣量方式</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="hold_custom" style="width: 35px;float:left" value="0" checked="checked" >
+						<input type="radio" name="hold_custom" id="radio_0" style="width: 35px;float:left" value="0" checked="checked" >
 						<label style="font-size: 14px;float:left">URL</label>
-						<input type="radio" name="hold_custom" style="width: 35px;float:left" value="1" >
+						<input type="radio" name="hold_custom" id="radio_1" style="width: 35px;float:left" value="1" >
 						<label style="font-size: 14px;float:left">业务</label>
 					</dd>
 					

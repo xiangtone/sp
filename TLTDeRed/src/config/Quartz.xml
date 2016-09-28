@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="gbk" ?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+
+  <transactionManager type="JDBC">
+		<dataSource type="dbcp">     
+		            <property name="JDBC.Driver" value="com.mysql.jdbc.Driver"/>
+		            <property name="JDBC.ConnectionURL" value="jdbc:mysql://211.136.85.186:3306/sms_eRed?useUnicode=true&amp;characterEncoding=gbk&amp;zeroDateTimeBehavior=convertToNull"/>
+		            <property name="JDBC.Username" value="smsplatform"/>
+		            <property name="JDBC.Password" value="Z6sxtfn.ZHRpm88J"/>
+		             <property name="Pool.MaximumActiveConnections" value="80"/>
+		            <property name="Pool.MaximumIdleConnections" value="40"/> 
+		            <property name="Pool.MaximumWait" value="60000"/>
+		            <property name="Pool.ValidationQuery" value="select 1 from eamenu"/>
+		            <property name="Pool.LogAbandoned" value="false"/>
+		            <property name="Pool.RemoveAbandoned" value="true"/>
+		            <property name="Pool.RemoveAbandonedTimeout" value="50000"/>
+		</dataSource>
+	</transactionManager>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/limitDaysCompanys.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/totalUsers.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/monthFeeUsers.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/alertPolice.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/company_UserByMonth.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/reportTable.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/moveMt.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/updateReportByMt.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/month_succ_cpn_num.xml"/>
+  <sqlMap resource="org/xtone/mt/model/sqlmap/tousuPhone.xml"/>
+</sqlMapConfig>
+
+
+
+
+

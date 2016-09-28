@@ -1,0 +1,9 @@
+/build/
+/config/
+/config.properties
+/g4.Resource.properties
+/global.app.properties
+/global.g4.properties
+/jdbc.properties
+/log4j.properties
+/org/

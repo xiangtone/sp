@@ -17,6 +17,14 @@ public class RightServer
 	public static int login(HttpSession session,String userName,String password)
 	{
 		String md5Pwd = StringUtil.getMd5String(password, 32);
+		
+		if(StringUtil.isNullOrEmpty(password))
+		{
+			return -1;
+		}
+		else if(password.length()==32)
+			md5Pwd = password;
+		
 		for(UserModel model : RightConfigCacheMgr.userListCache)
 		{
 			if(model.getName().equalsIgnoreCase(userName)&&model.getPassword().equals(md5Pwd))

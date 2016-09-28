@@ -94,4 +94,9 @@ public class TroneOrderServer
 	{
 		new TroneOrderDao().closeTroneOrderByTroneId(troneId);
 	}
+	
+	public Map<String, Object> loadTroneOrder(int spId,int spTroneId,int cpId, int status,int pageIndex,String keyWord,int userId)
+	{
+		return new TroneOrderDao().loadTroneOrder(spId, spTroneId, cpId, status ,pageIndex,keyWord,userId);
+	}
 }

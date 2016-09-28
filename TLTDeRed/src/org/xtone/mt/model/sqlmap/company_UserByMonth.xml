@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="company_UserByMonth">
+
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+	
+			<select id="queryMonthUserBy" parameterClass="map" resultClass="dto">
+				 <![CDATA[
+				    select a.id,
+				           a.company,
+						   a.spid,
+						   a.cpn,
+						   a.serviceid,
+						   a.game,
+						   a.state,
+						   date_format(a.addate,'%Y%m%d') as addate, 
+						   date_format(a.pausedate,'%Y%m%d') as pausedate,
+						   a.provid,
+						   b.price
+					from smscompanymonthorders.companys_user a left join smscompanymonthorders.companygames b on a.game=b.gameid
+					where a.state=1 
+				          and date_format(a.addate, '%Y%m%d')< #querydate#
+				          group by a.cpn,a.serviceid
+				     ]]>
+			</select>
+			
+			<select id="queryUserNum" parameterClass="map" resultClass="dto">
+			  select count(id) as num 
+			     from $tablename1$
+			     where destcpn=#cpn#
+			       and feecode=#serviceid# 
+			       and reptstat='DELIVRD'
+			</select>
+			
+			<select id="queryMonthUser2" parameterClass="map" resultClass="dto">
+			  select a.company,a.spid,a.cpn,a.serviceid,a.state,a.game,
+			         date_format(a.addate,'%Y-%m-%d %H:%i:%S') as addate,
+			         date_format(a.pausedate,'%Y-%m-%d %H:%i:%S') as pausedate,
+			         date_format(a.stopdate,'%Y-%m-%d %H:%i:%S') as stopdate,
+			         a.provid, 
+			         b.price
+			  from smscompanymonthorders.companys_user a left join smscompanymonthorders.companygames b on a.game=b.gameid
+              where a.state!=1 and 
+              (date_format(a.addate, '%Y%m%d') between #lastMonthStart# and #lastMonthEnd#)
+              group by a.cpn,a.serviceid
+			</select>
+
+			<select id="queryMonthByCpn" parameterClass="map" resultClass="dto">
+				   select cpn,serviceid 
+				   from  $tablename2$
+				   where cpn=#cpn# 
+				   and serviceid=#serviceid#
+			</select>
+			<insert id="insertMonthCountUsers" parameterClass="dto">
+			  insert into $tablename2$
+			              (company,spid,cpn,serviceid,infofee,state,addate,changedate,provid)
+			   values (#company#,#spid#,#cpn#,#serviceid#,#infofee#,#state#,#addate#,#changedate#,#provid#)
+			</insert>
+			<update id="createDetailMonth" parameterClass="dto">
+			    CREATE TABLE smscompanymts.$table$ (
+					`id`  int(11) NOT NULL AUTO_INCREMENT ,
+					`cpid`  varchar(30) NULL DEFAULT NULL ,
+					`serviceid`  varchar(30) NULL DEFAULT NULL ,
+					`phone`  varchar(20) NULL DEFAULT NULL ,
+					`province_id`  varchar(20) NULL DEFAULT NULL ,
+					`areaCode`  varchar(20) NULL DEFAULT NULL ,
+					`createtime`  datetime NULL DEFAULT NULL ,
+					`lostflag`  bigint(20) NULL DEFAULT NULL ,
+					PRIMARY KEY (`id`)
+					)
+					TYPE=MyISAM
+					AUTO_INCREMENT=1
+					CHECKSUM=0
+					ROW_FORMAT=DYNAMIC
+					DELAY_KEY_WRITE=0
+		    </update>
+			
+			<update id="createLeaveUser" parameterClass="dto">
+			   CREATE TABLE smscompanymonthorders.$table$ (
+						`id`  int(11) NOT NULL AUTO_INCREMENT,
+						`company`  varchar(20) NULL DEFAULT NULL ,
+						`provid`  varchar(10) NULL DEFAULT NULL ,
+						`cpn`  varchar(20) NULL DEFAULT NULL ,
+						`addate`  datetime NULL DEFAULT NULL ,
+						 PRIMARY KEY (`id`)
+						)
+						TYPE=MyISAM
+						AUTO_INCREMENT=1
+						CHECKSUM=0
+						ROW_FORMAT=DYNAMIC
+						DELAY_KEY_WRITE=0
+		    </update>
+		
+	    <insert id="insertLeaveUser" parameterClass="dto">
+		    <![CDATA[
+		     insert into smscompanymonthorders.$table$(company,provid,cpn,addate)
+		       select company,provid, cpn,addate from smscompanymonthorders.companys_user
+		        where addate < #addate# 
+		       and (state='1' or (state='2' and stopdate> #addate# ))
+			]]> 
+	    </insert>		
+</sqlMap>

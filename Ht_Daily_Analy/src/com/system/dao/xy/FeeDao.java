@@ -55,7 +55,7 @@ public class FeeDao
 	public boolean updateChannelShowAmout(String startDate,String endDate)
 	{
 		String sql = " UPDATE game_log.`tbl_xypay_summer` a,daily_config.`tbl_xy_channel` b "
-				+ " SET show_amount = a.`amount`*(100-b.`hold_percent`)/100  "
+				+ " SET show_amount = floor(a.`amount`*(100-b.`hold_percent`)/100)  "
 				+ " WHERE show_amount = 0  AND a.`channelid` = b.`channel` AND b.settle_type = 2 "
 				+ " AND fee_date >= '" + startDate + "' "
 				+ " AND fee_date <= '" + endDate + "'";

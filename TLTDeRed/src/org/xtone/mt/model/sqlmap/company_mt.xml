@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Company_Mt">
+	<typeAlias alias="dto" type="org.eredlab.g4.ccl.datastructure.impl.BaseDto"/>
+		<select id="queryMtByDay" parameterClass="map" resultClass="dto">
+		 <![CDATA[
+		               select a.id as id,
+						       a.company as company,
+						       b.partnerName as companyName,
+						       a.game as game,
+						       c.gamename as gameName,
+						       a.cpn as cpn,
+						       a.linkid as linkid,
+						       a.addate as mttime,
+						       a.sendstate  as sendstate,
+						       a.comprecstat as comprecstat,
+						       a.province as province,
+						       d.province as provinceName,
+						       a.postcode as postcode,
+						       e.city as city,
+						       case  a.lostflag when '1' then '是' else  a.lostflag end as lostflag
+					  from smscompanymts.$tableName$ as a left join  smscompanymts.provinceid d on a.province=d.miscid left join  smscompanymts.provscitys e on a.postcode=e.areaCode,
+					       smscompanymts.partners as b,
+					       smscompanymts.companygames c
+		             where a.company=b.partner
+		                   and a.game=c.gamecode
+		                   ]]>
+		             <isNotEmpty prepend="and" property="cpn">
+				        a.cpn = #cpn#
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="gameName">
+				        c.gameName like '%$gameName$%'
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="companyName">
+				       
+				        b.partnerName like '%$companyName$%'
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="provinceName">
+				       
+				        d.province like '%$provinceName$%'
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="city">
+				         e.city like '%$city$%'
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="mttime1">
+				         a.addate >= #mttime1#
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="mttime2">
+				        <![CDATA[ a.addate <= #mttime2#]]>
+				     </isNotEmpty>
+				 <isNotEmpty prepend="and" property="sendstate">
+						     <isEqual  property="sendstate" compareValue="DELIVRD"> 
+						            <![CDATA[ a.sendstate = 'DELIVRD']]>
+						     </isEqual>
+						      <isEqual  property="sendstate" compareValue="1"> 
+						            <![CDATA[a.sendstate != 'DELIVRD']]>
+						     </isEqual>
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="comprecstat">
+				              <isEqual  property="comprecstat" compareValue="0"> 
+						            <![CDATA[ a.comprecstat = '0']]>
+						     </isEqual>
+						      <isEqual  property="comprecstat" compareValue="1"> 
+						            <![CDATA[a.comprecstat != '0']]>
+						     </isEqual>
+				 </isNotEmpty>
+				<isNotEmpty prepend="and" property="lostflag">
+				      <isEqual  property="lostflag" compareValue="1"> 
+				            a.lostflag = '1'
+				     </isEqual>
+				      <isEqual  property="lostflag" compareValue="2"> 
+				            a.lostflag != '1'
+				     </isEqual>
+			    </isNotEmpty>    
+			    order by a.addate desc	
+		</select>
+	<select id="queryMtByDayForCount" parameterClass="map" resultClass="java.lang.Integer">
+		 <![CDATA[
+		               select  count(*) as count
+					  from smscompanymts.$tableName$ as a left join  smscompanymts.provinceid d on a.province=d.miscid left join  smscompanymts.provscitys e on   a.postcode=e.areaCode,
+					       smscompanymts.partners as b,
+					       smscompanymts.companygames c
+		             where a.company=b.partner
+		                   and a.game=c.gamecode
+		                   ]]>
+		             <isNotEmpty prepend="and" property="cpn">
+				        a.cpn = #cpn#
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="gameName">
+				        c.gameName like '%$gameName$%'
+				       
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="companyName">
+				       
+				        b.partnerName like '%$companyName$%'
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="provinceName">
+				       
+				        d.province like '%$provinceName$%'
+				     </isNotEmpty>
+				     <isNotEmpty prepend="and" property="city">
+				         e.city like '%$city$%'
+				     </isNotEmpty>
+				     
+				      <isNotEmpty prepend="and" property="mttime1">
+				         a.addate >= #mttime1#
+				     </isNotEmpty>
+				      <isNotEmpty prepend="and" property="mttime2">
+				       <![CDATA[ a.addate <= #mttime2#]]>
+				     </isNotEmpty>
+				 <isNotEmpty prepend="and" property="sendstate">
+						     <isEqual  property="sendstate" compareValue="DELIVRD"> 
+						            <![CDATA[ a.sendstate = 'DELIVRD']]>
+						     </isEqual>
+						      <isEqual  property="sendstate" compareValue="1"> 
+						            <![CDATA[a.sendstate != 'DELIVRD']]>
+						     </isEqual>
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="comprecstat">
+				              <isEqual  property="comprecstat" compareValue="0"> 
+						            <![CDATA[ a.comprecstat = '0']]>
+						     </isEqual>
+						      <isEqual  property="comprecstat" compareValue="1"> 
+						            <![CDATA[a.comprecstat != '0']]>
+						     </isEqual>
+				 </isNotEmpty>
+				<isNotEmpty prepend="and" property="lostflag">
+				      <isEqual  property="lostflag" compareValue="1"> 
+				            a.lostflag = '1'
+				     </isEqual>
+				      <isEqual  property="lostflag" compareValue="2"> 
+				            a.lostflag != '1'
+				     </isEqual>
+			    </isNotEmpty>
+	</select>
+	
+	
+	
+	
+	
+	
+		
+		
+		
+</sqlMap>
