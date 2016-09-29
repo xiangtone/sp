@@ -2,6 +2,10 @@
 package com.system.handler;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.Base64.Decoder;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +21,10 @@ public class bolinCallbackHttpHandler extends baseCallbackFilter
 	@Override
 	void OnRequest(HttpServletRequest request, HttpServletResponse response)
 	{
+		
+		
 		int c = request.getContentLength();
-
-		String data;
+		String data = null;
 		if (c < 0)
 		{
 			write(response, "error no data!");
@@ -38,8 +43,27 @@ public class bolinCallbackHttpHandler extends baseCallbackFilter
 		{
 		}
 
-		data = new String(bin);
+		try
+		{
+			data = new String(bin, "utf-8");
+		}
+		catch (Exception e)
+		{
+		}
+		
 
+		data=data.substring(8);
+
+		try
+		{
+			data=URLDecoder.decode(data,"utf-8");
+		}
+		catch (UnsupportedEncodingException e)
+		{
+		
+		}
+		System.out.println("blc->" + data);
+		
 		JSONObject jsonObj = JSONObject.fromObject(data);
 		bolincallModel bl = (bolincallModel) JSONObject.toBean(jsonObj,
 				bolincallModel.class);
@@ -49,7 +73,7 @@ public class bolinCallbackHttpHandler extends baseCallbackFilter
 		cpOrderId = bl.getCpOrderId();
 
 		if (super.ProceModel(cpOrderId, null, price))
-			write(response, "ok");
+			write(response, "200");
 		else
 			write(response, "fail " + getErrMsg());
 	}

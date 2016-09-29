@@ -118,7 +118,7 @@ public class LvUserDao
 		String upSql = "update little_video_log." + getTabelName(imei)
 				+ " set Level=? where imei=? ";
 		if(!iForce)
-			upSql+=" and  Level>?";
+			upSql+=" and  Level<?";
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
 		map.put(++i, level);

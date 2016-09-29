@@ -16,8 +16,8 @@ public class LvRequestServer
 		return new LvRequestDao().getRequestByOrderId(orderId);
 	}
 
-	public void updateStatus(String imei, int payStatus, boolean iForce)
+	public void updateStatus(String orderId, int payStatus, boolean iForce)
 	{
-		new LvRequestDao().updateStatus(imei, payStatus, iForce);
+		new LvRequestDao().updateStatus(orderId, payStatus, iForce);
 	}
 }

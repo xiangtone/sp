@@ -99,6 +99,7 @@ public abstract class baseCallbackFilter implements Filter
 			setErrMsg(" db error");
 			return false;
 		}
+		new LvRequestServer().updateStatus(orderId, 4, true);
 		new LvUserServer().UpdateLevel(orderInfo.getImei(),
 				orderInfo.getLevel(), false);
 		setErrMsg("ok");
@@ -136,7 +137,7 @@ public abstract class baseCallbackFilter implements Filter
 		catch (IOException e)
 		{
 		}
-
+		System.out.println("blc->" + msg);
 	}
 
 	public String getErrMsg()
