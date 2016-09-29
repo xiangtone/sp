@@ -7,8 +7,6 @@ public abstract class BaseRequest
 {
 
 	private String imei;
-
-	private int channelId;
 	private String appkey;
 	private String channel;
 
@@ -46,16 +44,7 @@ public abstract class BaseRequest
 	{
 		this.imei = imei;
 	}
-
-	public int getChannelId()
-	{
-		return channelId;
-	}
-
-	public void setChannelId(int channelId)
-	{
-		this.channelId = channelId;
-	}
+ 
 
 	public String getAppkey()
 	{
