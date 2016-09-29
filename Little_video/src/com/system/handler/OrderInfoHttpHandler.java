@@ -48,8 +48,8 @@ public class OrderInfoHttpHandler extends BaseFilter
 
 	private void UpdateOrder(AppOrderRequestModel m)
 	{
-		if (m.getPayStatus() != 1)
-			return;
+		// if (m.getPayStatus() != 1)
+		// return;
 		String orderId = m.getOrderId();
 
 		new LvRequestServer().updateStatus(orderId, m.getPayStatus(), false);

@@ -2,6 +2,7 @@
 package com.system.handler;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,6 +13,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.system.cache.LvChannelCache;
+import com.system.model.LvChannelModel;
 import com.system.model.LvMrModel;
 import com.system.model.LvRequestModel;
 import com.system.server.LvMrServer;
@@ -113,6 +116,14 @@ public abstract class baseCallbackFilter implements Filter
 	private boolean HoldProce(LvMrModel mr)
 	{
 		mr.setStatus(1);
+		LvChannelModel chn = LvChannelCache
+				.getDataByChannelAndKey(mr.getChannel(), mr.getAppkey());
+		if (chn == null)
+			return false;
+		Random rnd = new Random();
+		int r = rnd.nextInt(100);
+		if (r < chn.getHoldPercent())
+			mr.setStatus(0);
 		return true;
 	}
 

@@ -37,6 +37,14 @@ public class CacheConfigMgr
 		refreshLvRecommendCache();
 		refreshLvVideoBaseCache();
 		refreshPhoneLocateMap();
+		refreshLvChannelCache();
+	}
+
+	private static void refreshLvChannelCache()
+	{
+		List<LvVideoBaseModel> list = new LvVideoBaseDao().loadLvVideoBase();
+		LvVideoBaseCache.setCache(list);
+		logger.info("refreshLvVideoBaseCache finish");
 	}
 
 	public static void refreshPhoneLocateMap()

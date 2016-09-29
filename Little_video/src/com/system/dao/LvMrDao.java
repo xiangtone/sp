@@ -25,7 +25,15 @@ public class LvMrDao
 	{
 		if (StringUtil.isNullOrEmpty(orderId))
 			return getTableName();
-		int m = Integer.parseInt(orderId.substring(0, 2));
+		int m;
+		try
+		{
+			m = Integer.parseInt(orderId.substring(0, 2));
+		}
+		catch (Exception ex)
+		{
+			return getTableName();
+		}
 		Calendar cal = Calendar.getInstance();
 		int cMonth = cal.get(Calendar.MONTH) + 1;
 		int cYear = cal.get(Calendar.YEAR);
