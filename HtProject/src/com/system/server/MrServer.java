@@ -1,24 +1,68 @@
 
 package com.system.server;
 
+import java.util.List;
 import java.util.Map;
 
 import com.system.dao.MrDao;
+import com.system.model.MrReportModel;
 import com.system.util.StringUtil;
 
 public class MrServer
 {
 	public Map<String, Object> getMrData(String startDate, String endDate,
 			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType,int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType,String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
-		return new MrDao().getMrAnalyData(startDate, endDate, spId, spTroneId,troneId,
+		
+		Map<String, Object> result = new MrDao().getMrAnalyData(startDate, endDate, spId, spTroneId,troneId,
 				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
+		
+		//如果数据类型，只能重新处理标题
+		if(sortType==15)
+		{
+			String[] titles = {"实时","隔天","IVR","第三方支付"};
+			
+			@SuppressWarnings("unchecked")
+			List<MrReportModel> list = (List<MrReportModel>)result.get("list");
+			if(list!=null)
+			for(MrReportModel model : list)
+			{
+				model.setTitle1(titles[StringUtil.getInteger(model.getTitle1(),0)]);
+			}
+		}
+		
+		return result;
+	}
+	
+	public Map<String, Object> getThirdPayMrData(String startDate, String endDate,
+			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
+			int cityId,int operatorId,int dataType,String spCommerceUserId,String cpCommerceUserId,int sortType)
+	{
+		
+		Map<String, Object> result = new MrDao().getThirdPayMrData(startDate, endDate, spId, spTroneId,troneId,
+				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
+		
+		//如果数据类型，只能重新处理标题
+		if(sortType==15)
+		{
+			String[] titles = {"实时","隔天","IVR","第三方支付"};
+			
+			@SuppressWarnings("unchecked")
+			List<MrReportModel> list = (List<MrReportModel>)result.get("list");
+			if(list!=null)
+			for(MrReportModel model : list)
+			{
+				model.setTitle1(titles[StringUtil.getInteger(model.getTitle1(),0)]);
+			}
+		}
+		
+		return result;
 	}
 	
 	public Map<String, Object> getMrLrData(String startDate, String endDate,
 			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType,int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType,String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		return new MrDao().getMrAnalyLrData(startDate, endDate, spId, spTroneId,troneId,
 				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
@@ -34,16 +78,24 @@ public class MrServer
 	
 	public Map<String, Object> getMrTodayData(String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId, int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId, String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		String tableName = StringUtil.getMonthFormat(startDate);
+		
+		String curDate = StringUtil.getDefaultDate();
+		
+		if(curDate.equalsIgnoreCase(startDate))
+		{
+			tableName = "daily";
+		}
+		
 		return new MrDao().getMrTodayData(tableName, startDate, spId,spTroneId, troneId,
 				cpId, troneOrderId, provinceId, cityId,spCommerceUserId, cpCommerceUserId,sortType);
 	}
 	
 	public Map<String, Object> getMrTodayLrData(String startDate,
 			int spId, int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId, int spCommerceUserId,int cpCommerceUserId,int sortType)
+			int cityId, String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		String tableName = StringUtil.getMonthFormat(startDate);
 		return new MrDao().getMrTodayLrData(tableName, startDate, spId,spTroneId, troneId,
@@ -97,4 +149,20 @@ public class MrServer
 	{
 		new MrDao().updateCpMrRate(cpId,spTroneId, rate, startDate, endDate);
 	}
+	/**
+	 * 当日数据添加业务和指令查询
+	 * @param userId
+	 * @param spTroneId
+	 * @param showType
+	 * @return
+	 */
+	public Map<String,Object> getCpMrTodayShowData(int userId,int spTroneId,int showType)
+	{
+		String tableName = StringUtil.getMonthFormat();
+		String startDate = StringUtil.getDefaultDate();
+
+		return new MrDao().getCpMrTodayShowData(tableName, startDate, userId,spTroneId,showType);
+	}
+
+	
 }

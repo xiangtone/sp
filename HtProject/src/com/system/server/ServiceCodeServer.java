@@ -17,10 +17,12 @@ public class ServiceCodeServer
 		List<ServiceCodeModel> list1 =new ArrayList<ServiceCodeModel>();
 		List<ServiceCodeModel> list2 =new ArrayList<ServiceCodeModel>();
 		List<ServiceCodeModel> list3 =new ArrayList<ServiceCodeModel>();
+		List<ServiceCodeModel> list4 =new ArrayList<ServiceCodeModel>();
 		
 		result.add(list1);
 		result.add(list2);
 		result.add(list3);
+		result.add(list4);
 		
 		for(ServiceCodeModel model : list)
 		{
@@ -30,6 +32,8 @@ public class ServiceCodeServer
 				list2.add(model);
 			else if(model.getOperatorBjFlag()==3)
 				list3.add(model);	
+			else if(model.getOperatorBjFlag()==5)
+				list4.add(model);
 		}
 		
 		return result;

@@ -74,13 +74,13 @@
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
-				<dd class="ddbtn" >
+				<dd class="ddbtn" style="width: 200px">
 				<label>SP修改</label>
 				</dd>
 			</dl>
 			<br />	<br />		
 			<dl>
-				<form action="action.jsp?query=<%= query %>" method="get"  id="addform">
+				<form action="action.jsp?query=<%= query %>" method="post"  id="addform">
 					<input type="hidden" value="<%= model.getId() %>" name="id" />
 										
 					<dd class="dd00_me"></dd>

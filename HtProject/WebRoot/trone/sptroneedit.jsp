@@ -1,3 +1,5 @@
+<%@page import="com.system.server.UpDataTypeServer"%>
+<%@page import="com.system.model.UpDataTypeModel"%>
 <%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.server.ServiceCodeServer"%>
 <%@page import="com.system.model.ServiceCodeModel"%>
@@ -33,6 +35,7 @@
 	List<SpTroneApiModel> spTroneApiList = new SpTroneApiServer().loadSpTroneApi();
 	List<List<ServiceCodeModel>> serviceCodeList = new ServiceCodeServer().loadServiceCode();
 	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
+	List<UpDataTypeModel> upDatatypeList=new UpDataTypeServer().loadUpDataType();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -90,10 +93,14 @@
 			$("#sel_js_type").focus();
 			return;
 		}
-		
+		if ($("#up_data_type").val() == "-1") {
+			alert("请输入上量类型");
+			$("#up_data_type").focus();
+			return;
+		}
 		var rate = parseFloat($("#input_jiesuanlv").val());
 		
-		if(isNaN(rate) || rate>=1 || rate<=0)
+		if(isNaN(rate) || rate>=10 || rate<=0)
 		{
 			alert("<%=jiuSuanName%>只能介于0和1之间");
 			$("#input_jiesuanlv").focus();
@@ -144,10 +151,33 @@
 	
 	$(function() 
 	{
+	<%
+	if(spTroneModel.getApiStatus()==1){
+	%>
+	$("#div_sp_trone_api").show();
+	<%}%>
 		resetForm();
+		$("input[name=api_status]").click(function(){
+			 apiStatus();
+			 });
 	});
 	
-	function resetForm()
+	function apiStatus(){
+		 switch($("input[name=api_status]:checked").attr("id")){
+		  case "api_status_1":
+		   //alert("one");
+		   $("#div_sp_trone_api").show();
+		   
+		   break;
+		  case "api_status_0":
+			$("#div_sp_trone_api").hide();
+		   break;
+		  default:
+		   break;
+		 }
+	}
+	
+	function resetFormTwo()
 	{
 		$("#sel_sp").val("<%=spTroneModel.getSpId()%>");
 		$("#sel_operator").val("<%=spTroneModel.getOperator()%>");
@@ -158,15 +188,80 @@
 		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
 		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
 		
-		var provinceIds = "<%=spTroneModel.getProvinces()%>
-	";
+		$("#input_shield_start").val("<%=spTroneModel.getShieldStart()%>");
+		$("#input_shield_end").val("<%=spTroneModel.getShieldEnd()%>");
+		
+		$("#input_day_limit").val("<%=spTroneModel.getDayLimit()%>");
+		$("#input_month_limit").val("<%=spTroneModel.getMonthLimit()%>");
+		$("#input_user_day_limit").val("<%=spTroneModel.getUserDayLimit()%>");
+		$("#input_user_month_limit").val("<%=spTroneModel.getUserMonthLimit()%>");
+		$("#up_data_type").val("<%=spTroneModel.getUpDataType()%>");
+		
+		<%
+		if(spTroneModel.getApiStatus()==1){
+		%>
+		$("#div_sp_trone_api").show();
+		<%}else{%>
+		$("#div_sp_trone_api").hidden();
+		<%}%>
+		
+		var provinceIds = "<%=spTroneModel.getProvinces()%>";
 		var provinces = provinceIds.split(",");
+		setRadioCheck("limit_type",
+				<%=spTroneModel.getLimiteType()%>
+					);
 		setRadioCheck("trone_type",
 <%=spTroneModel.getTroneType()%>
 	);
 		setRadioCheck("status",
 <%=spTroneModel.getStatus()%>
 	);
+		setRadioCheck("api_status",
+				<%=spTroneModel.getApiStatus()%>
+					);
+		unAllCkb();
+		$('[name=area[]]:checkbox').each(function() {
+
+			for (k = 0; k < provinces.length; k++) {
+				if (provinces[k] == this.value) {
+					this.checked = true;
+					break;
+				}
+			}
+		});
+	}
+	
+	function resetForm()
+	{
+		debugger;
+		$("#sel_sp").val("<%=spTroneModel.getSpId()%>");
+		$("#sel_operator").val("<%=spTroneModel.getOperator()%>");
+		$("#input_sp_trone_name").val("<%=spTroneModel.getSpTroneName()%>");
+		$("#input_jiesuanlv").val("<%=spTroneModel.getJieSuanLv()%>");
+		$("#sel_sp_trone_api").val("<%=spTroneModel.getTroneApiId()%>");
+		
+		$("#sel_service_code").val("<%=spTroneModel.getServiceCodeId()%>");
+		$("#sel_js_type").val("<%=spTroneModel.getJsTypes()%>");
+	
+		$("#input_shield_start").val("<%=spTroneModel.getShieldStart()%>");
+		$("#input_shield_end").val("<%=spTroneModel.getShieldEnd()%>");
+		
+		$("#up_data_type").val("<%=spTroneModel.getUpDataType()%>");
+		
+		var provinceIds = "<%=spTroneModel.getProvinces()%>";
+		var provinces = provinceIds.split(",");
+		setRadioCheck("limit_type",
+				<%=spTroneModel.getLimiteType()%>
+					);
+		setRadioCheck("trone_type",
+<%=spTroneModel.getTroneType()%>
+	);
+		setRadioCheck("status",
+<%=spTroneModel.getStatus()%>
+	);
+		setRadioCheck("api_status",
+				<%=spTroneModel.getApiStatus()%>
+					);
 		unAllCkb();
 		$('[name=area[]]:checkbox').each(function() {
 
@@ -244,11 +339,15 @@
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<dl>
+				<dd class="ddbtn" style="width: 200px">
+				<label>修改SP业务</label>
+				</dd>
+			</dl>
+			<dl>
 				<form action="sptroneaction.jsp?query=<%=query%>" method="post"
 					id="addform">
 					<table>
 						<thead>
-							<td style="text-align: left">修改SP业务</td>
 							<input type="hidden" value="<%=spTroneModel.getId()%>"
 								name="id" />
 						</thead>
@@ -303,8 +402,17 @@
 									}
 								%>
 							</optgroup>
-
-
+							<optgroup label="第三方支付">
+								<%
+									for(ServiceCodeModel  serviceCodeModel : serviceCodeList.get(3))
+									{
+										%>
+								<option value="<%= serviceCodeModel.getId() %>"><%= serviceCodeModel.getServiceName() %></option>		
+										<%
+									}
+								%>
+							</optgroup>									
+							
 							<!--  
 							<option value="1">联通</option>
 							<option value="2">电信</option>
@@ -321,6 +429,23 @@
 						<input type="text" name="sp_trone_name_1" title="业务名称"
 							id="input_sp_trone_name" style="width: 200px">
 					</dd>
+					<br />
+					<br />
+					<br />
+					<dd class="dd01_me">上量类型</dd>
+					<dd class="dd04_me">
+						<select name="up_data_type" id="up_data_type" title="上量类型" style="width: 200px" >
+							<option value="-1">请选择上量类型</option>
+								<%
+									for(UpDataTypeModel  upDataTypeModel : upDatatypeList)
+									{
+										%>
+								<option value="<%= upDataTypeModel.getId() %>"><%= upDataTypeModel.getName() %></option>		
+										<%
+									}
+								%>
+						</select>
+					</dd>
 
 					<br /> <br /> <br />
 					<dd class="dd01_me">结算类型</dd>
@@ -330,7 +455,8 @@
 							<option value="-1">请选择结算类型</option>
 							<option value="0">对公周结</option>
 							<option value="1">对公双周结</option>
-							<option value="2">对公月结</option>
+							<option value="2">对公N+1结</option>
+							<option value="7">对公N+2结</option>
 							<option value="3">对私周结</option>
 							<option value="4">对私双周结</option>
 							<option value="5">对私月结</option>
@@ -346,6 +472,46 @@
 							style="width: 200px">
 					</dd>
 
+					
+
+					<br /> <br /> <br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">数据类型</dd>
+					<dd class="dd03_me" style="background: none">
+						<input type="radio" name="trone_type"
+							style="width: 35px; float: left" value="0" checked="checked">
+						<label style="font-size: 14px; float: left">实时</label> <input
+							type="radio" name="trone_type" style="width: 35px; float: left"
+							value="1"> <label style="font-size: 14px; float: left">隔天</label>
+						<input type="radio" name="trone_type"
+							style="width: 35px; float: left" value="2"> <label
+							style="font-size: 14px; float: left">IVR</label>
+						<input type="radio" name="trone_type" style="width: 35px;float:left" value="3" >
+						<label style="font-size: 14px;float:left">第三方支付</label>
+					</dd>
+					
+					<br /> <br /> <br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">状态</dd>
+					<dd class="dd03_me">
+						<input type="radio" name="status" style="width: 35px; float: left"
+							value="1"> <label style="font-size: 14px; float: left">开启</label>
+						<input type="radio" name="status" style="width: 35px; float: left"
+							value="0"> <label style="font-size: 14px; float: left">关闭</label>
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">代码池</dd>
+					<dd class="dd03_me">
+						<input type="radio" name="api_status" id="api_status_0" style="width: 35px;float:left" value="0" checked="checked">
+						<label style="font-size: 14px;float:left">否</label>
+						<input type="radio" name="api_status" id="api_status_1" style="width: 35px;float:left" value="1"  >
+						<label style="font-size: 14px;float:left">是</label>
+					</dd>
+				<div  id="div_sp_trone_api"  style="display: none"> <!--API状态相关表单-->
 					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">业务API</dd>
@@ -362,30 +528,35 @@
 							%>
 						</select>
 					</dd>
-
-					<br /> <br /> <br />
+					<br />
+					<br />
+					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">数据类型</dd>
+					<dd class="dd01_me">限量类型</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="trone_type"
-							style="width: 35px; float: left" value="0" checked="checked">
-						<label style="font-size: 14px; float: left">实时</label> <input
-							type="radio" name="trone_type" style="width: 35px; float: left"
-							value="1"> <label style="font-size: 14px; float: left">隔天</label>
-						<input type="radio" name="trone_type"
-							style="width: 35px; float: left" value="2"> <label
-							style="font-size: 14px; float: left">IVR</label>
+						<input type="radio" name="limit_type" style="width: 35px;float:left" value="0" checked="checked" >
+						<label style="font-size: 14px;float:left">元</label>
+						<input type="radio" name="limit_type" style="width: 35px;float:left" value="1" >
+						<label style="font-size: 14px;float:left">条数</label>
 					</dd>
-
-					<br /> <br /> <br />
+					<br />
+					<br />
+					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">状态</dd>
+					<dd class="dd01_me">屏蔽起始时间</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="status" style="width: 35px; float: left"
-							value="1"> <label style="font-size: 14px; float: left">开启</label>
-						<input type="radio" name="status" style="width: 35px; float: left"
-							value="0"> <label style="font-size: 14px; float: left">关闭</label>
+						<input type="text" name="shield_start" value="<%=spTroneModel.getShieldStart()%>" id="input_shield_start" style="width: 200px" onclick="WdatePicker({dateFmt:'HH:mm',isShowClear:false,readOnly:true})">
 					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">屏蔽结束时间</dd>
+					<dd class="dd03_me">
+						<input type="text" name="shield_end" value="<%=spTroneModel.getShieldEnd()%>" id="input_shield_end" style="width: 200px" onclick="WdatePicker({dateFmt:'HH:mm',isShowClear:false,readOnly:true})">
+					</dd>
+				
 
 					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
@@ -422,7 +593,7 @@
 							value="<%=spTroneModel.getUserMonthLimit()%>"
 							id="input_user_month_limit" style="width: 200px">
 					</dd>
-
+</div>
 					<br /> <br /> <br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">省份</dd>
@@ -448,6 +619,14 @@
 						<input type="button" onclick="exportProvince()"
 							style="padding-top: 10px;" value="导　出" />
 					</div>
+					<br />
+					<div style="clear: both;"><br /></div>
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">备注</dd>
+					<dd class="dd03_me"></dd>
+					&nbsp;
+					&nbsp;
+					<textarea name="remark"   style="border:solid 1px black;" overflow-y="auto" overflow-x="hidden" maxlength="1000" cols="91" rows="10"  id="remark" ><%=spTroneModel.getRemark()%></textarea>
 
 					<br /> <br /> <br />
 					<dd class="dd00"></dd>
@@ -456,7 +635,7 @@
 						<input type="button" value="提 交" onclick="subForm()">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
-						<input type="button" value="重 置" onclick="resetForm()">
+						<input type="button" value="重 置" onclick="resetFormTwo()">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
 						<input type="button" value="返 回" onclick="history.go(-1)">

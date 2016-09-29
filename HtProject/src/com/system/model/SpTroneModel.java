@@ -24,6 +24,18 @@ public class SpTroneModel
 	private int serviceCodeId;
 	private String servoceCodeName;
 	
+	//增加is_on_api字段，shield_start_hour屏蔽开始时间，shield_end_hour屏蔽结束时间
+	private int apiStatus;//is_on_api字段
+	private String shieldStart;//屏蔽开始时间
+	private String shieldEnd;  //屏蔽结束时间
+	private String remark;
+	
+	private int upDataType;
+	private int limiteType;
+	private String upDataName;
+	//商务ID
+	private int commerceUserId;
+	
 	public int getTroneType()
 	{
 		return troneType;
@@ -184,4 +196,54 @@ public class SpTroneModel
 	{
 		this.jsTypes = jsTypes;
 	}
+	public int getApiStatus() {
+		return apiStatus;
+	}
+	public void setApiStatus(int apiStatus) {
+		this.apiStatus = apiStatus;
+	}
+	public String getShieldStart() {
+		return shieldStart;
+	}
+	public void setShieldStart(String shieldStart) {
+		this.shieldStart = shieldStart;
+	}
+	public String getShieldEnd() {
+		return shieldEnd;
+	}
+	public void setShieldEnd(String shieldEnd) {
+		this.shieldEnd = shieldEnd;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public int getUpDataType() {
+		return upDataType;
+	}
+	public void setUpDataType(int upDataType) {
+		this.upDataType = upDataType;
+	}
+	public int getLimiteType() {
+		return limiteType;
+	}
+	public void setLimiteType(int limiteType) {
+		this.limiteType = limiteType;
+	}
+	public String getUpDataName() {
+		return upDataName;
+	}
+	public void setUpDataName(String upDataName) {
+		this.upDataName = upDataName;
+	}
+	public int getCommerceUserId() {
+		return commerceUserId;
+	}
+	public void setCommerceUserId(int commerceUserId) {
+		this.commerceUserId = commerceUserId;
+	}
+	
+	
 }

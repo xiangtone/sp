@@ -40,6 +40,10 @@
 	String query = request.getQueryString();
 	
 	query = Base64UTF.encode(query);
+	
+	//0对公周结；1对公双周结；2对公月结；3对私周结；4对私双周结；5对私月结,6见帐单结,7对公N+1结
+	String[] jsTypes = {"对公周结","对公双周结","对公N+1结","对私周结","对私双周结","对私月结","见帐单结","对公N+2结"};
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -78,7 +82,7 @@
 	{
 		var newShowRows = parseFloat($("#myput_" + editId).val());
 		
-		if(isNaN(newShowRows) || newShowRows>=1 || newShowRows<=0)
+		if(isNaN(newShowRows) || newShowRows>=10 || newShowRows<=0)
 		{
 			alert("请输入介于0和1之间的数据");
 			return;
@@ -142,6 +146,7 @@
 					<td>日限</td>
 					<td>月限</td>
 					<td>结算率</td>
+					<td>结算方式</td>
 					<td>操作</td>
 				</tr>
 			</thead>
@@ -166,6 +171,7 @@
 					<td ondblclick="editShowData('<%= model.getId() %>')">
 						<span id="span_<%= model.getId() %>"><%= model.getRate() %></span>
 					</td>
+					<td><%= jsTypes[model.getJsType()] %></td>
 					<td>
 						<a href="rateedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a>
 						<a href="ratelist.jsp?query=<%= query %>&id=<%= model.getId() %>&title=<%= URLEncoder.encode(title,"utf-8") %>&rate=<%= model.getRate() %>">列表</a>

@@ -99,10 +99,13 @@
 	{
 		var spTroneId =  $("#sel_sp_trone").val();
 		getAjaxValue("../ajaction.jsp?type=3&sp_trone_id=" + spTroneId,onSpTroneChange);
+		//sss
 	}
 	
 	function onSpTroneChange(data)
 	{
+		//EVAL DATA 之前先把 troneOrderArray 清空
+		troneOrderArray.length = 0;
 		eval(data);
 		$("#sel_trone_order").empty();
 		$("#sel_trone_order").append("<option value='-1'>请选择</option>");
@@ -244,6 +247,38 @@
 		showAmount = $("#input_show_amount").val();
 		feeDate = $("#input_fee_date").val();
 		
+		var intShowDataRows = parseInt(showDataRows);
+		
+		var floatAmount = parseFloat(amount);
+		
+		var floatShowAmount = parseFloat(showAmount);
+
+		if(isNaN(intShowDataRows) || intShowDataRows < 0)
+		{
+			alert("请输入正确的CP数据量");
+			$("#input_show_data_rows").focus();
+			return;
+		}
+		
+		$("#input_show_data_rows").val(intShowDataRows);
+		
+		if(isNaN(floatAmount) || floatAmount < 0)
+		{
+			alert("请输入正确的SP金额");
+			$("#input_amount").focus();
+			return;
+		}
+		
+		if(isNaN(floatShowAmount) || floatShowAmount < 0)
+		{
+			alert("请输入正确的CP金额");
+			$("#input_show_amount").focus();
+			return;
+		}
+		
+		$("#input_amount").val(floatAmount);
+		$("#input_show_amount").val(floatShowAmount);
+		
 		isOnSummit = true;
 		
 		startSubmitData();
@@ -321,7 +356,7 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">金额</dd>
 					<dd class="dd03_me">
-						<input type="text" readonly="readonly" name="amount"  id="input_amount" value="0" style="width: 200px">
+						<input type="text" name="amount"  id="input_amount" value="0" style="width: 200px">
 					</dd>
 					
 					<br />
@@ -339,7 +374,7 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">CP金额</dd>
 					<dd class="dd03_me">
-						<input type="text" name="show_amount" readonly="readonly"  id="input_show_amount" value="0" style="width: 200px">
+						<input type="text" name="show_amount"  id="input_show_amount" value="0" style="width: 200px">
 					</dd>
 
 					<br />

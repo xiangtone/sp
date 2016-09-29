@@ -56,7 +56,7 @@ public class CpMrDao
 	
 	public boolean deleteCpMrSummer(String startDate,String endDate)
 	{
-		String sql = "DELETE FROM daily_log.tbl_cp_mr_summer WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "' and record_type in( 0,2)";
+		String sql = "DELETE FROM daily_log.tbl_cp_mr_summer WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "' and record_type in( 0,2,3)";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -85,6 +85,36 @@ public class CpMrDao
 				+ "on b.trone_id = c.id where a.mr_date >= '" + startDate + "' "
 				+ "and a.mr_date <= '" + endDate + "' AND trone_type = 2 group by mr_date,cp_id, trone_order_id,"
 				+ "mcc,province_id,city_id order by mr_date asc";
+		
+		return new JdbcControl().execute(sql);
+	}
+	
+	//here 
+	public boolean analyThirdPayToCpMrSummer(String tableName,String startDate,String endDate)
+	{
+		String sql = "INSERT INTO daily_log.`tbl_third_pay_cp_mr_summer`(cp_id,mcc,province_id,city_id,trone_order_id,mr_date,data_rows,amount,record_type)";
+		
+		sql += " SELECT * ";
+		sql += " FROM ";
+		sql += " ( ";
+		sql += " SELECT b.cp_id,460,32,416,b.trone_order_id,mr_date,data_rows,amount/100 amount,3  ";
+		sql += " FROM ";
+		sql += " ( ";
+		sql += " SELECT appkey,oprator pay_type,SUM(amount) amount,DATE_FORMAT(a.`createdate`,'%Y-%m-%d') mr_date,COUNT(*) data_rows  ";
+		sql += " FROM game_log.`tbl_xypay_" + tableName + "` a  ";
+		sql += " WHERE a.`createdate` >= '" + startDate + " 00:00:00'  ";
+		sql += " AND a.`createdate` <= '" + endDate + " 23:59:59' ";
+		sql += " GROUP BY appkey,oprator ";
+		sql += " ) a LEFT JOIN ";
+		sql += " ( ";
+		sql += " SELECT a.id trone_order_id,a.`order_num` appkey,b.`orders` pay_type,c.`sp_id`,a.cp_id,b.id trone_id   ";
+		sql += " FROM daily_config.tbl_trone_order a  ";
+		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`  ";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`  ";
+		sql += " WHERE c.`trone_type` = 3  ";
+		sql += " )b ";
+		sql += " ON a.appkey = b.appkey AND a.pay_type = b.pay_type ";
+		sql += " ) a WHERE trone_order_id IS NOT NULL ";
 		
 		return new JdbcControl().execute(sql);
 	}

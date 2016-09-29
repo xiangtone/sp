@@ -21,6 +21,7 @@
 	float dayLimit = StringUtil.getFloat(request.getParameter("day_limit"), 0F);
 	float monthLimit = StringUtil.getFloat(request.getParameter("month_limit"), 0F);
 	String provinceHoldRate = StringUtil.getString(request.getParameter("pros_data"), "");
+	int jsType = StringUtil.getInteger(request.getParameter("js_type"), 0);
 	
 	SingleCpSpTroneRateModel model = new SingleCpSpTroneRateModel();
 	
@@ -41,7 +42,7 @@
 	{
 		new SingleCpSpTroneRateServer().addSingleRate(model);
 		
-		response.sendRedirect("ratelist.jsp?" + Base64UTF.decode(query2));
+		response.sendRedirect("ratelist.jsp?id=" + cpTroneRateId + "&" + Base64UTF.decode(query2));
 	}
 	else if(type==3) //检查同一时间段内有没有重复的
 	{
@@ -68,6 +69,7 @@
 		tModel.setMonthLimit(monthLimit);
 		tModel.setRate(rate);
 		tModel.setProsData(provinceHoldRate);
+		tModel.setJsType(jsType);
 		
 		new CpSpTroneRateServer().updateCpSpTroneLimit(tModel);
 		

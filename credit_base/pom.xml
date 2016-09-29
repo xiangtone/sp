@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>credit_base</groupId>
   <artifactId>credit_base</artifactId>
@@ -42,30 +43,70 @@
 					</webResources>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>1.0-beta-4</version>
+				<executions>
+					<execution>
+						<id>upload-war</id>
+						<phase>install</phase>
+						<goals>
+							<goal>upload-single</goal>
+						</goals>
+						<configuration>
+							<fromFile>target/${final.name}.war</fromFile>
+							<url>${ftp.to.url}</url>
+							<serverId>${ftp.server.id}</serverId>
+							<skip>false</skip>
+							<toFile>${final.name}.war</toFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<extensions>
+			<!-- Enabling the use of FTP -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
 	</build>
 	<profiles>
 		<profile>
-			<id>bj</id>
+			<id>bjyd</id>
 			<properties>
-				<runtime.env>config\bj</runtime.env>
+				<runtime.env>config\bjyd</runtime.env>
 				<final.name>credit</final.name>
+				<ftp.server.id>BjYdFtpServer</ftp.server.id>
+				<ftp.to.url>ftp://120.26.105.75/tomcat_9090/swap_dir/</ftp.to.url>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
 		<profile>
-			<id>sz</id>
+			<id>szht</id>
 			<properties>
-				<runtime.env>config\sz</runtime.env>
+				<runtime.env>config\szht</runtime.env>
+				<final.name>credit</final.name>
+				<ftp.server.id>SzHtFtpServer</ftp.server.id>
+				<ftp.to.url>ftp://120.26.78.220/tomcat_6000/swap_dir/</ftp.to.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>shhh</id>
+			<properties>
+				<runtime.env>config\shhh</runtime.env>
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
 		<profile>
-			<id>sh</id>
+			<id>szhtwin</id>
 			<properties>
-				<runtime.env>config\sh</runtime.env>
+				<runtime.env>config\szhtwin</runtime.env>
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
@@ -73,6 +114,13 @@
 			<id>bjtl</id>
 			<properties>
 				<runtime.env>config\bjtl</runtime.env>
+				<final.name>credit</final.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>szsu</id>
+			<properties>
+				<runtime.env>config\szsu</runtime.env>
 				<final.name>credit</final.name>
 			</properties>
 		</profile>

@@ -9,6 +9,8 @@ public class ApiOrderModel
 	private String imei;
 	private String imsi;
 	private String mobile;
+	private String fakeMobile;
+	private int cityId;	
 	private String ip;
 	private String clientIp;
 	private String netType;
@@ -236,5 +238,21 @@ public class ApiOrderModel
 	public void setUserAgent(String userAgent)
 	{
 		this.userAgent = userAgent;
+	}
+	public String getFakeMobile()
+	{
+		return fakeMobile;
+	}
+	public void setFakeMobile(String fakeMobile)
+	{
+		this.fakeMobile = fakeMobile;
+	}
+	public int getCityId()
+	{
+		return cityId;
+	}
+	public void setCityId(int cityId)
+	{
+		this.cityId = cityId;
 	}
 }

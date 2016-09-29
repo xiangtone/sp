@@ -49,7 +49,7 @@
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrTodayLrData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId,cpCommerceUserId,sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayLrData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId+"",cpCommerceUserId+"",sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -374,7 +374,7 @@
 							%>
 						</select>
 					</dd>
-					<dd class="dd01_me">展示方式</dd>
+					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式">
 							<option value="11">小时</option>

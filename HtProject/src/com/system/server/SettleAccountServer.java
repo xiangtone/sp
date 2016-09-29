@@ -11,28 +11,27 @@ import com.system.dao.SettleAcountDao;
 import com.system.excel.ExcelManager;
 import com.system.model.SettleAccountModel;
 import com.system.util.ConfigManager;
-import com.system.util.FileUtil;
 import com.system.vmodel.SpFinanceShowModel;
 
 public class SettleAccountServer
 {
-	public List<SettleAccountModel> loadSpSettleAccountList(int spId,String startDate,String endDate)
+	public List<SettleAccountModel> loadSpSettleAccountList(int spId,String startDate,String endDate,int dateType)
 	{
-		List<SettleAccountModel> list = new SettleAcountDao().loadSpSettleAccountData(spId, startDate, endDate);
+		List<SettleAccountModel> list = new SettleAcountDao().loadSpSettleAccountData(spId, startDate, endDate,dateType);
 		//List<SettleAccountModel> list = loadSpSettleAccountFromFile("c:/duizhangdan.txt");
 		return list;
 	}
 	
-	public List<SettleAccountModel> loadCpSettleAccountList(int cpId,String startDate,String endDate)
+	public List<SettleAccountModel> loadCpSettleAccountList(int cpId,String startDate,String endDate,int dateType)
 	{
-		List<SettleAccountModel> list = new SettleAcountDao().loadCpSettleAccountData(cpId, startDate, endDate);
+		List<SettleAccountModel> list = new SettleAcountDao().loadCpSettleAccountData(cpId, startDate, endDate,dateType);
 		//List<SettleAccountModel> list = loadSpSettleAccountFromFile("c:/duizhangdan.txt");
 		return list;
 	}
 	
-	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountData(String startDate,String endDate)
+	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType)
 	{
-		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountData(startDate, endDate);
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountData(startDate, endDate,spId,jsType);
 		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
 		
 		List<SpFinanceShowModel> tmpList = null;
@@ -54,9 +53,57 @@ public class SettleAccountServer
 	}
 	
 	
-	public Map<String, List<SpFinanceShowModel>> loadCpSettleAccountData(String startDate,String endDate)
+	public Map<String, List<SpFinanceShowModel>> loadCpSettleAccountData(String startDate,String endDate,int cpId,int jsType)
 	{
-		List<SpFinanceShowModel> list = new SettleAcountDao().loadCpSettleAccountData(startDate, endDate);
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadCpSettleAccountData(startDate, endDate,cpId,jsType);
+		
+		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
+		
+		List<SpFinanceShowModel> tmpList = null;
+		
+		for(SpFinanceShowModel model : list)
+		{
+			if(map.containsKey(model.getShortName()))
+			{
+				tmpList = map.get(model.getShortName());
+			}
+			else
+			{
+				tmpList = new ArrayList<SpFinanceShowModel>();
+				map.put(model.getShortName(), tmpList);
+			}
+			tmpList.add(model);
+		}
+		return map;
+	}
+	
+	public Map<String, List<SpFinanceShowModel>> loadCpSettleAccountDataAll(String startDate,String endDate,int cpId,int jsType)
+	{
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadCpSettleAccountDataAll(startDate, endDate,cpId,jsType);
+		
+		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
+		
+		List<SpFinanceShowModel> tmpList = null;
+		
+		for(SpFinanceShowModel model : list)
+		{
+			if(map.containsKey(model.getShortName()))
+			{
+				tmpList = map.get(model.getShortName());
+			}
+			else
+			{
+				tmpList = new ArrayList<SpFinanceShowModel>();
+				map.put(model.getShortName(), tmpList);
+			}
+			tmpList.add(model);
+		}
+		return map;
+	}
+	
+	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountDataAll(String startDate,String endDate,int spId,int jsType)
+	{
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountDataAll(startDate, endDate,spId,jsType);
 		
 		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
 		
@@ -85,17 +132,29 @@ public class SettleAccountServer
 		
 		switch(dateType)
 		{
+			case 0:
+				dateTypeValue = "对公周结";
+				break;
 			case 1:
-				dateTypeValue = "周结";
+				dateTypeValue = "对公双周结";
 				break;
 			case 2:
-				dateTypeValue = "双周结";
+				dateTypeValue = "对公N+1结";
 				break;
 			case 3:
-				dateTypeValue = "月结";
+				dateTypeValue = "对私周结";
 				break;
 			case 4:
-				dateTypeValue = "自定义";
+				dateTypeValue = "对私双周结";
+				break;
+			case 5:
+				dateTypeValue = "对私月结";
+				break;
+			case 6:
+				dateTypeValue = "见帐单结";
+				break;
+			case 7:
+				dateTypeValue = "对公N+2结";
 				break;
 			default:
 				break;
@@ -121,27 +180,62 @@ public class SettleAccountServer
 			
 		}
 		return date;
-		
 	}
-	
-	@SuppressWarnings("unused")
-	private List<SettleAccountModel> loadSpSettleAccountFromFile(String filePath)
+	/*
+	 * SP商务只能看到自己的基础数据
+	 * */
+	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountDataAll(String startDate,String endDate,int spId,int jsType,int userId,int rightType)
 	{
-		String[] strs = null;
-		List<SettleAccountModel> list = new ArrayList<SettleAccountModel>();
-		for(String line : FileUtil.readFileToList(filePath, "GBK"))
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountDataAll(startDate, endDate,spId,jsType,userId, rightType);
+		
+		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
+		
+		List<SpFinanceShowModel> tmpList = null;
+		
+		for(SpFinanceShowModel model : list)
 		{
-			strs = line.split("\t");
-			SettleAccountModel model = new SettleAccountModel();
-			
-			model.setOperatorName(strs[0]);
-			model.setSpTroneName(strs[1]);
-			model.setAmount(Float.parseFloat(strs[2].replace(",", "")));
-			model.setJiesuanlv(Float.parseFloat(strs[3]));
-			
-			list.add(model);
+			if(map.containsKey(model.getShortName()))
+			{
+				tmpList = map.get(model.getShortName());
+			}
+			else
+			{
+				tmpList = new ArrayList<SpFinanceShowModel>();
+				map.put(model.getShortName(), tmpList);
+			}
+			tmpList.add(model);
 		}
-		return list;
+		return map;
+	}
+	/**
+	 * SP商务只能查看自己账单基础数据
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsType
+	 * @return
+	 */
+	public Map<String, List<SpFinanceShowModel>> loadSpSettleAccountData(String startDate,String endDate,int spId,int jsType,int userId,int rightType)
+	{
+		List<SpFinanceShowModel> list = new SettleAcountDao().loadSpSettleAccountData(startDate, endDate,spId,jsType,userId,rightType);
+		Map<String, List<SpFinanceShowModel>> map = new HashMap<String, List<SpFinanceShowModel>>();
+		
+		List<SpFinanceShowModel> tmpList = null;
+		
+		for(SpFinanceShowModel model : list)
+		{
+			if(map.containsKey(model.getShortName()))
+			{
+				tmpList = map.get(model.getShortName());
+			}
+			else
+			{
+				tmpList = new ArrayList<SpFinanceShowModel>();
+				map.put(model.getShortName(), tmpList);
+			}
+			tmpList.add(model);
+		}
+		return map;
 	}
 	 
 }

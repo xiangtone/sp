@@ -206,6 +206,7 @@ public class UserDao
 					
 					model.setId(rs.getInt("id"));
 					model.setActiveDate(rs.getString("active_date"));
+					model.setChannelKey(StringUtil.getString(rs.getString("channelkey"), ""));
 					model.setAppName(StringUtil.getString(rs.getString("appname"),""));
 					model.setShowDataRows(rs.getInt("show_data_rows"));
 					

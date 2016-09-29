@@ -49,6 +49,8 @@ public class MrSummerDao
 		});
 	}
 	
+	
+	
 	/**
 	 * 写入MR SUMMER数据之前确保相同的数据已经删除
 	 * @param startDate
@@ -57,7 +59,7 @@ public class MrSummerDao
 	 */
 	public boolean deleteMrSummer(String startDate,String endDate)
 	{
-		String sql  = "delete from daily_log.tbl_mr_summer where mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "' and record_type in( 0,2) ";
+		String sql  = "delete from daily_log.tbl_mr_summer where mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "' and record_type in( 0,2,3) ";
 		
 		return new JdbcControl().execute(sql);
 	}
@@ -79,6 +81,43 @@ public class MrSummerDao
 		
 		return new JdbcControl().execute(sql);
 	}
+	
+	
+	/**
+	 * 把第三方支付的数据同步到浩天数据
+	 * @param tableName
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public boolean analyThirdPayToSummer(String tableName,String startDate,String endDate)
+	{
+		String sql = "INSERT INTO daily_log.`tbl_third_pay_mr_summer`(sp_id,cp_id,mcc,province_id,city_id,trone_id,trone_order_id,mr_date,data_rows,amount,record_type)";
+		
+		sql += " SELECT * ";
+		sql += " FROM( ";
+		sql += " SELECT b.sp_id,b.cp_id,460,32,416,b.trone_id,b.trone_order_id,a.mr_date,a.data_rows,a.amount/100 amount,3  ";
+		sql += " FROM ";
+		sql += " ( ";
+		sql += " SELECT appkey,oprator pay_type,SUM(amount) amount,DATE_FORMAT(a.`createdate`,'%Y-%m-%d') mr_date,COUNT(*) data_rows  ";
+		sql += " FROM game_log.`tbl_xypay_" + tableName + "` a  ";
+		sql += " WHERE a.`createdate` >= '" + startDate + " 00:00:00'  ";
+		sql += " AND a.`createdate` <= '" + endDate + " 23:59:59' ";
+		sql += " GROUP BY appkey,oprator ";
+		sql += " ) a LEFT JOIN ";
+		sql += " ( ";
+		sql += " SELECT a.id trone_order_id,a.`order_num` appkey,b.`orders` pay_type,c.`sp_id`,a.cp_id,b.id trone_id   ";
+		sql += " FROM daily_config.tbl_trone_order a  ";
+		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`  ";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`  ";
+		sql += " WHERE c.`trone_type` = 3  ";
+		sql += " )b ";
+		sql += " ON a.appkey = b.appkey AND a.pay_type = b.pay_type ";
+		sql += " )a WHERE trone_order_id IS NOT NULL ";
+		
+		return new JdbcControl().execute(sql);
+	}
+	
 	
 	/**
 	 * 在指定时间把昨天的数据分析到SUMMER表

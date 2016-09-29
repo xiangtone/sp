@@ -1,0 +1,32 @@
+10:41:27.592 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13246799672","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:41:27.628 http://120.76.84.132/YiJian/recharge/index.php?
+10:41:27.628 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:41:45.333 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13246799672","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:41:45.336 http://120.76.84.132/YiJian/recharge/index.php?
+10:41:45.336 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:41:51.893 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13246799672","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:41:51.903 http://120.76.84.132/YiJian/recharge/index.php?
+10:41:51.903 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:41:59.332 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13246799672","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:42:08.580 http://120.76.84.132/YiJian/recharge/index.php?
+10:42:08.580 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:42:11.173 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13246799672","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:42:11.929 http://120.76.84.132/YiJian/recharge/index.php?
+10:42:11.929 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:42:21.917 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13246799672","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:42:23.395 http://120.76.84.132/YiJian/recharge/index.php?
+10:42:23.395 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:42:47.513 http://120.76.84.132/YiJian/recharge/index.php?
+10:42:47.784 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:45:10.761 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13246799672","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:45:12.878 http://120.76.84.132/YiJian/recharge/index.php?
+10:45:12.878 tel=13246799672&consumecode=006086277001&accountid=1234&serverid=1
+10:47:02.034 +109152ms 
+10:48:14.500 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13817794460","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:48:14.503 http://120.76.84.132/YiJian/recharge/index.php?
+10:48:14.503 tel=13817794460&consumecode=006086277001&accountid=1234&serverid=1
+10:48:15.299 +795ms <302 Found，虚拟成功！>
+10:50:48.819 Request:{"apiExdata":"","apiOrderId":34,"cid":0,"clientIp":"192.168.1.90","cpVerifyCode":"","extrData":"01055351","extraParams":"","iccid":"","id":333200,"imei":"866568022922909","imsi":"460007743190142","ip":"183.17.255.144","isHidden":0,"lac":0,"mobile":"13817794460","msg":"","netType":"","packageName":"","port":"","sdkVersion":"","spExField":"","spLinkId":"","status":1001,"troneId":232,"troneOrderId":2127,"userAgent":""}
+10:50:48.823 http://120.76.84.132/YiJian/recharge/index.php?
+10:50:48.823 tel=13817794460&consumecode=006086277001&accountid=1234&serverid=1
+10:50:49.747 +918ms <302 Found，虚拟成功！>

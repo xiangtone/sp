@@ -1,8 +1,6 @@
 package com.system.server.analy;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -11,6 +9,7 @@ import com.system.dao.analy.CpMrDao;
 import com.system.dao.analy.HoldConfigDao;
 import com.system.dao.analy.MrDao;
 import com.system.dao.analy.MrSummerDao;
+import com.system.database.JdbcControl;
 import com.system.model.analy.HoldConfigModel;
 import com.system.model.analy.MrModel;
 import com.system.util.StringUtil;
@@ -33,6 +32,8 @@ public class AnalyMrDailyServer
 		mrSummerDao.analyMrToSummer(tableName, startDate, endDate);
 		
 		mrSummerDao.analyIvrMrToSummer(tableName, startDate, endDate);
+		
+		mrSummerDao.analyThirdPayToSummer(tableName,startDate,endDate);
 		
 		log.info("Analy Mr To Summer Finish");
 		
@@ -83,6 +84,8 @@ public class AnalyMrDailyServer
 		cpMrDao.analyCpMrToCpMrSummer(StringUtil.getMonthFormat(startDate), startDate, endDate);	
 		
 		cpMrDao.analyIvrCpMrToCpMrSummer(StringUtil.getMonthFormat(startDate), startDate, endDate);
+		
+		cpMrDao.analyThirdPayToCpMrSummer(StringUtil.getMonthFormat(startDate), startDate, endDate);
 		
 		log.info("finish analy cp mr to summer");
 		
@@ -194,10 +197,48 @@ public class AnalyMrDailyServer
 	}
 	*/
 	
+	/**
+	 * 删除第三方指定日期内的数据
+	 * @param startDate
+	 * @param endDate
+	 */
+	private void delThirdPaySummerData(String startDate,String endDate)
+	{
+		String sql1 = "DELETE FROM daily_log.`tbl_third_pay_cp_mr_summer` WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		String sql2 = "DELETE FROM daily_log.`tbl_third_pay_mr_summer` WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		
+		JdbcControl control =new JdbcControl();
+		control.execute(sql1);
+		control.execute(sql2);
+	}
+	
+	/**
+	 * 删除每日数据里不是指定日期的数据
+	 * @param startDate
+	 * @param endDate
+	 */
+	private void delMrDailyData(String startDate,String endDate)
+	{
+		String sql1 = "DELETE FROM daily_log.`tbl_mr_daily` WHERE mr_date <> '" + startDate + "'";
+		String sql2 = "DELETE FROM daily_log.`tbl_cp_mr_daily` WHERE mr_date <> '" + startDate + "'";
+		
+		JdbcControl control =new JdbcControl();
+		control.execute(sql1);
+		control.execute(sql2);
+	}
+	
 	public void startAnalyDailyMr()
 	{
 		log.info("start analy mr daily");
+		
 		String startDate = StringUtil.getPreDayOfMonth();
+		
+		String today = StringUtil.getDefaultDate();
+		
+		delThirdPaySummerData(startDate,startDate);
+		
+		delMrDailyData(today,today);
+		
 		analyMrDailyWithDate(startDate,startDate);
 		log.info("start analy cp mr daily");
 		analyCpMrToSummer(startDate,startDate);

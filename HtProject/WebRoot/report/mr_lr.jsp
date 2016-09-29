@@ -58,7 +58,7 @@
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
-	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
+	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId+"",cpCommerceUserId+"",sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -411,7 +411,7 @@
 							%>
 						</select>
 					</dd>
-					<dd class="dd01_me">展示方式</dd>
+					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式" style="width: 110px;" >
 							<option value="1">日期</option>
@@ -444,9 +444,10 @@
 					<td>序号</td>
 					<td><%= titles[sortType-1] %></td>
 					<td>数据量(条)</td>
+					<td>金额(元)</td>
 					<td>失败量(条)</td>
 					<td>推送量(条)</td>
-					<td>金额(元)</td>
+					
 					<td>失败金额(元 )</td>
 					<td>推送金额(元)</td>
 					<td>失败率</td>
@@ -466,9 +467,10 @@
 					<td><%= index++ %></td>
 					<td><%= model.getTitle1() %></td>
 					<td><%= model.getDataRows() %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getAmount()) %></td>
 					<td><%= model.getDataRows() - model.getShowDataRows()  %></td>
 					<td><%= model.getShowDataRows() %></td>
-					<td><%= StringUtil.getDecimalFormat(model.getAmount()) %></td>
+					
 					<td><%= StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
 					<td><%= StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows()) %></td>
@@ -485,9 +487,10 @@
 					<td></td>
 					<td></td>
 					<td>总数据量(条)：<%= dataRows %></td>
+					<td>总金额(元)：<%= StringUtil.getDecimalFormat(amount) %></td>
 					<td>总失败量(条)：<%= dataRows - showDataRows  %> </td>
 					<td>总推送量(条)：<%= showDataRows %></td>
-					<td>总金额(元)：<%= StringUtil.getDecimalFormat(amount) %></td>
+					
 					<td>总失败金额(元 )：<%= StringUtil.getDecimalFormat(amount - showAmount) %></td>
 					<td>总推送金额(元)：<%= StringUtil.getDecimalFormat(showAmount) %></td>
 					<td>总失败率：<%= StringUtil.getPercent(dataRows - showDataRows, dataRows) %></td>

@@ -22,14 +22,11 @@
 		return;
 	}
 	
-	
 	Menu1Model model = new Menu1Model();
 	model.setId(id);
 	model.setMenuHeadId(headId);
 	model.setName(name);
 	model.setRemark(remark);
-	
-	
 	
 	if(id>0)
 		new Menu1Server().updateMenu1Model(model);

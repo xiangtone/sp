@@ -14,31 +14,21 @@
 	pageEncoding="UTF-8"%>
 <%
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
-	String fullName = StringUtil.getString(request.getParameter("fullname"), "");
-	String shortName = StringUtil.getString(request.getParameter("shortname"), "");
-	
-	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user_id"), -1);
+	String keyWord = StringUtil.getString(request.getParameter("keyword"), "");
 
-	Map<String, Object> map =  new SpServer().loadSp(pageIndex, fullName, shortName,commerceUserId);
+	Map<String, Object> map =  new SpServer().loadSp(pageIndex, keyWord);
 		
 	List<SpModel> list = (List<SpModel>)map.get("list");
 	
 	int rowCount = (Integer)map.get("rows");
 	
-	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
-	
-	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
-	
 	Map<String,String> params = new HashMap<String,String>();
 	
-	params.put("fullname", fullName);
-	params.put("shortname", shortName);
-	params.put("commerce_user_id", commerceUserId + "");
+	params.put("keyword", keyWord);
 	
 	String pageData = PageUtil.initPageQuery("sp.jsp",params,rowCount,pageIndex);
 	
 	String query = Base64UTF.encode(request.getQueryString());
-	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -58,11 +48,6 @@
 		}
 	}
 	
-	$(function()
-	{
-		$("#sel_commerce_user_id").val(<%= commerceUserId %>);
-	});
-	
 </script>
 
 <body>
@@ -70,30 +55,12 @@
 		<div class="content" >
 			<dl>
 				<dd class="ddbtn" ><a href="spadd.jsp">增  加</a></dd>
-				<form action="sp.jsp"  method="post" id="formid">
+				<form action="sp.jsp"  method="get" id="formid">
 				<dl>
-					<dd class="dd01_me">全称</dd>
+					<dd class="dd01_me">关键字</dd>
 					<dd class="dd03_me">
-						<input name="fullname" id="input_fullname" value="<%=fullName %>" type="text" style="width: 150px">
+						<input name="keyword" id="input_keyword" value="<%= keyWord %>" type="text" style="width: 150px">
 					</dd>
-					<dd class="dd01_me">简称</dd>
-					<dd class="dd03_me">
-						<input name="shortname" id="input_shortname" value="<%=shortName %>" type="text" style="width: 150px">
-					</dd>
-					<dd class="dd01_me">商务人员</dd>
-						<dd class="dd04_me">
-							<select name="commerce_user_id" id="sel_commerce_user_id">
-								<option value="-1">请选择</option>
-								<%
-								for(UserModel model : userList)
-								{
-									%>
-								<option value="<%= model.getId() %>"><%= model.getNickName() %></option>	
-									<%
-								}
-								%>
-							</select>
-						</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" >
 					</dd>

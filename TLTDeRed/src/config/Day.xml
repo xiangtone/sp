@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="gbk" ?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+
+  <transactionManager type="JDBC">
+		<dataSource type="dbcp">     
+		            <property name="JDBC.Driver" value="com.mysql.jdbc.Driver"/>
+		            <property name="JDBC.ConnectionURL" value="jdbc:mysql://211.147.7.245/oa_pt_system?&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
+		            <property name="JDBC.Username" value="pt_system"/>
+		            <property name="JDBC.Password" value="Yu863hTw"/>
+		            <property name="Pool.MaximumActiveConnections" value="80"/>
+		            <property name="Pool.MaximumIdleConnections" value="40"/> 
+		            <property name="Pool.MaximumWait" value="60000"/>
+		            <property name="Pool.ValidationQuery" value="select 1 from datacenter_201209"/>
+		            <property name="Pool.LogAbandoned" value="false"/>
+		            <property name="Pool.RemoveAbandoned" value="true"/>
+		            <property name="Pool.RemoveAbandonedTimeout" value="50000"/>
+		</dataSource>
+	</transactionManager>
+<sqlMap resource="org/xtone/mt/model/sqlmap/reportTable.xml"/>
+</sqlMapConfig>
+
+
+
+
+
+
+
+
+
+      
+
+
+

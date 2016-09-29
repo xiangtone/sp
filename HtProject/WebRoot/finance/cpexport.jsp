@@ -16,15 +16,16 @@
 	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
 	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
-	int dateType = StringUtil.getInteger(request.getParameter("datetype"), 1);
+	int dateType = StringUtil.getInteger(request.getParameter("datetype"), -1);
 	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
+	boolean isExport = StringUtil.getInteger(request.getParameter("export"), -1) == 1 ;
 	List<CpModel> cpList = new CpServer().loadCp();
 	String display = "";
 	Map<String, List<SpFinanceShowModel>> map = null;
-	if (cpId > 0 && isNotFirstLoad) 
+	if (isExport) 
 	{
 		SettleAccountServer accountServer = new SettleAccountServer();
-		List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(cpId, startDate, endDate);
+		List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(cpId, startDate, endDate,dateType);
 		if (list != null && list.size() > 0) 
 		{
 			String cpName = "";
@@ -63,9 +64,10 @@
 			display = "alert('没有相应的数据');";
 		}
 	}
-	else if (cpId < 0 && isNotFirstLoad) 
+	else
 	{
-		map = new SettleAccountServer().loadCpSettleAccountData(startDate, endDate);
+		if(isNotFirstLoad)
+			map = new SettleAccountServer().loadCpSettleAccountData(startDate, endDate,cpId,dateType);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -77,12 +79,32 @@
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
+<script type="text/javascript" src="../sysjs/base.js"></script>
+<script type="text/javascript" src="../sysjs/pinyin.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 
+	var cpList = new Array();
+	<%
+	for(CpModel cpModel : cpList)
+	{
+		%>
+		cpList.push(new joSelOption(<%= cpModel.getId() %>,1,'<%= cpModel.getShortName() %>'));
+		<%
+	}
+	%>
+	
+	function onCpDataSelect(joData)
+	{
+		$("#sel_cp").val(joData.id);
+	}
+
 	$(function()
-		{
-			$("#sel_date_type").val("<%= dateType %>");
-		});
+	{
+		$("#sel_date_type").val("<%= dateType %>");
+		$("#sel_cp").val("<%= cpId %>");
+	});
 	
 	function subForm() 
 	{
@@ -94,6 +116,28 @@
 		}
 	
 		document.getElementById("exportform").submit();
+	}
+	
+	function exportCpBillData(startDate,endDate,cpId,jsType)
+	{
+		window.location.href = "cpexport_all.jsp?export=1&js_type=" + jsType + "&cpid=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate;
+	}
+	
+	function exportBill(startDate,endDate,cpId,jsType)
+	{
+		getAjaxValue("action.jsp?js_type=" + jsType + "&cpid=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate,onExportBillResult);
+	}
+	
+	function onExportBillResult(data)
+	{
+		if("OK" == data.trim())
+		{
+			alert("开始对帐成功");
+		}
+		else
+		{
+			alert("已存在相同的对帐单");	
+		}
 	}
 	
 </script>
@@ -113,14 +157,32 @@
 						<input name="enddate" type="text" value="<%=endDate%>"
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
 					</dd>
+					<dd class="dd01_me">CP</dd>
+					<dd class="dd04_me">
+						<select name="cp_id" id="sel_cp"  style="width: 120px" onclick="namePicker(this,cpList,onCpDataSelect)">
+							<option value="-1">全部</option>
+							<%
+								for (CpModel cp : cpList)
+								{
+							%>
+							<option value="<%=cp.getId()%>"><%=cp.getShortName()%></option>
+							<%
+								}
+							%>
+						</select>
+					</dd>
 					<dd class="dd01_me">结算类型</dd>
 					<dd class="dd04_me">
-						<select name="datetype" id="sel_date_type" title="选择日期结算类型" style="width:100px">
+						<select name="datetype" id="sel_date_type" title="选择结算类型" style="width:100px">
 							<option value="-1">请选择</option>
-							<option value="1">周结</option>
-							<option value="2">双周结</option>
-							<option value="3">月结</option>
-							<option value="4">自定义</option>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公N+1结</option>
+							<option value="7">对公N+2结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
 						</select>
 					</dd>
 
@@ -136,7 +198,7 @@
 				<thead>
 					<tr>
 						<td>CP名称</td>
-						<td>运营商</td>
+						<td>业务线</td>
 						<td>SP业务名称</td>
 						<td>金额</td>
 						<td>结算率</td>
@@ -170,11 +232,7 @@
 												+ StringUtil.getDecimalFormat(sfsModel.getAmount()
 														* sfsModel.getJiesuanlv())
 												+ "</td><td rowspan='" + tmpList.size()
-												+ "'><a href='cpexport.jsp?startdate="
-												+ startDate + "&enddate=" + endDate
-												+ "&cp_id=" + sfsModel.getSpId()
-												+ "&load=1&datetype=" + dateType
-												+ "'>导出</a></td></tr>");
+												+ "'><a href='#' onclick=exportBill(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>对帐</a></td></tr>");
 									}
 									else
 									{
