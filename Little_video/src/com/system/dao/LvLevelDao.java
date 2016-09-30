@@ -32,6 +32,8 @@ public class LvLevelDao
 							model.setRemark(StringUtil
 									.getString(rs.getString("remark"), ""));
 							model.setCreateDate(rs.getDate("create_date"));
+							model.setAppkey(StringUtil
+									.getString(rs.getString("appkey"), ""));
 							list.add(model);
 						}
 						return list;

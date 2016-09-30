@@ -7,11 +7,13 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.system.dao.LocateDao;
+import com.system.dao.LvChannelDao;
 import com.system.dao.LvImgDao;
 import com.system.dao.LvLevelDao;
 import com.system.dao.LvRecommendDao;
 import com.system.dao.LvVideoBaseDao;
 import com.system.model.CityModel;
+import com.system.model.LvChannelModel;
 import com.system.model.LvImgModel;
 import com.system.model.LvLevelModel;
 import com.system.model.LvRecommendModel;
@@ -42,9 +44,9 @@ public class CacheConfigMgr
 
 	private static void refreshLvChannelCache()
 	{
-		List<LvVideoBaseModel> list = new LvVideoBaseDao().loadLvVideoBase();
-		LvVideoBaseCache.setCache(list);
-		logger.info("refreshLvVideoBaseCache finish");
+		List<LvChannelModel> list = new LvChannelDao().loadData();
+		LvChannelCache.setCache(list);
+		logger.info(String.format( "refreshLvVideoBaseCache finish,count:%d",list.size()));
 	}
 
 	public static void refreshPhoneLocateMap()

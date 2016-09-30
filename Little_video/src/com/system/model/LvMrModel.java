@@ -7,10 +7,12 @@ public class LvMrModel
 {
 	int		id;
 	String	orderId;
+	int		payType;
 	int		price;
 	String	appkey;
 	String	channel;
 	String	payOrderId;
+
 	/**
 	 * 0扣量1不扣量
 	 */
@@ -77,6 +79,7 @@ public class LvMrModel
 	{
 		this.payOrderId = payOrderId;
 	}
+
 	/**
 	 * @param status
 	 *            0扣量1不扣量
@@ -113,6 +116,16 @@ public class LvMrModel
 	public void setCreateDate(Date createDate)
 	{
 		this.createDate = createDate;
+	}
+
+	public int getPayType()
+	{
+		return payType;
+	}
+
+	public void setPayType(int payType)
+	{
+		this.payType = payType;
 	}
 
 }

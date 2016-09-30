@@ -88,8 +88,8 @@ public class LvMrDao
 	{
 		String insSql = "insert into little_video_log."
 				+ getTableName(mr.getOrderId())
-				+ "( orderid, price, appkey, channel, pay_order_id, status,level_id)"
-				+ " values( ?, ?, ?, ?, ?, ?,?)";
+				+ "( orderid, price, appkey, channel, pay_order_id, status,level_id, pay_type)"
+				+ " values( ?, ?, ?, ?, ?, ?,?,?)";
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
 		map.put(++i, mr.getOrderId());
@@ -99,6 +99,7 @@ public class LvMrDao
 		map.put(++i, mr.getPayOrderId());
 		map.put(++i, mr.getStatus());
 		map.put(++i, mr.getLevelId());
+		map.put(++i, mr.getPayType());
 
 		JdbcControlLvLog jdbc = new JdbcControlLvLog();
 		mr.setId(jdbc.insertWithGenKey(insSql, map));

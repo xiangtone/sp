@@ -10,6 +10,7 @@ public class LvLevelModel
 	int		price;
 	String	remark;
 	Date	createDate;
+	String appkey;
 	
 	public void setId(int id)
 	{
@@ -50,6 +51,14 @@ public class LvLevelModel
 	public Date getCreateDate()
 	{
 		return createDate;
+	}
+	public String getAppkey()
+	{
+		return appkey;
+	}
+	public void setAppkey(String appkey)
+	{
+		this.appkey = appkey;
 	}
 
 }

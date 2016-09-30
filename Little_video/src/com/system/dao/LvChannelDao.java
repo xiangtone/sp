@@ -37,6 +37,7 @@ public class LvChannelDao
 					m.setHoldPercent(rs.getInt("hold_percent"));
 					m.setId(rs.getInt("id"));
 					m.setUserId(rs.getInt("user_id"));
+					lst.add(m);
 				}
 				return lst;
 			}

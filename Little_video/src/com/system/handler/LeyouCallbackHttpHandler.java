@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.system.util.StringUtil;
 
-public class LeyouPayHttpHandler extends baseCallbackFilter
+public class LeyouCallbackHttpHandler extends baseCallbackFilter
 {
 
 	@Override
@@ -24,7 +24,7 @@ public class LeyouPayHttpHandler extends baseCallbackFilter
 		}
 		if (super.ProceModel(orderId, order3th, price))
 		{
-			write(response, "0");
+			write(response, "{\"rescode\":0}");
 		}
 		else
 		{

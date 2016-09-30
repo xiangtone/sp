@@ -55,6 +55,15 @@
 		<url-pattern>/bolincall</url-pattern>
 	</filter-mapping>
 
+	<filter>
+		<filter-name>leyou_callback</filter-name>
+		<filter-class>com.system.handler.LeyouCallbackHttpHandler</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>leyou_callback</filter-name>
+		<url-pattern>/leyoupay</url-pattern>
+	</filter-mapping>
+
 
 	<servlet>
 		<servlet-name>CacheInit</servlet-name>
