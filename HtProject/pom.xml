@@ -116,6 +116,13 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>szsu</id>
+			<properties>
+				<runtime.env>config\szsu</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+		<profile>
 			<id>bjtl</id>
 			<properties>
 				<runtime.env>config\bjtl</runtime.env>

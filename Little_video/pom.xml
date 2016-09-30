@@ -1,8 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>credit_base</groupId>
-  <artifactId>credit_base</artifactId>
+  <groupId>little_video_server</groupId>
+  <artifactId>little_video_server</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>
@@ -76,52 +76,10 @@
 	</build>
 	<profiles>
 		<profile>
-			<id>bjyd</id>
+			<id>ht</id>
 			<properties>
-				<runtime.env>config\bjyd</runtime.env>
-				<final.name>credit</final.name>
-				<ftp.server.id>BjYdFtpServer</ftp.server.id>
-				<ftp.to.url>ftp://120.26.105.75/tomcat_9090/swap_dir/</ftp.to.url>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>szht</id>
-			<properties>
-				<runtime.env>config\szht</runtime.env>
-				<final.name>credit</final.name>
-				<ftp.server.id>SzHtFtpServer</ftp.server.id>
-				<ftp.to.url>ftp://120.26.78.220/tomcat_6000/swap_dir/</ftp.to.url>
-			</properties>
-		</profile>
-		<profile>
-			<id>shhh</id>
-			<properties>
-				<runtime.env>config\shhh</runtime.env>
-				<final.name>credit</final.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>szhtwin</id>
-			<properties>
-				<runtime.env>config\szhtwin</runtime.env>
-				<final.name>credit</final.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>bjtl</id>
-			<properties>
-				<runtime.env>config\bjtl</runtime.env>
-				<final.name>credit</final.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>szsu</id>
-			<properties>
-				<runtime.env>config\szsu</runtime.env>
-				<final.name>credit</final.name>
+				<runtime.env>config\ht</runtime.env>
+				<final.name>lv.n8wan.com</final.name>
 			</properties>
 		</profile>
 	</profiles>

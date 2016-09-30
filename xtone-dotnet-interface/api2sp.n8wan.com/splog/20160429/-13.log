@@ -1,7 +1,0 @@
-13:52:21.848 paycode 获取失败，请检查paycode是否有配置
-13:52:21.882 paycode 获取失败，请检查paycode是否有配置
-13:52:21.882 value:szhaot01013570830935szhaot0000000000201604291352218http://baidu.com/szhaot0000000000866568022922909460023192787105ht0428,md5:B4A821925A87EDF85E950677C8C7DF7B
-13:52:21.883 http://123.56.91.64:8888/igameunpay/req.jsp
-13:52:21.883 merid=szhaot&goodsid=010&mobileid=13570830935&clientip=&orderid=szhaot0000000000&orderdate=20160429135221&platType=8&returl=http%3a%2f%2fbaidu.com%2f&merpriv=szhaot0000000000&IMEI=866568022922909&IMSI=460023192787105&sign=B4A821925A87EDF85E950677C8C7DF7B
-13:52:21.980 +97ms {"called":"","called2":"","city":"","mo":"","mo2":"","orderid":"szhaot0000000000","paytype":"Error","province":"","retCode":"1","retMsg":"para error!"}
-
