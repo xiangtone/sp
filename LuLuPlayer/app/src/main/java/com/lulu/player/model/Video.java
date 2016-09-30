@@ -53,4 +53,25 @@ public class Video {
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", videoUrl='" + videoUrl + '\'' +
+                '}';
+    }
+
+    public Video() {
+
+    }
+
+    public Video(int id, String imgUrl, String name, String videoUrl) {
+        this.id = id;
+        this.imgUrl = imgUrl;
+        this.name = name;
+        this.videoUrl = videoUrl;
+    }
 }

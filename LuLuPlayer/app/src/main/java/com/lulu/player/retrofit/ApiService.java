@@ -4,6 +4,9 @@ package com.lulu.player.retrofit;
 import com.lulu.player.common.HttpUrl;
 import com.lulu.player.model.Intro;
 import com.lulu.player.model.Levels;
+import com.lulu.player.model.Order;
+import com.lulu.player.model.RequestOrder;
+import com.lulu.player.model.RequestUpdate;
 import com.lulu.player.model.RequestVideo;
 import com.lulu.player.model.UserInfo;
 import com.lulu.player.model.RequestUserInfo;
@@ -30,5 +33,13 @@ public interface ApiService {
 
     @POST(HttpUrl.GET_VIDEO_LIST)
     Observable<Intro<List<Video>>> getVideo(@Body RequestVideo video);
+
+    //创建订单
+    @POST(HttpUrl.POST_ORDER_INFO)
+    Observable<Order> createOrder(@Body RequestOrder order);
+
+    //支付成功请求刷新等级
+    @POST(HttpUrl.POST_ORDER_INFO)
+    Observable<Order> updateLevel(@Body RequestUpdate update);
 
 }

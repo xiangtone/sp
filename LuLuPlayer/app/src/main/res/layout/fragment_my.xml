@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/my_special_normal"
+                android:text=""
                 android:textColor="@color/my_special"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -193,16 +193,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:text="@string/my_time"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/my_zhu"
             android:textColor="@color/white"
             android:textSize="15sp" />
 

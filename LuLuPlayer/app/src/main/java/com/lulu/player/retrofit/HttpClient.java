@@ -1,10 +1,8 @@
 package com.lulu.player.retrofit;
 
 import com.lulu.player.BuildConfig;
-import com.lulu.player.app.App;
 import com.lulu.player.common.HttpUrl;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -34,6 +32,10 @@ public class HttpClient {
             } else {
                 loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
             }
+
+            //设置缓存
+//            File cacheFile = new File(App.getContext().getCacheDir(),"video_list");
+
             builder.connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                     .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                     .readTimeout(TIMEOUT, TimeUnit.SECONDS)
@@ -42,9 +44,6 @@ public class HttpClient {
                     .addInterceptor(loggingInterceptor);
 
             OkHttpClient okHttpClient = builder.build();
-
-            //设置缓存
-            File cacheFile = new File(App.getContext().getCacheDir(),"");
 
             mRetrofit = new Retrofit.Builder()
                     .baseUrl(HttpUrl.BASE_URL)

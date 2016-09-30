@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lulu.player.R;
 import com.lulu.player.model.Video;
 
@@ -30,7 +31,11 @@ public class NetWorkImageHolderView implements Holder<Video> {
     public void UpdateUI(Context context, int position, Video data) {
         ImageView imageView = (ImageView) view.findViewById(R.id.img_banner);
         if (data.getImgUrl() != null || "".equals(data.getImgUrl()))
-            Glide.with(context).load(data.getImgUrl()).placeholder(R.drawable.black_bg).into(imageView);
+            Glide.with(context).load(data.getImgUrl())
+                    .placeholder(R.drawable.ic_default)
+                    .error(R.drawable.ic_error)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imageView);
     }
 
 }

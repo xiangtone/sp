@@ -14,7 +14,11 @@ import com.lulu.player.main.diamond.presenter.DiamondPresenter;
 import com.lulu.player.model.Intro;
 import com.lulu.player.model.RequestVideo;
 import com.lulu.player.model.Video;
+import com.lulu.player.model.VideoListRsp;
 import com.lulu.player.mvp.MvpFragment;
+import com.lulu.player.pay.view.PayActivity;
+import com.lulu.player.utils.ACache;
+import com.lulu.player.utils.JsonDecode;
 import com.lulu.player.video.VideoActivity;
 
 import java.util.ArrayList;
@@ -30,6 +34,8 @@ public class DiamondFragment extends MvpFragment<DiamondPresenter> implements Di
 
     @Bind(R.id.diamond_gridView)
     GridView diamondGV;
+
+    private ACache cache;
 
     private GridViewAdapter diamondAdapter;
 
@@ -65,11 +71,25 @@ public class DiamondFragment extends MvpFragment<DiamondPresenter> implements Di
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), VideoActivity.class);
-                intent.putExtra(Constants.VIDEO_URL, mVideos.get(position).getVideoUrl());
-                startActivity(intent);
+                if (cache.getAsString(Constants.LEVEL).equals("2")) {
+                    Intent intent = new Intent(getActivity(), VideoActivity.class);
+                    intent.putExtra(Constants.VIDEO_URL, mVideos.get(position).getVideoUrl());
+                    startActivityForResult(intent, Constants.REQUEST_CODE);
+                } else {
+                    Intent intent = new Intent(getActivity(), PayActivity.class);
+                    startActivity(intent);
+                }
             }
         });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULT_OK) {
+
+        }
 
     }
 
@@ -81,15 +101,36 @@ public class DiamondFragment extends MvpFragment<DiamondPresenter> implements Di
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        cache = ACache.get(getContext());
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (cache.getAsString(Constants.DIAMOND_VIDEO_LIST) == null) {
+            RequestVideo requestVideo = new RequestVideo(2);
+            presenter.getVideo(requestVideo);
+        } else {
+            JsonDecode decode = new JsonDecode();
+            VideoListRsp videoListRsp = decode.decode(cache.getAsString(Constants.DIAMOND_VIDEO_LIST));
+            mVideos.addAll(videoListRsp.getVideoList());
+            diamondAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        RequestVideo requestVideo = new RequestVideo(2);
-        presenter.getVideo(requestVideo);
+
     }
 
 
     @Override
     public void requestVideoList(Intro<List<Video>> intro) {
+
+        cache.put(Constants.DIAMOND_VIDEO_LIST, intro.toString(), Constants.CACHE_TIME);
         mVideos.addAll(intro.getVideos());
         diamondAdapter.notifyDataSetChanged();
     }

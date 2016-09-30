@@ -12,16 +12,24 @@ public class ToastUtils {
     public ToastUtils() {
     }
 
-    private static Toast getToast(Context context, String msg, int length) {
-        return Toast.makeText(context, msg, length);
+    public static void showError(final String message, final Context context) {
+        getToast(context,message).show();
     }
 
-    public static void showShortMessage(Context context,String msg){
-        getToast(context,msg,Toast.LENGTH_SHORT);
+    public static void showShortMessage(Context context, String message) {
+        getToast(context,message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showLongMessage(Context context,String msg){
-        getToast(context,msg,Toast.LENGTH_LONG);
+    public static void showLongMessage(Context context, String message) {
+        getToast(context,message, Toast.LENGTH_LONG).show();
+    }
+
+    private static Toast getToast(Context context, String message) {
+        return getToast(context,message, Toast.LENGTH_LONG);
+    }
+
+    private static Toast getToast(Context context, String message, int length) {
+        return Toast.makeText(context, message, length);
     }
 
 }

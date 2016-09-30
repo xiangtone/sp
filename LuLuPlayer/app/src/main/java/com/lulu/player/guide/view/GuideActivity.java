@@ -1,9 +1,12 @@
 package com.lulu.player.guide.view;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 
 import com.lulu.player.R;
@@ -13,7 +16,8 @@ import com.lulu.player.main.MainActivity;
 import com.lulu.player.model.RequestUserInfo;
 import com.lulu.player.model.UserInfo;
 import com.lulu.player.mvp.MvpActivity;
-import com.lulu.player.utils.SharedPreferencesUtil;
+import com.lulu.player.utils.ACache;
+import com.lulu.player.utils.NetWorkUtils;
 import com.lulu.player.utils.ToastUtils;
 
 
@@ -26,6 +30,10 @@ import com.lulu.player.utils.ToastUtils;
 public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideView {
 
     private String IMSI, IMEI, mac, androidVersion, androidLevel, model;
+
+    private ACache cache;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected int getFragmentLayout() {
@@ -56,26 +64,46 @@ public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideV
 
         IMSI = "" + manager.getSubscriberId();
         mac = "" + wifiInfor.getMacAddress();
-        androidVersion = "" + android.os.Build.VERSION.SDK;
-        androidLevel = "" + android.os.Build.VERSION.RELEASE;
+        androidVersion = "" + android.os.Build.VERSION.RELEASE;
+        androidLevel = "" + android.os.Build.VERSION.SDK;
         model = "" + android.os.Build.MODEL;
         IMEI = "" + manager.getDeviceId();
 
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        cache = ACache.get(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("请确认网络连接");
+        if (NetWorkUtils.isNetworkAvailable(this)) {
+            if (cache.getAsString(Constants.USER_NAME) == null) {
+                cache.put(Constants.IMEI, IMEI);
+                RequestUserInfo info = new RequestUserInfo(IMSI, IMEI, mac, androidVersion, androidLevel, model);
+                presenter.getInfo(info);
+            }
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        RequestUserInfo info = new RequestUserInfo(IMSI, IMEI, mac, androidVersion, androidLevel, model);
-        presenter.getInfo(info);
-//        Intent intent = new Intent(GuideActivity.this, MainActivity.class);
-//        startActivity(intent);
+        if (NetWorkUtils.isNetworkAvailable(this)) {
+            if (cache.getAsString(Constants.USER_NAME) != null) {
+                Intent intent = new Intent(GuideActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else {
+            progressDialog.show();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        finish();
     }
 
     @Override
@@ -90,12 +118,18 @@ public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideV
 
     @Override
     public void requestUserInfo(UserInfo user) {
-        ToastUtils.showShortMessage(this, "加载完成...");
-        SharedPreferencesUtil.getInstance(this).save(Constants.USER_NAME, user.getName());
-        SharedPreferencesUtil.getInstance(this).save(Constants.PASSWORD, user.getPassword());
-        SharedPreferencesUtil.getInstance(this).save(Constants.LEVEL, user.getLevel());
-        Intent intent = new Intent(GuideActivity.this, MainActivity.class);
-        startActivity(intent);
+        cache.put(Constants.USER_NAME, user.getName(), Constants.CACHE_TIME);
+        cache.put(Constants.PASSWORD, user.getPassword(), Constants.CACHE_TIME);
+        cache.put(Constants.LEVEL, user.getLevel() + "", Constants.CACHE_TIME);
+
+        new Handler().postDelayed(new Runnable() {
+
+            public void run() {
+                Intent intent = new Intent(GuideActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, 3000);
     }
 
     @Override
@@ -110,6 +144,16 @@ public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideV
 
     @Override
     public void hideProgress() {
-        ToastUtils.showShortMessage(this, "加载完成...");
+        ToastUtils.showShortMessage(this, "加载完成");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        } else {
+            super.onBackPressed();
+        }
+
     }
 }

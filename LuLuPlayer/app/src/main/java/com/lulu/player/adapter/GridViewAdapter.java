@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lulu.player.R;
 import com.lulu.player.model.Video;
 
@@ -40,25 +41,21 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return mVideo.size();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return mVideo.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         ViewHolder mHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_grid_view, parent, false);
@@ -70,11 +67,12 @@ public class GridViewAdapter extends BaseAdapter {
 
         String name = mVideo.get(position).getName() + "";
         String imgUrl = mVideo.get(position).getImgUrl() + "";
-        //
-        mHolder.title.setText(mVideo.get(position).getName());
-        Glide.with(mContext).load(imgUrl == null || imgUrl.equals("") ? R.drawable.black_bg : imgUrl)
-                .placeholder(R.drawable.black_bg)
-                .error(R.drawable.exit_mm)
+
+        mHolder.title.setText(name);
+        Glide.with(mContext).load(imgUrl == null || imgUrl.equals("") ? R.drawable.ic_default : imgUrl)
+                .placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_error)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mHolder.img);
 
         return convertView;

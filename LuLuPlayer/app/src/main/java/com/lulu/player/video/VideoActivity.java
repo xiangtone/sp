@@ -1,6 +1,7 @@
 package com.lulu.player.video;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,17 +20,18 @@ import butterknife.ButterKnife;
  * @author zxc
  * @time 2016/9/26 0026下午 5:59
  */
-public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
 
     public static final String KEY_URL = "view_url";
-
     private static final int PLAY_RETURN = 2 * 1000; // 2 seconds
     private static final String KEY_PLAY_POSITION = "play_position";
-    private static final String TOAST_ERROR_URL = "Play url is null, please check parameter:" + KEY_URL;
-    private static final String TOAST_ERROR_PLAY = "Play error, please check url exist!";
+    private static final String TOAST_ERROR_URL = "播放失败，请检查网址是否有误:" + KEY_URL;
+    private static final String TOAST_ERROR_PLAY = "播放失败，请检查网址是否存在!";
     private static final String DIALOG_TITLE = "奋力加载中，请稍后...";
-
+    private static final int TIME_INTERVAL = 2000;
     private static String url;
+
+    private long mBackPressed;
 
     private ProgressDialog progressDialog;
 
@@ -59,6 +61,7 @@ public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnPr
         videoView.requestFocus();
         videoView.setOnPreparedListener(this);
         videoView.setOnErrorListener(this);
+        videoView.setOnCompletionListener(this);
 
         mc = new MediaController(this);
         mc.setAnchorView(videoView);
@@ -110,5 +113,24 @@ public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnPr
         progressDialog.setMessage(DIALOG_TITLE);
         progressDialog.setCancelable(false);
         progressDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+            super.onBackPressed();
+            return;
+        } else {
+            Toast.makeText(this, "再按一次退出播放", Toast.LENGTH_SHORT).show();
+        }
+
+        mBackPressed = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        Intent intent=new Intent();
+        setResult(Constants.RESULT_OK,intent);
+        finish();
     }
 }

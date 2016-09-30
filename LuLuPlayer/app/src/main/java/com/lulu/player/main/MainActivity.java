@@ -1,21 +1,27 @@
 package com.lulu.player.main;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lulu.player.R;
 import com.lulu.player.adapter.FragmentsAdapter;
 import com.lulu.player.base.BaseActivity;
 import com.lulu.player.base.BaseFragment;
+import com.lulu.player.common.Constants;
 import com.lulu.player.main.diamond.view.DiamondFragment;
 import com.lulu.player.main.free.view.FreeFragment;
 import com.lulu.player.main.gold.view.GoldFragment;
 import com.lulu.player.main.my.view.MyFragment;
+import com.lulu.player.pay.view.PayActivity;
+import com.lulu.player.utils.ACache;
 import com.lulu.player.view.NoSlideViewPager;
 
 import java.util.ArrayList;
@@ -47,11 +53,16 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
 
     private List<RadioButton> mTabItems;
 
+    private ACache cache;
+
+    private long mExitTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViewPager();
         initTabBar();
+        cache = ACache.get(this);
     }
 
     private void initViewPager() {
@@ -166,5 +177,27 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (cache.getAsString(Constants.LEVEL).equals("2")) {
+                if ((System.currentTimeMillis() - mExitTime) > 2000) {
+                    Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                    mExitTime = System.currentTimeMillis();
+                } else {
+                    System.exit(0);
+                }
+                return true;
+            } else {
+                Intent intent = new Intent(MainActivity.this, PayActivity.class);
+                startActivity(intent);
+                return false;
+            }
+
+
+        }
+        return super.onKeyDown(keyCode, event);
+
+    }
 
 }

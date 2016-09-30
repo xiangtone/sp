@@ -1,10 +1,7 @@
 package com.lulu.player.main.my.view;
 
-import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -13,10 +10,11 @@ import com.lulu.player.R;
 import com.lulu.player.common.Constants;
 import com.lulu.player.main.my.presenter.MyPresenter;
 import com.lulu.player.model.Levels;
-import com.lulu.player.model.RequestUserInfo;
 import com.lulu.player.model.UserInfo;
 import com.lulu.player.mvp.MvpFragment;
-import com.lulu.player.utils.SharedPreferencesUtil;
+import com.lulu.player.pay.view.PayActivity;
+import com.lulu.player.utils.ACache;
+import com.lulu.player.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * @author Administrator
+ * @author zxc
  * @time 2016/9/23 0023 上午 11:25
  */
 public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
@@ -47,11 +45,11 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
     @Bind(R.id.my_upgrade_text)
     TextView upgrade;
 
-    private String user_name, password_text, level_text, special_text;
-
-    private String IMSI, IMEI, mac, androidVersion, androidLevel, model;
+    private String user_name, password_text;
 
     private List<Levels> mLevels;
+
+    private ACache cache;
 
     public static MyFragment newInstance(String title, int index) {
         MyFragment fragment = new MyFragment();
@@ -60,6 +58,12 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
         bundle.putInt(Constants.INDEX, index);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        cache = ACache.get(getContext());
     }
 
     @Override
@@ -72,22 +76,13 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
 
         mLevels = new ArrayList<>();
 
-        TelephonyManager manager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        WifiManager wifiMng = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfor = wifiMng.getConnectionInfo();
-
-        IMSI = "" + manager.getSubscriberId();
-        mac = "" + wifiInfor.getMacAddress();
-        androidVersion = "" + android.os.Build.VERSION.SDK;
-        androidLevel = "" + android.os.Build.VERSION.RELEASE;
-        model = "" + android.os.Build.MODEL;
-        IMEI = "" + manager.getDeviceId();
-
-        user_name = "" + SharedPreferencesUtil.getInstance(getActivity()).getString(Constants.USER_NAME);
+        user_name = "" + cache.getAsString(Constants.USER_NAME);
         user.setText(user_name);
 
-        password_text = "" + SharedPreferencesUtil.getInstance(getActivity()).getString(Constants.PASSWORD);
+        password_text = "" + cache.getAsString(Constants.PASSWORD);
         password.setText("******");
+
+        setLevels();
 
     }
 
@@ -110,10 +105,12 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
 
             @Override
             public void onClick(View v) {
-                level_text = getResources().getString(R.string.my_level_gold);
-                level.setText(level_text);
-                special_text = getResources().getString(R.string.my_special_gold);
-                special.setText(special_text);
+                if (cache.getAsString(Constants.LEVEL).equals("2")) {
+                    ToastUtils.showShortMessage(getActivity(), "您已是最高级别会员，不用升级！");
+                } else {
+                    Intent intent = new Intent(getActivity(), PayActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -124,16 +121,9 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RequestUserInfo info = new RequestUserInfo(IMSI, IMEI, mac, androidVersion, androidLevel, model);
-        presenter.getLevels(info);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-
+        setLevels();
     }
 
     @Override
@@ -143,25 +133,28 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
 
     @Override
     public void requestUserInfo(UserInfo<List<Levels>> info) {
-        mLevels.addAll(info.getLevels());
-        level_text = "" + SharedPreferencesUtil.getInstance(getActivity()).getInt(Constants.LEVEL);
 
-        switch (level_text) {
-            case "0":
-                level.setText(mLevels.get(0).getRemark());
-                break;
-            case "1":
-                level.setText(mLevels.get(1).getRemark());
-                break;
-            case "2":
-                level.setText(mLevels.get(2).getRemark());
-                break;
-
-        }
     }
 
     @Override
     public void requestFail(String msg) {
 
+    }
+
+    public void setLevels() {
+        switch (cache.getAsString(Constants.LEVEL)) {
+            case "0":
+                level.setText("体验会员");
+                special.setText("观看体验区电影");
+                break;
+            case "1":
+                level.setText("黄金会员");
+                special.setText("观看黄金区电影");
+                break;
+            case "2":
+                level.setText("钻石会员");
+                special.setText("观看所有电影");
+                break;
+        }
     }
 }

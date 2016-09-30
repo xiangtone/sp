@@ -14,7 +14,11 @@ import com.lulu.player.main.gold.presenter.GoldPresenter;
 import com.lulu.player.model.Intro;
 import com.lulu.player.model.RequestVideo;
 import com.lulu.player.model.Video;
+import com.lulu.player.model.VideoListRsp;
 import com.lulu.player.mvp.MvpFragment;
+import com.lulu.player.pay.view.PayActivity;
+import com.lulu.player.utils.ACache;
+import com.lulu.player.utils.JsonDecode;
 import com.lulu.player.video.VideoActivity;
 
 import java.util.ArrayList;
@@ -34,6 +38,8 @@ public class GoldFragment extends MvpFragment<GoldPresenter> implements GoldView
     private GridViewAdapter goldAdapter;
 
     private List<Video> goldVideos;
+
+    private ACache cache;
 
     public static GoldFragment newInstance(String title, int index) {
         GoldFragment fragment = new GoldFragment();
@@ -65,11 +71,29 @@ public class GoldFragment extends MvpFragment<GoldPresenter> implements GoldView
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), VideoActivity.class);
-                intent.putExtra(Constants.VIDEO_URL, goldVideos.get(position).getVideoUrl());
-                startActivity(intent);
+                if (cache.getAsString(Constants.LEVEL).equals("1")||cache.getAsString(Constants.LEVEL).equals("2")) {
+                    Intent intent = new Intent(getActivity(), VideoActivity.class);
+                    intent.putExtra(Constants.VIDEO_URL, goldVideos.get(position).getVideoUrl());
+                    startActivityForResult(intent, Constants.REQUEST_CODE);
+                } else {
+                    Intent intent = new Intent(getActivity(), PayActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULT_OK) {
+            if (cache.getAsString(Constants.LEVEL).equals("1")){
+                Intent intent = new Intent(getActivity(), PayActivity.class);
+                startActivity(intent);
+            }
+        }
 
     }
 
@@ -79,25 +103,36 @@ public class GoldFragment extends MvpFragment<GoldPresenter> implements GoldView
         goldGV.setAdapter(goldAdapter);
     }
 
-    //null point
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        //0 体验 1 黄金 2 钻石
-//        RequestVideo requestVideo = new RequestVideo(1);
-//        presenter.getVideo(requestVideo);
-//    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        cache = ACache.get(getContext());
+    }
 
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (cache.getAsString(Constants.GOLD_VIDEO_LIST) == null) {
+            RequestVideo requestVideo = new RequestVideo(1);
+            presenter.getVideo(requestVideo);
+        } else {
+            JsonDecode decode = new JsonDecode();
+            VideoListRsp videoListRsp2 = decode.decode(cache.getAsString(Constants.GOLD_VIDEO_LIST));
+            goldVideos.addAll(videoListRsp2.getVideoList());
+            goldAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        RequestVideo requestVideo = new RequestVideo(2);
-        presenter.getVideo(requestVideo);
+
     }
 
     @Override
     public void requestVideoList(Intro<List<Video>> intro) {
+        cache.put(Constants.GOLD_VIDEO_LIST, intro.toString(), Constants.CACHE_TIME);
         goldVideos.addAll(intro.getVideos());
         goldAdapter.notifyDataSetChanged();
     }

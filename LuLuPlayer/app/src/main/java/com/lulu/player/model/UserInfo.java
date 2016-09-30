@@ -25,8 +25,6 @@ public class UserInfo<T> {
 
     @SerializedName("levels")
     private T levels;
-    //private List<Levels> levels;
-//    private Levels[] levels;
 
     public String getName() {
         return name;
@@ -65,6 +63,29 @@ public class UserInfo<T> {
     }
 
     public void setLevels(T levels) {
+        this.levels = levels;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "status=" + status +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", level=" + level +
+                ", levels=" + levels +
+                '}';
+    }
+
+    public UserInfo() {
+
+    }
+
+    public UserInfo(int status, String name, String password, int level, T levels) {
+        this.status = status;
+        this.name = name;
+        this.password = password;
+        this.level = level;
         this.levels = levels;
     }
 }

@@ -14,7 +14,6 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
 
 	public FragmentsAdapter(FragmentManager fm) {
 		super(fm);
-		// TODO Auto-generated constructor stub
 	}
 
 	public FragmentsAdapter(FragmentManager fm, List<BaseFragment> mFragments) {
@@ -24,13 +23,11 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
-		// TODO Auto-generated method stub
 		return mFragments.get(position);
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return mFragments.size();
 	}
 

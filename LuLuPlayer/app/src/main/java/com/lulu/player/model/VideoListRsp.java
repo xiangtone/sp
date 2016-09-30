@@ -1,28 +1,17 @@
 package com.lulu.player.model;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 /**
- * @author zxc
- * @time 2016/9/22 0022 下午 5:49
+ * Created by Administrator on 2016/9/28 0028.
  */
-public class Intro<T>{
+public class VideoListRsp {
 
-    @SerializedName("count")
     private int count;
-
-    @SerializedName("levelId")
     private int levelId;
-
-    @SerializedName("status")
     private int status;
-
-    @SerializedName("topVideos")
-    private T topVideos;
-
-    @SerializedName("videos")
-    private T videos;
-
+    private List<Video> videoList;
+    private List<Video> topVideoList;
     public int getCount() {
         return count;
     }
@@ -47,20 +36,20 @@ public class Intro<T>{
         this.status = status;
     }
 
-    public T getTopVideos() {
-        return topVideos;
+    public List<Video> getVideoList() {
+        return videoList;
     }
 
-    public void setTopVideos(T topVideos) {
-        this.topVideos = topVideos;
+    public void setVideoList(List<Video> videoList) {
+        this.videoList = videoList;
     }
 
-    public T getVideos() {
-        return videos;
+    public List<Video> getTopVideoList() {
+        return topVideoList;
     }
 
-    public void setVideos(T videos) {
-        this.videos = videos;
+    public void setTopVideoList(List<Video> topVideoList) {
+        this.topVideoList = topVideoList;
     }
 
     @Override
@@ -69,8 +58,8 @@ public class Intro<T>{
                 "count=" + count +
                 ", levelId=" + levelId +
                 ", status=" + status +
-                ", topVideos=" + topVideos +
-                ", videos=" + videos +
+                ", videoList=" + videoList +
+                ", topVideoList=" + topVideoList +
                 '}';
     }
 }
