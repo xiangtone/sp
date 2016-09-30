@@ -89,6 +89,7 @@ public abstract class baseCallbackFilter implements Filter
 		mr.setLevelId(orderInfo.getLevel());
 		mr.setOrderId(orderInfo.getOrderid());
 		mr.setPayOrderId(order3th);
+		mr.setPayType(orderInfo.getPayType());
 
 		mr.setPrice(price == -1 ? orderInfo.getPrice() : price);
 		HoldProce(mr);
@@ -123,6 +124,10 @@ public abstract class baseCallbackFilter implements Filter
 			return false;
 		Random rnd = new Random();
 		int r = rnd.nextInt(100);
+		System.out.println(String.format(
+				"[lv]: hold proce: setting value:%d, rnd value:%d",
+				chn.getHoldPercent(), r));
+
 		if (r < chn.getHoldPercent())
 			mr.setStatus(0);
 		return true;

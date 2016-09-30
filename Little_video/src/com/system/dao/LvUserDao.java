@@ -46,6 +46,9 @@ public class LvUserDao
 				m.setAndroidVersion(StringUtil
 						.getString(rs.getString("Android_Version"), ""));
 
+				m.setAppkey(StringUtil.getString(rs.getString("appkey"), ""));
+				m.setChannel(StringUtil.getString(rs.getString("channel"), ""));
+
 				return m;
 			}
 		};
@@ -76,8 +79,8 @@ public class LvUserDao
 	{
 		String insSql = "insert into little_video_log."
 				+ getTabelName(user.getImei())
-				+ "(imei,imsi,mac,android_Version,android_Level,model,level,city,province,name,pwd)"
-				+ " values(?,?,?,?,?,?,?,?,?,?,?)";
+				+ "(imei,imsi,mac,android_Version,android_Level,model,level,city,province,name,pwd,appkey,channel)"
+				+ " values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
@@ -92,6 +95,9 @@ public class LvUserDao
 		map.put(++i, user.getProvince());
 		map.put(++i, user.getName());
 		map.put(++i, user.getPwd());
+		map.put(++i, user.getAppkey());
+		map.put(++i, user.getChannel());
+
 		JdbcControlLvLog jdbc = new JdbcControlLvLog();
 		user.setId(jdbc.insertWithGenKey(insSql, map));
 
@@ -112,21 +118,20 @@ public class LvUserDao
 		jdbc.execute(upSql, map);
 		return;
 	}
-	
-	public void UpdateLevel(String imei, int level ,boolean iForce)
+
+	public void UpdateLevel(String imei, int level, boolean iForce)
 	{
 		String upSql = "update little_video_log." + getTabelName(imei)
 				+ " set Level=? where imei=? ";
-		if(!iForce)
-			upSql+=" and  Level<?";
+		if (!iForce)
+			upSql += " and  Level<?";
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
 		map.put(++i, level);
-		map.put(++i, imei );
-		
-		if(!iForce)
+		map.put(++i, imei);
+
+		if (!iForce)
 			map.put(++i, level);
-		
 
 		JdbcControlLvLog jdbc = new JdbcControlLvLog();
 		jdbc.execute(upSql, map);

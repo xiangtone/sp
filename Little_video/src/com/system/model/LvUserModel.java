@@ -18,6 +18,8 @@ public class LvUserModel
 	String	name;
 	String	pwd;
 	Date	createDate;
+	String appkey;
+	String channel;
 	
 	public void setId(int id)
 	{
@@ -122,5 +124,21 @@ public class LvUserModel
 	public Date getCreateDate()
 	{
 		return createDate;
+	}
+	public String getAppkey()
+	{
+		return appkey;
+	}
+	public void setAppkey(String appkey)
+	{
+		this.appkey = appkey;
+	}
+	public String getChannel()
+	{
+		return channel;
+	}
+	public void setChannel(String channel)
+	{
+		this.channel = channel;
 	}
 }

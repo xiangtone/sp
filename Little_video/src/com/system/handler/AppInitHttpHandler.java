@@ -39,8 +39,12 @@ public class AppInitHttpHandler extends BaseFilter
 		result.setLevel(user.getLevel());
 		result.setName(user.getName());
 		result.setPassword(user.getPwd());
+		// System.out.println("appkey:"+m.getAppkey());
+		String appkey = m.getAppkey();
+		if (StringUtil.isNullOrEmpty(appkey)) // 兼容已经发包的APP
+			appkey = "57d963881bc74500925d9b2afd728f79";
 
-		List<LvLevelModel> levels = LvLevelCache.getCache();
+		List<LvLevelModel> levels = LvLevelCache.getLevelByAppkey(appkey);
 		LevelItem[] lItems = new LevelItem[levels.size()];
 		for (int i = 0; i < lItems.length; i++)
 		{
@@ -76,6 +80,8 @@ public class AppInitHttpHandler extends BaseFilter
 		u.setLevel(0);
 		u.setMac(m.getMac());
 		u.setModel(m.getModel());
+		u.setAppkey(m.getAppkey());
+		u.setChannel(m.getChannel());
 
 		FillRandName(u);
 		FillAreaInfo(u);
@@ -103,8 +109,8 @@ public class AppInitHttpHandler extends BaseFilter
 			return;
 
 		int city = LocateCache.getCityIdByPhone(phone);
-		if(city==-1)
-			return ;
+		if (city == -1)
+			return;
 		ProvinceModel provinceModel = LocateCache.getProvinceByCityId(city);
 		u.setCity(city);
 		System.out.println(phone);

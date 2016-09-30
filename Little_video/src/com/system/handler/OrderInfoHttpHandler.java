@@ -99,7 +99,7 @@ public class OrderInfoHttpHandler extends BaseFilter
 		order.setOrderid(orderId);
 		order.setPayType(m.getPayType());
 		order.setPrice(levelInfo.getPrice());
-
+		order.setLevel(m.getLevelId());
 		order.setAppkey(m.getAppkey());
 		order.setChannel(m.getChannel());
 
