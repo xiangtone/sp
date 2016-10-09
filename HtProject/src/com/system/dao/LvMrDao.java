@@ -85,7 +85,7 @@ public class LvMrDao {
 			query+=" and mr.pay_type="+payType;
 		}
 		
-		String sql="SELECT SUM(mr.price) as day_total,DATE_FORMAT(mr.create_date,'%Y-%m-%d') AS day_date FROM little_video_log.tbl_mr_201609 mr "
+		String sql="SELECT SUM(mr.price) as day_total,DATE_FORMAT(mr.create_date,'%Y-%m-%d') AS day_date FROM little_video_log.tbl_mr_"+tableName+" mr "
 				+ "LEFT JOIN daily_config.tbl_lv_channel lc ON mr.channel=lc.channel "
 				+ "WHERE 1=1 AND mr.status=1 "
 				+ "AND lc.user_id="+userId;
