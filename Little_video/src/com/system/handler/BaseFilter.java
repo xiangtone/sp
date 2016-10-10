@@ -11,6 +11,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.system.api.baseResponse;
 
@@ -49,6 +50,9 @@ public abstract class BaseFilter implements Filter
 			data="{}";
 		
 
+		((HttpServletResponse)response).addHeader("Access-Control-Allow-Origin", "*");
+		((HttpServletResponse)response).addHeader("Access-Control-Allow-Methods", "POST");
+		
 		baseResponse result = ProcessReuqest(data);
 		if (result == null)
 		{

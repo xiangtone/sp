@@ -5,8 +5,7 @@ public class ImsiUtil
 {
 	public static String ImsiToPhone(String imsi)
 	{
-
-		System.out.println("IMSI:" + imsi);
+		//System.out.println("IMSI:" + imsi);
 		if (imsi == null || imsi.length() < 10)
 			return null;
 

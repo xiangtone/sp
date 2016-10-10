@@ -70,9 +70,10 @@ public class LvMrDao
 				return rs.next();
 			};
 		};
-
-		Boolean ret = (Boolean) new JdbcControl().query(sql, callBack);
-		return ret;
+		Object obj = new JdbcControl().query(sql, callBack);
+		if (obj == null)
+			return true;
+		return (Boolean) obj;
 
 		// String curTabName = getTableName();
 		//
@@ -88,7 +89,7 @@ public class LvMrDao
 	{
 		String insSql = "insert into little_video_log."
 				+ getTableName(mr.getOrderId())
-				+ "( orderid, price, appkey, channel, pay_order_id, status,level_id, pay_type)"
+				+ "( orderid, price, appkey, channel, pay_order_id, status,level_id, pay_type,pay_type_id)"
 				+ " values( ?, ?, ?, ?, ?, ?,?,?)";
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
@@ -100,6 +101,7 @@ public class LvMrDao
 		map.put(++i, mr.getStatus());
 		map.put(++i, mr.getLevelId());
 		map.put(++i, mr.getPayType());
+		map.put(++i, mr.getPayTypeId());
 
 		JdbcControlLvLog jdbc = new JdbcControlLvLog();
 		mr.setId(jdbc.insertWithGenKey(insSql, map));

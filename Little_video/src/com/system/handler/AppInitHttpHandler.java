@@ -61,6 +61,7 @@ public class AppInitHttpHandler extends BaseFilter
 		LvUserModel u = s.getUserByImsi(m.getImei());
 		if (u != null)
 		{
+			// System.out.println("old user:"+m.getImei());
 			if (!StringUtil.isNullOrEmpty(m.getImsi())
 					&& u.getImsi() != m.getImsi())
 			{
@@ -70,6 +71,7 @@ public class AppInitHttpHandler extends BaseFilter
 			}
 			return u;
 		}
+		// System.out.println("new user:"+m.getImei());
 
 		u = new LvUserModel();
 		u.setAndroidLevel(m.getAndroidLevel());
@@ -93,8 +95,10 @@ public class AppInitHttpHandler extends BaseFilter
 	private void FillRandName(LvUserModel u)
 	{
 		long ts = System.currentTimeMillis();
-
-		u.setName(Long.toString(100000 + (ts & 0xFFffFF)));
+		if (u.getImei().length() < 8)
+			u.setName(u.getImei());
+		else
+			u.setName(Long.toString(100000 + (ts & 0xFFffFF)));
 		u.setPwd(Long.toHexString((ts & 0xFFffFF) | 0x100000));
 
 	}

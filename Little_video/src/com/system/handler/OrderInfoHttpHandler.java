@@ -8,7 +8,9 @@ import com.system.api.AppOrderRequestModel;
 import com.system.api.AppOrderResponseModel;
 import com.system.api.BaseRequest;
 import com.system.api.baseResponse;
+import com.system.cache.LvChannelCache;
 import com.system.cache.LvLevelCache;
+import com.system.model.LvChannelModel;
 import com.system.model.LvLevelModel;
 import com.system.model.LvRequestModel;
 import com.system.model.LvUserModel;
@@ -72,6 +74,14 @@ public class OrderInfoHttpHandler extends BaseFilter
 			result.setStatus(com.system.constant.Constant.ERROR_UNKONW_USER);
 			return;
 		}
+
+		LvChannelModel channel = LvChannelCache
+				.getDataByChannelAndKey(m.getChannel(), m.getAppkey());
+		if (channel == null)
+		{
+			result.setStatus(com.system.constant.Constant.ERROR_NO_PAY_CHANNEL);
+			return;
+		}
 		// System.out.println(m.getLevelId() +" <--"+ user.getLevel());
 		if (m.getLevelId() <= user.getLevel())
 		{
@@ -102,9 +112,10 @@ public class OrderInfoHttpHandler extends BaseFilter
 		order.setLevel(m.getLevelId());
 		order.setAppkey(m.getAppkey());
 		order.setChannel(m.getChannel());
-
+		order.setPayTypeId(
+				m.getPayType() == 1 ? channel.getWxPay() : channel.getAliPay());
 		new LvRequestServer().Insert(order);
-		if (order.getId() == 0)
+		if (order.getId() < 1)
 		{
 			result.setStatus(com.system.constant.Constant.ERROR_DBASE_BUSY);
 			return;
@@ -114,8 +125,9 @@ public class OrderInfoHttpHandler extends BaseFilter
 		result.setPrice(levelInfo.getPrice());
 		result.setLevelName(levelInfo.getRemark());
 		result.setOrderId(orderId);
+		result.setSdkId(order.getPayTypeId());
 		result.setStatus(com.system.constant.Constant.ERROR_SUCCESS);
-
+		System.out.println("done!");
 	}
 
 	private synchronized static String CreateOrderId()

@@ -90,6 +90,7 @@ public abstract class baseCallbackFilter implements Filter
 		mr.setOrderId(orderInfo.getOrderid());
 		mr.setPayOrderId(order3th);
 		mr.setPayType(orderInfo.getPayType());
+		mr.setPayTypeId(orderInfo.getPayTypeId());
 
 		mr.setPrice(price == -1 ? orderInfo.getPrice() : price);
 		HoldProce(mr);

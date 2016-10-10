@@ -9,6 +9,7 @@ public class AppOrderResponseModel extends baseResponse
 	int		price;
 	long	createDate;
 	int		payDate;
+	int		sdkId;
 
 	public String getOrderId()
 	{
@@ -50,7 +51,6 @@ public class AppOrderResponseModel extends baseResponse
 		this.price = price;
 	}
 
-
 	public long getCreateDate()
 	{
 		return createDate;
@@ -69,5 +69,15 @@ public class AppOrderResponseModel extends baseResponse
 	public void setPayDate(int payDate)
 	{
 		this.payDate = payDate;
+	}
+
+	public int getSdkId()
+	{
+		return sdkId;
+	}
+
+	public void setSdkId(int sdkId)
+	{
+		this.sdkId = sdkId;
 	}
 }

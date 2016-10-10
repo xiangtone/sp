@@ -38,6 +38,7 @@ public class LvRequestDao
 				m.setPrice(rs.getInt("price"));
 				m.setAppkey(StringUtil.getString(rs.getString("appKey"), ""));
 				m.setLevel(rs.getInt("level"));
+				m.setPayTypeId(rs.getInt("pay_type_id"));
 
 				return m;
 			}
@@ -55,7 +56,7 @@ public class LvRequestDao
 			return;
 		String tab = getTableName(orderId);
 		String sql = "Insert into little_video_log." + tab
-				+ "(imei,pay_type,orderid,channel,appkey,price,level) values(?,?,?,?,?,?,?)";
+				+ "(imei,pay_type,orderid,channel,appkey,price,level,pay_type_id) values(?,?,?,?,?,?,?,?)";
 		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
 		int i = 0;
 		map.put(++i, m.getImei());
@@ -65,7 +66,8 @@ public class LvRequestDao
 		map.put(++i, m.getAppkey());
 		map.put(++i, m.getPrice());
 		map.put(++i, m.getLevel());
-		
+		map.put(++i, m.getPayTypeId());
+
 		JdbcControlLvLog jdbc = new JdbcControlLvLog();
 		m.setId(jdbc.insertWithGenKey(sql, map));
 	}

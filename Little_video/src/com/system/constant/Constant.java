@@ -25,14 +25,20 @@ public class Constant
 	 * 不允许跳级购买
 	 */
 	public static final int ERROR_SKIP_LEVEL = 5;
-
+	
 	/**
 	 * 数据库忙（可能是参数错误引起）
 	 */
 	public static final int ERROR_DBASE_BUSY = 6;
 
+	/**
+	 * 没有支付通道（可能是Appkey /channel 错误引起）
+	 */
+	public static final int ERROR_NO_PAY_CHANNEL = 7;
+
+	
 	public static final int	ORDER_METHOD_QUERY	= 0;
 	public static final int	ORDER_METHOD_CREATE	= 1;
 	public static final int	ORDER_METHOD_UPDATE	= 2;
-
+	
 }

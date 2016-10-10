@@ -12,6 +12,7 @@ public class LvMrModel
 	String	appkey;
 	String	channel;
 	String	payOrderId;
+	int		payTypeId;
 
 	/**
 	 * 0扣量1不扣量
@@ -126,6 +127,16 @@ public class LvMrModel
 	public void setPayType(int payType)
 	{
 		this.payType = payType;
+	}
+
+	public int getPayTypeId()
+	{
+		return payTypeId;
+	}
+
+	public void setPayTypeId(int payTypeId)
+	{
+		this.payTypeId = payTypeId;
 	}
 
 }
