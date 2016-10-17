@@ -2,13 +2,17 @@ package com.system.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.system.database.ConnectionCallBack;
 import com.system.database.JdbcLvControl;
 import com.system.database.QueryCallBack;
 import com.system.model.LvMrModel;
+import com.system.model.LvSpecialCpaModel;
 import com.system.util.StringUtil;
 
 public class LvMrDao {
@@ -118,5 +122,121 @@ public class LvMrDao {
 		}));
 		map.put("allAmount", datalist.get(0));
 		return map;
+	}
+	
+	public List<LvSpecialCpaModel> loadMrActiveData(final String startDate,final String endDate,final String appKey, final String channel)
+	{
+		JdbcLvControl control = new JdbcLvControl();
+		
+		final Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		control.getConnection(new ConnectionCallBack()
+		{
+			@Override
+			public void onConnectionCallBack(Statement stmt, ResultSet rs)
+					throws SQLException
+			{
+				String sql = "SELECT DATE_FORMAT(create_date,'%Y-%m-%d') lv_date,COUNT(*) data_rows  FROM `little_video_log`.tbl_user_";
+				String query	= " WHERE 1=1 " + " and create_date >= '" + startDate + " 00:00:00' and create_date <= '" + endDate + " 23:59:59' " + (StringUtil.isNullOrEmpty(appKey) ? "" : " and appkey = '" + appKey + "'")
+						+ (StringUtil.isNullOrEmpty(channel) ? "" : " and channel = '" + channel + "'")
+						+ " GROUP BY lv_date order by lv_date";
+				
+				String execSql = "";
+				
+				for(int i=0; i<10; i++)
+				{
+					execSql = sql + i + query;
+					
+					System.out.println(execSql);
+					
+					rs = stmt.executeQuery(execSql);
+					
+					while(rs.next())
+					{
+						String date = rs.getString("lv_date");
+						int dataRows = rs.getInt("data_rows");
+						
+						if(map.containsKey(date))
+						{
+							map.put(date, map.get(date) + dataRows);
+						}
+						else
+						{
+							map.put(date, dataRows);
+						}
+					}
+					
+					rs.close();
+				}
+			}
+		});
+		
+		List<LvSpecialCpaModel> list = new ArrayList<LvSpecialCpaModel>();
+		
+		for(String key : map.keySet())
+		{
+			LvSpecialCpaModel model = new LvSpecialCpaModel();
+			
+			model.setActiveDate(key);
+			
+			model.setDataRows(map.get(key));
+			
+			list.add(model);
+		}
+		
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, LvSpecialCpaModel> loadMrData(String tableName,String startDate,String endDate,String appKey,String channel,int status)
+	{
+		String sql = "SELECT DATE_FORMAT(create_date,'%Y-%m-%d') mr_date,pay_type,SUM(price) amount FROM little_video_log.tbl_mr_" + tableName + "  WHERE 1=1 ";
+				
+		if(!StringUtil.isNullOrEmpty(appKey))
+		{
+			sql += " and appkey = '" + appKey + "'";
+		}
+			
+		if(!StringUtil.isNullOrEmpty(channel))
+		{
+			sql += " and channel = '" + channel + "'";
+		}
+		
+		if(status>0)
+		{
+			sql += " and status = " + status;
+		}
+					
+		sql	+= " GROUP BY mr_date,pay_type order by mr_date ,pay_type";
+		
+		return (Map<String, LvSpecialCpaModel>)new JdbcLvControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				Map<String, LvSpecialCpaModel> map = new HashMap<String, LvSpecialCpaModel>();
+				
+				while(rs.next())
+				{
+					LvSpecialCpaModel model = new LvSpecialCpaModel();
+					
+					model.setActiveDate(rs.getString("mr_date"));
+					model.setPayType(rs.getInt("pay_type"));
+					model.setAmount(rs.getFloat("amount"));
+					
+					map.put(model.getActiveDate(), model);
+				}
+				
+				return map;
+			}
+		});
+	}
+	
+	public static void main(String[] args)
+	{
+		LvMrDao dao = new LvMrDao();
+		
+		dao.loadMrActiveData("", "", "", "");
+		
 	}
 }
