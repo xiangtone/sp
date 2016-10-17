@@ -1,19 +1,26 @@
 package com.system.server;
 
+import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.system.dao.SpBillingDao;
 import com.system.dao.SpTroneRateDao;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
+import com.system.excel.ExcelManager;
 import com.system.model.SettleAccountModel;
+import com.system.model.SpBillExportModel;
 import com.system.model.SpBillingModel;
 import com.system.model.SpBillingSpTroneModel;
 import com.system.model.SpTroneRateModel;
+import com.system.util.ConfigManager;
 
 public class SpBillingServer
 {
@@ -149,6 +156,10 @@ public class SpBillingServer
 		return new SpBillingDao().recallSpBilling(spBillingId);
 	}
 	
+	public void updateSpBillingActurePay(int spBillingId,float money,String date)
+	{
+		new SpBillingDao().updateSpBillingActurePay(spBillingId, money,date);
+	}
 	public void updateSpBillingActurePay(int spBillingId,float money)
 	{
 		new SpBillingDao().updateSpBillingActurePay(spBillingId, money);
@@ -167,6 +178,63 @@ public class SpBillingServer
 			int spId,int jsType,int userId,int rightType,int status,int pageIndex)
 	{
 		return new SpBillingDao().loadSpBilling(startDate, endDate, spId,jsType,userId,rightType,status,pageIndex);
+	}
+	
+	/**
+	 * 财务对结算审核更新状态和时间
+	 * @param id
+	 * @param type
+	 * @param status
+	 * @param date
+	 */
+	
+	public void updateSpBillingModel(int id,int type,int status,String date){
+		new SpBillingDao().updateSpBillingModel(id,type,status,date);
+		
+	}
+	/**
+	 * 导出账单数据
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsTypes
+	 * @param status
+	 * @return
+	 */
+	public List<SpBillExportModel> exportExcelData(String startDate,String endDate,int spId,String jsTypes,String status)
+	{
+		return new SpBillingDao().exportExcelData(startDate, endDate, spId, jsTypes, status);
+	} 
+	/**
+	 * 导出账单数据
+	 * @param channelType
+	 * @param dateType
+	 * @param channelName
+	 * @param startDate
+	 * @param endDate
+	 * @param list
+	 * @param os
+	 */
+	public void exportSettleAccount(String startDate,String endDate,List<SpBillExportModel> list,OutputStream os)
+	{
+		String date = getDateFormat(startDate,endDate);
+		String filePath =ConfigManager.getConfigData("EXCEL_BILL_DEMO") ;
+		new ExcelManager().writeBillDataToExcel(date, list, filePath, os);
+	}
+	private String getDateFormat(String startDate,String endDate)
+	{
+		String date = startDate + ":" + endDate;
+		try
+		{
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+			return sdf2.format(sdf1.parse(startDate)) + "-" + sdf2.format(sdf1.parse(endDate));
+		}
+		catch(Exception ex)
+		{
+			
+		}
+		return date;
 	}
 	
 }
