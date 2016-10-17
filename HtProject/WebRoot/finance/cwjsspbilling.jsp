@@ -1,4 +1,3 @@
-<%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.server.SpServer"%>
 <%@page import="com.system.model.SpModel"%>
 <%@page import="com.system.model.SpBillingModel"%>
@@ -18,22 +17,18 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
-<%@page import="java.text.DecimalFormat" %>
 <%@page import="com.system.util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	int rightType=-1;//是否进行权限控制。-1不进行权限控制
-	UserModel user=(UserModel)session.getAttribute("user");
-	int userId=user.getId();
-	DecimalFormat df = new DecimalFormat("0.00");
+
 	int spBillingId = StringUtil.getInteger(request.getParameter("spbillingid"), -1);
 
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
 	
 	SpBillingServer server = new SpBillingServer();
 	
-	int status = StringUtil.getInteger(request.getParameter("status"), -1);
+	int status = StringUtil.getInteger(request.getParameter("status"), 1);
 	
 	boolean isRecall = false;
 	
@@ -106,7 +101,7 @@
 	
 	String endDate = StringUtil.getString(request.getParameter("enddate"), "");
 
-	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,userId,rightType,status,pageIndex);
+	Map<String, Object> map =  server.loadSpBilling(startDate, endDate, spId, jsType,status,pageIndex);
 		
 	List<SpBillingModel> list = (List<SpBillingModel>)map.get("list");
 	
@@ -129,12 +124,13 @@
 	
 	String[] statusData = {"运营发起","运营审核","对帐完成","上游已开票","结算申请开票","财务已开票"};
 	
-	String[] btnStrings = {" <a href='#' onclick='sendToFinance(helloisthereany)'>审核</a>&nbsp;&nbsp;<a href='#' onclick='delSpBilling(helloisthereany)'>删除</a>&nbsp;&nbsp;<a href='#' onclick='reExportSpBilling(helloisthereany)'>重新生成</a>",
-			"<a href='#' onclick='reCallSpBillingBack(helloisthereany)'>撤回</a>","","","",""};
-	
-	String[] btnMore = {"","<a href='#' onclick='showConfirmDialog(helloisthereany)''>更多</a>","",""};
-
-
+	String[] btnStrings = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,1)''>上游开票</a>","","<a href='#' onclick='showConfirmDialog(helloisthereany,2)''>结算申请开票</a>",""};
+	String[] btnMore = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,0)''>更多</a>","",""};
+	String[] year={"年份","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
+	String[] month={"月份","01","02","03","04","05","06","07","08","09","10","11","12"};
+	String[] days={"日期","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
+	String defYear=StringUtil.getDefaultDate();
+	String[] defDate=defYear.split("-");
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -213,13 +209,15 @@
 		$("#sel_status").val(<%= status %>);
 	});
 	
-	function showConfirmDialog(id)
+	var confirmBillingList = new Array();
+	
+	function showConfirmDialog(id,type)
 	{	
 		$("#lab_title").text($("#lab_sp_name_" + id).text() + "[" + $("#lab_start_date_" + id).text() + "至" + $("#lab_end_date_" + id).text() + "][" + $("#lab_js_name_" + id).text() + "]");
   		$("#lab_sp").text($("#lab_sp_name_" + id).text());
   		$("#lab_start_date").text($("#lab_start_date_" + id).text());
-  		var dateString=ajaxGetgetSpBillingDate(id);
-  		var dateArray=dateString.split("#")
+  		var dateString=ajaxGetgetSpBillingDate(id,0);
+  		var dateArray=dateString.split("#");
   		$("#lab_end_date").text($("#lab_end_date_" + id).text());
   		$("#lab_js_name").text($("#lab_js_name_" + id).text());
   		$("#lab_amount").text($("#lab_amount_" + id).text());
@@ -228,22 +226,163 @@
   		$("#lab_fact_amount").text($("#lab_fact_amount_" + id).text());
   		$("#lab_acturebilling").text($("#lab_acturebilling_" + id).text());
   		$("#lab_create_date").text($("#lab_create_date_" + id).text());
-  		$("#lab_billing_date").text(dateArray[0]);
-  		$("#lab_apply_kaipiao_date").text(dateArray[1]);
-  		$("#lab_kaipiao_date").text(dateArray[2]);
-
-  		
+  		if(type==0){
+  			if(dateArray[0]==""||null==dateArray[0]){
+  		  		$("#lab_billing_year").val('<%=year[0]%>');
+  		  		$("#lab_billing_month").val('<%=month[0]%>');
+  		  		$("#lab_billing_day").val('<%=days[0]%>');
+  			}else{
+				var splitDate=getYearMonthDayByDate(dateArray[0]);
+  				$("#lab_billing_year").val(splitDate[0]);
+  		  		$("#lab_billing_month").val(splitDate[1]);
+  		  		$("#lab_billing_day").val(splitDate[2]);
+  			}
+  			if(dateArray[1]==""||null==dateArray[1]){
+  		  		$("#lab_apply_kaipiao_year").val('<%=year[0]%>');
+  		  		$("#lab_apply_kaipiao_month").val('<%=month[0]%>');
+  		  		$("#lab_apply_kaipiao_day").val('<%=days[0]%>');
+  			}else{
+  				var splitDate=getYearMonthDayByDate(dateArray[1]);
+  		  		$("#lab_apply_kaipiao_year").val(splitDate[0]);
+  		  		$("#lab_apply_kaipiao_month").val(splitDate[1]);
+  		  		$("#lab_apply_kaipiao_day").val(splitDate[2]);
+  			}
+  			if(dateArray[2]==""||null==dateArray[2]){
+  		  		$("#lab_kaipiao_year").val('<%=year[0]%>');
+  		  		$("#lab_kaipiao_month").val('<%=month[0]%>');
+  		  		$("#lab_kaipiao_day").val('<%=days[0]%>');
+  			}else{
+  				var splitDate=getYearMonthDayByDate(dateArray[2]);
+  		  		$("#lab_kaipiao_year").val(splitDate[0]);
+  		  		$("#lab_kaipiao_month").val(splitDate[1]);
+  		  		$("#lab_kaipiao_day").val(splitDate[2]);
+  			}
+  			$("#lab_billing_year").attr("disabled",true);
+		  	$("#lab_billing_month").attr("disabled",true);
+		  	$("#lab_billing_day").attr("disabled",true);
+		  	$("#lab_apply_kaipiao_year").attr("disabled",true);
+		  	$("#lab_apply_kaipiao_month").attr("disabled",true);
+		  	$("#lab_apply_kaipiao_day").attr("disabled",true);
+		  	$("#lab_kaipiao_year").attr("disabled",true);
+  		  	$("#lab_kaipiao_month").attr("disabled",true);
+  		  	$("#lab_kaipiao_day").attr("disabled",true);
+  		}
+  		if(type==1){
+  			if(dateArray[0]==""||null==dateArray[0]){
+  		  		$("#lab_billing_year").val('<%=defDate[0]%>');
+  		  		$("#lab_billing_month").val('<%=defDate[1]%>');
+  		  		$("#lab_billing_day").val('<%=defDate[2]%>');
+  			}else{
+				var splitDate=getYearMonthDayByDate(dateArray[0]);
+  				$("#lab_billing_year").val(splitDate[0]);
+  		  		$("#lab_billing_month").val(splitDate[1]);
+  		  		$("#lab_billing_day").val(splitDate[2]);
+  			}
+  			if(dateArray[1]==""||null==dateArray[1]){
+  		  		$("#lab_apply_kaipiao_year").val('<%=year[0]%>');
+  		  		$("#lab_apply_kaipiao_month").val('<%=month[0]%>');
+  		  		$("#lab_apply_kaipiao_day").val('<%=days[0]%>');
+  			}else{
+  				var splitDate=getYearMonthDayByDate(dateArray[1]);
+  		  		$("#lab_apply_kaipiao_year").val(splitDate[0]);
+  		  		$("#lab_apply_kaipiao_month").val(splitDate[1]);
+  		  		$("#lab_apply_kaipiao_day").val(splitDate[2]);
+  			}
+  			if(dateArray[2]==""||null==dateArray[2]){
+  		  		$("#lab_kaipiao_year").val('<%=year[0]%>');
+  		  		$("#lab_kaipiao_month").val('<%=month[0]%>');
+  		  		$("#lab_kaipiao_day").val('<%=days[0]%>');
+  			}else{
+  				var splitDate=getYearMonthDayByDate(dateArray[2]);
+  		  		$("#lab_kaipiao_year").val(splitDate[0]);
+  		  		$("#lab_kaipiao_month").val(splitDate[1]);
+  		  		$("#lab_kaipiao_day").val(splitDate[2]);
+  			}
+  			$("#lab_billing_year").attr("disabled",false);
+		  	$("#lab_billing_month").attr("disabled",false);
+		  	$("#lab_billing_day").attr("disabled",false);
+		  	$("#lab_apply_kaipiao_year").attr("disabled",true);
+		  	$("#lab_apply_kaipiao_month").attr("disabled",true);
+		  	$("#lab_apply_kaipiao_day").attr("disabled",true);
+		  	$("#lab_kaipiao_year").attr("disabled",true);
+  		  	$("#lab_kaipiao_month").attr("disabled",true);
+  		  	$("#lab_kaipiao_day").attr("disabled",true);
+  		}
+  		if(type==2){
+  			if(dateArray[0]==""||null==dateArray[0]){
+  		  		$("#lab_billing_year").val('<%=year[0]%>');
+  		  		$("#lab_billing_month").val('<%=month[0]%>');
+  		  		$("#lab_billing_day").val('<%=days[0]%>');
+  			}else{
+				var splitDate=getYearMonthDayByDate(dateArray[0]);
+  				$("#lab_billing_year").val(splitDate[0]);
+  		  		$("#lab_billing_month").val(splitDate[1]);
+  		  		$("#lab_billing_day").val(splitDate[2]);
+  			}
+  			if(dateArray[1]==""||null==dateArray[1]){
+  		  		$("#lab_apply_kaipiao_year").val('<%=defDate[0]%>');
+  		  		$("#lab_apply_kaipiao_month").val('<%=defDate[1]%>');
+  		  		$("#lab_apply_kaipiao_day").val('<%=defDate[2]%>');
+  			}else{
+  				var splitDate=getYearMonthDayByDate(dateArray[1]);
+  		  		$("#lab_apply_kaipiao_year").val(splitDate[0]);
+  		  		$("#lab_apply_kaipiao_month").val(splitDate[1]);
+  		  		$("#lab_apply_kaipiao_day").val(splitDate[2]);
+  			}
+  			if(dateArray[2]==""||null==dateArray[2]){
+  		  		$("#lab_kaipiao_year").val('<%=year[0]%>');
+  		  		$("#lab_kaipiao_month").val('<%=month[0]%>');
+  		  		$("#lab_kaipiao_day").val('<%=days[0]%>');
+  			}else{
+  				var splitDate=getYearMonthDayByDate(dateArray[2]);
+  		  		$("#lab_kaipiao_year").val(splitDate[0]);
+  		  		$("#lab_kaipiao_month").val(splitDate[1]);
+  		  		$("#lab_kaipiao_day").val(splitDate[2]);
+  			}
+  			$("#lab_billing_year").attr("disabled",true);
+		  	$("#lab_billing_month").attr("disabled",true);
+		  	$("#lab_billing_day").attr("disabled",true);
+		  	$("#lab_apply_kaipiao_year").attr("disabled",false);
+		  	$("#lab_apply_kaipiao_month").attr("disabled",false);
+		  	$("#lab_apply_kaipiao_day").attr("disabled",false);
+		  	$("#lab_kaipiao_year").attr("disabled",true);
+  		  	$("#lab_kaipiao_month").attr("disabled",true);
+  		  	$("#lab_kaipiao_day").attr("disabled",true);
+  		}
   		$("#btn_confirm").click(function(){
-  			$( "#dialog" ).dialog("close");
+  			if(type==0){
+  				$( "#dialog" ).dialog("close");
+  			}
+  			//上游开票，更改状态和时间
+  			if(type==1){  
+  				var billyear=$("#lab_billing_year").val();
+  				var billmonth=$("#lab_billing_month").val();
+  				var billday=$("#lab_billing_day").val();
+				var date=billyear+"-"+billmonth+"-"+billday;
+  				ajaxGetgetSpBillingDate(id,type,3,date);
+  				$( "#dialog" ).dialog("close");
+
+  				
+  			}
+  			//结算申请开票时间，更改状态和时间
+  			if(type==2){
+  				var jskaipiaoyear=$("#lab_apply_kaipiao_year").val();
+  				var jskaipiaomonth=$("#lab_apply_kaipiao_month").val();
+  				var jskaipiaoday=$("#lab_apply_kaipiao_day").val();
+				var date=jskaipiaoyear+"-"+jskaipiaomonth+"-"+jskaipiaoday;
+				ajaxGetgetSpBillingDate(id,type,4,date);
+  				$( "#dialog" ).dialog("close");
+  			}
+  			
   		});
 		
 		$( "#dialog" ).dialog();
 	}
-	function ajaxGetgetSpBillingDate(id) {
+	function ajaxGetgetSpBillingDate(id,type,status,date) {
 		var result = "";
 		$.ajax({
 			url : "util.jsp",
-			data : "spbillingid=" + id + "&type=0",
+			data : "spbillingid=" + id + "&type="+type+"&status="+status+"&date="+date,
 			cache : false,
 			async : false,
 			success : function(html) {
@@ -252,7 +391,46 @@
 		});
 		return result;
 	}
+	
+	function confirmActureBilling(id)
+	{
+		var actureBilling = parseFloat($("#lab_acture_billing").val()).toFixed(2);
+		
+		if(isNaN(actureBilling) || actureBilling < 0)
+		{
+			alert("难道你能真的能收到这样的钱？");
+			return;
+		}
+		
+		getAjaxValue("action.jsp?type=4&id=" + id + "&money=" + actureBilling,onConfirmSpBilling);
+		
+		$( "#dialog" ).dialog("close");
+	}
+	
+	function onConfirmSpBilling(data)
+	{
+		if(!(data==null || data==""))
+		{
+			var strData = data.split(",");
+			if("OK"==strData[0])
+			{
+				confirmBillingList.push(strData[1]);
+				alert("已经完成对帐！");
+				return;
+			}
+			else
+			{
+				alert("完成对帐失败！");	
+				return;
+			}
+		}
+	}
+	function getYearMonthDayByDate(date){
+  		var dateArray=date.split("-");
+  		return dateArray;
+	}
 </script>
+
 <style type="text/css">
 .ui-button-icon-only .ui-icon{left:0}
 .ui-button-icon-only .ui-icon, 
@@ -262,10 +440,11 @@
 .ui-button-icons-only .ui-icon
 {top:0}
 </style>
+
 <body style="min-height: 2000px">
 	<div class="main_content">
 		<div class="content" >
-			<form action="spbilling.jsp"  method="get" style="margin-top: 10px">
+			<form action="cwjsspbilling.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me" style="margin-left: -10px;">开始日期</dd>
 					<dd class="dd03_me">
@@ -350,25 +529,24 @@
 				%>
 				<tr>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
-					<td><label id="lab_sp_name_<%= model.getId() %>"><%=model.getSpName() %></label></td>
+					
+					<td><label id="lab_sp_name_<%= model.getId() %>"><%=model.getSpName() %></label> </td>
 					<td><label id="lab_start_date_<%= model.getId() %>"><%=model.getStartDate() %></label></td>
 					<td><label id="lab_end_date_<%= model.getId() %>"><%=model.getEndDate()%></label></td>
 					<td><label id="lab_js_name_<%= model.getId() %>"><%= model.getJsName() %></label></td>
-					<td><label id="lab_amount_<%= model.getId() %>"><%= StringUtil.getDecimalFormat(model.getAmount())  %></label></td>
-					<td><label id="lab_prebilling_<%= model.getId() %>"><%=StringUtil.getDecimalFormat(model.getPreBilling()) %></label></td>
-					<td><label id="lab_reduceamount_<%= model.getId() %>"><%= StringUtil.getDecimalFormat(model.getReduceAmount()) %></label></td>
-					<td><label id="lab_fact_amount_<%= model.getId() %>"><%= StringUtil.getDecimalFormat(model.getPreBilling() - model.getReduceAmount()) %></label></td>
-					<td><label id="lab_acturebilling_<%= model.getId() %>"><%= StringUtil.getDecimalFormat(model.getActureBilling()) %></label></td>
+					<td><label id="lab_amount_<%= model.getId() %>"><%= model.getAmount() %></label></td>
+					<td><label id="lab_prebilling_<%= model.getId() %>"><%=model.getPreBilling() %></label></td>
+					<td><label id="lab_reduceamount_<%= model.getId() %>"><%= model.getReduceAmount() %></label></td>
+					<td><label id="lab_fact_amount_<%= model.getId() %>"><%= model.getPreBilling() - model.getReduceAmount() %></label></td>
+					<td><label id="lab_acturebilling_<%= model.getId() %>"><%= model.getActureBilling() %></label></td>
 					<td><%=model.getRemark() %></td>
-					<td><label id="lab_create_date_<%= model.getId() %>"><%= model.getCreateDate() %></label></td>				
-					
+					<td><label id="lab_create_date_<%= model.getId() %>"><%= model.getCreateDate() %></label></td>
 					<td><%= statusData[model.getStatus()] %></td>
 					<td style="text-align: left">
 						<%= btnMore[1].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="spbillingdetail.jsp?query=<%= query %>&spbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="spbilling.jsp?type=1&spbillingid=<%= model.getId() %>">导出</a>
-						
 					</td>
 				</tr>
 				<%
@@ -382,8 +560,8 @@
 			</tbody>
 		</table>
 	</div>
-		<div id="dialog" title="账单明细" >
-  		<label id="lab_title" style="font-weight: bold;">账单明细</label>
+	<div id="dialog" title="账单明细" style="">
+  		<label id="lab_title" >账单明细</label>
   		<br />
   		 SP:<label id="lab_sp">123456</label>
   		<br />
@@ -405,23 +583,107 @@
   		<br />
   		 创建时间 ：<label id="lab_create_date">00:00:00</label>
   		<br />
-  		 上游确认账单 ：<label id="lab_billing_date">00:00:00</label>
+  		 上游确认账单 ：<label></label><select name="lab_billing_year" id="lab_billing_year" style="width: 55px">
+						<%
+							for(int i=0;i<year.length;i++)
+							{
+								
+								%>
+							<option value="<%= year[i]%>"><%= year[i]%></option>	
+								<%
+								
+
+							}
+						
+							%>
+						</select>-
+						<select name="lab_billing_month" id="lab_billing_month" style="width: 55px">
+						<%
+							for(int i=0;i<month.length;i++)
+							{
+								%>
+							<option value="<%= month[i]%>"><%= month[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_billing_day" id="lab_billing_day" style="width: 55px">
+						<%
+							for(int i=0;i<days.length;i++)
+							{
+								%>
+							<option value="<%= days[i]%>"><%= days[i]%></option>	
+								<%
+							}
+							%>
+						</select>
   		<br />
-  		  结算申请开票日期  ：<label id="lab_apply_kaipiao_date">00:00:00</label>
-  		<br />
-  		 财务开票日期  ：<label id="lab_kaipiao_date">00:00:00</label>
+  		  结算申请开票 ：<label></label><select name="lab_apply_kaipiao_year" id="lab_apply_kaipiao_year" >
+						<%
+							for(int i=0;i<year.length;i++)
+							{
+								%>
+							<option value="<%= year[i]%>"><%= year[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_apply_kaipiao_month" id="lab_apply_kaipiao_month" >
+						<%
+							for(int i=0;i<month.length;i++)
+							{
+								%>
+							<option value="<%= month[i]%>"><%= month[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_apply_kaipiao_day" id="lab_apply_kaipiao_day" >
+						<%
+							for(int i=0;i<days.length;i++)
+							{
+								%>
+							<option value="<%= days[i]%>"><%= days[i]%></option>	
+								<%
+							}
+							%>
+						</select>
+  		    		<br />
+  		 财务开票日期  ：<label></label><select name="lab_kaipiao_year" id="lab_kaipiao_year" >
+						<%
+							for(int i=0;i<year.length;i++)
+							{
+								%>
+							<option value="<%= year[i]%>"><%= year[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_kaipiao_month" id="lab_kaipiao_month" >
+						<%
+							for(int i=0;i<month.length;i++)
+							{
+								%>
+							<option value="<%= month[i]%>"><%= month[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_kaipiao_day" id="lab_kaipiao_day" >
+						<%
+							for(int i=0;i<days.length;i++)
+							{
+								%>
+							<option value="<%= days[i]%>"><%= days[i]%></option>	
+								<%
+							}
+							%>
+						</select>
+  		 
   		<br />
   		
-  		<input id="btn_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="关闭" >
+  		<input id="btn_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="确认" >
 	</div>
+	
 </body>
 </html>
-<%
-		if(isRecall)
-		{
-			if(!isRecallSuc)
-			{
-				out.println("<script>alert('财务已审核，撤回帐单失败，请找管理员！');</script>");
-			}
-		}
-%>

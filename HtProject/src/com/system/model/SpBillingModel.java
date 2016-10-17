@@ -18,6 +18,13 @@ public class SpBillingModel
 	private String payTime;
 	private String createDate;
 	private float reduceAmount;
+	//新增三个对账时间
+	//上游确认帐单日期 
+	private String billingDate;
+	//结算申请开票日期 
+	private String applyKaipiaoDate;
+	//财务开票日期
+	private String kaipiaoDate;
 	
 	public float getReduceAmount()
 	{
@@ -147,5 +154,24 @@ public class SpBillingModel
 	{
 		this.createDate = createDate;
 	}
+	public String getBillingDate() {
+		return billingDate;
+	}
+	public void setBillingDate(String billingDate) {
+		this.billingDate = billingDate;
+	}
+	public String getApplyKaipiaoDate() {
+		return applyKaipiaoDate;
+	}
+	public void setApplyKaipiaoDate(String applyKaipiaoDate) {
+		this.applyKaipiaoDate = applyKaipiaoDate;
+	}
+	public String getKaipiaoDate() {
+		return kaipiaoDate;
+	}
+	public void setKaipiaoDate(String kaipiaoDate) {
+		this.kaipiaoDate = kaipiaoDate;
+	}
+	
 	
 }

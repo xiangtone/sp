@@ -56,7 +56,9 @@
 	{
 		int spBillingId = StringUtil.getInteger(request.getParameter("id"), -1);
 		float actureBilling = StringUtil.getFloat(request.getParameter("money"), 0.0F);
-		new SpBillingServer().updateSpBillingActurePay(spBillingId, actureBilling);
+		String date = StringUtil.getString(request.getParameter("date"),"");
+
+		new SpBillingServer().updateSpBillingActurePay(spBillingId, actureBilling,date);
 		out.println("OK," + spBillingId);
 		return;
 	}

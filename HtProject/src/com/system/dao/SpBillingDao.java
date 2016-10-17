@@ -2,6 +2,7 @@ package com.system.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.SettleAccountModel;
+import com.system.model.SpBillExportModel;
 import com.system.model.SpBillingModel;
 import com.system.model.SpBillingSpTroneModel;
 import com.system.util.SqlUtil;
@@ -188,6 +190,12 @@ public class SpBillingDao
 					model.setAmount(rs.getFloat("amount"));
 					model.setReduceAmount(rs.getFloat("reduce_amount"));
 					
+					//新增三个对账时间,完成对账时间
+					model.setBillingDate(StringUtil.getString(rs.getString("billing_date"),""));
+					model.setApplyKaipiaoDate(StringUtil.getString(rs.getString("apply_kaipiao_date"), ""));
+					model.setKaipiaoDate(StringUtil.getString(rs.getString("kaipiao_date"), ""));
+					model.setPayTime(StringUtil.getString(rs.getString("pay_time"), ""));
+					
 					return model;
 				}
 				return null;
@@ -282,6 +290,10 @@ public class SpBillingDao
 							model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
 							model.setAmount(rs.getFloat("amount"));
 							model.setReduceAmount(rs.getFloat("reduce_amount"));
+							//新增三个对账时间
+							model.setBillingDate(StringUtil.getString(rs.getString("billing_date"),""));
+							model.setApplyKaipiaoDate(StringUtil.getString(rs.getString("apply_kaipiao_date"), ""));
+							model.setKaipiaoDate(StringUtil.getString(rs.getString("kaipiao_date"), ""));
 							
 							list.add(model);
 						}
@@ -345,9 +357,14 @@ public class SpBillingDao
 		return false;
 	}
 	
+	public void updateSpBillingActurePay(int spBillingId,float money,String payTime)
+	{
+		String sql = "UPDATE daily_config.`tbl_sp_billing` SET acture_billing = " + money + ",pay_time = '"+payTime+"',status = 2 WHERE id = " + spBillingId;
+		new JdbcControl().execute(sql);
+	}
 	public void updateSpBillingActurePay(int spBillingId,float money)
 	{
-		String sql = "UPDATE daily_config.`tbl_sp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + spBillingId;
+		String sql = "UPDATE daily_config.`tbl_sp_billing` SET acture_billing = " + money + ",pay_time =now(),status = 2 WHERE id = " + spBillingId;
 		new JdbcControl().execute(sql);
 	}
 	/**
@@ -473,5 +490,115 @@ public class SpBillingDao
 			}
 			
 		});
+	}
+	public void updateSpBillingModel(int id,int type,int status,String date){
+		String replaceStr="";
+		if(type==1){
+			replaceStr="billing_date='"+date+"'";
+		}
+		if(type==2){
+			replaceStr="apply_kaipiao_date='"+date+"'";
+		}
+		if(type==3){
+			replaceStr="kaipiao_date='"+date+"'";
+		}
+		String sql="UPDATE daily_config.`tbl_sp_billing` SET "+replaceStr+",status ="+status+"  WHERE id ="+id;
+		new JdbcControl().execute(sql);
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SpBillExportModel> exportExcelData(String startDate,String endDate,int spId,String jsTypes,String status)
+	{	
+		String startDateStr="";
+		String endDateStr="";
+		if(!StringUtil.isNullOrEmpty(startDate)){
+			 startDateStr="AND start_date >= '"+startDate+"'";
+		}
+		if(!StringUtil.isNullOrEmpty(endDate)){
+			endDateStr=" AND end_date<= '"+endDate+"'";
+		}
+		String sql="SELECT b.id AS bill_id,a.id AS detail_id,DATE_FORMAT(b.start_date,'%Y%m') AS bill_month, i.`name`,"+
+				   "b.`start_date`,b.`end_date`,e.`nick_name`,d.`full_name`,CONCAT(h.name_cn,'-',g.name) product_name,"+
+				   "c.`name` sp_trone_name,a.`amount`,a.rate,a.amount*a.rate sp_trone_billing_amount,a.reduce_amount, "+
+				   "a.reduce_type,CASE WHEN a.reduce_type = 0 THEN (a.amount - a.reduce_amount)*rate ELSE a.amount*rate - a.reduce_amount END sp_trone_billing_acture_amount,"+
+				   "b.pre_billing,b.billing_date,b.pre_billing kaipiao_amount,b.apply_kaipiao_date,b.kaipiao_date,b.pay_time,b.acture_billing,b.status"+ 
+				   " FROM (SELECT * FROM daily_log.`tbl_sp_billing_sp_trone` WHERE 1=1 "+startDateStr+endDateStr+" ) a "+
+				   " LEFT JOIN daily_config.tbl_sp_billing b ON a.`sp_billing_id` = b.`id`"+
+				   " LEFT JOIN daily_config.`tbl_sp_trone` c ON a.`sp_trone_id` = c.id"+
+				   " LEFT JOIN daily_config.`tbl_sp` d ON b.`sp_id` = d.`id`"+
+				   " LEFT JOIN daily_config.`tbl_user` e ON d.`commerce_user_id` = e.`id`"+
+				   " LEFT JOIN daily_config.`tbl_product_2` f ON c.`product_id` = f.`id`"+
+				   " LEFT JOIN daily_config.`tbl_product_1` g ON f.`product_1_id` = g.`id`"+
+				   " LEFT JOIN daily_config.`tbl_operator` h ON g.`operator_id` = h.`id`"+
+				   " LEFT JOIN daily_config.`tbl_js_type` i ON b.`js_type` = i.`id` WHERE 1=1";
+		if(!StringUtil.isNullOrEmpty(status)){
+			sql+=" AND b.status IN ("+status+")";
+		}
+		if(!StringUtil.isNullOrEmpty(jsTypes)){
+			sql+=" AND i.type_id IN ("+jsTypes+")";
+		}
+		if(spId>=0){
+			sql+=" AND d.id="+spId;
+			
+		}
+		return (List<SpBillExportModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpBillExportModel> list = new ArrayList<SpBillExportModel>();
+				SpBillExportModel model = null;
+		        DecimalFormat df2 = new DecimalFormat("#,###.000");  
+				while(rs.next())
+				{
+		
+					model = new SpBillExportModel();
+					model.setBillId(rs.getInt("bill_id"));
+					model.setDetailId(rs.getInt("detail_id"));
+					model.setBillMonth(StringUtil.getString(rs.getString("bill_month"), ""));
+					model.setJsName(StringUtil.getString(rs.getString("name"), ""));
+					model.setStartDate(StringUtil.getString(rs.getString("start_date"), ""));
+					model.setEndDate(StringUtil.getString(rs.getString("end_date"), ""));
+					model.setNickName(StringUtil.getString(rs.getString("nick_name"), ""));
+					model.setSpFullNam(StringUtil.getString(rs.getString("full_name"), ""));
+					model.setProductName(StringUtil.getString(rs.getString("product_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+					model.setAmount(StringUtil.getDecimalFormat(rs.getFloat("amount")));
+					model.setRate(df2.format(rs.getFloat("rate"))+"");
+					model.setSpTroneBillAmount(StringUtil.getDecimalFormat(rs.getFloat("sp_trone_billing_amount")));
+					model.setReduceAmount(StringUtil.getDecimalFormat(rs.getFloat("reduce_amount")));
+					model.setReduceType(rs.getInt("reduce_type"));
+					model.setActureAmount(StringUtil.getDecimalFormat(rs.getFloat("sp_trone_billing_acture_amount")));
+					model.setPreBilling(StringUtil.getDecimalFormat(rs.getFloat("pre_billing")));
+					model.setBillingDate(StringUtil.getString(rs.getString("billing_date"), ""));
+					model.setKaipiaoAmount(StringUtil.getDecimalFormat(rs.getFloat("kaipiao_amount")));
+					model.setApplyKaipiaoDate(StringUtil.getString(rs.getString("apply_kaipiao_date"), ""));
+					model.setKaipiaoDate(StringUtil.getString(rs.getString("kaipiao_date"), ""));
+					model.setPayTime(StringUtil.getString(rs.getString("pay_time"), ""));
+					model.setActureBilling(StringUtil.getDecimalFormat(rs.getFloat("acture_billing")));
+					model.setStatus(rs.getInt("status"));
+					model.setStatusName(getStatusNameByStatu(rs.getInt("status")));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	public String getStatusNameByStatu(int status){
+		String msg="";
+		switch (status) {
+		case 0:
+			msg="刚发起"; break;
+		case 1: msg="运营审核通过"; break;
+		case 2: msg="已到帐"; break;
+		case 3: msg="上游已开票"; break;
+		case 4: msg="结算申请开票完成"; break;
+		case 5: msg="财务已完成开票"; break;
+		default:
+			break;
+		}
+		return msg;
 	}
 }
