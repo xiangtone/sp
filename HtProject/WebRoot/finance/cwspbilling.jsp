@@ -28,7 +28,7 @@
 	
 	SpBillingServer server = new SpBillingServer();
 	
-	int status = StringUtil.getInteger(request.getParameter("status"), 1);
+	int status = StringUtil.getInteger(request.getParameter("status"), 4);
 	
 	boolean isRecall = false;
 	
