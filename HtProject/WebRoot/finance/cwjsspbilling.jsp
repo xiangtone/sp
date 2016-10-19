@@ -120,11 +120,11 @@
 	params.put("enddate",endDate);
 	params.put("status",""+status);
 	
-	String pageData = PageUtil.initPageQuery("spbilling.jsp",params,rowCount,pageIndex);
+	String pageData = PageUtil.initPageQuery("cwjsspbilling.jsp",params,rowCount,pageIndex);
 	
 	String[] statusData = {"运营发起","运营审核","对帐完成","上游已开票","结算申请开票","财务已开票"};
 	
-	String[] btnStrings = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,1)''>上游开票</a>","","<a href='#' onclick='showConfirmDialog(helloisthereany,2)''>结算申请开票</a>",""};
+	String[] btnStrings = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,1)''>上游开票</a>","","<a href='#' onclick='showConfirmDialog(helloisthereany,2)''>结算申请开票</a>","",""};
 	String[] btnMore = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,0)''>更多</a>","",""};
 	String[] year={"年份","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
 	String[] month={"月份","01","02","03","04","05","06","07","08","09","10","11","12"};
