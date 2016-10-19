@@ -127,7 +127,7 @@
 	
 	String pageData = PageUtil.initPageQuery("spbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"运营发起","运营审核","对帐完成","上游已开票","结算申请开票","财务已开票"};
+	String[] statusData = {"运营发起","运营审核","对帐完成","上游已发帐单","结算申请开票","财务已开票"};
 	
 	String[] btnStrings = {" <a href='#' onclick='sendToFinance(helloisthereany)'>审核</a>&nbsp;&nbsp;<a href='#' onclick='delSpBilling(helloisthereany)'>删除</a>&nbsp;&nbsp;<a href='#' onclick='reExportSpBilling(helloisthereany)'>重新生成</a>",
 			"<a href='#' onclick='reCallSpBillingBack(helloisthereany)'>撤回</a>","","","",""};
@@ -191,7 +191,7 @@
 	//审核帐单
 	function sendToFinance(id)
 	{
-		if(confirm("是否确认数据无误？审核后会进入财务结款!"))
+		if(confirm("是否确认数据无误？审核后会进入结算结款!"))
 		{
 			window.location.href = "spbilling.jsp?type=4&spbillingid=" + id + "&<%= Base64UTF.decode(query) %>";
 		}
@@ -231,6 +231,8 @@
   		$("#lab_billing_date").text(dateArray[0]);
   		$("#lab_apply_kaipiao_date").text(dateArray[1]);
   		$("#lab_kaipiao_date").text(dateArray[2]);
+  		$("#lab_pay_time").text(dateArray[3]);
+
 
   		
   		$("#btn_confirm").click(function(){
@@ -311,7 +313,7 @@
 						<option value="-1">请选择</option>
 							<option value="0">运营发起</option>
 							<option value="1">运营审核</option>
-							<option value="3">上游已开票</option>
+							<option value="3">上游已发帐单</option>
 							<option value="4">结算申请开票</option>
 							<option value="5">财务已开票</option>
 							<option value="2">对帐完成</option>
@@ -360,10 +362,9 @@
 					<td><label id="lab_fact_amount_<%= model.getId() %>"><%= StringUtil.getDecimalFormat(model.getPreBilling() - model.getReduceAmount()) %></label></td>
 					<td><label id="lab_acturebilling_<%= model.getId() %>"><%= StringUtil.getDecimalFormat(model.getActureBilling()) %></label></td>
 					<td><%=model.getRemark() %></td>
-					<td><label id="lab_create_date_<%= model.getId() %>"><%= model.getCreateDate() %></label></td>				
-					
+					<td><label id="lab_create_date_<%= model.getId() %>"><%= model.getCreateDate() %></label></td>					
 					<td><%= statusData[model.getStatus()] %></td>
-					<td style="text-align: left">
+					<td >
 						<%= btnMore[1].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="spbillingdetail.jsp?query=<%= query %>&spbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
@@ -410,6 +411,8 @@
   		  结算申请开票日期  ：<label id="lab_apply_kaipiao_date">00:00:00</label>
   		<br />
   		 财务开票日期  ：<label id="lab_kaipiao_date">00:00:00</label>
+  		<br />
+  		 回款日期  ：<label id="lab_pay_time">00:00:00</label>
   		<br />
   		
   		<input id="btn_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="关闭" >
