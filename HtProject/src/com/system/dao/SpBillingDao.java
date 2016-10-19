@@ -549,7 +549,7 @@ public class SpBillingDao
 			{
 				List<SpBillExportModel> list = new ArrayList<SpBillExportModel>();
 				SpBillExportModel model = null;
-		        DecimalFormat df2 = new DecimalFormat("#,###.000");  
+		        DecimalFormat df2 = new DecimalFormat("0.000");  
 				while(rs.next())
 				{
 		
