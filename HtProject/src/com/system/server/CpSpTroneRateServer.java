@@ -52,6 +52,23 @@ public class CpSpTroneRateServer
 	public void syncUnAddCpSpTroneRate()
 	{
 		new CpSpTroneRateDao().syncUnAddCpSpTroneRate();
+		
+		//更新tbl_trone_order里对应的 jie suan lv id
+		try
+		{
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					new CpSpTroneRateDao().updateTroneOrderCpTroneRateId();
+				}
+			}).start();
+		}
+		catch(Exception ex)
+		{
+			System.out.println("SORRY, UPDATE TBL_TRONE_ORDER JIE SUAN LV ID FAIL:" + ex.getMessage());
+		}
 	}
 	
 	/**

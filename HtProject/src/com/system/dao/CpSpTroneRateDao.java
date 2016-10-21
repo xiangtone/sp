@@ -193,6 +193,20 @@ public class CpSpTroneRateDao
 		new JdbcControl().execute(sql);
 	}
 	
+	public void updateTroneOrderCpTroneRateId()
+	{
+		String sql = "";
+		
+		sql += " UPDATE daily_config.tbl_trone_order,daily_config.`tbl_cp_trone_rate`,daily_config.tbl_trone,daily_config.tbl_sp_trone ";
+		sql += " SET daily_config.tbl_trone_order.`cp_jiesuanlv_id` = daily_config.tbl_cp_trone_rate.`id`";
+		sql += " WHERE daily_config.tbl_trone_order.`cp_id` = daily_config.tbl_cp_trone_rate.`cp_id` ";
+		sql += " AND daily_config.tbl_trone_order.trone_id = daily_config.tbl_trone.`id`";
+		sql += " AND daily_config.tbl_trone.`sp_trone_id` =  daily_config.tbl_sp_trone.`id`";
+		sql += " AND daily_config.tbl_sp_trone.id = daily_config.tbl_cp_trone_rate.`sp_trone_id`;";
+		
+		new JdbcControl().execute(sql);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<CpSpTroneRateModel> loadCpSpTroneRateList(final int cpId,int jsType,String startDate,String endDate)
 	{
