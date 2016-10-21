@@ -264,7 +264,7 @@ public class SpBillingDao
 				}));
 
 		map.put("list", control.query(
-				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.`short_name` sp_name,c.`name` js_name") + limit,
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.`short_name` sp_name,b.`short_name`,c.`name` js_name") + limit,
 				new QueryCallBack()
 				{
 					@Override
@@ -294,6 +294,7 @@ public class SpBillingDao
 							model.setBillingDate(StringUtil.getString(rs.getString("billing_date"),""));
 							model.setApplyKaipiaoDate(StringUtil.getString(rs.getString("apply_kaipiao_date"), ""));
 							model.setKaipiaoDate(StringUtil.getString(rs.getString("kaipiao_date"), ""));
+							model.setSpShortName(StringUtil.getString(rs.getString("short_name"), ""));
 							
 							list.add(model);
 						}
@@ -440,7 +441,7 @@ public class SpBillingDao
 				}));
 
 		map.put("list", control.query(
-				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.`short_name` sp_name,c.`name` js_name") + limit,
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, " a.*,b.`short_name` sp_name,b.`short_name` short_name,c.`name` js_name") + limit,
 				new QueryCallBack()
 				{
 					@Override
@@ -549,7 +550,7 @@ public class SpBillingDao
 			{
 				List<SpBillExportModel> list = new ArrayList<SpBillExportModel>();
 				SpBillExportModel model = null;
-		        DecimalFormat df2 = new DecimalFormat("#,###.000");  
+		        DecimalFormat df2 = new DecimalFormat("0.000");  
 				while(rs.next())
 				{
 		

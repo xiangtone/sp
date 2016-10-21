@@ -120,11 +120,11 @@
 	params.put("enddate",endDate);
 	params.put("status",""+status);
 	
-	String pageData = PageUtil.initPageQuery("spbilling.jsp",params,rowCount,pageIndex);
+	String pageData = PageUtil.initPageQuery("cwjsspbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"运营发起","运营审核","对帐完成","上游已开票","结算申请开票","财务已开票"};
+	String[] statusData = {"运营发起","运营审核","对帐完成","上游已发帐单","结算申请开票","财务已开票"};
 	
-	String[] btnStrings = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,1)''>上游开票</a>","","<a href='#' onclick='showConfirmDialog(helloisthereany,2)''>结算申请开票</a>",""};
+	String[] btnStrings = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,1)''>上游开票</a>","","<a href='#' onclick='showConfirmDialog(helloisthereany,2)''>结算申请开票</a>","",""};
 	String[] btnMore = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,0)''>更多</a>","",""};
 	String[] year={"年份","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
 	String[] month={"月份","01","02","03","04","05","06","07","08","09","10","11","12"};
@@ -257,6 +257,16 @@
   		  		$("#lab_kaipiao_month").val(splitDate[1]);
   		  		$("#lab_kaipiao_day").val(splitDate[2]);
   			}
+  			if(dateArray[3]==""||null==dateArray[3]){
+  		  		$("#lab_kaipiao_year").val('<%=year[0]%>');
+  		  		$("#lab_kaipiao_month").val('<%=month[0]%>');
+  		  		$("#lab_kaipiao_day").val('<%=days[0]%>');
+  			}else{
+  				var splitDate=getYearMonthDayByDate(dateArray[3]);
+  		  		$("#lab_pay_year").val(splitDate[0]);
+  		  		$("#lab_pay_month").val(splitDate[1]);
+  		  		$("#lab_pay_day").val(splitDate[2]);
+  			}
   			$("#lab_billing_year").attr("disabled",true);
 		  	$("#lab_billing_month").attr("disabled",true);
 		  	$("#lab_billing_day").attr("disabled",true);
@@ -266,6 +276,9 @@
 		  	$("#lab_kaipiao_year").attr("disabled",true);
   		  	$("#lab_kaipiao_month").attr("disabled",true);
   		  	$("#lab_kaipiao_day").attr("disabled",true);
+  		 	$("#lab_pay_year").attr("disabled",true);
+  		  	$("#lab_pay_month").attr("disabled",true);
+  		  	$("#lab_pay_day").attr("disabled",true);
   		}
   		if(type==1){
   			if(dateArray[0]==""||null==dateArray[0]){
@@ -307,6 +320,9 @@
 		  	$("#lab_kaipiao_year").attr("disabled",true);
   		  	$("#lab_kaipiao_month").attr("disabled",true);
   		  	$("#lab_kaipiao_day").attr("disabled",true);
+  		  	$("#lab_pay_year").attr("disabled",true);
+		  	$("#lab_pay_month").attr("disabled",true);
+		  	$("#lab_pay_day").attr("disabled",true);
   		}
   		if(type==2){
   			if(dateArray[0]==""||null==dateArray[0]){
@@ -348,6 +364,9 @@
 		  	$("#lab_kaipiao_year").attr("disabled",true);
   		  	$("#lab_kaipiao_month").attr("disabled",true);
   		  	$("#lab_kaipiao_day").attr("disabled",true);
+  		  	$("#lab_pay_year").attr("disabled",true);
+		  	$("#lab_pay_month").attr("disabled",true);
+		  	$("#lab_pay_day").attr("disabled",true);
   		}
   		$("#btn_confirm").click(function(){
   			if(type==0){
@@ -490,7 +509,7 @@
 						<option value="-1">请选择</option>
 							<option value="0">运营发起</option>
 							<option value="1">运营审核</option>
-							<option value="3">上游已开票</option>
+							<option value="3">上游已发帐单</option>
 							<option value="4">结算申请开票</option>
 							<option value="5">财务已开票</option>
 							<option value="2">对帐完成</option>
@@ -542,7 +561,7 @@
 					<td><%=model.getRemark() %></td>
 					<td><label id="lab_create_date_<%= model.getId() %>"><%= model.getCreateDate() %></label></td>
 					<td><%= statusData[model.getStatus()] %></td>
-					<td style="text-align: left">
+					<td >
 						<%= btnMore[1].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="spbillingdetail.jsp?query=<%= query %>&spbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
@@ -670,6 +689,38 @@
 							%>
 						</select>-
 						<select name="lab_kaipiao_day" id="lab_kaipiao_day" >
+						<%
+							for(int i=0;i<days.length;i++)
+							{
+								%>
+							<option value="<%= days[i]%>"><%= days[i]%></option>	
+								<%
+							}
+							%>
+						</select>
+  		 
+  		<br />
+  		 回款日期  ：<label></label><select name="lab_pay_year" id="lab_pay_year" >
+						<%
+							for(int i=0;i<year.length;i++)
+							{
+								%>
+							<option value="<%= year[i]%>"><%= year[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_pay_month" id="lab_pay_month" >
+						<%
+							for(int i=0;i<month.length;i++)
+							{
+								%>
+							<option value="<%= month[i]%>"><%= month[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_pay_day" id="lab_pay_day" >
 						<%
 							for(int i=0;i<days.length;i++)
 							{

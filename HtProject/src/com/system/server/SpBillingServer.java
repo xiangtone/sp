@@ -4,12 +4,13 @@ import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
+import com.system.model.ExportDetailModel;
 import com.system.dao.SpBillingDao;
 import com.system.dao.SpTroneRateDao;
 import com.system.database.JdbcControl;
@@ -218,8 +219,9 @@ public class SpBillingServer
 	public void exportSettleAccount(String startDate,String endDate,List<SpBillExportModel> list,OutputStream os)
 	{
 		String date = getDateFormat(startDate,endDate);
-		String filePath =ConfigManager.getConfigData("EXCEL_BILL_DEMO") ;
-		new ExcelManager().writeBillDataToExcel(date, list, filePath, os);
+		String filePath =ConfigManager.getConfigData("EXCEL_DEMO")+"Finalce-Demo.xls";
+		Map<Integer,Map<String,Object>> map=exportDataHandle(list);
+		new ExcelManager().writeBillDataToExcel(date, map, filePath, os);
 	}
 	private String getDateFormat(String startDate,String endDate)
 	{
@@ -235,6 +237,60 @@ public class SpBillingServer
 			
 		}
 		return date;
+	}
+	public Map<Integer,Map<String,Object>>exportDataHandle(List<SpBillExportModel> list){
+		Map<Integer,Map<String,Object>> maps=new HashMap<Integer, Map<String,Object>>();
+		List<ExportDetailModel> tempList=null;
+		Map<String,Object> tempMap=null;
+		for(SpBillExportModel billExportModel:list){
+			if(maps.containsKey(billExportModel.getBillId())){
+				tempMap=maps.get(billExportModel.getBillId());
+				tempList=(List<ExportDetailModel>)tempMap.get("list");
+				ExportDetailModel detailModel=new ExportDetailModel();
+				detailModel.setProductName(billExportModel.getProductName());
+				detailModel.setSpTroneName(billExportModel.getSpTroneName());
+				detailModel.setRate(billExportModel.getRate());
+				detailModel.setAmount(billExportModel.getAmount());
+				detailModel.setActureAmount(billExportModel.getActureAmount());
+				detailModel.setReduceAmount(billExportModel.getReduceAmount());
+				detailModel.setReduceType(billExportModel.getReduceType());
+				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
+				tempList.add(detailModel);
+				tempMap.put("list", tempList);
+				maps.put(billExportModel.getBillId(), tempMap);
+			}else{
+				Map<String,Object> map=new HashMap<String, Object>();
+				map.put("billMonth",billExportModel.getBillMonth());
+				map.put("jsName",billExportModel.getJsName());
+				map.put("startDate", billExportModel.getStartDate());
+				map.put("endDate", billExportModel.getEndDate());
+				map.put("nickName", billExportModel.getNickName());
+				map.put("spFullNam", billExportModel.getSpFullNam());
+				List<ExportDetailModel> delist=new ArrayList<ExportDetailModel>();
+				ExportDetailModel detailModel=new ExportDetailModel();
+				detailModel.setProductName(billExportModel.getProductName());
+				detailModel.setSpTroneName(billExportModel.getSpTroneName());
+				detailModel.setRate(billExportModel.getRate());
+				detailModel.setAmount(billExportModel.getAmount());
+				detailModel.setActureAmount(billExportModel.getActureAmount());
+				detailModel.setReduceAmount(billExportModel.getReduceAmount());
+				detailModel.setReduceType(billExportModel.getReduceType());
+				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
+				delist.add(detailModel);
+				map.put("list", delist);
+				map.put("preBilling", billExportModel.getPreBilling());
+				map.put("billingDate", billExportModel.getBillingDate());
+				map.put("kaipiaoAmount", billExportModel.getKaipiaoAmount());
+				map.put("applyKaipiaoDate", billExportModel.getApplyKaipiaoDate());
+				map.put("kaipiaoDate", billExportModel.getKaipiaoDate());
+				map.put("payTime", billExportModel.getPayTime());
+				map.put("actureBilling", billExportModel.getActureBilling());
+				map.put("status", billExportModel.getStatus());
+				map.put("statusName", billExportModel.getStatusName());
+				maps.put(billExportModel.getBillId(), map);
+			}
+		}
+		return maps;
 	}
 	
 }

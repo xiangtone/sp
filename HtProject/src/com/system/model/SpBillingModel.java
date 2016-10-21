@@ -26,6 +26,8 @@ public class SpBillingModel
 	//财务开票日期
 	private String kaipiaoDate;
 	
+	private String spShortName; 
+	
 	public float getReduceAmount()
 	{
 		return reduceAmount;
@@ -171,6 +173,12 @@ public class SpBillingModel
 	}
 	public void setKaipiaoDate(String kaipiaoDate) {
 		this.kaipiaoDate = kaipiaoDate;
+	}
+	public String getSpShortName() {
+		return spShortName;
+	}
+	public void setSpShortName(String spShortName) {
+		this.spShortName = spShortName;
 	}
 	
 	
