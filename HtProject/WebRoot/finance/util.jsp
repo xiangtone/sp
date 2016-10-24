@@ -1,3 +1,5 @@
+<%@page import="com.system.server.SpServer"%>
+<%@page import="com.system.model.SpModel"%>
 <%@page import="com.system.model.SpBillingModel"%>
 <%@page import="com.system.server.SpBillingServer"%>
 <%@page import="com.system.server.CpBillingServer"%>
@@ -47,9 +49,24 @@
 		}
 		
 		response.setContentType("application/octet-stream;charset=utf-8");
-		
-		String fileName ="demo.xls";
-		
+		String fileName ="";
+		if(!StringUtil.isNullOrEmpty(startDateExp)){
+		String fileStartDate=startDateExp.replace("-", "");
+		fileName+=fileStartDate;
+		}
+		fileName+="-";
+		if(!StringUtil.isNullOrEmpty(endDateExp)){
+		String fileEndDate=endDateExp.replace("-", "");
+		fileName+=fileEndDate;
+		}
+		fileName+="-";
+		if(spIdExp>0){
+			SpModel spModel=new SpServer().loadSpById(spIdExp);
+			fileName+=spModel.getShortName();
+		}else{
+			fileName+="全部上游";
+		}
+		fileName+="-账单.xls";
 		if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
 		{
 			fileName = URLEncoder.encode(fileName, "UTF-8");

@@ -24,7 +24,7 @@
 <%
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	String startDate=StringUtil.getString(request.getParameter("start_date"), StringUtil.getLastMonthFirstDay());
-	String endDate=StringUtil.getString(request.getParameter("end_date"), StringUtil.getLastMonthEndDay());
+	String endDate=StringUtil.getString(request.getParameter("end_date"), StringUtil.getDefaultDate());
 	String jsTypes=StringUtil.getString(request.getParameter("js_types"), "");
 	String status=StringUtil.getString(request.getParameter("status"), "");
 	int load=StringUtil.getInteger(request.getParameter("load"), -1);
@@ -92,7 +92,10 @@
 		return result;
 	}
 		
-	
+	function onSpDataSelect(joData)
+	{
+		$("#sp_id").val(joData.id);
+	}
 </script>
 
 <style type="text/css">
@@ -116,18 +119,18 @@ filter: alpha(opacity=0);
 	<div class="main_content">
 		<div class="content" >
 				<dl>
-					<dd class="dd01_me" style="margin-left: -10px;">开始日期</dd>
-					<dd class="dd03_me">
+					<dd class="dd01_me" style="margin-top: 20px">开始日期</dd>
+					<dd class="dd03_me" style="margin-top: 20px">
 						<input name="startdate" type="text" value="<%=startDate%>" id="start_date"
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
 					</dd>
-					<dd class="dd01_me">结束日期</dd>
-					<dd class="dd03_me">
+					<dd class="dd01_me" style="margin-top: 20px">结束日期</dd>
+					<dd class="dd03_me" style="margin-top: 20px">
 						<input name="enddate" type="text" value="<%=endDate%>" id="end_date"
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
 					</dd>
-					<dd class="dd01_me">SP</dd>
-					<dd class="dd04_me">
+					<dd class="dd01_me" style="margin-top: 20px">SP</dd>
+					<dd class="dd04_me" style="margin-top: 20px">
 						<select name="sp_id" id="sp_id" onclick="namePicker(this,spList,onSpDataSelect)">
 						<option value="-1">全部</option>
 							<%
@@ -141,29 +144,29 @@ filter: alpha(opacity=0);
 						</select>
 					</dd>
 					<div style="clear: both;"><br /></div>
-					<dd class="dd01_me" style="margin-left: -10px;" >结算类型</dd>
-					<dd class="dd04_me">
-					对公周结<input style="width: 15px; height: 15px" type="checkbox" title="对公周结" class="chpro" name="js_type"value="0">&nbsp&nbsp
-					对公双周结	<input style="" type="checkbox" title="对公双周结" class="chpro" name="js_type"value="1">&nbsp&nbsp
-					对公N+1结	<input style="" type="checkbox" title="对公N+1结" class="chpro" name="js_type"value="2">&nbsp&nbsp
-					对公N+2结	<input style="" type="checkbox" title="对公N+2结" class="chpro" name="js_type"value="7">&nbsp&nbsp
-					对私周结<input style="" type="checkbox" title="对私周结" class="chpro" name="js_type"value="3">&nbsp&nbsp
-					对私双周结<input style="" type="checkbox" title="对私双周结" class="chpro" name="js_type"value="4">&nbsp&nbsp
-					对私月结<input style="" type="checkbox" title="对私月结" class="chpro" name="js_type"value="5">&nbsp&nbsp
-					见帐单结<input style="" type="checkbox" title="见帐单结" class="chpro" name="js_type"value="6">&nbsp&nbsp
+					<dd class="dd01_me">结算类型</dd>
+					<dd class="dd04_me" style="margin-left: 10px">
+					<label><input style="" type="checkbox" title="对公周结" class="chpro" name="js_type"value="0" checked="checked">&nbsp;&nbsp;对公周结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对公双周结" class="chpro" name="js_type"value="1" checked="checked">&nbsp;&nbsp;对公双周结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对公N+1结" class="chpro" name="js_type"value="2" checked="checked">&nbsp;&nbsp;对公N+1结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对公N+2结" class="chpro" name="js_type"value="7" checked="checked">&nbsp;&nbsp;对公N+2结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对私周结" class="chpro" name="js_type"value="3" checked="checked">&nbsp;&nbsp;对私周结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对私双周结" class="chpro" name="js_type"value="4" checked="checked">&nbsp;&nbsp;对私双周结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对私月结" class="chpro" name="js_type"value="5" checked="checked">&nbsp;&nbsp;对私月结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="见帐单结" class="chpro" name="js_type"value="6" checked="checked">&nbsp;&nbsp;见帐单结</label>&nbsp&nbsp
 					</dd>
 					<div style="clear: both;"><br /></div>
-					<dd class="dd01_me" style="margin-left: -10px;">状态</dd>
-					<dd class="dd04_me">
-					运营发起<input style="color: #0000ff" type="checkbox" title="对公周结" class="chpro" name="status"value="0">&nbsp&nbsp
-					运营审核	<input style="" type="checkbox" title="对公双周结" class="chpro" name="status"value="1">&nbsp&nbsp
-					上游已开票	<input style="" type="checkbox" title="对公N+1结" class="chpro" name="status"value="3">&nbsp&nbsp
-					结算申请开票	<input style="" type="checkbox" title="对公N+2结" class="chpro" name="status"value="4">&nbsp&nbsp
-					财务已开票<input style="" type="checkbox" title="对私周结" class="chpro" name="status"value="5">&nbsp&nbsp
-					对帐完成<input style="" type="checkbox" title="对私双周结" class="chpro" name="status"value="2">&nbsp&nbsp
+					<dd class="dd01_me" >状态</dd>
+					<dd class="dd04_me" style="margin-left: 10px">
+					<label><input style="" type="checkbox" title="对公周结" class="chpro" name="status"value="0" checked="checked">&nbsp;&nbsp;运营发起</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对公双周结" class="chpro" name="status"value="1" checked="checked">&nbsp;&nbsp;运营审核</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对公N+1结" class="chpro" name="status"value="3" checked="checked">&nbsp;&nbsp;上游已开票</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对公N+2结" class="chpro" name="status"value="4" checked="checked">&nbsp;&nbsp;结算申请开票</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对私周结" class="chpro" name="status"value="5" checked="checked">&nbsp;&nbsp;财务已开票</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对私双周结" class="chpro" name="status"value="2" checked="checked">&nbsp;&nbsp;对帐完成</label>&nbsp&nbsp
 					</dd>
 					<div style="clear: both;"><br /></div>
-					<dd class="ddbtn" style="margin-left: -10px; margin-top: 0px;">
+					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="export" type="button" id="export" value="导     出" onclick="dataexport()" />
 					</dd>
 				</dl>
