@@ -118,9 +118,9 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>szsu</id>
+			<id>szwx</id>
 			<properties>
-				<runtime.env>config\szsu</runtime.env>
+				<runtime.env>config\szwx</runtime.env>
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
