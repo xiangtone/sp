@@ -242,10 +242,15 @@ public class SpBillingServer
 		Map<Integer,Map<String,Object>> maps=new HashMap<Integer, Map<String,Object>>();
 		List<ExportDetailModel> tempList=null;
 		Map<String,Object> tempMap=null;
+		float preBilling=0;
+		float kaipiaoAmount=0; 
 		for(SpBillExportModel billExportModel:list){
 			if(maps.containsKey(billExportModel.getBillId())){
 				tempMap=maps.get(billExportModel.getBillId());
 				tempList=(List<ExportDetailModel>)tempMap.get("list");
+				//票帐金额和开票金额
+				preBilling=Float.parseFloat((String)tempMap.get("preBilling"));
+				kaipiaoAmount=Float.parseFloat((String)tempMap.get("kaipiaoAmount"));
 				ExportDetailModel detailModel=new ExportDetailModel();
 				detailModel.setProductName(billExportModel.getProductName());
 				detailModel.setSpTroneName(billExportModel.getSpTroneName());
@@ -255,8 +260,12 @@ public class SpBillingServer
 				detailModel.setReduceAmount(billExportModel.getReduceAmount());
 				detailModel.setReduceType(billExportModel.getReduceType());
 				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
+				preBilling+=Float.parseFloat(billExportModel.getActureAmount());
+				kaipiaoAmount+=Float.parseFloat(billExportModel.getActureAmount());
 				tempList.add(detailModel);
 				tempMap.put("list", tempList);
+				tempMap.put("preBilling", preBilling+"");
+				tempMap.put("kaipiaoAmount", kaipiaoAmount+"");
 				maps.put(billExportModel.getBillId(), tempMap);
 			}else{
 				Map<String,Object> map=new HashMap<String, Object>();
@@ -278,9 +287,9 @@ public class SpBillingServer
 				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
 				delist.add(detailModel);
 				map.put("list", delist);
-				map.put("preBilling", billExportModel.getPreBilling());
+				map.put("preBilling", billExportModel.getActureAmount());
 				map.put("billingDate", billExportModel.getBillingDate());
-				map.put("kaipiaoAmount", billExportModel.getKaipiaoAmount());
+				map.put("kaipiaoAmount", billExportModel.getActureAmount());
 				map.put("applyKaipiaoDate", billExportModel.getApplyKaipiaoDate());
 				map.put("kaipiaoDate", billExportModel.getKaipiaoDate());
 				map.put("payTime", billExportModel.getPayTime());
