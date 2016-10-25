@@ -543,6 +543,7 @@ public class SpBillingDao
 			sql+=" AND d.id="+spId;
 			
 		}
+		sql+=" ORDER BY bill_month ASC,start_date ASC,full_name ASC";
 		return (List<SpBillExportModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override

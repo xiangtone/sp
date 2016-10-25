@@ -6,10 +6,12 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+
+
 import com.system.model.ExportDetailModel;
 import com.system.dao.SpBillingDao;
 import com.system.dao.SpTroneRateDao;
@@ -238,8 +240,10 @@ public class SpBillingServer
 		}
 		return date;
 	}
+	@SuppressWarnings("unchecked")
 	public Map<Integer,Map<String,Object>>exportDataHandle(List<SpBillExportModel> list){
-		Map<Integer,Map<String,Object>> maps=new HashMap<Integer, Map<String,Object>>();
+		//Map<Integer,Map<String,Object>> maps=new HashMap<Integer, Map<String,Object>>(); 
+		LinkedHashMap<Integer,Map<String,Object>> maps=new LinkedHashMap<Integer, Map<String,Object>>();
 		List<ExportDetailModel> tempList=null;
 		Map<String,Object> tempMap=null;
 		float preBilling=0;
@@ -301,5 +305,7 @@ public class SpBillingServer
 		}
 		return maps;
 	}
+	
+	
 	
 }
