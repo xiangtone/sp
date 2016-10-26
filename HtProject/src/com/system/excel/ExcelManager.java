@@ -125,6 +125,18 @@ public class ExcelManager
 		styleFormatNum.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 		styleFormatNum.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
 		map.put("FORMAT_STYLE_NUM", styleFormatNum);
+		
+		HSSFCellStyle styleFormatPer = workbook.createCellStyle();
+		styleFormatPer.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+		styleFormatPer.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		styleFormatPer.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		styleFormatPer.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		styleFormatPer.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+		styleFormatPer.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		styleFormatPer.setDataFormat(workbook.createDataFormat().getFormat("0.00%"));
+		styleFormatPer.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		styleFormatPer.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
+		map.put("FORMAT_STYLE_PER", styleFormatPer);
 		return map;
 	}
 	/**
@@ -361,7 +373,7 @@ public class ExcelManager
 					cell.setCellValue(Float.parseFloat(delist.get(k).getAmount()));
 					sheet.setColumnWidth(12, 15 * 256);
 					cell = row.createCell(13);
-					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_RATE"));
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_PER"));
 					cell.setCellValue(Float.parseFloat(delist.get(k).getRate()));
 					sheet.setColumnWidth(13, 15 * 256);
 					cell = row.createCell(14);

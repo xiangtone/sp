@@ -49,7 +49,7 @@
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
 	int operatorId = StringUtil.getInteger(request.getParameter("operator"), -1);
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
-	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), userId);
 	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
 
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
