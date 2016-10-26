@@ -101,8 +101,8 @@
 						if(i%5==0)
 							out.print("</tr><tr>");
 						
-						out.print("<td style=\"text-align: left\"><input type=\"checkbox\" name=\"groupid\" id=\"groupid_" + group.getId() 
-						+ "\" value=\"" + group.getId() + "\"></input>&nbsp;&nbsp;" + group.getName() + "</td>");
+						out.print("<td style=\"text-align: left\"><label><input type=\"checkbox\" name=\"groupid\" id=\"groupid_" + group.getId() 
+						+ "\" value=\"" + group.getId() + "\"></input>&nbsp;&nbsp;" + group.getName() + "</label></td>");
 						
 						i++;
 					}
