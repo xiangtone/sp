@@ -80,7 +80,7 @@
 </script>
 <body>
 	<div class="main_content">
-		<div class="content" style="margin-top: 10px; margin-left: -10px">
+		<div class="content" >
 		<dl>	<dd class="ddbtn" style="width:200px">
 					<label><%= group.getName() %></label>
 				</dd>
