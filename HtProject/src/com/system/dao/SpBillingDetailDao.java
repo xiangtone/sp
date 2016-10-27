@@ -41,6 +41,9 @@ public class SpBillingDetailDao
 					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
 					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					
+					model.setReduceDataAmount(rs.getFloat("reduce_data_amount"));
+					model.setReduceMoneyAmount(rs.getFloat("reduce_money_amount"));
+					
 					list.add(model);
 				}
 				return list;
@@ -74,6 +77,9 @@ public class SpBillingDetailDao
 					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
 					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					
+					model.setReduceDataAmount(rs.getFloat("reduce_data_amount"));
+					model.setReduceMoneyAmount(rs.getFloat("reduce_money_amount"));
+					
 					return model;
 				}
 				return null;
@@ -89,7 +95,7 @@ public class SpBillingDetailDao
 	{
 		String sql = "update daily_log.`tbl_sp_billing_sp_trone` set reduce_amount = " 
 				+ model.getReduceAmount() + "  , status = " + model.getStatus() + ", remark = '" + SqlUtil.sqlEncode(model.getRemark()) 
-				+ "',reduce_type = " + model.getReduceType() + " where id = " + model.getId();
+				+ "',reduce_type = " + model.getReduceType() + ", reduce_data_amount = "+ model.getReduceDataAmount() +", reduce_money_amount = " + model.getReduceMoneyAmount() + " where id = " + model.getId();
 		
 		new JdbcControl().execute(sql);		
 	}

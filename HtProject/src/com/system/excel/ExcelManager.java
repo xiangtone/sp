@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -382,13 +381,21 @@ public class ExcelManager
 					sheet.setColumnWidth(14, 15 * 256);
 					cell = row.createCell(15);
 					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
-					cell.setCellValue(Float.parseFloat(delist.get(k).getReduceAmount()));
+					
+					//Update By Andy.Chen 2016.10.27
+					//cell.setCellValue(Float.parseFloat(delist.get(k).getReduceAmount()));
+					cell.setCellValue(Float.parseFloat(delist.get(k).getReduceDataAmount()));
+					
 					sheet.setColumnWidth(15, 15 * 256);
-
+					
 					cell = row.createCell(16);
-					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
-					cell.setCellValue(delist.get(k).getReduceType()==1?"结算款":"信息费");
-					sheet.setColumnWidth(16, 10 * 256);
+					//Update By Andy.Chen 2016.10.27
+					//cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					//cell.setCellValue(delist.get(k).getReduceType()==1?"结算款":"信息费");
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					cell.setCellValue(Float.parseFloat(delist.get(k).getReduceMoneyAmount()));
+					
+					sheet.setColumnWidth(16, 15 * 256);
 					cell = row.createCell(17);
 					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
 					cell.setCellValue(Float.parseFloat(delist.get(k).getActureAmount()));

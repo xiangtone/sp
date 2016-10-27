@@ -520,10 +520,10 @@ public class SpBillingDao
 			endDateStr=" AND end_date<= '"+endDate+"'";
 		}
 		String sql="SELECT b.id AS bill_id,a.id AS detail_id,DATE_FORMAT(b.start_date,'%Y%m') AS bill_month, i.`name`,"+
-				   "b.`start_date`,b.`end_date`,e.`nick_name`,d.`full_name`,CONCAT(h.name_cn,'-',g.name) product_name,"+
-				   "c.`name` sp_trone_name,a.`amount`,a.rate,a.amount*a.rate sp_trone_billing_amount,a.reduce_amount, "+
-				   "a.reduce_type,CASE WHEN a.reduce_type = 0 THEN (a.amount - a.reduce_amount)*rate ELSE a.amount*rate - a.reduce_amount END sp_trone_billing_acture_amount,"+
-				   "b.pre_billing,b.billing_date,b.pre_billing kaipiao_amount,b.apply_kaipiao_date,b.kaipiao_date,b.pay_time,b.acture_billing,b.status"+ 
+				   " b.`start_date`,b.`end_date`,e.`nick_name`,d.`full_name`,CONCAT(h.name_cn,'-',g.name) product_name,"+
+				   " c.`name` sp_trone_name,a.`amount`,a.rate,a.amount*a.rate sp_trone_billing_amount,a.reduce_amount, "+
+				   " a.reduce_type,((a.amount - a.reduce_data_amount)*rate - a.reduce_money_amount) sp_trone_billing_acture_amount,a.reduce_data_amount,reduce_money_amount,"+
+				   " b.pre_billing,b.billing_date,b.pre_billing kaipiao_amount,b.apply_kaipiao_date,b.kaipiao_date,b.pay_time,b.acture_billing,b.status"+ 
 				   " FROM (SELECT * FROM daily_log.`tbl_sp_billing_sp_trone` WHERE 1=1 "+startDateStr+endDateStr+" ) a "+
 				   " LEFT JOIN daily_config.tbl_sp_billing b ON a.`sp_billing_id` = b.`id`"+
 				   " LEFT JOIN daily_config.`tbl_sp_trone` c ON a.`sp_trone_id` = c.id"+
@@ -579,6 +579,11 @@ public class SpBillingDao
 					model.setKaipiaoDate(StringUtil.getString(rs.getString("kaipiao_date"), ""));
 					model.setPayTime(StringUtil.getString(rs.getString("pay_time"), ""));
 					model.setActureBilling(StringUtil.getDecimalFormat(rs.getFloat("acture_billing")));
+					
+					//Add By Andy.Chen 2016.10.27
+					model.setReduceDataAmount(StringUtil.getDecimalFormat(rs.getFloat("reduce_data_amount")));
+					model.setReduceMoneyAmount(StringUtil.getDecimalFormat(rs.getFloat("reduce_money_amount")));
+					
 					model.setStatus(rs.getInt("status"));
 					model.setStatusName(getStatusNameByStatu(rs.getInt("status")));
 					list.add(model);

@@ -9,6 +9,11 @@ public class ExportDetailModel {
 	private String reduceAmount; //核减金额
 	private int reduceType;  //核减类型(0是信息费，1是结算款)
 	private String actureAmount; //实际应收
+	
+	//Add By Andy 2016.10.27
+	private String reduceDataAmount;
+	private String reduceMoneyAmount;
+	
 	public String getProductName() {
 		return productName;
 	}
@@ -56,6 +61,22 @@ public class ExportDetailModel {
 	}
 	public void setActureAmount(String actureAmount) {
 		this.actureAmount = actureAmount;
+	}
+	public String getReduceDataAmount()
+	{
+		return reduceDataAmount;
+	}
+	public void setReduceDataAmount(String reduceDataAmount)
+	{
+		this.reduceDataAmount = reduceDataAmount;
+	}
+	public String getReduceMoneyAmount()
+	{
+		return reduceMoneyAmount;
+	}
+	public void setReduceMoneyAmount(String reduceMoneyAmount)
+	{
+		this.reduceMoneyAmount = reduceMoneyAmount;
 	}
 	
 

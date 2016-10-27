@@ -108,9 +108,10 @@ public class SpBillingServer
 	{
 		String sql = "SELECT  SUM(amount) amount, ";
 		sql += " SUM(amount*rate) pre_billing, ";
-		sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount ";
+		//增加了 reduce_data_amount 和 reduce_money_amount 后就取消 reduce_type 及 reduce_amount 这两个参数的使用
+		//sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount ";
+		sql += " SUM(amount*rate - ((amount - reduce_data_amount)*rate - reduce_money_amount)) reduce_amount ";
 		sql += " FROM daily_log.`tbl_sp_billing_sp_trone` WHERE sp_billing_id = " + spBillingId + " AND STATUS = 0; ";
-
 		
 		JdbcControl control = new JdbcControl();
 		float[] result = (float[])control.query(sql, new QueryCallBack()
@@ -263,6 +264,11 @@ public class SpBillingServer
 				detailModel.setActureAmount(billExportModel.getActureAmount());
 				detailModel.setReduceAmount(billExportModel.getReduceAmount());
 				detailModel.setReduceType(billExportModel.getReduceType());
+				
+				//Add By Andy 2016.10.27
+				detailModel.setReduceDataAmount(billExportModel.getReduceDataAmount());
+				detailModel.setReduceMoneyAmount(billExportModel.getReduceMoneyAmount());
+				
 				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
 				preBilling+=Float.parseFloat(billExportModel.getActureAmount());
 				kaipiaoAmount+=Float.parseFloat(billExportModel.getActureAmount());
@@ -288,6 +294,11 @@ public class SpBillingServer
 				detailModel.setActureAmount(billExportModel.getActureAmount());
 				detailModel.setReduceAmount(billExportModel.getReduceAmount());
 				detailModel.setReduceType(billExportModel.getReduceType());
+				
+				//Add By Andy 2016.10.27
+				detailModel.setReduceDataAmount(billExportModel.getReduceDataAmount());
+				detailModel.setReduceMoneyAmount(billExportModel.getReduceMoneyAmount());
+				
 				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
 				delist.add(detailModel);
 				map.put("list", delist);
