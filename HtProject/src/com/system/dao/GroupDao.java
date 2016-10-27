@@ -11,6 +11,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.GroupModel;
+import com.system.model.UserModel;
 import com.system.util.StringUtil;
 
 public class GroupDao
@@ -289,6 +290,60 @@ public class GroupDao
 	public void addGroupRight(int groupId,List<Integer> list)
 	{
 		String sql = "insert into daily_config.tbl_group_right(group_id,menu_2_id) values ";
+		
+		String values = "";
+		
+		for(int i=0; i <list.size(); i++)
+		{
+			values += "("+ groupId +","+ list.get(i) +"),";
+		}
+		
+		if(!StringUtil.isNullOrEmpty(values))
+		{
+			values = values.substring(0,values.length()-1);
+			values += ";";
+			new JdbcControl().execute(sql + values);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserModel> loadGroupUsersById(int id)
+	{
+		String sql = "SELECT a.id,a.group_id,a.user_id,b.name,b.remark,c.nick_name "
+				+ "	FROM daily_config.tbl_group_user a "
+				+ "	LEFT JOIN daily_config.tbl_group b ON a.group_id=b.id "
+				+ " LEFT JOIN daily_config.tbl_user c ON a.user_id=c.id where b.id="+id 
+				+ " order by convert(c.nick_name using gbk) asc ";
+		
+		return (List<UserModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<UserModel> list = new ArrayList<UserModel>();
+				 
+				while(rs.next())
+				{
+					UserModel model = new UserModel();
+					model.setId(rs.getInt("user_id"));
+					model.setNickName(StringUtil.getString(rs.getString("nick_name"),""));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+		
+	}
+	public void delGroupUserById(int id)
+	{
+		String sql = "delete from daily_config.tbl_group_user where group_id = " + id;
+		new JdbcControl().execute(sql);
+	}
+	
+	public void addGroupUser(int groupId,List<Integer> list)
+	{
+		String sql = "insert into daily_config.tbl_group_user(group_id,user_id) values ";
 		
 		String values = "";
 		
