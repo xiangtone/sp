@@ -86,8 +86,8 @@ text-decoration: underline;
 					<td>业务名称</td>
 					<td>信息费</td>
 					<td>结算率</td>
-					<td>核减费用</td>
-					<td>核减类型</td>
+					<td>核减信息费</td>
+					<td>核减款</td>
 					<td>应收</td>
 					<td>实际应收</td>
 					<td>备注</td>
@@ -106,10 +106,10 @@ text-decoration: underline;
 					<td><%= model.getSpTroneName()  %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getAmount()) %></td>
 					<td><%= model.getRate() %></td>
-					<td><%= StringUtil.getDecimalFormat(model.getReduceAmount())  %></td>
-					<td><%= reduceType[model.getReduceType()] %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getReduceDataAmount())  %></td>
+					<td><%= StringUtil.getDecimalFormat(model.getReduceMoneyAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getAmount()*model.getRate()) %></td>
-					<td><%= StringUtil.getDecimalFormat(model.getAmount()*model.getRate()- (model.getReduceType()==0 ? model.getReduceAmount() * model.getRate() : model.getReduceAmount())) %></td>
+					<td><%= StringUtil.getDecimalFormat((model.getAmount() - model.getReduceDataAmount())*model.getRate() - model.getReduceMoneyAmount()) %></td>
 					<td><%= model.getRemark() %></td>
 					<td><%= statusStr[model.getStatus()] %></td>
 					<%=

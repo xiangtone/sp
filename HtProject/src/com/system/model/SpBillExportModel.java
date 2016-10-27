@@ -27,6 +27,11 @@ public class SpBillExportModel
 	private String actureBilling; //到帐金额
 	private int status; //审核状态
 	private String statusName;
+	
+	//后面ANDY加上去的,2016.10.27
+	private String reduceDataAmount; //核减信息费
+	private String reduceMoneyAmount; //核减结算款
+	
 	public int getBillId() {
 		return billId;
 	}
@@ -176,6 +181,22 @@ public class SpBillExportModel
 	}
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
+	}
+	public String getReduceDataAmount()
+	{
+		return reduceDataAmount;
+	}
+	public void setReduceDataAmount(String reduceDataAmount)
+	{
+		this.reduceDataAmount = reduceDataAmount;
+	}
+	public String getReduceMoneyAmount()
+	{
+		return reduceMoneyAmount;
+	}
+	public void setReduceMoneyAmount(String reduceMoneyAmount)
+	{
+		this.reduceMoneyAmount = reduceMoneyAmount;
 	}
 	
 	

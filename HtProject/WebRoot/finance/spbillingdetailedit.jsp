@@ -20,17 +20,23 @@
 	SpBillingDetailServer detailServer = new SpBillingDetailServer();
 	SpBillingSptroneDetailModel model = detailServer.getSingleSpBillingSpTroneDetailModel(id);
 	
-	float reduceAmount = StringUtil.getFloat(request.getParameter("reduce_amount"), 0);
+	float reduceDataAmount = StringUtil.getFloat(request.getParameter("reduce_data_amount"), 0);
+	float reduceMoneyAmount = StringUtil.getFloat(request.getParameter("reduce_money_amount"), 0);
 	
 	int status = StringUtil.getInteger(request.getParameter("status"), 0);
 	String remark = StringUtil.getString(request.getParameter("remark"), "");
 	
 	if(typeId==1)
 	{
-		model.setReduceAmount(reduceAmount);
+		model.setReduceAmount(0);
 		model.setStatus(status);
 		model.setRemark(remark);
 		model.setReduceType(reduceType);
+		
+		//这里需要重新处理
+		model.setReduceDataAmount(model.getAmount() - reduceDataAmount);
+		model.setReduceMoneyAmount(reduceDataAmount * model.getRate() - reduceMoneyAmount);
+		
 		detailServer.updateSingleSpBillingSpTroneDetail(model);
 		response.sendRedirect("spbillingdetail.jsp?query=" + Base64UTF.decode(query) + "&spbillingid=" + spBillingId);
 		return;
@@ -56,7 +62,7 @@
 	
 	$(function(){
 		setRadioCheck("status",<%= model.getStatus() %>);
-		setRadioCheck("reduce_type",<%= model.getReduceType() %>);
+		//setRadioCheck("reduce_type",<%= model.getReduceType() %>);
 	});
 	
 </script>
@@ -104,21 +110,18 @@
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">核减费用</dd>
+					<dd class="dd01_me">上游信息费</dd>
 					<dd class="dd03_me">
-						<input type="text" name="reduce_amount" id="input_reduce_amount" value="<%= model.getReduceAmount() %>" style="width: 200px">
+						<input type="text" name="reduce_data_amount" id="input_reduce_amount" value="<%= StringUtil.getDecimalFormat(model.getAmount() - model.getReduceDataAmount()) %>" style="width: 200px">
 					</dd>
 					
 					<br />
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">核减类型</dd>
+					<dd class="dd01_me">上游结算款</dd>
 					<dd class="dd03_me">
-						<input type="radio" name="reduce_type" style="width: 35px;float:left" value="0" checked="checked" >
-						<label style="font-size: 14px;float:left">信息费</label>
-						<input type="radio" name="reduce_type" style="width: 35px;float:left" value="1" >
-						<label style="font-size: 14px;float:left">结算款</label>
+						<input type="text" name="reduce_money_amount" id="input_reduce_amount" value="<%= StringUtil.getDecimalFormat((model.getAmount() - model.getReduceDataAmount())*model.getRate() - model.getReduceMoneyAmount()) %>" style="width: 200px">
 					</dd>
 					
 					<br />
