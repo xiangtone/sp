@@ -87,6 +87,8 @@
 						
 						<a href="groupedit.jsp?id=<%= model.getId() %>&pageindex=<%=pageIndex %>&encodeStr=<%=name%>&type=1">修改</a>
 						<a href="groupright.jsp?id=<%= model.getId() %>&pageindex=<%=pageIndex %>&encodeStr=<%=name%>&type=1">授权</a>
+						<a href="groupuseredit.jsp?id=<%= model.getId() %>&pageindex=<%=pageIndex %>&encodeStr=<%=name%>&type=2">角色用户管理</a>
+						
 					</td>
 				</tr>
 				<%
