@@ -532,7 +532,7 @@ public class SpBillingDao
 				   " LEFT JOIN daily_config.`tbl_product_2` f ON c.`product_id` = f.`id`"+
 				   " LEFT JOIN daily_config.`tbl_product_1` g ON f.`product_1_id` = g.`id`"+
 				   " LEFT JOIN daily_config.`tbl_operator` h ON g.`operator_id` = h.`id`"+
-				   " LEFT JOIN daily_config.`tbl_js_type` i ON b.`js_type` = i.`id` WHERE 1=1";
+				   " LEFT JOIN daily_config.`tbl_js_type` i ON b.`js_type` = i.`type_id` WHERE 1=1";
 		if(!StringUtil.isNullOrEmpty(status)){
 			sql+=" AND b.status IN ("+status+")";
 		}
