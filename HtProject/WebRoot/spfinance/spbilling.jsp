@@ -208,9 +208,9 @@
 	});
 	
 </script>
-<body>
+<body style="padding-top: 40px">
 	<div class="main_content">
-		<div class="content" >
+		<div class="content" style="position: fixed; left: 0px; right: 0px">
 			<form action="spbilling.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me" style="margin-left: -10px;">开始日期</dd>

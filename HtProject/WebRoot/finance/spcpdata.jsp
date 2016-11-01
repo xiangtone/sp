@@ -44,9 +44,9 @@
 		document.getElementById("exportform").submit();
 	}
 </script>
-<body>
+<body style="padding-top: 40px">
 	<div class="main_content">
-		<div class="content" style="margin-top: 10px">
+		<div class="content" style="position: fixed; left: 0px; right: 0px">
 			<form action="spcpdata.jsp" method="post" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
@@ -103,6 +103,7 @@
 					</dd>
 				</dl>
 			</form>
+			</div>
 			<br /><br />
 			<table cellpadding="0" cellspacing="0">
 				<thead>
@@ -139,7 +140,6 @@
 				%>
 				</tbody>
 			</table>
-		</div>
 
 	</div>
 </body>

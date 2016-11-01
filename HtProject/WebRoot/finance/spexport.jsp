@@ -131,9 +131,10 @@
 	}
 	
 </script>
-<body>
+<body style="padding-top: 40px">
 	<div class="main_content">
-		<div class="content" style="margin-top: 10px">
+		<div class="content" style="margin-top: 0px">
+			<div class="content" style="position: fixed; left: 0px; right: 0px">
 			<form action="spexport.jsp" method="post" id="exportform">
 				<dl>
 					<input type="hidden" value="2" name="load" />
@@ -183,9 +184,11 @@
 					</dd>
 				</dl>
 			</form>
+			</div>
 			<br /><br />
 			<table cellpadding="0" cellspacing="0">
 				<thead>
+				<br/>
 					<tr>
 						<td>SP名称</td>
 						<td>业务线</td>
