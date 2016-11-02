@@ -185,6 +185,8 @@ public class SpDao
 					model.setContractEndDate(StringUtil.getString(rs.getString("contract_end_date"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
 					model.setCommerceUserName(StringUtil.getString(rs.getString("nick_name"), ""));
+					//添加状态
+					model.setStatus(rs.getInt("status"));
 					
 					list.add(model);
 				}
@@ -217,6 +219,8 @@ public class SpDao
 					model.setContractStartDate(StringUtil.getString(rs.getString("contract_start_date"), ""));
 					model.setContractEndDate(StringUtil.getString(rs.getString("contract_end_date"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					//添加状态
+					model.setStatus(rs.getInt("status"));
 					return model;
 				}
 				
@@ -227,12 +231,12 @@ public class SpDao
 	
 	public boolean addSp(SpModel model)
 	{
-		String sql = "insert into daily_config.tbl_sp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id) "
+		String sql = "insert into daily_config.tbl_sp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id,status) "
 				+ "value('" + model.getFullName() + "','" + model.getShortName()
 				+ "','" + model.getContactPerson() + "','" + model.getQq()
 				+ "','" + model.getMail() + "','" + model.getPhone() + "','"
 				+ model.getAddress() + "','" + model.getContractStartDate()
-				+ "','" + model.getContractEndDate() + "',"+ model.getCommerceUserId() +")";
+				+ "','" + model.getContractEndDate() + "',"+ model.getCommerceUserId() +","+model.getStatus()+")";
 		return new JdbcControl().execute(sql);
 	}
 
@@ -245,7 +249,7 @@ public class SpDao
 				+ "',mail='" + model.getMail() + "',phone='" + model.getPhone()
 				+ "',address='" + model.getAddress() + "',contract_start_date='"
 				+ model.getContractStartDate() + "',contract_end_date='"
-				+ model.getContractEndDate() + "',commerce_user_id=" + model.getCommerceUserId() + " where id =" + model.getId();
+				+ model.getContractEndDate() + "',commerce_user_id=" + model.getCommerceUserId() +",status="+model.getStatus()+" where id =" + model.getId();
 		return new JdbcControl().execute(sql);
 	}
 	
