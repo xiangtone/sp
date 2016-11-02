@@ -138,4 +138,13 @@ public class CpBillingServer
 	{
 		new CpBillingDao().updateCpBilling(cpBillingId);
 	}
+	
+	public void updateCpBillingModel(int id, int type,int status,String date){
+		new CpBillingDao().updateCpBillingModel(id,type,status,date);
+	}
+	
+	public void updateCpBillingActurePay(int cpBillingId,float money,String date)
+	{
+		new CpBillingDao().updateCpBillingActurePay(cpBillingId, money,date);
+	}
 }

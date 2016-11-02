@@ -24,7 +24,7 @@
 	
 	CpBillingServer server = new CpBillingServer();
 	
-	int status = StringUtil.getInteger(request.getParameter("status"), 2);
+	int status = StringUtil.getInteger(request.getParameter("status"), 5);
 	
 	//导出EXCEL数据
 	if(cpBillingId>0 && type ==1)
@@ -93,9 +93,18 @@
 	
 	String pageData = PageUtil.initPageQuery("cwcpbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"待审核","CP对帐中","CP已对帐","已付款"};
+	String[] statusData = {"发起","运营审核通过","CP审核通过","结算开始对帐","结算收到票","结算申请付款","已付款"};
 	
-	String[] btnStrings = {"","","<a href='#' onclick='showConfirmDialog(helloisthereany)''>完成对帐</a>",""};
+	String[] btnStrings = {"","","","","","<a href='#' onclick='showConfirmDialog(helloisthereany)''>完成对帐</a>",""};
+	
+	String[] btnMore = {"","<a href='#' onclick='showCwBillConfirmDialog(helloisthereany)''>更多</a>","",""};
+	
+	String[] year={"年份","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"};
+	String[] month={"月份","01","02","03","04","05","06","07","08","09","10","11","12"};
+	String[] days={"日期","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
+	String defYear=StringUtil.getDefaultDate();
+	String[] defDate=defYear.split("-");
+
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -203,13 +212,52 @@
   		$("#lab_pre_billing").text($("#lab_pre_billing_" + id).text());
   		$("#lab_acture_billing").val($("#lab_pre_billing_" + id).text());
   		
+  		<!--日期 -->
+  		var dateString=ajaxGetgetCpBillingDate(id,0);
+  		var dateArray=dateString.split("#");
+  		if(dateArray[3]==""||null==dateArray[3]){
+		  	$("#lab_pay_year").val('<%=defDate[0]%>');
+		  	$("#lab_pay_month").val('<%=defDate[1]%>');
+		  	$("#lab_pay_day").val('<%=defDate[2]%>');
+		}else{
+			var splitDate=getYearMonthDayByDate(dateArray[3]);
+			$("#lab_pay_year").val(splitDate[0]);
+		  	$("#lab_pay_month").val(splitDate[1]);
+		  	$("#lab_pay_day").val(splitDate[2]);
+		}
+  		
   		$("#btn_confirm").click(function(){
   			confirmActureBilling(id);
   		});
 		
 		$( "#dialog" ).dialog();
 	}
-	
+	function showCwBillConfirmDialog(id)
+	{	
+		$("#lab_cw_title").text($("#lab_cp_name_" + id).text() + "[" + $("#lab_start_date_" + id).text() + "至" + $("#lab_end_date_" + id).text() + "][" + $("#lab_js_name_" + id).text() + "]");
+  		$("#lab_cw_cp_name").text($("#lab_cp_name_" + id).text());
+  		$("#lab_cw_start_date").text($("#lab_start_date_" + id).text());
+  		var dateString=ajaxGetgetCpBillingDate(id);
+  		var dateArray=dateString.split("#")
+  		$("#lab_cw_end_date").text($("#lab_end_date_" + id).text());
+  		$("#lab_cw_js_name").text($("#lab_js_name_" + id).text());
+  		$("#lab_cw_amount").text($("#lab_amount_" + id).text());
+  		$("#lab_cw_prebilling").text($("#lab_pre_billing_" + id).text());
+  		$("#lab_cw_acturebilling").text($("#lab_acture_billing_" + id).text());
+  		$("#lab_cw_create_date").text($("#lab_create_date_" + id).text());
+  		$("#lab_cw_start_bill_date").text(dateArray[0]);
+  		$("#lab_cw_get_bill_date").text(dateArray[1]);
+  		$("#lab_cw_apply_pay_bill_date").text(dateArray[2]);
+  		$("#lab_cw_pay_time").text(dateArray[3]);
+
+
+  		
+  		$("#btn_cw_confirm").click(function(){
+  			$( "#cwdialog" ).dialog("close");
+  		});
+		
+		$( "#cwdialog" ).dialog();
+	}
 	function confirmActureBilling(id)
 	{
 		var actureBilling = parseFloat($("#lab_acture_billing").val()).toFixed(2);
@@ -219,8 +267,11 @@
 			alert("难道你能真付给对方这样的钱？");
 			return;
 		}
-		
-		getAjaxValue("action.jsp?type=2&id=" + id + "&money=" + actureBilling,onConfirmCpBilling);
+		var payyear=$("#lab_pay_year").val();
+		var paymonth=$("#lab_pay_month").val();
+		var payday=$("#lab_pay_day").val();
+		var date=payyear+"-"+paymonth+"-"+payday;
+		getAjaxValue("action.jsp?type=2&id=" + id + "&money=" + actureBilling+"&cpdate="+date,onConfirmCpBilling);
 		
 		$( "#dialog" ).dialog("close");
 	}
@@ -244,6 +295,23 @@
 		}
 	}
 	
+	function ajaxGetgetCpBillingDate(id) {
+		var result = "";
+		$.ajax({
+			url : "util.jsp",
+			data : "cpbillingid=" + id + "&cpbilltype=0",
+			cache : false,
+			async : false,
+			success : function(html) {
+				result = $.trim(html);
+			}
+		});
+		return result;
+	}
+	function getYearMonthDayByDate(date){
+  		var dateArray=date.split("-");
+  		return dateArray;
+	}
 </script>
 
 
@@ -324,6 +392,9 @@
 		<table cellpadding="0" cellspacing="0">
 			<thead>
 				<tr>
+				<br/>
+				<br/>
+				<br/>
 					<td>序号</td>
 					<td>CP</td>
 					<td>开始时间</td>
@@ -354,11 +425,12 @@
 					<td><label id="lab_js_name_<%= model.getId() %>"><%= model.getJsName() %></label></td>
 					<td><label id="lab_amount_<%= model.getId() %>"><%= model.getAmount() %></label></td>
 					<td><label id="lab_pre_billing_<%= model.getId() %>"><%=model.getPreBilling() %></label></td>
-					<td><%= model.getActureBilling() %></td>
+					<td><label id="lab_acture_billing_<%=model.getId() %>"><%= model.getActureBilling() %></label></td>
 					<td><%= model.getRemark() %></td>
-					<td><%= model.getCreateDate() %></td>
-					<td><%= statusData[model.getStatus()] %></td>
+					<td><label id="lab_create_date_<%=model.getId() %>"><%= model.getCreateDate() %></label></td>
+					<td><label id="lab_status_name_<%=model.getId() %>"><%= statusData[model.getStatus()] %></label></td>
 					<td style="text-align: left">
+						<%= btnMore[1].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbillingdetail.jsp?pagetype=1&query=<%= query %>&cpbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>
@@ -384,7 +456,70 @@
   		<br />
   		<label style="font-weight: bold;">实际支付：</label><input id="lab_acture_billing" type="text" value="123456" style="background-color: #ccc" />
   		<br />
+  		 付款日期  ：<label></label><select name="lab_pay_year" id="lab_pay_year" >
+						<%
+							for(int i=0;i<year.length;i++)
+							{
+								%>
+							<option value="<%= year[i]%>"><%= year[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_pay_month" id="lab_pay_month" >
+						<%
+							for(int i=0;i<month.length;i++)
+							{
+								%>
+							<option value="<%= month[i]%>"><%= month[i]%></option>	
+								<%
+							}
+							%>
+						</select>-
+						<select name="lab_pay_day" id="lab_pay_day" >
+						<%
+							for(int i=0;i<days.length;i++)
+							{
+								%>
+							<option value="<%= days[i]%>"><%= days[i]%></option>	
+								<%
+							}
+							%>
+						</select>
+  		 
+  		<br />
   		<input id="btn_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="确定" >
+	</div>
+	
+	<div id="cwdialog" title="账单明细" >
+  		<label id="lab_cw_title" style="font-weight: bold;">账单明细</label>
+  		<br />
+  		 CP:<label id="lab_cw_cp_name">123456</label>
+  		<br />
+  		开始时间：<label id="lab_cw_start_date">123456</label>
+  		<br />
+  		  结束时间：<label id="lab_cw_end_date">123456</label>
+  		<br />
+  		 结算类型：<label id="lab_cw_js_name">123456</label>
+  		<br />
+  		  信息费 ：<label id="lab_cw_amount">123456</label>
+  		<br />
+  		  应收款 ：<label id="lab_cw_prebilling">123456</label>
+  		<br />
+  		实际支付 ：<label id="lab_cw_acturebilling">123456</label>
+  		<br />
+  		 创建时间 ：<label id="lab_cw_create_date">00:00:00</label>
+  		<br />
+  		 收账单时间 ：<label id="lab_cw_start_bill_date">00:00:00</label>
+  		<br />
+  		  收票时间  ：<label id="lab_cw_get_bill_date">00:00:00</label>
+  		<br />
+  		申请付款时间  ：<label id="lab_cw_apply_pay_bill_date">00:00:00</label>
+  		<br />
+  		 付款日期  ：<label id="lab_cw_pay_time">00:00:00</label>
+  		<br />
+  		
+  		<input id="btn_cw_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="关闭" >
 	</div>
 </body>
 </html>

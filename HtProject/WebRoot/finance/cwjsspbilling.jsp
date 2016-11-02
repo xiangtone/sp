@@ -258,9 +258,9 @@
   		  		$("#lab_kaipiao_day").val(splitDate[2]);
   			}
   			if(dateArray[3]==""||null==dateArray[3]){
-  		  		$("#lab_kaipiao_year").val('<%=year[0]%>');
-  		  		$("#lab_kaipiao_month").val('<%=month[0]%>');
-  		  		$("#lab_kaipiao_day").val('<%=days[0]%>');
+  		  		$("#lab_pay_day").val('<%=year[0]%>');
+  		  		$("#lab_pay_month").val('<%=month[0]%>');
+  		  		$("#lab_pay_month").val('<%=days[0]%>');
   			}else{
   				var splitDate=getYearMonthDayByDate(dateArray[3]);
   		  		$("#lab_pay_year").val(splitDate[0]);
@@ -524,6 +524,9 @@
 		<table cellpadding="0" cellspacing="0">
 			<thead>
 				<tr>
+				<br/>
+				<br/>
+				<br/>
 					<td>序号</td>
 					<td>SP</td>
 					<td>开始时间</td>

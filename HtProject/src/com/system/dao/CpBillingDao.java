@@ -209,7 +209,7 @@ public class CpBillingDao
 	 */
 	public CpBillingModel getCpBillingModel(int id)
 	{
-		String sql = "SELECT a.create_date,a.id,a.amount,a.`cp_id`,b.`short_name` cp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status";
+		String sql = "SELECT a.create_date,a.id,a.amount,a.`cp_id`,b.`short_name` cp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status,a.start_bill_date,a.get_bill_date,a.apply_pay_bill_date, a.pay_time ";
 		sql += " FROM daily_config.`tbl_cp_billing` a";
 		sql += " LEFT JOIN daily_config.`tbl_cp` b ON a.`cp_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
@@ -238,6 +238,14 @@ public class CpBillingDao
 					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
 					model.setAmount(rs.getFloat("amount"));
+					//新增三个账单时间
+					model.setStartBillDate(StringUtil.getString(rs.getString("start_bill_date"), ""));
+					model.setGetBillDate(StringUtil.getString(rs.getString("get_bill_date"), ""));
+					model.setApplyPayBillDate(StringUtil.getString(rs.getString("apply_pay_bill_date"), ""));
+					
+					model.setPayTime(StringUtil.getString(rs.getString("pay_time"), ""));
+
+
 					
 					return model;
 				}
@@ -450,6 +458,12 @@ public class CpBillingDao
 		String sql = "UPDATE daily_config.`tbl_cp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + cpBillingId;
 		new JdbcControl().execute(sql);
 	}
+	//完成对账是更新对账时间
+	public void updateCpBillingActurePay(int cpBillingId,float money,String date)
+	{
+		String sql = "UPDATE daily_config.`tbl_cp_billing` SET acture_billing = " + money + ",pay_time ='"+date+"',status = 6 WHERE id = " + cpBillingId;
+		new JdbcControl().execute(sql);
+	}
 	
 	/**
 	 * 增加CP帐单下面业务汇总数据
@@ -489,7 +503,21 @@ public class CpBillingDao
 		
 		new JdbcControl().execute(sql);
 	}
-	
+	public void updateCpBillingModel(int id,int type,int status,String date){
+		String replaceStr="";
+		if(type==1){
+			replaceStr="start_bill_date='"+date+"'";
+		}
+		if(type==2){
+			replaceStr="get_bill_date='"+date+"'";
+		}
+		if(type==3){
+			replaceStr="apply_pay_bill_date='"+date+"'";
+		}
+		String sql="UPDATE daily_config.`tbl_cp_billing` SET "+replaceStr+",status ="+status+"  WHERE id ="+id;
+		new JdbcControl().execute(sql);
+
+	}
 	
 	
 }

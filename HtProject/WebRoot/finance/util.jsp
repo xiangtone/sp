@@ -1,3 +1,4 @@
+<%@page import="com.system.model.CpBillingModel"%>
 <%@page import="com.system.server.SpServer"%>
 <%@page import="com.system.model.SpModel"%>
 <%@page import="com.system.model.SpBillingModel"%>
@@ -28,6 +29,11 @@
 	String statusExp=StringUtil.getString(request.getParameter("status_exp"), "");
 	int load=StringUtil.getInteger(request.getParameter("load"), -1);
 	int spIdExp=StringUtil.getInteger(request.getParameter("sp_id"), -1);
+	
+	int cpBillingId = StringUtil.getInteger(request.getParameter("cpbillingid"),-1);
+	int cpBillingType = StringUtil.getInteger(request.getParameter("cpbilltype"),-1);//CP账单type
+	int cpBillingStatus=StringUtil.getInteger(request.getParameter("cpbillstatus"),-1);//CP账单状态
+	String cpdate=StringUtil.getString(request.getParameter("cpdate"),"");			  //CP账单时间
 
 
 	if(type==0){
@@ -86,4 +92,15 @@
 		
 		return;
 	}
+	//CP账单处理
+	if(cpBillingType==0){
+		CpBillingModel billingModel=new CpBillingServer().getCpBillingModel(cpBillingId);
+		String data=billingModel.getStartBillDate()+"#"+billingModel.getGetBillDate()+"#"+billingModel.getApplyPayBillDate()+"#"+billingModel.getPayTime();
+		out.clear();
+		out.print(data); 
+		}
+	//CP账单更新状态和时间
+		if(cpBillingType==1||cpBillingType==2||cpBillingType==3){    
+			new CpBillingServer().updateCpBillingModel(cpBillingId, cpBillingType, cpBillingStatus, cpdate);
+		}
 %>
