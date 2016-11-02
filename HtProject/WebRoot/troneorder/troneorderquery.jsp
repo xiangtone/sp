@@ -84,6 +84,9 @@
 		}
 	}
 	%>
+	if(spList==null||spList.length==0){
+		spList.push(new joSelOption(-1,1,'全部'));
+	}
 	
 	var cpList = new Array();
 	<%
