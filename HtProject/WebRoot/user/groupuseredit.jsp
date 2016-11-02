@@ -23,14 +23,14 @@
 	GroupModel group = groupServer.loadGroupById(id);
 	if(group==null)
 	{
-		response.sendRedirect("groupuser.jsp");
+		response.sendRedirect("group.jsp");
 		return;
 	}
 	String msg = "";
 	String encodeStr = URLEncoder.encode(name,"GBK"); 
 	if(StringUtil.getInteger(request.getParameter("msg"), -1)==1){
 		msg = "alert('修改成功');";
-		msg += "window.location.href = 'groupuser.jsp?pageindex="+pageIndex+"&name="+encodeStr+"&type="+type+";'";
+		msg += "window.location.href = 'group.jsp?pageindex="+pageIndex+"&name="+encodeStr+"&type="+type+";'";
 		}
 
 	List<UserModel> users=new GroupServer().loadGroupUsersById(id);
@@ -74,7 +74,7 @@
 	
 	function goToMain()
 	{
-		window.location.href = "groupuser.jsp?pageindex=<%=pageIndex%>&name=<%=encodeStr%>&type=<%=type%>";
+		window.location.href = "group.jsp?pageindex=<%=pageIndex%>&name=<%=encodeStr%>&type=<%=type%>";
 	}
 	
 </script>
