@@ -19,6 +19,12 @@ public class CpBillingModel
 	private String payTime;
 	private String createDate;
 	
+	//新增三个时间字段
+	private String startBillDate;//帐单开始时间 
+	private String getBillDate;//收到开票时间
+	private String applyPayBillDate;//申请开票时间 
+
+	
 	public int getId()
 	{
 		return id;
@@ -147,4 +153,23 @@ public class CpBillingModel
 	{
 		this.reduceAmount = reduceAmount;
 	}
+	public String getStartBillDate() {
+		return startBillDate;
+	}
+	public void setStartBillDate(String startBillDate) {
+		this.startBillDate = startBillDate;
+	}
+	public String getGetBillDate() {
+		return getBillDate;
+	}
+	public void setGetBillDate(String getBillDate) {
+		this.getBillDate = getBillDate;
+	}
+	public String getApplyPayBillDate() {
+		return applyPayBillDate;
+	}
+	public void setApplyPayBillDate(String applyPayBillDate) {
+		this.applyPayBillDate = applyPayBillDate;
+	}
+	
 }

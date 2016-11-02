@@ -88,10 +88,11 @@
 			<tbody>
 				<%
 					int rowNum = 1;
+					String stopStyle = "class=\"StopStyle\"";
 					for (SpModel model : list)
 					{
 				%>
-				<tr>
+				<tr <%= model.getStatus() == 0 ? stopStyle : "" %>>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
 					<td><%= model.getId() + 1000 %></td>
 					<td><%=model.getFullName()%></td>

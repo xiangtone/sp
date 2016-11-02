@@ -11,6 +11,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.Menu2Model;
+import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
 public class Menu2Dao
@@ -124,7 +125,7 @@ public class Menu2Dao
 	public Menu2Model loadMenu2ById(int id)
 	{
 		String sql = "select a.id menu2Id,a.name menu2Name,b.id menu1Id,b.name menu1Name,"
-				+ "c.id menuHeadId,c.name menuHeadName,a.url,a.action_url from daily_config.tbl_menu_2 a left join daily_config.tbl_menu_1 b "
+				+ "c.id menuHeadId,c.name menuHeadName,a.url,a.action_url,a.remark from daily_config.tbl_menu_2 a left join daily_config.tbl_menu_1 b "
 				+ "on a.menu_1_id = b.id left join daily_config.tbl_menu_head c on b.head_id = c.id where a.id = " + id;
 		
 		return (Menu2Model)new JdbcControl().query(sql, new QueryCallBack()
@@ -146,6 +147,8 @@ public class Menu2Dao
 					model.setMenuHeadName(StringUtil.getString(rs.getString("menuHeadName"), "MenuHeadName"));
 					
 					model.setActionUrl(StringUtil.getString(rs.getString("action_url"), ""));
+					//增加备注字段
+					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					
 					return model;
 				}
@@ -156,9 +159,9 @@ public class Menu2Dao
 	
 	public void addMenu2(Menu2Model model)
 	{
-		String sql = "insert into daily_config.tbl_menu_2(menu_1_id,name,url,action_url)value("
+		String sql = "insert into daily_config.tbl_menu_2(menu_1_id,name,url,action_url,remark)value("
 				+ model.getMenu1Id() + ",'" + model.getName() + "','"
-				+ model.getUrl() + "','" + model.getActionUrl() + "')";
+				+ model.getUrl() + "','" + model.getActionUrl() + "','"+SqlUtil.sqlEncode(model.getRemark())+"')";
 		new JdbcControl().execute(sql);
 	}
 
@@ -167,7 +170,7 @@ public class Menu2Dao
 		String sql = "update daily_config.tbl_menu_2 set menu_1_id = "
 				+ model.getMenu1Id() + " ,name = '" + model.getName()
 				+ "',url = '" + model.getUrl() + "',action_url = '"
-				+ model.getActionUrl() + "' where id =" + model.getId();
+				+ model.getActionUrl() + "',remark='"+SqlUtil.sqlEncode(model.getRemark())+"' where id =" + model.getId();
 		new JdbcControl().execute(sql);
 	}
 	

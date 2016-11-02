@@ -16,6 +16,8 @@
 	String contractStartDate = StringUtil.getString(request.getParameter("contract_start_date"), StringUtil.getDefaultDate());
 	String contractEndDate = StringUtil.getString(request.getParameter("contract_end_date"), StringUtil.getDefaultDate());
 	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user_id"), -1);
+	int status = StringUtil.getInteger(request.getParameter("status"), 1);
+
 	
 	String query = StringUtil.getString(request.getParameter("query"), "");
 	
@@ -31,6 +33,7 @@
 	model.setContractStartDate(contractStartDate);
 	model.setContractEndDate(contractEndDate);
 	model.setCommerceUserId(commerceUserId);
+	model.setStatus(status);
 	
 	if(id>0)
 	{
@@ -40,7 +43,7 @@
 	{
 		new SpServer().addSp(model);
 	}
-	
-	response.sendRedirect(request.getContextPath() + "sp.jsp?"+ Base64UTF.decode(query));
+	response.sendRedirect("sp.jsp?" + Base64UTF.decode(query));
+	//response.sendRedirect(request.getContextPath() + "sp.jsp?"+ Base64UTF.decode(query));
 	
 %>

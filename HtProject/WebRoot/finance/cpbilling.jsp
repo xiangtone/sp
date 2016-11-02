@@ -121,10 +121,11 @@
 	
 	String pageData = PageUtil.initPageQuery("cpbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"待审核","CP对帐中","CP已对帐","已付款"};
+	String[] statusData = {"发起","运营审核通过","CP审核通过","结算开始对帐","结算收到票","结算申请付款","已付款"};
 	
 	String[] btnStrings = {"<a href='#' onclick='sendCpBillingToCp(helloisthereany)'>审核</a> <a href='#' onclick='delCpBilling(helloisthereany)'>删除</a> <a href='#' onclick='reExportCpBilling(helloisthereany)'>重新生成</a>",
-			"<a href='#' onclick='confirmCpBillingForCp(helloisthereany)'>CP审核</a> <a href='#' onclick='reCallCpBillingFromCpStatus(helloisthereany)'>撤回</a>","",""};
+			"<a href='#' onclick='confirmCpBillingForCp(helloisthereany)'>CP审核</a> <a href='#' onclick='reCallCpBillingFromCpStatus(helloisthereany)'>撤回</a>","","","","",""};
+	String[] btnMore = {"","<a href='#' onclick='showConfirmDialog(helloisthereany)''>更多</a>","",""};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -140,6 +141,9 @@
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
 <script type="text/javascript" src="../sysjs/base.js"></script>
 <script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <script type="text/javascript">
 
 	var cpList = new Array();
@@ -210,8 +214,58 @@
 		$("#sel_status").val(<%= status %>);
 	});
 	
-</script>
+	function showConfirmDialog(id)
+	{	
+		$("#lab_title").text($("#lab_cp_name_" + id).text() + "[" + $("#lab_start_date_" + id).text() + "至" + $("#lab_end_date_" + id).text() + "][" + $("#lab_js_name_" + id).text() + "]");
+  		$("#lab_cp_name").text($("#lab_cp_name_" + id).text());
+  		$("#lab_start_date").text($("#lab_start_date_" + id).text());
+  		var dateString=ajaxGetgetCpBillingDate(id);
+  		var dateArray=dateString.split("#")
+  		$("#lab_end_date").text($("#lab_end_date_" + id).text());
+  		$("#lab_js_name").text($("#lab_js_name_" + id).text());
+  		$("#lab_amount").text($("#lab_amount_" + id).text());
+  		$("#lab_prebilling").text($("#lab_prebilling_" + id).text());
+  		$("#lab_reduce_amount").text($("#lab_reduce_amount_" + id).text());
+  		$("#lab_fuct_amount").text($("#lab_fuct_amount_" + id).text());
+  		$("#lab_acturebilling").text($("#lab_acturebilling_" + id).text());
+  		$("#lab_create_date").text($("#lab_create_date_" + id).text());
+  		$("#lab_start_bill_date").text(dateArray[0]);
+  		$("#lab_get_bill_date").text(dateArray[1]);
+  		$("#lab_apply_pay_bill_date").text(dateArray[2]);
+  		$("#lab_pay_time").text(dateArray[3]);
 
+
+  		
+  		$("#btn_confirm").click(function(){
+  			$( "#dialog" ).dialog("close");
+  		});
+		
+		$( "#dialog" ).dialog();
+	}
+	
+	function ajaxGetgetCpBillingDate(id) {
+		var result = "";
+		$.ajax({
+			url : "util.jsp",
+			data : "cpbillingid=" + id + "&cpbilltype=0",
+			cache : false,
+			async : false,
+			success : function(html) {
+				result = $.trim(html);
+			}
+		});
+		return result;
+	}
+</script>
+<style type="text/css">
+.ui-button-icon-only .ui-icon{left:0}
+.ui-button-icon-only .ui-icon, 
+.ui-button-text-icon-primary .ui-icon, 
+.ui-button-text-icon-secondary .ui-icon, 
+.ui-button-text-icons .ui-icon, 
+.ui-button-icons-only .ui-icon
+{top:0}
+</style>
 <body style="padding-top: 40px">
 	<div class="main_content">
 		<div class="content" style="position: fixed; left: 0px; right: 0px">
@@ -259,14 +313,13 @@
 					<dd class="dd04_me">
 						<select name="status" id="sel_status" >
 						<option value="-1">请选择</option>
-						<%
-						for(int i=0; i<statusData.length; i++)
-						{
-							%>
-							<option value="<%= i %>"><%= statusData[i] %></option>
-							<%
-						}
-						%>
+						<option value="0">发起</option>
+						<option value="1">运营审核通过</option>
+						<option value="2">CP审核通过</option>
+						<option value="3">结算开始对帐</option>
+						<option value="4">结算已收到票</option>
+						<option value="5">结算已申请付款</option>
+						<option value="6">已付款</option>
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
@@ -278,6 +331,10 @@
 		<table cellpadding="0" cellspacing="0">
 			<thead>
 				<tr>
+				<br/>
+				<br/>
+				<br/>
+			
 					<td>序号</td>
 					<td>CP</td>
 					<td>开始时间</td>
@@ -302,19 +359,20 @@
 				%>
 				<tr>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
-					<td><%=model.getCpName() %></td>
-					<td><%=model.getStartDate() %></td>
-					<td><%=model.getEndDate()%></td>
-					<td><%= model.getJsName() %></td>
-					<td><%= model.getAmount() %></td>
-					<td><%= model.getPreBilling() %></td>
-					<td><%= model.getReduceAmount() %></td>
-					<td><%= model.getPreBilling() - model.getReduceAmount() %></td>
-					<td><%= model.getActureBilling() %></td>
+					<td><label id="lab_cp_name_<%= model.getId() %>"><%=model.getCpName() %></label></td>
+					<td><label id="lab_start_date_<%= model.getId() %>"><%=model.getStartDate() %></label></td>
+					<td><label id="lab_end_date_<%= model.getId() %>"><%=model.getEndDate()%></label></td>
+					<td><label id="lab_js_name_<%= model.getId() %>"><%= model.getJsName()%></label></td>
+					<td><label id="lab_amount_<%= model.getId() %>"><%= model.getAmount()%></label></td>
+					<td><label id="lab_prebilling_<%= model.getId()%>"><%= model.getPreBilling() %></label></td>
+					<td><label id="lab_reduce_amount_<%= model.getId()%>"><%= model.getReduceAmount()%></label></td>
+					<td><label id="lab_fuct_amount_<%= model.getId() %>"><%= model.getPreBilling() - model.getReduceAmount() %></label></td>
+					<td><label id="lab_acturebilling_<%= model.getId() %>"><%= model.getActureBilling() %></label></td>
 					<td><%=model.getRemark() %></td>
-					<td><%= model.getCreateDate() %></td>
+					<td><label id="lab_create_date_<%= model.getId() %>"><%= model.getCreateDate() %></label></td>
 					<td><%= statusData[model.getStatus()] %></td>
 					<td style="text-align: left">
+						<%= btnMore[1].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbillingdetail.jsp?query=<%= query %>&cpbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>
@@ -331,6 +389,39 @@
 			</tbody>
 		</table>
 	</div>
-	
+	<div id="dialog" title="账单明细" >
+  		<label id="lab_title" style="font-weight: bold;">账单明细</label>
+  		<br />
+  		 CP:<label id="lab_cp_name">123456</label>
+  		<br />
+  		开始时间：<label id="lab_start_date">123456</label>
+  		<br />
+  		  结束时间：<label id="lab_end_date">123456</label>
+  		<br />
+  		 结算类型：<label id="lab_js_name">123456</label>
+  		<br />
+  		  信息费 ：<label id="lab_amount">123456</label>
+  		<br />
+  		  应收款 ：<label id="lab_prebilling">123456</label>
+  		<br />
+  		 核减款 ：<label id="lab_reduce_amount">123456</label>
+  		<br />
+  		 实际应收款 ：<label id="lab_fuct_amount">123456</label>
+  		<br />
+  		实际到款 ：<label id="lab_acturebilling">123456</label>
+  		<br />
+  		 创建时间 ：<label id="lab_create_date">00:00:00</label>
+  		<br />
+  		 收账单时间 ：<label id="lab_start_bill_date">00:00:00</label>
+  		<br />
+  		  收票时间  ：<label id="lab_get_bill_date">00:00:00</label>
+  		<br />
+  		申请付款时间  ：<label id="lab_apply_pay_bill_date">00:00:00</label>
+  		<br />
+  		 付款日期  ：<label id="lab_pay_time">00:00:00</label>
+  		<br />
+  		
+  		<input id="btn_confirm" style="float: right;font-size: 14px;font-weight: bold;cursor: pointer;" type="button" value="关闭" >
+	</div>
 </body>
 </html>
