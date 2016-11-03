@@ -48,5 +48,17 @@ public class Menu2Server
 	{
 		return new Menu2Dao().updateMenu2(id, sort);
 	}
+	/**
+	 * 菜单管理增加角色查询字段
+	 * @param menuHeadId
+	 * @param menu1Id
+	 * @param groupId
+	 * @param pageIndex
+	 * @return
+	 */
+	public Map<String, Object> loadMenu2(int menuHeadId,int menu1Id,int groupId,int pageIndex)
+	{
+		return new Menu2Dao().loadMenu2(menuHeadId, menu1Id,groupId, pageIndex);
+	}
 	
 }

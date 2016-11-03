@@ -180,5 +180,81 @@ public class Menu2Dao
 		
 		return new JdbcControl().execute(sql);
 	}
+	/**
+	 * 菜单管理增加角色查询字段
+	 * @param menuHeadId
+	 * @param menu1Id
+	 * @param groupId
+	 * @param pageIndex
+	 * @return
+	 */
+	public Map<String, Object> loadMenu2(int menuHeadId,int menu1Id,int groupId,int pageIndex)
+	{
+		String params = " a.id menu2Id,a.name menu2Name,b.id menu1Id,b.name menu1Name,c.id menuHeadId,c.name menuHeadName,a.url,a.action_url,a.remark,a.sort  ";
+		
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_menu_2 a left join daily_config.tbl_menu_1 b "
+				+ "on a.menu_1_id = b.id left join daily_config.tbl_menu_head c on b.head_id = c.id "
+				+ " left join daily_config.tbl_group_right d on d.menu_2_id=a.id where 1=1 ";
+		
+		String sort = " order by c.sort,b.sort,a.sort asc ";
+		
+		String query = "";
+		
+		if(menuHeadId>0)
+			query = " and b.head_id = " + menuHeadId;
+		
+		if(menu1Id>0)
+			query += " and a.menu_1_id = " + menu1Id;
+		
+		if(groupId>0)
+			query += " and d.group_id = " + groupId;
+		
+		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
+		
+		Map<String, Object> map = new  HashMap<String, Object>();
+		
+		map.put("rows", new JdbcControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " count(*) ") + query, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+					return rs.getInt(1);
+				return 0;
+			}
+		}));
+		
+		
+		map.put("list", new JdbcControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, params)  + query + sort + limit, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<Menu2Model> list = new ArrayList<Menu2Model>();
+				 
+				while(rs.next())
+				{
+					Menu2Model model = new Menu2Model();
+					
+					model.setId(rs.getInt("menu2Id"));
+					model.setMenu1Id(rs.getInt("menu1Id"));
+					model.setName(StringUtil.getString(rs.getString("menu2Name"), "Menu2Name"));
+					model.setUrl(StringUtil.getString(rs.getString("url"), "url"));
+					model.setSort(rs.getInt("sort"));
+					model.setMenuHeadId(rs.getInt("menuHeadId"));
+					model.setMenu1Name(StringUtil.getString(rs.getString("menu1Name"), "Menu1Name"));
+					model.setMenuHeadName(StringUtil.getString(rs.getString("menuHeadName"), "MenuHeadName"));
+					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
+					model.setActionUrl(StringUtil.getString(rs.getString("action_url"), ""));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		}));
+		
+		return map;
+	}
 	
 }	

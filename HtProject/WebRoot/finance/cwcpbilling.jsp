@@ -93,7 +93,7 @@
 	
 	String pageData = PageUtil.initPageQuery("cwcpbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"发起","运营审核通过","CP审核通过","结算开始对帐","结算收到票","结算申请付款","已付款"};
+	String[] statusData = {"发起","运营审核","CP审核","发起帐单","收到票据","申请付款","已付款"};
 	
 	String[] btnStrings = {"","","","","","<a href='#' onclick='showConfirmDialog(helloisthereany)''>完成对帐</a>",""};
 	

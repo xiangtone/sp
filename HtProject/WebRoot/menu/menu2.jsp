@@ -23,12 +23,19 @@
 	int menuHeadId = StringUtil.getInteger(request.getParameter("head_id"), -1);
 	
 	int menu1Id = StringUtil.getInteger(request.getParameter("menu_1_id"), -1);
+	int groupId=StringUtil.getInteger(request.getParameter("group_id"), -1);
+	
+	//所有的角色
+	List<GroupModel> groupList = new GroupServer().loadAllGroup();
+
 	
 	List<MenuHeadModel> menuHeadList = new MenuHeadServer().loadMenuHeadList();
 	
 	List<Menu1Model> menu1List = new Menu1Server().loadMenu1List();
 
-	Map<String, Object> map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id, pageIndex);
+//	Map<String, Object> map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id, pageIndex);
+	//增加角色查询字段
+	Map<String, Object> map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id,groupId, pageIndex);
 		
 	List<Menu2Model> list = (List<Menu2Model>)map.get("list");
 	
@@ -52,8 +59,26 @@
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
+<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
+<script type="text/javascript" src="../sysjs/pinyin.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
-
+<!--角色用户列表-->
+	var groupList = new Array();
+	<%
+	for(GroupModel groupModel : groupList)
+	{
+		%>
+		groupList.push(new joSelOption(<%= groupModel.getId() %>,1,'<%= groupModel.getName() %>'));
+		<%
+	}
+	%>
+	
+	function onRoleDataSelect(joData)
+	{
+		$("#sel_group_id").val(joData.id);
+	}
+<!--分割线 -->
 	function menu1Object(menu1Id,menuHeadId,name)
 	{
 		var obj = {};
@@ -75,6 +100,8 @@
 	
 	$(function()
 	{
+		$("#sel_group_id").val("<%= groupId %>");
+
 		$("#sel_head_id").val("<%= menuHeadId %>");
 		$("#sel_head_id").change(menuHeadChange);
 		menuHeadChange();
@@ -198,6 +225,20 @@
 			</dl>
 			<form action="menu2.jsp"  method="get" style="margin-top: 10px">
 				<dl>
+				<dd class="dd01_me">角色</dd>
+					<dd class="dd04_me">
+						<select name="group_id" id="sel_group_id" onclick="namePicker(this,groupList,onRoleDataSelect)">
+							<option value="-1">全部</option>
+							<%
+							for(GroupModel model : groupList)
+							{
+								%>
+							<option value="<%= model.getId() %>"><%= model.getName() %></option>	
+								<%
+							}
+							%>
+						</select>
+					</dd>
 					<dd class="dd01_me">模块</dd>
 					<dd class="dd04_me">
 						<select name="head_id" id="sel_head_id" >

@@ -121,7 +121,7 @@
 	
 	String pageData = PageUtil.initPageQuery("cpbilling.jsp",params,rowCount,pageIndex);
 	
-	String[] statusData = {"发起","运营审核通过","CP审核通过","结算开始对帐","结算收到票","结算申请付款","已付款"};
+	String[] statusData = {"发起","运营审核","CP审核","发起帐单","收到票据","申请付款","已付款"};
 
 	String[] btnStrings = {"","","<a href='#' onclick='showConfirmDialog(helloisthereany,1)''>发起帐单</a>","<a href='#' onclick='showConfirmDialog(helloisthereany,2)''>收到票据</a>","<a href='#' onclick='showConfirmDialog(helloisthereany,3)''>申请付款</a>","",""};
 	String[] btnMore = {"","<a href='#' onclick='showConfirmDialog(helloisthereany,0)''>更多</a>","",""};
@@ -538,11 +538,11 @@
 						<select name="status" id="sel_status" >
 						<option value="-1">请选择</option>
 						<option value="0">发起</option>
-						<option value="1">运营审核通过</option>
-						<option value="2">CP审核通过</option>
-						<option value="3">结算开始对帐</option>
-						<option value="4">结算已收到票</option>
-						<option value="5">结算已申请付款</option>
+						<option value="1">运营审核</option>
+						<option value="2">CP审核</option>
+						<option value="3">发起帐单</option>
+						<option value="4">收到票据</option>
+						<option value="5">申请付款</option>
 						<option value="6">已付款</option>
 						</select>
 					</dd>
