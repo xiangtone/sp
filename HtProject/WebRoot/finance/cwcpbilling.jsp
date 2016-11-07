@@ -210,7 +210,11 @@
 		
   		$("#lab_amount").text($("#lab_amount_" + id).text());
   		$("#lab_pre_billing").text($("#lab_pre_billing_" + id).text());
-  		$("#lab_acture_billing").val($("#lab_pre_billing_" + id).text());
+  		$("#lab_acture_billing").val($("#lab_kaipiao_billing_" + id).text());
+  		
+  		$("#lab_kaipiao_billing").text($("#lab_kaipiao_billing_" + id).text());
+
+  		
   		
   		<!--日期 -->
   		var dateString=ajaxGetgetCpBillingDate(id,0);
@@ -243,6 +247,9 @@
   		$("#lab_cw_js_name").text($("#lab_js_name_" + id).text());
   		$("#lab_cw_amount").text($("#lab_amount_" + id).text());
   		$("#lab_cw_prebilling").text($("#lab_pre_billing_" + id).text());
+  		
+  		$("#lab_cw_kaipiao_billing").text($("#lab_kaipiao_billing_" + id).text());
+
   		$("#lab_cw_acturebilling").text($("#lab_acture_billing_" + id).text());
   		$("#lab_cw_create_date").text($("#lab_create_date_" + id).text());
   		$("#lab_cw_start_bill_date").text(dateArray[0]);
@@ -402,6 +409,7 @@
 					<td>结算类型</td>
 					<td>信息费</td>
 					<td>应支付</td>
+					<td>开票金额</td>
 					<td>实际支付</td>
 					<td>备注</td>
 					<td>创建时间</td>
@@ -425,6 +433,7 @@
 					<td><label id="lab_js_name_<%= model.getId() %>"><%= model.getJsName() %></label></td>
 					<td><label id="lab_amount_<%= model.getId() %>"><%= model.getAmount() %></label></td>
 					<td><label id="lab_pre_billing_<%= model.getId() %>"><%=model.getPreBilling() %></label></td>
+					<td><label id="lab_kaipiao_billing_<%= model.getId() %>"><%=StringUtil.getDecimalFormat(model.getKaipiaoBilling())  %></label></td>
 					<td><label id="lab_acture_billing_<%=model.getId() %>"><%= model.getActureBilling() %></label></td>
 					<td><%= model.getRemark() %></td>
 					<td><label id="lab_create_date_<%=model.getId() %>"><%= model.getCreateDate() %></label></td>
@@ -453,6 +462,8 @@
   		信息费：<label id="lab_amount">123456</label>
   		<br />
   		预支付：<label id="lab_pre_billing">123456</label>
+  		<br />
+  		开票金额：<label id="lab_kaipiao_billing">123456</label>
   		<br />
   		<label style="font-weight: bold;">实际支付：</label><input id="lab_acture_billing" type="text" value="123456" style="background-color: #ccc" />
   		<br />
@@ -510,9 +521,11 @@
   		<br />
   		 创建时间 ：<label id="lab_cw_create_date">00:00:00</label>
   		<br />
-  		 收账单时间 ：<label id="lab_cw_start_bill_date">00:00:00</label>
+  		 账单时间 ：<label id="lab_cw_start_bill_date">00:00:00</label>
   		<br />
   		  收票时间  ：<label id="lab_cw_get_bill_date">00:00:00</label>
+  		<br />
+  		  开票金额  ：<label id="lab_cw_kaipiao_billing">0</label>
   		<br />
   		申请付款时间  ：<label id="lab_cw_apply_pay_bill_date">00:00:00</label>
   		<br />

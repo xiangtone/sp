@@ -234,6 +234,10 @@
   		$("#lab_fuct_amount").text($("#lab_fuct_amount_" + id).text());
   		$("#lab_acturebilling").text($("#lab_acturebilling_" + id).text());
   		$("#lab_create_date").text($("#lab_create_date_" + id).text());
+  		
+  		$("#lab_kaipiao_billing").val($("#lab_kaipiao_billing_" + id).text());
+
+  		
   		if(type==0){
   			if(dateArray[0]==""||null==dateArray[0]){
   		  		$("#lab_start_bill_year").val('<%=year[0]%>');
@@ -287,6 +291,8 @@
   		 	$("#lab_pay_year").attr("disabled",true);
   		  	$("#lab_pay_month").attr("disabled",true);
   		  	$("#lab_pay_day").attr("disabled",true);
+		  	$("#lab_kaipiao_billing").attr("disabled",true);
+
   		}
   		if(type==1){
   			if(dateArray[0]==""||null==dateArray[0]){
@@ -332,6 +338,7 @@
   		  	$("#lab_pay_year").attr("disabled",true);
 		  	$("#lab_pay_month").attr("disabled",true);
 		  	$("#lab_pay_day").attr("disabled",true);
+		  	$("#lab_kaipiao_billing").attr("disabled",true);
   		}
   		if(type==2){
   			if(dateArray[0]==""||null==dateArray[0]){
@@ -377,6 +384,8 @@
   		  	$("#lab_pay_year").attr("disabled",true);
 		  	$("#lab_pay_month").attr("disabled",true);
 		  	$("#lab_pay_day").attr("disabled",true);
+		  	$("#lab_kaipiao_billing").attr("disabled",false);
+
   		}
   		if(type==3){
   			if(dateArray[0]==""||null==dateArray[0]){
@@ -422,6 +431,8 @@
   		  	$("#lab_pay_year").attr("disabled",true);
 		  	$("#lab_pay_month").attr("disabled",true);
 		  	$("#lab_pay_day").attr("disabled",true);
+		  	$("#lab_kaipiao_billing").attr("disabled",true);
+
   		}
   		$("#btn_confirm").click(function(){
   			if(type==0){
@@ -444,7 +455,9 @@
   				var billmonth=$("#lab_get_bill_month").val();
   				var billday=$("#lab_get_bill_day").val();
 				var date=billyear+"-"+billmonth+"-"+billday;
-				ajaxGetgetCpBillingDate(id,type,4,date);
+				//开票金额
+				var kaipiaoBilling=$("#lab_kaipiao_billing").val();
+				ajaxGetgetCpBillingDate(id,type,4,date,kaipiaoBilling);
   				$( "#dialog" ).dialog("close");
   			}
   		//申请付款时间，更改状态和时间
@@ -461,12 +474,11 @@
 		
 		$( "#dialog" ).dialog();
 	}
-	
-	function ajaxGetgetCpBillingDate(id,type,status,date) {
+	function ajaxGetgetCpBillingDate(id,type,status,date,money) {
 		var result = "";
 		$.ajax({
 			url : "util.jsp",
-			data : "cpbillingid=" + id + "&cpbilltype="+type+"&cpbillstatus="+status+"&cpdate="+date,
+			data : "cpbillingid=" + id + "&cpbilltype="+type+"&cpbillstatus="+status+"&cpdate="+date+"&cpkaipiaoBilling="+money,
 			cache : false,
 			async : false,
 			success : function(html) {
@@ -475,6 +487,8 @@
 		});
 		return result;
 	}
+
+	
 	
 	function getYearMonthDayByDate(date){
   		var dateArray=date.split("-");
@@ -566,6 +580,7 @@
 					<td>信息费</td>
 					<td title="信息费*结算率">预支付</td>
 					<td title="从结算款里核减掉的钱">核减款</td>
+					<td>开票金额</td>
 					<td title="预支付-核减款">实际预支付</td>
 					<td title="财务最终支付给渠道的钱">财务支付</td>
 					<td>备注</td>
@@ -589,6 +604,7 @@
 					<td><label id="lab_amount_<%= model.getId() %>"><%= model.getAmount()%></label></td>
 					<td><label id="lab_prebilling_<%= model.getId()%>"><%= model.getPreBilling() %></label></td>
 					<td><label id="lab_reduce_amount_<%= model.getId()%>"><%= model.getReduceAmount()%></label></td>
+					<td><label id="lab_kaipiao_billing_<%= model.getId()%>"><%= StringUtil.getDecimalFormat(model.getKaipiaoBilling()) %></label></td>
 					<td><label id="lab_fuct_amount_<%= model.getId() %>"><%= model.getPreBilling() - model.getReduceAmount() %></label></td>
 					<td><label id="lab_acturebilling_<%= model.getId() %>"><%= model.getActureBilling() %></label></td>
 					<td><%=model.getRemark() %></td>
@@ -636,7 +652,7 @@
   		<br />
   		 创建时间 ：<label id="lab_create_date">00:00:00</label>
   		<br />
-  		 收账单时间 ：<label></label><select name="lab_start_bill_year" id="lab_start_bill_year" style="width: 55px">
+  		 账单时间 ：<label></label><select name="lab_start_bill_year" id="lab_start_bill_year" style="width: 55px">
 						<%
 							for(int i=0;i<year.length;i++)
 							{
@@ -702,6 +718,8 @@
 							%>
 						</select>
   		    		<br />
+  		<label style="font-weight: bold;">开票金额：<input id="lab_kaipiao_billing" type="text"  value="0" style="background-color: #ccc" /></label>
+  		<br />
   		申请付款时间  ：<label></label><select name="lab_apply_pay_bill_year" id="lab_apply_pay_bill_year" >
 						<%
 							for(int i=0;i<year.length;i++)

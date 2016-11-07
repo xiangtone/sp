@@ -22,13 +22,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
+	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	String startDate=StringUtil.getString(request.getParameter("start_date"), StringUtil.getLastMonthFirstDay());
 	String endDate=StringUtil.getString(request.getParameter("end_date"), StringUtil.getDefaultDate());
 	String jsTypes=StringUtil.getString(request.getParameter("js_types"), "");
 	String status=StringUtil.getString(request.getParameter("status"), "");
 	int load=StringUtil.getInteger(request.getParameter("load"), -1);
-	List<SpModel> spList = new SpServer().loadSp();
+	List<CpModel> cpList = new CpServer().loadCp();
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -48,19 +48,19 @@
 <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <script type="text/javascript">
 
-	var spList = new Array();
+	var cpList = new Array();
 	
 	<%
-	for(SpModel spModel : spList)
+	for(CpModel cpModel : cpList)
 	{
 		%>
-		spList.push(new joSelOption(<%= spModel.getId() %>,1,'<%= spModel.getShortName() %>'));
+		cpList.push(new joSelOption(<%= cpModel.getId() %>,1,'<%= cpModel.getShortName() %>'));
 		<%
 	}
 	%>
 	
 	function dataexport() {
-		var spId=$("#sp_id").val();
+		var cpId=$("#cp_id").val();
 		var startDate=$("#start_date").val();
 		var endDate=$("#end_date").val();
 		var jstype=[];
@@ -71,30 +71,16 @@
 		$('input[name="status"]:checked').each(function(){ 
 			status.push($(this).val()); 
 			}); 
-		<!-- 
-		ajaxExport(spId,startDate,endDate,jstype,status,1);
-		-->
-		window.location.href="util.jsp?sp_id=" + spId + "&start_date="+startDate+"&end_date="+endDate+"&js_types="+jstype+"&status_exp="+status+"&load=1";
+		
+		window.location.href="util.jsp?cp_id_exp=" + cpId + "&cp_start_date="+startDate+"&cp_end_date="+endDate+"&cp_js_types="+jstype+"&cp_status_exp="+status+"&cp_load=1";
 		
 	}
 	
-	function ajaxExport(spId,startDate,endDate,jstypes,status,load) {
-		var result = "";
-		$.ajax({
-			url : "cwspbillingexport.jsp",
-			data : "sp_id=" + spId + "&start_date="+startDate+"&end_date="+endDate+"&js_types="+jstypes+"&status="+status+"&load="+load,
-			cache : false,
-			async : false,
-			success : function(html) {
-				result = $.trim(html);
-			}
-		});
-		return result;
-	}
+	
 		
-	function onSpDataSelect(joData)
+	function onCpDataSelect(joData)
 	{
-		$("#sp_id").val(joData.id);
+		$("#cp_id").val(joData.id);
 	}
 </script>
 
@@ -129,15 +115,15 @@ filter: alpha(opacity=0);
 						<input name="enddate" type="text" value="<%=endDate%>" id="end_date"
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
 					</dd>
-					<dd class="dd01_me" style="margin-top: 20px">SP</dd>
+					<dd class="dd01_me" style="margin-top: 20px">CP</dd>
 					<dd class="dd04_me" style="margin-top: 20px">
-						<select name="sp_id" id="sp_id" onclick="namePicker(this,spList,onSpDataSelect)">
+						<select name="cp_id" id="cp_id" onclick="namePicker(this,cpList,onCpDataSelect)">
 						<option value="-1">全部</option>
 							<%
-							for(SpModel sp : spList)
+							for(CpModel cp : cpList)
 							{
 								%>
-							<option value="<%= sp.getId() %>"><%= sp.getShortName() %></option>	
+							<option value="<%= cp.getId() %>"><%= cp.getShortName() %></option>	
 								<%
 							}
 							%>
@@ -146,24 +132,25 @@ filter: alpha(opacity=0);
 					<div style="clear: both;"><br /></div>
 					<dd class="dd01_me">结算类型</dd>
 					<dd class="dd04_me" style="margin-left: 10px">
-					<label><input style="" type="checkbox" title="对公周结" class="chpro" name="js_type"value="0" checked="checked">&nbsp;&nbsp;对公周结</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="对公双周结" class="chpro" name="js_type"value="1" checked="checked">&nbsp;&nbsp;对公双周结</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="对公N+1结" class="chpro" name="js_type"value="2" checked="checked">&nbsp;&nbsp;对公N+1结</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="对公N+2结" class="chpro" name="js_type"value="7" checked="checked">&nbsp;&nbsp;对公N+2结</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="对私周结" class="chpro" name="js_type"value="3" checked="checked">&nbsp;&nbsp;对私周结</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="对私双周结" class="chpro" name="js_type"value="4" checked="checked">&nbsp;&nbsp;对私双周结</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="对私月结" class="chpro" name="js_type"value="5" checked="checked">&nbsp;&nbsp;对私月结</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="见帐单结" class="chpro" name="js_type"value="6" checked="checked">&nbsp;&nbsp;见帐单结</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="对公周结" class="chpro" name="js_type"value="0" checked="checked">&nbsp;&nbsp;对公周结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="对公双周结" class="chpro" name="js_type"value="1" checked="checked">&nbsp;&nbsp;对公双周结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="对公N+1结" class="chpro" name="js_type"value="2" checked="checked">&nbsp;&nbsp;对公N+1结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="对公N+2结" class="chpro" name="js_type"value="7" checked="checked">&nbsp;&nbsp;对公N+2结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="对私周结" class="chpro" name="js_type"value="3" checked="checked">&nbsp;&nbsp;对私周结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="对私双周结" class="chpro" name="js_type"value="4" checked="checked">&nbsp;&nbsp;对私双周结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="对私月结" class="chpro" name="js_type"value="5" checked="checked">&nbsp;&nbsp;对私月结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="见帐单结" class="chpro" name="js_type"value="6" checked="checked">&nbsp;&nbsp;见帐单结</label>&nbsp;&nbsp;
 					</dd>
 					<div style="clear: both;"><br /></div>
 					<dd class="dd01_me" >状态</dd>
 					<dd class="dd04_me" style="margin-left: 10px">
-					<label><input style="" type="checkbox" title="运营发起" class="chpro" name="status"value="0" checked="checked">&nbsp;&nbsp;运营发起</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="运营审核" class="chpro" name="status"value="1" checked="checked">&nbsp;&nbsp;运营审核</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="上游已开票" class="chpro" name="status"value="3" checked="checked">&nbsp;&nbsp;上游已开票</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="结算申请开票" class="chpro" name="status"value="4" checked="checked">&nbsp;&nbsp;结算申请开票</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="财务已开票" class="chpro" name="status"value="5" checked="checked">&nbsp;&nbsp;财务已开票</label>&nbsp&nbsp
-					<label><input style="" type="checkbox" title="对帐完成" class="chpro" name="status"value="2" checked="checked">&nbsp;&nbsp;对帐完成</label>&nbsp&nbsp
+					<label><input style="" type="checkbox" title="发起" class="chpro" name="status"value="0" checked="checked">&nbsp;&nbsp;发起</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="运营审核" class="chpro" name="status"value="1" checked="checked">&nbsp;&nbsp;运营审核</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="CP审核" class="chpro" name="status"value="2" checked="checked">&nbsp;&nbsp;CP审核</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="发起帐单" class="chpro" name="status"value="3" checked="checked">&nbsp;&nbsp;发起帐单</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="收到票据" class="chpro" name="status"value="4" checked="checked">&nbsp;&nbsp;收到票据</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="申请付款" class="chpro" name="status"value="5" checked="checked">&nbsp;&nbsp;申请付款</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="已付款" class="chpro" name="status"value="6" checked="checked">&nbsp;&nbsp;已付款</label>&nbsp;&nbsp;
 					</dd>
 					<div style="clear: both;"><br /></div>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">

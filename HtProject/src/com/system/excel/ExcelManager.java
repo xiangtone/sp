@@ -18,6 +18,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.system.model.ExportDetailModel;
 import com.system.model.SettleAccountModel;
+import com.system.model.CpExportDetailModel;
 
 
 public class ExcelManager
@@ -516,6 +517,270 @@ public class ExcelManager
 						hssCell=hssRow.getCell(23);
 						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
 						hssCell.setCellValue(Float.parseFloat((String)entry.getValue().get("actureBilling")));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,24,24));
+						hssCell=hssRow.getCell(24);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+						hssCell.setCellValue((String)entry.getValue().get("payTime"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,25,25));
+						hssCell=hssRow.getCell(25);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+						hssCell.setCellValue((String)entry.getValue().get("statusName"));
+						entryIndex+=1;
+					}
+				}				
+
+				 	
+			 }
+			 sheet.setForceFormulaRecalculation(true);
+			 
+			 book.write(os);
+			
+//			log.info("Export Excel " + channelName + "," + date + " finish" );
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			try{ if(is!=null)is.close(); }catch(Exception ex){}
+		}
+	}
+	
+	/**
+	 * 导出账单数据
+	 * @param date
+	 * @param list
+	 * @param demoPath
+	 * @param os
+	 */
+	@SuppressWarnings("unchecked")
+	public void writeCpBillDataToExcel(String date,
+			 Map<Integer,Map<String,Object>> map,String demoPath,OutputStream os)
+	{
+			InputStream is = null;
+		
+		try
+		{
+			is = new FileInputStream(demoPath);
+			HSSFWorkbook book =  new HSSFWorkbook(is);
+			HSSFSheet sheet = book.getSheetAt(0);
+			Map<String, HSSFCellStyle> mapStyle = createBillStyles(book);
+			
+			int i=2;//自增行
+			int lineRow=0;//合并初始行
+			
+		 	List<CpExportDetailModel> delist=null;
+		 	int j=0;
+		 	Integer entryIndex=1;
+			 for (Map.Entry<Integer, Map<String,Object>> entry : map.entrySet()) {
+				 	int key=entry.getKey();
+				 	Map<String,Object> bean=map.get(key);
+				 	delist=(List<CpExportDetailModel>)bean.get("list");
+				 	lineRow=i;
+				 	for(int k=0;k<delist.size();k++){
+				 	HSSFRow row = sheet.createRow(i);
+					HSSFCell cell = row.createCell(0);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
+					cell.setCellValue(Float.parseFloat((j+1)+""));
+					sheet.setColumnWidth(0, 10 * 256);
+
+					
+					cell = row.createCell(1);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue((String)entry.getValue().get("billMonth"));
+					sheet.setColumnWidth(1, 10 * 256);
+					
+					cell = row.createCell(2);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue((String)entry.getValue().get("jsName"));
+					sheet.setColumnWidth(2, 10 * 256);
+					
+					cell = row.createCell(3);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue((String)entry.getValue().get("startDate"));
+					sheet.setColumnWidth(3, 15 * 256);
+					
+					cell = row.createCell(4);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue((String)entry.getValue().get("endDate"));
+					sheet.setColumnWidth(4, 15 * 256);
+
+					cell = row.createCell(5);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					sheet.setColumnWidth(5, 10 * 256);
+
+					cell = row.createCell(6);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					sheet.setColumnWidth(6, 10 * 256);
+
+					cell = row.createCell(7);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue((String)entry.getValue().get("nickName"));
+					sheet.setColumnWidth(7, 10 * 256);
+					cell = row.createCell(8);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell = row.createCell(9);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue((String)entry.getValue().get("cpFullNam"));
+					sheet.setColumnWidth(9, 30 * 256);
+
+					cell = row.createCell(10);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue(delist.get(k).getProductName());
+					sheet.setColumnWidth(10, 20 * 256);
+					cell = row.createCell(11);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE"));
+					cell.setCellValue(delist.get(k).getSpTroneName());
+					sheet.setColumnWidth(11, 30 * 256);
+
+					cell = row.createCell(12);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
+					cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+					cell.setCellValue(delist.get(k).getAmount());
+					sheet.setColumnWidth(12, 15 * 256);
+					cell = row.createCell(13);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_PER"));
+					cell.setCellValue(delist.get(k).getRate());
+					sheet.setColumnWidth(13, 15 * 256);
+					cell = row.createCell(14);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
+					cell.setCellValue(delist.get(k).getSpTroneBillAmount());
+					sheet.setColumnWidth(14, 15 * 256);
+					cell = row.createCell(15);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					
+					cell.setCellValue(delist.get(k).getReduceAmount());
+					
+					sheet.setColumnWidth(15, 15 * 256);
+					
+					cell = row.createCell(16);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					cell.setCellValue(delist.get(k).getReduceType()==1?"结算款":"信息费");
+					
+					
+					sheet.setColumnWidth(16, 15 * 256);
+					cell = row.createCell(17);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					cell.setCellValue(delist.get(k).getActureAmount());
+					sheet.setColumnWidth(17, 15 * 256);
+					cell = row.createCell(18);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					cell.setCellValue((Float)entry.getValue().get("preBilling"));
+					sheet.setColumnWidth(18, 15 * 256);
+					cell = row.createCell(19);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					cell.setCellValue((String)entry.getValue().get("billingDate"));
+					sheet.setColumnWidth(19, 15 * 256);
+					cell = row.createCell(20);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					cell.setCellValue((Float)entry.getValue().get("kaipiaoAmount"));
+					sheet.setColumnWidth(20, 15 * 256);
+					cell = row.createCell(21);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					cell.setCellValue((String)entry.getValue().get("getbillDate"));
+					sheet.setColumnWidth(21, 15 * 256);
+
+					cell = row.createCell(22);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					cell.setCellValue((String)entry.getValue().get("applyPayBillDate"));
+					sheet.setColumnWidth(22, 15 * 256);
+					cell = row.createCell(23);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					cell.setCellValue(((Float)entry.getValue().get("actureBilling")));
+					sheet.setColumnWidth(23, 15 * 256);
+					cell = row.createCell(24);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					cell.setCellValue((String)entry.getValue().get("payTime"));
+					sheet.setColumnWidth(24, 15 * 256);
+					cell = row.createCell(25);
+					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					cell.setCellValue((String)entry.getValue().get("statusName"));
+					sheet.setColumnWidth(25, 15 * 256);
+					i++;
+					j++;
+					if(k==delist.size()-1){
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,0,0));
+						//HSSFRow hssRow=sheet.getRow(lineRow+k);
+						HSSFRow hssRow=sheet.getRow(lineRow);
+
+						HSSFCell hssCell=hssRow.getCell(0);
+						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_NUM"));
+						
+						hssCell.setCellValue(entryIndex);
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,1,1));
+						hssCell=hssRow.getCell(1);
+						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_NUM"));
+						hssCell.setCellValue(Float.parseFloat((String)entry.getValue().get("billMonth")));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,2,2));
+						hssCell=hssRow.getCell(2);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						hssCell.setCellValue((String)entry.getValue().get("jsName"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,3,3));
+						hssCell=hssRow.getCell(3);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						hssCell.setCellValue((String)entry.getValue().get("startDate"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,4,4));
+						hssCell=hssRow.getCell(4);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						hssCell.setCellValue((String)entry.getValue().get("endDate"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,5,5));
+						hssCell=hssRow.getCell(5);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,6,6));
+						hssCell=hssRow.getCell(6);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,7,7));
+						hssCell=hssRow.getCell(7);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						hssCell.setCellValue((String)entry.getValue().get("nickName"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,8,8));
+						hssCell=hssRow.getCell(8);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,9,9));
+						hssCell=hssRow.getCell(9);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
+						hssCell.setCellValue((String)entry.getValue().get("cpFullNam"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,18,18));
+						hssCell=hssRow.getCell(18);
+						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+						hssCell.setCellValue((Float)entry.getValue().get("preBilling"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,19,19));
+						hssCell=hssRow.getCell(19);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+						hssCell.setCellValue((String)entry.getValue().get("billingDate"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,20,20));
+						hssCell=hssRow.getCell(20);
+						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+						hssCell.setCellValue((Float)entry.getValue().get("kaipiaoAmount"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,21,21));
+						hssCell=hssRow.getCell(21);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+						hssCell.setCellValue((String)entry.getValue().get("getbillDate"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,22,22));
+						hssCell=hssRow.getCell(22);
+						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+						hssCell.setCellValue((String)entry.getValue().get("applyPayBillDate"));
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,23,23));
+						hssCell=hssRow.getCell(23);
+						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+						hssCell.setCellValue((Float)entry.getValue().get("actureBilling"));
 						
 						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,24,24));
 						hssCell=hssRow.getCell(24);

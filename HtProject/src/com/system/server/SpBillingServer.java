@@ -222,7 +222,7 @@ public class SpBillingServer
 	public void exportSettleAccount(String startDate,String endDate,List<SpBillExportModel> list,OutputStream os)
 	{
 		String date = getDateFormat(startDate,endDate);
-		String filePath =ConfigManager.getConfigData("EXCEL_DEMO")+"Finalce-Demo.xls";
+		String filePath =ConfigManager.getConfigData("EXCEL_DEMO")+"Finalce-SP-Demo.xls";
 		Map<Integer,Map<String,Object>> map=exportDataHandle(list);
 		new ExcelManager().writeBillDataToExcel(date, map, filePath, os);
 	}

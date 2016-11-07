@@ -23,6 +23,7 @@ public class CpBillingModel
 	private String startBillDate;//帐单开始时间 
 	private String getBillDate;//收到开票时间
 	private String applyPayBillDate;//申请开票时间 
+	private float kaipiaoBilling;//开票金额
 
 	
 	public int getId()
@@ -170,6 +171,12 @@ public class CpBillingModel
 	}
 	public void setApplyPayBillDate(String applyPayBillDate) {
 		this.applyPayBillDate = applyPayBillDate;
+	}
+	public float getKaipiaoBilling() {
+		return kaipiaoBilling;
+	}
+	public void setKaipiaoBilling(float kaipiaoBilling) {
+		this.kaipiaoBilling = kaipiaoBilling;
 	}
 	
 }

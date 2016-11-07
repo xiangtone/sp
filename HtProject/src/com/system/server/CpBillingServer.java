@@ -1,14 +1,26 @@
 package com.system.server;
 
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.system.dao.CpBillingDao;
+import com.system.dao.SpBillingDao;
+import com.system.excel.ExcelManager;
+import com.system.model.CpBillExportModel;
 import com.system.model.CpBillingModel;
 import com.system.model.CpBillingSpTroneModel;
 import com.system.model.CpBillingTroneOrderDetailModel;
+import com.system.model.CpExportDetailModel;
 import com.system.model.CpSpTroneRateModel;
+import com.system.model.ExportDetailModel;
 import com.system.model.SettleAccountModel;
+import com.system.model.SpBillExportModel;
+import com.system.util.ConfigManager;
 
 public class CpBillingServer
 {
@@ -138,13 +150,125 @@ public class CpBillingServer
 	{
 		new CpBillingDao().updateCpBilling(cpBillingId);
 	}
-	
-	public void updateCpBillingModel(int id, int type,int status,String date){
-		new CpBillingDao().updateCpBillingModel(id,type,status,date);
+	//更新CpBillingModel
+	public void updateCpBillingModel(int id, int type,int status,String date,float cpkaipiaoBilling){
+		new CpBillingDao().updateCpBillingModel(id,type,status,date,cpkaipiaoBilling);
 	}
 	
 	public void updateCpBillingActurePay(int cpBillingId,float money,String date)
 	{
 		new CpBillingDao().updateCpBillingActurePay(cpBillingId, money,date);
+	}
+	
+	/**
+	 * 获取账单数据
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsTypes
+	 * @param status
+	 * @return
+	 */
+	public List<CpBillExportModel> exportExcelData(String startDate,String endDate,int cpId,String jsTypes,String status)
+	{
+		return new CpBillingDao().exportExcelData(startDate, endDate, cpId, jsTypes, status);
+	} 
+	/**
+	 * 导出账单数据
+	 * @param channelType
+	 * @param dateType
+	 * @param channelName
+	 * @param startDate
+	 * @param endDate
+	 * @param list
+	 * @param os
+	 */
+	public void exportSettleAccount(String startDate,String endDate,List<CpBillExportModel> list,OutputStream os)
+	{
+		String date = getDateFormat(startDate,endDate);
+		String filePath =ConfigManager.getConfigData("EXCEL_DEMO")+"Finalce-CP-Demo.xls";
+		Map<Integer,Map<String,Object>> map=exportDataHandle(list);
+		new ExcelManager().writeCpBillDataToExcel(date, map, filePath, os);
+	}
+	
+	private String getDateFormat(String startDate,String endDate)
+	{
+		String date = startDate + ":" + endDate;
+		try
+		{
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+			return sdf2.format(sdf1.parse(startDate)) + "-" + sdf2.format(sdf1.parse(endDate));
+		}
+		catch(Exception ex)
+		{
+			
+		}
+		return date;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<Integer,Map<String,Object>>exportDataHandle(List<CpBillExportModel> list){
+		LinkedHashMap<Integer,Map<String,Object>> maps=new LinkedHashMap<Integer, Map<String,Object>>();
+		List<CpExportDetailModel> tempList=null;
+		Map<String,Object> tempMap=null;
+		float preBilling=0;
+//		float kaipiaoAmount=0; 
+		for(CpBillExportModel billExportModel:list){
+			if(maps.containsKey(billExportModel.getBillId())){
+				tempMap=maps.get(billExportModel.getBillId());
+				tempList=(List<CpExportDetailModel>)tempMap.get("list");
+				//票帐金额和开票金额
+				preBilling=(Float)tempMap.get("preBilling");
+//				kaipiaoAmount=(Float)tempMap.get("kaipiaoAmount");
+				CpExportDetailModel detailModel=new CpExportDetailModel();
+				detailModel.setProductName(billExportModel.getProductName());
+				detailModel.setSpTroneName(billExportModel.getSpTroneName());
+				detailModel.setRate(billExportModel.getRate());
+				detailModel.setAmount(billExportModel.getAmount());
+				detailModel.setActureAmount(billExportModel.getActureAmount());
+				detailModel.setReduceAmount(billExportModel.getReduceAmount());
+				detailModel.setReduceType(billExportModel.getReduceType());
+				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
+				preBilling+=billExportModel.getActureAmount();
+//				kaipiaoAmount+=billExportModel.getActureAmount();
+				tempList.add(detailModel);
+				tempMap.put("list", tempList);
+				tempMap.put("preBilling", preBilling);
+//				tempMap.put("kaipiaoAmount", kaipiaoAmount);
+				maps.put(billExportModel.getBillId(), tempMap);
+			}else{
+				Map<String,Object> map=new HashMap<String, Object>();
+				map.put("billMonth",billExportModel.getBillMonth());
+				map.put("jsName",billExportModel.getJsName());
+				map.put("startDate", billExportModel.getStartDate());
+				map.put("endDate", billExportModel.getEndDate());
+				map.put("nickName", billExportModel.getNickName());
+				map.put("cpFullNam", billExportModel.getCpFullNam());
+				List<CpExportDetailModel> delist=new ArrayList<CpExportDetailModel>();
+				CpExportDetailModel detailModel=new CpExportDetailModel();
+				detailModel.setProductName(billExportModel.getProductName());
+				detailModel.setSpTroneName(billExportModel.getSpTroneName());
+				detailModel.setRate(billExportModel.getRate());
+				detailModel.setAmount(billExportModel.getAmount());
+				detailModel.setActureAmount(billExportModel.getActureAmount());
+				detailModel.setReduceAmount(billExportModel.getReduceAmount());
+				detailModel.setReduceType(billExportModel.getReduceType());
+				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
+				delist.add(detailModel);
+				map.put("list", delist);
+				map.put("preBilling", billExportModel.getActureAmount());
+				map.put("billingDate", billExportModel.getBillingDate());
+				map.put("kaipiaoAmount", billExportModel.getKaipiaoAmount());
+				map.put("getbillDate", billExportModel.getGetbillDate());
+				map.put("applyPayBillDate", billExportModel.getApplyPayBillDate());
+				map.put("payTime", billExportModel.getPayTime());
+				map.put("actureBilling", billExportModel.getActureBilling());
+				map.put("status", billExportModel.getStatus());
+				map.put("statusName", billExportModel.getStatusName());
+				maps.put(billExportModel.getBillId(), map);
+			}
+		}
+		return maps;
 	}
 }

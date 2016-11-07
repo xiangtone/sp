@@ -1,3 +1,5 @@
+<%@page import="com.system.server.CpServer"%>
+<%@page import="com.system.model.CpModel"%>
 <%@page import="com.system.model.CpBillingModel"%>
 <%@page import="com.system.server.SpServer"%>
 <%@page import="com.system.model.SpModel"%>
@@ -6,6 +8,7 @@
 <%@page import="com.system.server.CpBillingServer"%>
 <%@page import="com.system.util.Base64UTF"%>
 <%@page import="com.system.model.SpBillExportModel" %>
+<%@page import="com.system.model.CpBillExportModel" %>
 
 <%@page import="com.system.model.SettleAccountModel" %>
 <%@page import="java.util.List"%>
@@ -34,6 +37,15 @@
 	int cpBillingType = StringUtil.getInteger(request.getParameter("cpbilltype"),-1);//CP账单type
 	int cpBillingStatus=StringUtil.getInteger(request.getParameter("cpbillstatus"),-1);//CP账单状态
 	String cpdate=StringUtil.getString(request.getParameter("cpdate"),"");			  //CP账单时间
+	float cpkaipiaoBilling=StringUtil.getFloat(request.getParameter("cpkaipiaoBilling"), 0);//开票金额
+	
+	//CP账单导出数据参数
+	String startDateCpExp=StringUtil.getString(request.getParameter("cp_start_date"), "");
+	String endDateCpExp=StringUtil.getString(request.getParameter("cp_end_date"),"");
+	String jsTypeCpExp=StringUtil.getString(request.getParameter("cp_js_types"), "");
+	String statusCpExp=StringUtil.getString(request.getParameter("cp_status_exp"), "");
+	int cpLoad=StringUtil.getInteger(request.getParameter("cp_load"), -1);
+	int cpIdExp=StringUtil.getInteger(request.getParameter("cp_id_exp"), -1);
 
 
 	if(type==0){
@@ -92,6 +104,53 @@
 		
 		return;
 	}
+	//CP账单导出
+	if(cpLoad>=0)
+	{
+		CpBillingServer server = new CpBillingServer();
+		List<CpBillExportModel> list = server.exportExcelData(startDateCpExp,endDateCpExp,cpIdExp,jsTypeCpExp,statusCpExp);
+		if(StringUtil.isNullOrEmpty(endDateCpExp)){
+			endDateCpExp=StringUtil.getDefaultDate();
+		}
+		
+		response.setContentType("application/octet-stream;charset=utf-8");
+		String fileName ="";
+		if(!StringUtil.isNullOrEmpty(startDateCpExp)){
+		String fileStartDate=startDateCpExp.replace("-", "");
+		fileName+=fileStartDate;
+		}
+		fileName+="-";
+		if(!StringUtil.isNullOrEmpty(endDateCpExp)){
+		String fileEndDate=endDateCpExp.replace("-", "");
+		fileName+=fileEndDate;
+		}
+		fileName+="-";
+		if(cpIdExp>0){
+			CpModel cpModel=new CpServer().loadCpById(cpIdExp);
+			fileName+=cpModel.getShortName();
+		}else{
+			fileName+="全部渠道";
+		}
+		fileName+="-账单.xls";
+		if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
+		{
+			fileName = URLEncoder.encode(fileName, "UTF-8");
+		} 
+		else 
+		{
+			fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+		}
+
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+		server.exportSettleAccount(startDateCpExp, endDateCpExp, list, response.getOutputStream());
+		
+		out.clear();
+		
+		out = pageContext.pushBody();
+		
+		return;
+	}
 	//CP账单处理
 	if(cpBillingType==0){
 		CpBillingModel billingModel=new CpBillingServer().getCpBillingModel(cpBillingId);
@@ -101,6 +160,6 @@
 		}
 	//CP账单更新状态和时间
 		if(cpBillingType==1||cpBillingType==2||cpBillingType==3){    
-			new CpBillingServer().updateCpBillingModel(cpBillingId, cpBillingType, cpBillingStatus, cpdate);
+			new CpBillingServer().updateCpBillingModel(cpBillingId, cpBillingType, cpBillingStatus, cpdate,cpkaipiaoBilling);
 		}
 %>
