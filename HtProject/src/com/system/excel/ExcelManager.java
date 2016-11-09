@@ -644,60 +644,62 @@ public class ExcelManager
 					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_PER"));
 					cell.setCellValue(delist.get(k).getRate());
 					sheet.setColumnWidth(13, 15 * 256);
+//					cell = row.createCell(14);
+//					cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
+//					cell.setCellValue(delist.get(k).getSpTroneBillAmount());
+//					sheet.setColumnWidth(14, 15 * 256);
 					cell = row.createCell(14);
-					cell.setCellStyle(mapStyle.get("FORMAT_STYLE"));
-					cell.setCellValue(delist.get(k).getSpTroneBillAmount());
-					sheet.setColumnWidth(14, 15 * 256);
-					cell = row.createCell(15);
 					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
 					
 					cell.setCellValue(delist.get(k).getReduceAmount());
 					
-					sheet.setColumnWidth(15, 15 * 256);
+					sheet.setColumnWidth(14, 15 * 256);
 					
-					cell = row.createCell(16);
+					cell = row.createCell(15);
 					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 					cell.setCellValue(delist.get(k).getReduceType()==1?"结算款":"信息费");
 					
 					
+					sheet.setColumnWidth(15, 15 * 256);
+					cell = row.createCell(16);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					cell.setCellValue(delist.get(k).getActureAmount());
 					sheet.setColumnWidth(16, 15 * 256);
 					cell = row.createCell(17);
 					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
-					cell.setCellValue(delist.get(k).getActureAmount());
+					cell.setCellValue((Float)entry.getValue().get("preBilling"));
 					sheet.setColumnWidth(17, 15 * 256);
 					cell = row.createCell(18);
-					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
-					cell.setCellValue((Float)entry.getValue().get("preBilling"));
-					sheet.setColumnWidth(18, 15 * 256);
-					cell = row.createCell(19);
 					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 					cell.setCellValue((String)entry.getValue().get("billingDate"));
-					sheet.setColumnWidth(19, 15 * 256);
-					cell = row.createCell(20);
+					sheet.setColumnWidth(18, 15 * 256);
+					cell = row.createCell(19);
 					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
 					cell.setCellValue((Float)entry.getValue().get("kaipiaoAmount"));
-					sheet.setColumnWidth(20, 15 * 256);
-					cell = row.createCell(21);
+					sheet.setColumnWidth(19, 15 * 256);
+					cell = row.createCell(20);
 					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 					cell.setCellValue((String)entry.getValue().get("getbillDate"));
-					sheet.setColumnWidth(21, 15 * 256);
+					sheet.setColumnWidth(20, 15 * 256);
 
+					cell = row.createCell(21);
+					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+					cell.setCellValue(((Float)entry.getValue().get("actureBilling")));
+					sheet.setColumnWidth(21, 15 * 256);
+					
 					cell = row.createCell(22);
 					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 					cell.setCellValue((String)entry.getValue().get("applyPayBillDate"));
 					sheet.setColumnWidth(22, 15 * 256);
+					
 					cell = row.createCell(23);
-					cell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
-					cell.setCellValue(((Float)entry.getValue().get("actureBilling")));
+					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
+					cell.setCellValue((String)entry.getValue().get("payTime"));
 					sheet.setColumnWidth(23, 15 * 256);
 					cell = row.createCell(24);
 					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
-					cell.setCellValue((String)entry.getValue().get("payTime"));
-					sheet.setColumnWidth(24, 15 * 256);
-					cell = row.createCell(25);
-					cell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 					cell.setCellValue((String)entry.getValue().get("statusName"));
-					sheet.setColumnWidth(25, 15 * 256);
+					sheet.setColumnWidth(24, 15 * 256);
 					i++;
 					j++;
 					if(k==delist.size()-1){
@@ -752,25 +754,32 @@ public class ExcelManager
 						hssCell.setCellStyle(mapStyle.get("BASE_STYLE"));
 						hssCell.setCellValue((String)entry.getValue().get("cpFullNam"));
 						
-						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,18,18));
-						hssCell=hssRow.getCell(18);
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,17,17));
+						hssCell=hssRow.getCell(17);
 						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
 						hssCell.setCellValue((Float)entry.getValue().get("preBilling"));
 						
-						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,19,19));
-						hssCell=hssRow.getCell(19);
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,18,18));
+						hssCell=hssRow.getCell(18);
 						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 						hssCell.setCellValue((String)entry.getValue().get("billingDate"));
 						
-						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,20,20));
-						hssCell=hssRow.getCell(20);
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,19,19));
+						hssCell=hssRow.getCell(19);
 						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
 						hssCell.setCellValue((Float)entry.getValue().get("kaipiaoAmount"));
 						
-						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,21,21));
-						hssCell=hssRow.getCell(21);
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,20,20));
+						hssCell=hssRow.getCell(20);
 						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 						hssCell.setCellValue((String)entry.getValue().get("getbillDate"));
+						
+						
+						
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,21,21));
+						hssCell=hssRow.getCell(21);
+						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
+						hssCell.setCellValue((Float)entry.getValue().get("actureBilling"));
 						
 						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,22,22));
 						hssCell=hssRow.getCell(22);
@@ -779,16 +788,11 @@ public class ExcelManager
 						
 						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,23,23));
 						hssCell=hssRow.getCell(23);
-						hssCell.setCellStyle(mapStyle.get("FORMAT_STYLE_TWO"));
-						hssCell.setCellValue((Float)entry.getValue().get("actureBilling"));
-						
-						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,24,24));
-						hssCell=hssRow.getCell(24);
 						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 						hssCell.setCellValue((String)entry.getValue().get("payTime"));
 						
-						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,25,25));
-						hssCell=hssRow.getCell(25);
+						sheet.addMergedRegion(new CellRangeAddress(lineRow,lineRow+k,24,24));
+						hssCell=hssRow.getCell(24);
 						hssCell.setCellStyle(mapStyle.get("BASE_STYLE_TWO"));
 						hssCell.setCellValue((String)entry.getValue().get("statusName"));
 						entryIndex+=1;

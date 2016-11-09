@@ -210,5 +210,45 @@ public class Menu1Dao
 				});
 		return list;
 	}
+	/**
+	 * 根据用户获取菜单
+	 * @param userId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Menu1Model> loadMenu1ListByUserId(int userId)
+	{
+		String sql="select * from tbl_menu_1 where id in (SELECT a.menu_1_id FROM daily_config.tbl_menu_2  a "  
+				+" LEFT JOIN  daily_config.tbl_menu_1  b ON a.menu_1_id=b.id"
+				+" LEFT JOIN daily_config.tbl_group_right c ON c.menu_2_id= a.id" 
+				+" left join daily_config.tbl_group_user d on c.group_id=d.group_id"
+				+" where d.user_id="+userId+")"
+				+" ORDER BY sort,id ASC";
+		
+		return (List<Menu1Model>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<Menu1Model> list = new ArrayList<Menu1Model>();
+				
+				Menu1Model model = null;
+				
+				while(rs.next())
+				{
+					model = new Menu1Model();
+					
+					model.setId(rs.getInt("id"));
+					model.setMenuHeadId(rs.getInt("head_id"));
+					model.setName(StringUtil.getString(rs.getString("name"),"MenuName"));
+					model.setRemark(StringUtil.getString(rs.getString("remark"),"DefaultRemark"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
 	
 }

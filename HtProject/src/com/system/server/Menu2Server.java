@@ -6,6 +6,7 @@ import java.util.Map;
 import com.system.cache.RightConfigCacheMgr;
 import com.system.dao.Menu2Dao;
 import com.system.model.Menu2Model;
+import com.system.model.UserMenuModel;
 
 public class Menu2Server
 {
@@ -59,6 +60,14 @@ public class Menu2Server
 	public Map<String, Object> loadMenu2(int menuHeadId,int menu1Id,int groupId,int pageIndex)
 	{
 		return new Menu2Dao().loadMenu2(menuHeadId, menu1Id,groupId, pageIndex);
+	}
+	/**
+	 * 根据用户的菜单
+	 * @param userId
+	 * @return
+	 */
+	public List<UserMenuModel> loadUserMenuByUserId(int userId){
+		return new  Menu2Dao().loadUserMenuByUserId(userId);
 	}
 	
 }

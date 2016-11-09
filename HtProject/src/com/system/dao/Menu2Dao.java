@@ -11,6 +11,7 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.Menu2Model;
+import com.system.model.UserMenuModel;
 import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
@@ -257,4 +258,78 @@ public class Menu2Dao
 		return map;
 	}
 	
+	/**
+	 * 根据用户的菜单
+	 * @param userId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<UserMenuModel>loadUserMenuByUserId(int userId)
+	{
+		String sql="SELECT a.id AS menu_2_id, a.name AS menu_2_name,a.menu_1_id,b.name AS menu_1_name,a.remark FROM daily_config.tbl_menu_2  a "
+				+" LEFT JOIN  daily_config.tbl_menu_1  b ON a.menu_1_id=b.id" 
+				+" LEFT JOIN daily_config.tbl_group_right c ON c.menu_2_id= a.id"  
+				+" WHERE c.group_id IN (SELECT group_id FROM daily_config.tbl_group_user d where d.user_id="+userId+")";
+		
+		return (List<UserMenuModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<UserMenuModel> list = new ArrayList<UserMenuModel>();
+				
+				UserMenuModel model = null;
+				
+				while(rs.next())
+				{
+					model = new UserMenuModel();
+					
+					model.setMenu_2_id(rs.getInt("menu_2_id"));
+					model.setMenu_2_name(StringUtil.getString(rs.getString("menu_2_name"), ""));
+					model.setMenu_1_id(rs.getInt("menu_1_id"));
+					model.setMenu_1_name(StringUtil.getString(rs.getString("menu_1_name"),""));
+					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+//	/**
+//	 * 根据用户的菜单
+//	 * @param userId
+//	 * @return
+//	 */
+//	@SuppressWarnings("unchecked")
+//	public List<UserMenuModel>loadUserMenuByUserId(int userId){
+//
+//		String sql="SELECT a.id AS menu_2_id, a.name AS menu_2_name,a.menu_1_id,b.name AS menu_1_name,a.remark FROM daily_config.tbl_menu_2  a "
+//					+" LEFT JOIN  daily_config.tbl_menu_1  b ON a.menu_1_id=b.id" 
+//					+" LEFT JOIN daily_config.tbl_group_right c ON c.menu_2_id= a.id"  
+//					+" WHERE c.group_id IN (SELECT group_id FROM daily_config.tbl_group_user d where d.user_id="+userId+")";
+//		
+//		return (List<UserMenuModel>)new JdbcControl().query(sql, new QueryCallBack()
+//		{
+//			@Override
+//			public Object onCallBack(ResultSet rs) throws SQLException
+//			{			
+//				List<UserMenuModel> list=new ArrayList<UserMenuModel>();
+//				if(rs.next())
+//				{
+//					UserMenuModel model = new UserMenuModel();
+//					model.setMenu_2_id(rs.getInt("menu_2_id"));
+//					model.setMenu_2_name(StringUtil.getString(rs.getString("menu_2_name"), ""));
+//					model.setMenu_1_id(rs.getInt("menu_1_id"));
+//					model.setMenu_1_name(StringUtil.getString(rs.getString("menu_1_name"),""));
+//					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
+//					list.add(model);
+//					
+//				}
+//				return list;
+//			}
+//		});
+//	
+//	}
 }	

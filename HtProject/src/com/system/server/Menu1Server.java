@@ -47,4 +47,13 @@ public class Menu1Server
 	{
 		return new Menu1Dao().loadMenu1NameById(id);
 	}
+	/**
+	 * 根据用户查询menu1
+	 * @param userId
+	 * @return
+	 */
+	public List<Menu1Model> loadMenu1ListByUserId(int userId)
+	{
+		return new Menu1Dao().loadMenu1ListByUserId(userId);
+	}
 }
