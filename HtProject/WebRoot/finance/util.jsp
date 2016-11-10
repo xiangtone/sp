@@ -46,7 +46,10 @@
 	String statusCpExp=StringUtil.getString(request.getParameter("cp_status_exp"), "");
 	int cpLoad=StringUtil.getInteger(request.getParameter("cp_load"), -1);
 	int cpIdExp=StringUtil.getInteger(request.getParameter("cp_id_exp"), -1);
-
+	
+	//CP运营账单批量导出
+	String cpbillingIds=StringUtil.getString(request.getParameter("cpbilling_ids"), "");
+	int exportZip=StringUtil.getInteger(request.getParameter("exprort_zip"), -1);
 
 	if(type==0){
 	SpBillingModel billingModel=new SpBillingServer().getSpBillingModel(id);
@@ -162,4 +165,30 @@
 		if(cpBillingType==1||cpBillingType==2||cpBillingType==3){    
 			new CpBillingServer().updateCpBillingModel(cpBillingId, cpBillingType, cpBillingStatus, cpdate,cpkaipiaoBilling);
 		}
+	if(exportZip==1){
+		response.setContentType("application/octet-stream;charset=utf-8");
+		String defultDate=StringUtil.getDefaultDate();
+		String fileName = "运营账单导出汇总.zip";
+		
+		if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
+		{
+			fileName = URLEncoder.encode(fileName, "UTF-8");
+		} 
+		else 
+		{
+			fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+		}
+
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+		SettleAccountServer accountServer = new SettleAccountServer();
+		
+		accountServer.exportSettleAccountBatchZip(2,cpbillingIds,response.getOutputStream());
+		
+		out.clear();
+		
+		out = pageContext.pushBody();
+		
+		return;
+	}
 %>

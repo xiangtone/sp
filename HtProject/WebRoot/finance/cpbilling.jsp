@@ -27,6 +27,7 @@
 	
 	int status = StringUtil.getInteger(request.getParameter("status"), -1);
 	
+	
 	//导出EXCEL数据
 	if(cpBillingId>0 && type ==1)
 	{
@@ -60,6 +61,40 @@
 		
 		return;
 	}
+	
+	//导出EXCEL ZIP数据
+		if(cpBillingId>0 && type ==2)
+		{
+			List<SettleAccountModel> list = server.exportExcelData(cpBillingId);
+			
+			CpBillingModel cpBillingModel = server.getCpBillingModel(cpBillingId);
+			
+			response.setContentType("application/octet-stream;charset=utf-8");
+			
+			String fileName = cpBillingModel.getCpName() + "(" + cpBillingModel.getStartDate() + "_" + cpBillingModel.getEndDate() + ").zip";
+			
+			if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
+			{
+				fileName = URLEncoder.encode(fileName, "UTF-8");
+			} 
+			else 
+			{
+				fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+			}
+
+			response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+			SettleAccountServer accountServer = new SettleAccountServer();
+			
+			accountServer.exportSettleAccountZip(2, cpBillingModel.getJsType(), cpBillingModel.getCpName(), cpBillingModel.getStartDate() , cpBillingModel.getEndDate(), list,
+					response.getOutputStream());
+			
+			out.clear();
+			
+			out = pageContext.pushBody();
+			
+			return;
+		}
 	//重新生成指定帐单的数据
 	else if(type==2 && cpBillingId > 0)
 	{
@@ -259,6 +294,35 @@
 		});
 		return result;
 	}
+	
+	
+	function exprortBatch()
+	{
+		var objs = document.getElementsByName("chk_data");
+		var ids = "";
+		for(i=0; i<objs.length; i++)
+		{
+			if(objs[i].checked==true)
+			{
+				ids += objs[i].id + ",";
+			}
+		}
+		var ids=ids.substring(0, ids.length-1);
+		if(ids==null||ids==""){
+			alert("请选择需要导出的账单！");
+			return;
+		}
+		window.location.href="util.jsp?cpbilling_ids=" + ids + "&exprort_zip=1";
+	
+	}
+	function resetCheckBox(data)
+	{
+		var objs = document.getElementsByName("chk_data");
+		for(i=0; i<objs.length; i++)
+		{
+			objs[i].checked = data;	
+		}
+	}
 </script>
 <style type="text/css">
 .ui-button-icon-only .ui-icon{left:0}
@@ -328,6 +392,9 @@
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查     询" type="submit" />
 					</dd>
+					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
+						<input class="btn_match" value="批量导出" type="button" onclick="exprortBatch()"  />
+					</dd>
 				</dl>
 			</form>
 		</div>
@@ -353,6 +420,7 @@
 					<td>创建时间</td>
 					<td>状态</td>
 					<td>操作</td>
+					<td>全选<input type="checkbox" onclick="resetCheckBox(this.checked)" /></td>
 				</tr>
 			</thead>
 			<tbody>
@@ -381,7 +449,9 @@
 						<a href="cpbillingdetail.jsp?query=<%= query %>&cpbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>
+						<a href="cpbilling.jsp?type=2&cpbillingid=<%= model.getId() %>">导出zip</a>
 					</td>
+					<td><input type="checkbox" id="<%= model.getId() %>" name="chk_data"></td>
 				</tr>
 				<%
 					}
