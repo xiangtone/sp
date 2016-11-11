@@ -309,6 +309,9 @@ public class SettleAccountServer
 			file.mkdirs();
 			//写入流
 			zipToOutstream(excelPath+time+"ZipDemo"+".zip",os);
+			//删除zip文件
+			ZipUtil.deleteExcelPath(new File(excelPath+time+"ZipDemo.zip"));
+
 	
 		}
 		
@@ -361,6 +364,9 @@ public class SettleAccountServer
 				file.mkdirs();
 				//写入流
 				zipToOutstream(excelPath+time+"ZipDemo.zip",os);
+		
+				ZipUtil.deleteExcelPath(new File(excelPath+time+"ZipDemo.zip"));
+
 			}
 		/**
 		 * 写入流
@@ -381,13 +387,17 @@ public class SettleAccountServer
 		            while ((byteread = inStream.read(buffer)) != -1) {  
 		                bytesum += byteread;  
 		                System.out.println(bytesum);  
-		                os.write(buffer, 0, byteread);  
+		                os.write(buffer, 0, byteread); 
+		               
 		            }  
+		            if(null!=inStream){
+		        		inStream.close();
+		        	}
 		        } catch (FileNotFoundException e) {  
 		            e.printStackTrace();  
 		        } catch (IOException e) {  
 		            e.printStackTrace();  
-		        }  
+		        }
 
 		}
 		/**
