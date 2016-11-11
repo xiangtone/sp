@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -299,14 +300,15 @@ public class SettleAccountServer
 			//创建excel文件
 			new ExcelManager().writeSettleAccountToExcelZip(dateTypeValue, date, channelName, list, filePath,excelPath,fileName);
 			//创建zip文件			
-			ZipUtil.craeteZipPath(excelPath, "ZipDemo");
+			String time=Calendar.getInstance().getTimeInMillis()+"";  
+			ZipUtil.craeteZipPath(excelPath, time+"ZipDemo");
 			//删除excel文件
 			File file=new File(excelPath);
 			ZipUtil.deleteExcelPath(file);
 			//重新创建文件夹
 			file.mkdirs();
 			//写入流
-			zipToOutstream(excelPath+"ZipDemo"+".zip",os);
+			zipToOutstream(excelPath+time+"ZipDemo"+".zip",os);
 	
 		}
 		
@@ -349,15 +351,16 @@ public class SettleAccountServer
 			
 //				
 				}
+				String time=Calendar.getInstance().getTimeInMillis()+"";  
 				//创建zip文件			
-				ZipUtil.craeteZipPath(excelPath, "ZipDemo");
+				ZipUtil.craeteZipPath(excelPath, time+"ZipDemo");
 //				删除excel文件
 				File file=new File(excelPath);
 				ZipUtil.deleteExcelPath(file);
 //				重新创建文件夹
 				file.mkdirs();
 				//写入流
-				zipToOutstream(excelPath+"ZipDemo.zip",os);
+				zipToOutstream(excelPath+time+"ZipDemo.zip",os);
 			}
 		/**
 		 * 写入流
