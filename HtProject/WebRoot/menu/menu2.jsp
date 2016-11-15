@@ -32,10 +32,16 @@
 	List<MenuHeadModel> menuHeadList = new MenuHeadServer().loadMenuHeadList();
 	
 	List<Menu1Model> menu1List = new Menu1Server().loadMenu1List();
+	Map<String, Object> map=null;
+	if(groupId==-1){
+		map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id, pageIndex);
+	}else{
+		map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id,groupId, pageIndex);
+	}
 
 //	Map<String, Object> map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id, pageIndex);
 	//增加角色查询字段
-	Map<String, Object> map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id,groupId, pageIndex);
+//	Map<String, Object> map =  new Menu2Server().loadMenu2(menuHeadId,menu1Id,groupId, pageIndex);
 		
 	List<Menu2Model> list = (List<Menu2Model>)map.get("list");
 	
