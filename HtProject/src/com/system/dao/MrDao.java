@@ -67,11 +67,11 @@ public class MrDao
 		sql += " from daily_log.tbl_mr_summer a";
 		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id ";
 		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
-		sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql += " left join daily_config.tbl_sp d on h.sp_id = d.id";
 		sql += " left join daily_config.tbl_cp e on b.cp_id = e.id ";
 		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
-		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
