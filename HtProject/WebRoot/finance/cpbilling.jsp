@@ -63,7 +63,7 @@
 	}
 	
 	//导出EXCEL ZIP数据
-		if(cpBillingId>0 && type ==2)
+		if(cpBillingId>0 && type ==100)
 		{
 			List<SettleAccountModel> list = server.exportExcelData(cpBillingId);
 			
@@ -449,7 +449,6 @@
 						<a href="cpbillingdetail.jsp?query=<%= query %>&cpbillingid=<%= model.getId() %>" >详细</a>
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>
-						<a href="cpbilling.jsp?type=2&cpbillingid=<%= model.getId() %>">导出zip</a>
 					</td>
 					<td><input type="checkbox" id="<%= model.getId() %>" name="chk_data"></td>
 				</tr>
