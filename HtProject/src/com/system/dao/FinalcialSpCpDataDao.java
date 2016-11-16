@@ -51,7 +51,10 @@ public class FinalcialSpCpDataDao
 		sql += " LEFT JOIN daily_config.tbl_sp_trone c ON b.`sp_trone_id` = c.`id`";
 		sql += " LEFT JOIN daily_config.tbl_sp d ON c.`sp_id` = d.`id`";
 		sql += " LEFT JOIN daily_config.tbl_cp f ON e.`cp_id` = f.`id`";
-		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON f.id = g.`cp_id` AND c.`id` = g.`sp_trone_id`";
+//		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON f.id = g.`cp_id` AND c.`id` = g.`sp_trone_id`";
+		
+		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON e.cp_jiesuanlv_id = g.id";
+		
 		sql += " WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "'" + query;
 		sql += " GROUP BY d.id,c.id,f.id ORDER BY CONVERT(d.`short_name` USING gbk),CONVERT(c.`name` USING gbk),CONVERT(f.`short_name` USING gbk) ASC";
 		sql += " ) b";
