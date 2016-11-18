@@ -356,7 +356,7 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<TroneOrderModel> loadTroneOrderListByCpSpTroneId(int cpId,int spTroneId,int status)
 	{
-		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price,d.status,d.name sp_trone_name,d.provinces  from daily_config.tbl_trone_order a "
+		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price,d.status,d.name sp_trone_name,d.provinces,d.ramark  from daily_config.tbl_trone_order a "
 				+ " left join daily_config.tbl_cp b on a.cp_id = b.id "
 				+ " left join daily_config.tbl_trone c on a.trone_id = c.id "
 				+ " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
@@ -405,6 +405,9 @@ public class TroneOrderDao
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setProvince(StringUtil.getString(rs.getString("provinces"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					
+					model.setRemark(StringUtil.getString(rs.getString("ramark"), ""));
+					
 					list.add(model);
 				}
 				

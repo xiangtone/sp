@@ -28,6 +28,8 @@ public class TroneOrderModel
 	
 	private int commerceUserId;
 	
+	private String remark;
+	
 	public float getPrice()
 	{
 		return price;
@@ -217,6 +219,14 @@ public class TroneOrderModel
 	}
 	public void setCommerceUserId(int commerceUserId) {
 		this.commerceUserId = commerceUserId;
+	}
+	public String getRemark()
+	{
+		return remark;
+	}
+	public void setRemark(String remark)
+	{
+		this.remark = remark;
 	}
 	
 	
