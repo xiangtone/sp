@@ -117,14 +117,14 @@
 		
 		$("#input_show_data_rows").val(intShowDataRows);
 		
-		if(isNaN(floatAmount) || floatAmount < 0)
+		if(isNaN(floatAmount))
 		{
 			alert("请输入正确的SP金额");
 			$("#input_amount").focus();
 			return;
 		}
 		
-		if(isNaN(floatShowAmount) || floatShowAmount < 0)
+		if(isNaN(floatShowAmount))
 		{
 			alert("请输入正确的CP金额");
 			$("#input_show_amount").focus();

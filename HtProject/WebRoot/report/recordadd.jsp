@@ -234,7 +234,7 @@
 			return;
 		}
 		
-		if (!isPositiveInteger($("#input_data_rows").val()))
+		if (!isInteger($("#input_data_rows").val()))
 		{
 			$("#input_data_rows").focus();
 			alert("请输入数据量");
@@ -247,13 +247,16 @@
 		showAmount = $("#input_show_amount").val();
 		feeDate = $("#input_fee_date").val();
 		
+		
+		var intDataRows = parseInt(dataRows);
+		
 		var intShowDataRows = parseInt(showDataRows);
 		
 		var floatAmount = parseFloat(amount);
 		
 		var floatShowAmount = parseFloat(showAmount);
 
-		if(isNaN(intShowDataRows) || intShowDataRows < 0)
+		if(isNaN(intShowDataRows))
 		{
 			alert("请输入正确的CP数据量");
 			$("#input_show_data_rows").focus();
@@ -262,14 +265,14 @@
 		
 		$("#input_show_data_rows").val(intShowDataRows);
 		
-		if(isNaN(floatAmount) || floatAmount < 0)
+		if(isNaN(floatAmount))
 		{
 			alert("请输入正确的SP金额");
 			$("#input_amount").focus();
 			return;
 		}
 		
-		if(isNaN(floatShowAmount) || floatShowAmount < 0)
+		if(isNaN(floatShowAmount))
 		{
 			alert("请输入正确的CP金额");
 			$("#input_show_amount").focus();
