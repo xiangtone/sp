@@ -31,19 +31,11 @@ public class jj82 : sdk_Request.Logical.APIRequestGet
             return null;
         }
         OrderInfo.spLinkId = jobj["tradeid"].Value<string>();
-        var jport2 = jobj["port2"];
-        if (jport2 != null)
-        {
-            var sms1 = new sdk_Request.Model.SP_2SMS_Result();
-            sms1.port = jobj["port1"].Value<string>();
-            sms1.msg = jobj["msg1"].Value<string>();
-            sms1.port2 = jobj["port2"].Value<string>();
-            sms1.msg2 = jobj["msg2"].Value<string>();
-            sms1.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
-            return sms1;
-        }
+
         var sms = new sdk_Request.Model.SP_SMS_Result();
+
         sms.port = jobj["smsport"].Value<string>();
+
         jval = jobj["smsmsg"];
         if (jval == null || string.IsNullOrEmpty(jval.ToString()))
         {

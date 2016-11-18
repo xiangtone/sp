@@ -19,7 +19,7 @@ public class jj40 : sdk_Request.Logical.APIRequestGet
                 + "&imsi=" + OrderInfo.imsi
                 + "&imei=" + OrderInfo.imei;
 
-        var html = GetHTML(url,1500,null);
+        var html = GetHTML(url,15000,null);
         if (string.IsNullOrEmpty(html))
         {
             SetError(sdk_Request.Logical.API_ERROR.GATEWAY_TIMEOUT);

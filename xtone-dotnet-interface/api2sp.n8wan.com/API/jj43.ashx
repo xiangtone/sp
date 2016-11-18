@@ -45,10 +45,10 @@ public class jj43 : sdk_Request.Logical.APIRequestGet
             return null;
         }
         var sms = new sdk_Request.Model.SP_SMS_Result();
-        OrderInfo.apiExdata = jobj["orderid"].Value<string>();
+        OrderInfo.spLinkId = jobj["orderid"].Value<string>();
         sms.port = jobj["smsport"].Value<string>();
-        sms.msg = jobj["sms"].Value<string>();
-        sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
+        sms.msg = System.Text.ASCIIEncoding.Default.GetString(Convert.FromBase64String(jobj["sms"].Value<string>()));
+        //sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
         return sms;
     }
 

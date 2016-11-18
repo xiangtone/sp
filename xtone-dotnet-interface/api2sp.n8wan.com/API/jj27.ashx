@@ -3,9 +3,7 @@
 using System;
 using System.Web;
 using Newtonsoft.Json.Linq;
-/// <summary>
-/// 瑶品_MM
-/// </summary>
+
 public class jj27 : sdk_Request.Logical.APIRequestGet
 {
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()

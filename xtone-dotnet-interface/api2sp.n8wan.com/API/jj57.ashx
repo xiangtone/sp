@@ -2,10 +2,12 @@
 
 using System;
 using System.Web;
-
+/// <summary>
+///RDO 基地对接代码
+/// </summary>
 public class jj57 : sdk_Request.Logical.APIRequestGet
 {
-    const string secKey = "youxue888";
+    //const string secKey = "youxue888";
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
         OrderInfo.spLinkId = string.Format("ht_{0:yyyyMMddss}_{1}", DateTime.Now, OrderInfo.id);
@@ -16,7 +18,9 @@ public class jj57 : sdk_Request.Logical.APIRequestGet
         PayModel.channelid = "J0540001";
         PayModel.paycode = "87000101";
          */
-
+        string[] ar = PayModel.channelid.Split(new char[] { ',' }, 2, StringSplitOptions.RemoveEmptyEntries);
+        string secKey = ar[1];
+        string channelid = ar[0];
 
         dic["mcpid"] = PayModel.appid;
         dic["feeCode"] = PayModel.paycode;
@@ -36,7 +40,7 @@ public class jj57 : sdk_Request.Logical.APIRequestGet
             + "&reqTime=" + dic["reqTime"]
             + "&sign=" + System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(s, "md5")
             + "&layout=9"
-            + "&cm=" + PayModel.channelid;
+            + "&cm=" + channelid;
 
         System.Xml.XmlDocument xml = new System.Xml.XmlDocument();
         var html = GetHTML(url);
@@ -55,12 +59,13 @@ public class jj57 : sdk_Request.Logical.APIRequestGet
         html = GetHTML(url);
         xml.LoadXml(html);
 
-        /*  if (el.InnerText != "200")
-          {
-              el = xml.SelectSingleNode("/Response/ResultMsg");
-              SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, el.InnerText);
-              return null;
-          }*/
+        el = xml.SelectSingleNode("/Response/ResultCode");
+        if (el.InnerText != "200")
+        {
+            el = xml.SelectSingleNode("/Response/ResultMsg");
+            SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, el.InnerText);
+            return null;
+        }
 
         el = null;
         el = xml.SelectSingleNode("/Response/Order/Submit0/ButtonTag/SubmitUrl");
@@ -77,10 +82,19 @@ public class jj57 : sdk_Request.Logical.APIRequestGet
         xml.LoadXml(html);
 
         var el = xml.SelectSingleNode("/Response/ResultCode");
-        if (el.InnerText != "200")
+        var jResultCode = el.InnerText;
+        if (jResultCode != "200")
         {
             el = xml.SelectSingleNode("/Response/ResultMsg");
-            SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, el.InnerText);
+            switch (jResultCode)
+            {
+                case "9998": SetError(sdk_Request.Logical.API_ERROR.VERIFY_CODE_ERROR, el.InnerText); break;
+                case "9997": SetError(sdk_Request.Logical.API_ERROR.BLACK_USER, el.InnerText); break;
+                case "90010": SetError(sdk_Request.Logical.API_ERROR.AREA_CLOSE, el.InnerText); break;
+                    default:
+                    SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, el.InnerText);
+                    return null;
+            }
             return null;
 
         }

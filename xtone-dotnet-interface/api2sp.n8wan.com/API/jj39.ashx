@@ -119,7 +119,4 @@ public class jj39 : sdk_Request.Logical.APIRequestGet
 
 
     }
-    
-     
-        
 }

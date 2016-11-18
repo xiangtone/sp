@@ -31,7 +31,6 @@ public class jj25 : sdk_Request.Logical.APIRequestGet
             var sms = new sdk_Request.Model.SP_SMS_Result();
             sms.port = jobj["smsport"].Value<string>();
             sms.msg = jobj["sms"].Value<string>();
-            sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
             return sms;
         }
         SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL);

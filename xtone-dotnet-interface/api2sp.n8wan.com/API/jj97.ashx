@@ -12,6 +12,14 @@ public class jj97 : sdk_Request.Logical.APIRequestGet
 {
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
+        if (string.IsNullOrEmpty(OrderInfo.packageName))
+        {
+            SetError((sdk_Request.Logical.API_ERROR)1008, "参数package不能为空");
+            /// return null;
+
+            OrderInfo.packageName = "游戏道具";
+        }
+        string[] package = OrderInfo.packageName.Split(new char[] { '|', ',' }, 2);
         string url = "http://pay.sdk.new.5isy.com/center/getCommand.ashx?partnerId=2031"
                 + "&appId=2112"
                 + "&channelId=3058"
@@ -25,6 +33,7 @@ public class jj97 : sdk_Request.Logical.APIRequestGet
                 + "&net_info=" + OrderInfo.netType
                 + "&extra="+OrderInfo.id
                 + "&timestamp=" + DateTime.Now.ToString("yyyyMMddHHmmss")
+                + "&proid=" + package[0]
                 + "&client_ip=" + OrderInfo.clientIp;
         var html = GetHTML(url, 10000, null);
         var jobj = JObject.Parse(html);

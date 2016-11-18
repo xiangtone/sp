@@ -14,6 +14,8 @@ public class jj51 : sdk_Request.Logical.APIRequestGet
         var fee = 0;
         switch (PayModel.paycode)
         {
+            case "151008145890": name = "增加5步"; fee = 200; break;
+            case "151208157493": name = "豪华金币大礼包"; fee = 1000; break;
             case "151208157494": name = "高级金币大礼包"; fee = 800; break;
             case "151208157495": name = "初级金币大礼包"; fee = 400; break;
             case "151208157496": name = "体力上限"; fee = 400; break;

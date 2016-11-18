@@ -64,34 +64,12 @@ public class jj48 : sdk_Request.Logical.APIRequestGet
                     SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL);
                     return null;
                 }
-        var jisBase64_1 = jobj["isBase64_1"];
-        var jisBase64_2 = jobj["isBase64_2"];
-        var jistype_1 = jobj["istype_1"];
-        var jistype_2 = jobj["istype_2"];
-        var sms = new sdk_Request.Model.SP_2SMS_Result();
-        if (jisBase64_1.Value<int>() == 0 || jisBase64_2.Value<int>() == 0) 
-        {
-            if (jistype_1.Value<int>() == 0)
-            {
-                sms.msg = jobj["sms1"].Value<string>();
-                sms.port = jobj["accessNo1"].Value<string>();
-                sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
-                sms.msg2 = jobj["sms2"].Value<string>();
-                sms.port2 = jobj["accessNo2"].Value<string>();
-            }
-            if (jistype_2.Value<int>() == 0)
-            {
-                sms.msg = jobj["sms1"].Value<string>();
-                sms.port = jobj["accessNo1"].Value<string>();
-                sms.msg2 = jobj["sms2"].Value<string>();
-                sms.port2 = jobj["accessNo2"].Value<string>();
-                sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
-            }
-        }
+                  var sms=new sdk_Request.Model.SP_2SMS_Result();
                   sms.msg = jobj["sms1"].Value<string>();
                   sms.port = jobj["accessNo1"].Value<string>();
                   sms.msg2 = jobj["sms2"].Value<string>();
                   sms.port2 = jobj["accessNo2"].Value<string>();
+        ////未判断是否base64解码
                   return sms;
 
         }

@@ -9,10 +9,16 @@ public class jj34 : sdk_Request.Logical.APIRequestGet
     {
         var url = "http://120.76.84.132/YiJian/recharge/index.php?";
         //var data = "tel=" + OrderInfo.mobile + "&consumecode=006086277001" + "&accountid=1234" + "&serverid=1";
-        var data = "tel="+OrderInfo.mobile+"&consumecode="+PayModel.paycode+"&accountid="+PayModel.appid+"&serverid=1";
+        var data = "tel=" + OrderInfo.mobile + "&consumecode=" + PayModel.paycode + "&accountid=" + PayModel.appid + "&serverid=1";
         var html = TPostHtml(url, data);
         if ("20000".Equals(html))
+        {
+            html = TPostHtml("http://120.76.84.132/YiJian/recharge/code.php", string.Empty);
+            var mc = System.Text.RegularExpressions.Regex.Match(html, "orderid=([0-9a-f]+)");
+            if (mc.Success)
+                OrderInfo.spLinkId = mc.Groups[1].Value;
             return new sdk_Request.Model.SP_RESULT();
+        }
         SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, html);
         return null;
     }
@@ -24,8 +30,12 @@ public class jj34 : sdk_Request.Logical.APIRequestGet
         var data = "code=" + OrderInfo.cpVerifyCode;
         var html = TPostHtml(url, data);
 
-        if ("20000".Equals(html))
+        if ("20000".Equals(html) || html.Contains("()ok"))
             return new sdk_Request.Model.SP_RESULT();
+
+        if ("200068".Equals(html))
+            SetError(sdk_Request.Logical.API_ERROR.VERIFY_CODE_ERROR, html);
+
         SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, html);
         return null;
     }
@@ -34,7 +44,8 @@ public class jj34 : sdk_Request.Logical.APIRequestGet
     string TPostHtml(string url, string data)
     {
         WriteLog(url);
-        WriteLog(data);
+        if (!string.IsNullOrEmpty(data))
+            WriteLog(data);
 
         var web = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
         web.Timeout = 5000;
@@ -48,7 +59,7 @@ public class jj34 : sdk_Request.Logical.APIRequestGet
         var bin = System.Text.ASCIIEncoding.UTF8.GetBytes(data);
         var st = new System.Diagnostics.Stopwatch();
         st.Start();
-        string html;
+        string html = null;
         try
         {
             using (var stm = web.GetRequestStream())
@@ -77,7 +88,7 @@ public class jj34 : sdk_Request.Logical.APIRequestGet
                     html = rd.ReadToEnd();
                     if (html.Length > 512)
                         html = html.Substring(0, 512) + "...";
-                    WriteLog(string.Format("+{0}ms ", st.ElapsedMilliseconds, html));
+                    WriteLog(string.Format("+{0}ms {1}", st.ElapsedMilliseconds, html));
 
                     var mc = System.Text.RegularExpressions.Regex.Match(html, "\"resultCode\":\"{0,1}(\\d+)");
                     if (mc.Success)
@@ -91,6 +102,6 @@ public class jj34 : sdk_Request.Logical.APIRequestGet
         {
             WriteLog(string.Format("+{0}ms {1}", st.ElapsedMilliseconds, ex.ToString()));
         }
-        return null;
+        return html;
     }
 }

@@ -3,9 +3,6 @@
 using System;
 using System.Web;
 using Newtonsoft.Json.Linq;
-/// <summary>
-///上海米馥 漫画
-/// </summary>
 
 public class jj24 : sdk_Request.Logical.APIRequestGet
 {

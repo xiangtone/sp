@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 /// <summary>
-///
+///深圳梦想国度---华录视频
 /// </summary>
 public class jj31 : sdk_Request.Logical.APIRequestGet
 {

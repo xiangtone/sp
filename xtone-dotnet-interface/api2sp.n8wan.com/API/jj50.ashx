@@ -47,7 +47,7 @@ public class jj50 : sdk_Request.Logical.APIRequestGet
 
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
-        OrderInfo.apiExdata = string.Format("2D_{0}", OrderInfo.id);
+        OrderInfo.apiExdata = string.Format("{0}{1}", PayModel.paycode, OrderInfo.id);
         var url = "http://123.59.165.142:18989/billPreTotalhold";
         var data = string.Format("channel={0}&flag={1}&imsi={2}&cpparam={3}", PayModel.channelid, PayModel.appid, OrderInfo.imsi, OrderInfo.apiExdata);
         //channel	String	否	10001
@@ -73,13 +73,13 @@ public class jj50 : sdk_Request.Logical.APIRequestGet
 
         var sms = new SP_SMS_2Feedback_Result();
         sms.port = rlt.loginport;
-        sms.msg = rlt.loginsms;// System.Text.ASCIIEncoding.UTF8.GetString(Convert.FromBase64String(rlt.loginsms));
+        sms.msg = System.Text.ASCIIEncoding.UTF8.GetString(Convert.FromBase64String(rlt.loginsms));
         sms.FeedBack = string.Format("{0}?id={1}&imsi={2}&sent=", rlt.loginreporturl, rlt.id, OrderInfo.imsi);
         sms.port2 = rlt.payport;
-        sms.msg2 = rlt.paysms;// System.Text.ASCIIEncoding.UTF8.GetString(Convert.FromBase64String(rlt.paysms));
+        sms.msg2 = System.Text.ASCIIEncoding.UTF8.GetString(Convert.FromBase64String(rlt.paysms));
         sms.FeedBack2 = string.Format("{0}?id={1}&imsi={2}&sent=", rlt.payreporturl, rlt.id, OrderInfo.imsi);
         sms.Interval = 5;
-        sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
+        //sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;
         OrderInfo.spLinkId = rlt.billid;
         return sms;
     }

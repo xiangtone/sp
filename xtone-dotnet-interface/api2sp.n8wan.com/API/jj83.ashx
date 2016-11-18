@@ -14,7 +14,7 @@ public class jj83 : sdk_Request.Logical.APIRequestGet
 {
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
-        string url = "http://test.hxbapi.vpclub.cn/MicroPayment/PayUrl?";
+        string url = "http://hxbapi.vpclub.cn/MicroPayment/PayUrl?";
 
         Dictionary<string, string> ptr = new Dictionary<string, string>();
         ptr["merchantid"] = PayModel.channelid;

@@ -11,7 +11,9 @@ public class jj86 : sdk_Request.Logical.APIRequestGet
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
 
-        var url = "http://p.ylmob.com:9030/rdoHttpPay?content=" + PayModel.paycode + PayModel.appid + PayModel.channelid + OrderInfo.id + "&mobile=" + OrderInfo.mobile + "&sepcNumber=" + OrderInfo.id;
+        OrderInfo.apiExdata = string.Format("0{0}{1}{2:000000000000}", PayModel.appid, PayModel.channelid, OrderInfo.id);
+
+        var url = "http://p.ylmob.com:9030/rdoHttpPay?content=" + PayModel.paycode + OrderInfo.apiExdata.Substring(1) + "&mobile=" + OrderInfo.mobile + "&sepcNumber=" + OrderInfo.id;
         var html = GetHTML(url, 15000, null);
         if (string.IsNullOrEmpty(html))
         {
@@ -38,12 +40,12 @@ public class jj86 : sdk_Request.Logical.APIRequestGet
             SetError(sdk_Request.Logical.API_ERROR.GET_CMD_FAIL, err);
             return null;
         }
-        OrderInfo.apiExdata = string.Format("0{0}{1}{3}{0}{1}{2}", PayModel.appid, PayModel.channelid, OrderInfo.id,"QA");
+        //OrderInfo.apiExdata = string.Format("0{0}{1}{3}{0}{1}{2}", PayModel.appid, PayModel.channelid, OrderInfo.id,"QA");
         return new sdk_Request.Model.SP_RESULT();
     }
     protected override sdk_Request.Model.SP_RESULT GetSpCmdStep2()
     {
-        var url = "http://p.ylmob.com:9030/rdoconfirm?" + "&content=" + PayModel.paycode + PayModel.appid + PayModel.channelid + OrderInfo.id + "&answer=" + OrderInfo.cpVerifyCode + "&mobile=" + OrderInfo.mobile;
+        var url = "http://p.ylmob.com:9030/rdoconfirm?" + "&content=" + PayModel.paycode + OrderInfo.apiExdata.Substring(1) + "&answer=" + OrderInfo.cpVerifyCode + "&mobile=" + OrderInfo.mobile;
         var html = GetHTML(url, 15000, null);
         if (string.IsNullOrEmpty(html))
         {
