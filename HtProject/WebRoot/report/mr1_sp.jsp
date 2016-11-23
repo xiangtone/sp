@@ -344,6 +344,8 @@ function arrayReverse(arr) {
 		<div class="content">
 			<form action="mr1_sp.jsp" method="get" style="margin-top: 10px">
 				<dl>
+				<input name="page_type" type="hidden" value="1"
+							>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
 						<input name="startdate" type="text" value="<%=startDate%>"
@@ -506,6 +508,10 @@ function arrayReverse(arr) {
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
+					</dd>
+					<dd class="dd01_me">
+						<a style="color: blue;"
+							href="mr_lr.jsp?<%=request.getQueryString()%>">查看利润</a>
 					</dd>
 				</dl>
 			</form>
