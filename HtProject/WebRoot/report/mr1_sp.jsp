@@ -511,7 +511,7 @@ function arrayReverse(arr) {
 					</dd>
 					<dd class="dd01_me">
 						<a style="color: blue;"
-							href="mr_lr.jsp?<%=request.getQueryString()%>">查看利润</a>
+							href="mr_lr_sp.jsp?<%=request.getQueryString()%>">查看利润</a>
 					</dd>
 				</dl>
 			</form>

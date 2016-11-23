@@ -57,7 +57,6 @@
 	
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
-	
 
 	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId+"",cpCommerceUserId+"",sortType);
 	
@@ -83,6 +82,7 @@
 	
 	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","SP商务","CP商务"};
 	
+	String[] pageReturn={"mr1.jsp","mr1_sp.jsp"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -286,7 +286,7 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="mr_lr.jsp"  method="get" style="margin-top: 10px">
+			<form action="mr_lr_sp.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
@@ -327,21 +327,6 @@
 							<option value="0">普通</option>
 							<option value="1">隔天</option>
 							<option value="2">IVR</option>
-						</select>
-					</dd>
-					<br /><br /><br />
-					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP" style="width: 110px;" onclick="namePicker(this,cpList,onCpDataSelect)">
-							<option value="-1">全部</option>
-							<%
-							for(CpModel cp : cpList)
-							{
-								%>
-							<option value="<%= cp.getId() %>"><%= cp.getShortName() %></option>	
-								<%
-							}
-							%>
 						</select>
 					</dd>
 					<!--  
@@ -385,6 +370,7 @@
 							<option value="2">电信</option>
 						</select>
 					</dd>
+					<div style="clear: both;"><br /></div>
 					<dd class="dd01_me">SP商务</dd>
 						<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
@@ -399,20 +385,7 @@
 							%>
 						</select>
 					</dd>
-					<dd class="dd01_me">CP商务</dd>
-						<dd class="dd04_me">
-						<select name="cp_commerce_user" id="sel_cp_commerce_user" style="width: 100px;">
-							<option value="-1">全部</option>
-							<%
-							for(UserModel commerceUser : cpCommerceUserList)
-							{
-								%>
-							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
-								<%
-							}
-							%>
-						</select>
-					</dd>
+					
 					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式" style="width: 110px;" >
@@ -436,7 +409,7 @@
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
-					<dd class="dd01_me"><a style="color:blue;" href="mr1.jsp?<%= request.getQueryString() %>">返回</a></dd>
+					<dd class="dd01_me"><a style="color:blue;" href="mr1_sp.jsp?<%= request.getQueryString() %>">返回</a></dd>
 					</dl>
 			</form>
 		</div>
