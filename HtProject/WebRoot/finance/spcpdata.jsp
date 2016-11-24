@@ -20,6 +20,8 @@
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
 	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(startDate, endDate,spId,cpId,dataType) : new ArrayList<FinancialSpCpDataShowModel>();
+	String lrjsp="<a style='color: blue;'href='mr_lr_spcp.jsp?startdate="+startDate+"&enddate="+endDate+"&sp_id="+spId+"&cp_id="+cpId+">查看利润</a>";
+//	<a style="color: blue;"href="mr_lr_spcp.jsp?<%=request.getQueryString()%>">查看利润</a>
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -69,7 +71,7 @@
 <body style="padding-top: 40px">
 	<div class="main_content">
 		<div class="content" style="position: fixed; left: 0px; right: 0px">
-			<form action="spcpdata.jsp" method="post" id="exportform">
+			<form action="spcpdata.jsp" method="get" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
 					<dd class="dd01_me">开始日期</dd>
@@ -120,8 +122,12 @@
 					</dd>
 					<dd class="dd00_me"></dd>
 					<dd class="dd00_me"></dd>
-					<dd class="ddbtn" style="margin-left: 10px;" />
-					<input type="button" value="查  询" onclick="subForm()">
+					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
+						<input class="btn_match" name="search" value="查 询" type="submit" />
+					</dd>
+					<dd class="dd01_me">
+						<a style="color: blue;"
+							href="mr_lr_spcp.jsp?<%=request.getQueryString()%>">查看利润</a>
 					</dd>
 				</dl>
 			</form>
