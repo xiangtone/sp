@@ -214,8 +214,8 @@
 					<td>SP业务</td>
 					<td>收入</td>
 					<td>CP</td>
-					<td>支出利润</td>
-					
+					<td>支出</td>
+					<td>利润</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -223,16 +223,35 @@
 					int index=1;
 					for(SpcpProfitModel model : list)
 					{
-					
-						out.println("<tr><td rowspan=\"" + model.spRowSpan + "\">" + index++ + "</td><td rowspan=\"" + model.spRowSpan + "\">" + model.spFullName + "</td>");
+						out.println("<tr><tr><td rowspan=\"" + model.spRowSpan + "\">" + index++ + "</td><td rowspan=\"" + model.spRowSpan + "\">" + model.spFullName + "</td>");
+						double lrcount=0;
 						for(SpcpProfitModel.SpTroneModel spTroneModel : model.list)
 						{
+							double lrAmount=spTroneModel.amount;
 							out.println("<td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.spTroneName + "</td>"+"<td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.amount + "</td>");
-							for(SpcpProfitModel.SpTroneModel.CpModelData cpModelData : spTroneModel.list)
+							for(int i=0;i<spTroneModel.list.size();i++)
 							{
-								out.println("<td>" + cpModelData.cpFullName + "</td><td>" + cpModelData.payAmount + "</td><tr>");
+								SpcpProfitModel.SpTroneModel.CpModelData cpModelData=spTroneModel.list.get(i);
+								if(i==spTroneModel.list.size()-1){
+									out.println("<td>" + cpModelData.cpFullName + "</td><td>" + cpModelData.payAmount + "</td>");
+
+								}else{
+									out.println("<td>" + cpModelData.cpFullName + "</td><td>" + cpModelData.payAmount + "</td></tr>");
+								}
+								lrAmount=lrAmount-cpModelData.payAmount;
 							}
+							int k=0;
+							if(spTroneModel.list.size()>1){
+								k=1;
+							}else{
+								k= spTroneModel.spTroneRowSpan;
+							}
+							out.println("<td text-align: center; rowspan=\"" + k + "\">" +StringUtil.getDecimalFormat(lrAmount)+ "</td></tr>");
+							lrcount=lrcount+lrAmount;
 						}
+						out.println(
+								"<tr style='background-color: #E0EEEE;'><td colspan='6' >利润合计</td><td>"
+										+ StringUtil.getDecimalFormat(lrcount) + "</td></tr>");
 					}
 				%>
 				</tbody>

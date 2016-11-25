@@ -252,6 +252,7 @@ public class FinalcialSpCpDataDao
 		sql+=" GROUP BY sp_trone_id,cp_id )b ON a.sp_trone_id = b.sp_trone_id";
 		sql+=" LEFT JOIN daily_config.tbl_cp c ON b.cp_id = c.id where 1=1 ";
 		sql+=query;
+		sql+=" order by sp_id";
 		
 		return (List<SpcpProfitModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
