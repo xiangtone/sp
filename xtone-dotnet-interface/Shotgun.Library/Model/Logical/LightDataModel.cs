@@ -79,7 +79,7 @@ namespace Shotgun.Model.Logical
             return dBase.SaveData(this);
         }
 
-        protected virtual void OnSaved(bool p) { }
+        protected virtual void OnSaved(bool isInsert) { }
 
         /// <summary>
         /// 存取字段值,字段值为null时返回default(type);存入null,会调用SetNull(key)

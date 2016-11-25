@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define TDEBUG
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace n8wan.Public.Logical
         protected void SetConfig(LightDataModel.tbl_trone_orderItem m)
         {
             _config = m;
-            _cp_push_url = LightDataModel.tbl_cp_push_urlItem.GetRowById(dBase, m.push_url_id);
+            _cp_push_url = LightDataModel.tbl_cp_push_urlItem.GetRowByIdWithCache(dBase, m.push_url_id);
             if (_trone == null || _trone.id != m.trone_id)
                 _trone = LightDataModel.tbl_troneItem.GetRowById(dBase, m.trone_id);
         }
@@ -113,8 +114,21 @@ namespace n8wan.Public.Logical
                 try
                 {
                     PushObject.SetHidden(dBase, _config);
-                    dBase.SaveData(_config);
+                    //if (holdCfg.hold_start > holdCfg.push_count //未达到起扣数
+                    //    || (holdCfg.hold_amount != 0 && holdCfg.hold_amount > holdCfg.amount)) //未达到最大同步金额
+                    //{
                     dBase.SaveData(_cp_push_url);
+                    dBase.SaveData(_config);
+                    //#if TDEBUG
+                    //                        WriteLog(-5, string.Format("updated,hold_start:{0},push_count:{1},hold_amount{2},amount:{3}",
+                    //                            holdCfg.hold_start, holdCfg.push_count, holdCfg.hold_amount, holdCfg.amount));
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        WriteLog(-5, "no update!");
+                    //#endif
+                    //                    }
+
                 }
                 catch (System.Data.Common.DbException ex)
                 {
@@ -133,14 +147,37 @@ namespace n8wan.Public.Logical
                 cpmr.syn_status = _cp_push_url.is_realtime ? 1 : 0;
 
                 dBase.SaveData(cpmr);
-                dBase.SaveData(_config);
-                dBase.SaveData(_cp_push_url);
+
+
+                if (holdCfg.hold_start > holdCfg.push_count //未达到起扣数
+                    || (holdCfg.hold_amount != 0 && holdCfg.hold_amount > holdCfg.amount)) //未达到最大同步金额
+                {
+                    dBase.SaveData(_cp_push_url);
+                    dBase.SaveData(_config);
+#if TDEBUG
+                    WriteLog(-5, string.Format("updated,hold_start:{0},push_count:{1},hold_amount{2},amount:{3}",
+                        holdCfg.hold_start, holdCfg.push_count, holdCfg.hold_amount, holdCfg.amount));
+                }
+                else
+                {
+                    WriteLog(-5, "no update!");
+#endif
+                }
+                var daily = cpmr.CopyToDailyCpMr(null);
+                try
+                {
+                    dBase.SaveData(daily);
+                }
+                catch { }
             }
             catch (System.Data.Common.DbException ex)
             {
                 WriteLog(-1, ex.Message);
                 return SetErrorMesage(ex.Message);
             }
+
+
+
             if (_cp_push_url.is_realtime)
                 SendQuery();
             return SetSuccess();
@@ -266,9 +303,9 @@ namespace n8wan.Public.Logical
             ptrs.Add("cpparam", PushObject.GetValue(Logical.EPushField.cpParam));
             ptrs.Add("provinceId", PushObject.GetValue(EPushField.province));
 
+            ptrs.Add("virtualMobile", GetVirtualMobile());
+
             string qs = UrlEncode(ptrs);
-
-
             string url;
             if (API_PushUrl.Contains('?'))
                 url = API_PushUrl + "&" + qs;
@@ -276,6 +313,11 @@ namespace n8wan.Public.Logical
                 url = API_PushUrl + "?" + qs;
 
             asyncSendData(url, null);
+        }
+
+        protected string GetVirtualMobile()
+        {
+            return CityToPhone.GetVirtualPhone(PushObject.GetValue(EPushField.Mobile), PushObject.province_id, PushObject.city_id);
         }
 
         protected void asyncSendData(string url, string postData)
@@ -296,10 +338,6 @@ namespace n8wan.Public.Logical
         private void SendData(object s)
         {
 
-#if DEBUG
-            var rnd = new Random();
-            System.Threading.Thread.Sleep(rnd.Next(1000) + 10000);
-#endif
             if (this._url == null || this._url.StartsWith("#"))
             {
 

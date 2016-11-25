@@ -49,12 +49,12 @@ namespace n8wan.Public.Logical
             if (_apiOrder == null)
                 return false;
 
-            var tOrder = tbl_trone_orderItem.GetQueries(dBase);
-            tOrder.Filter.AndFilters.Add(tbl_trone_orderItem.Fields.id, _apiOrder.trone_order_id);
-            tOrder.Filter.AndFilters.Add(tbl_trone_orderItem.Fields.disable, false);
-
-            var m = tOrder.GetRowByFilters();
-            if (m == null)
+            //var tOrder = tbl_trone_orderItem.GetQueries(dBase);
+            //tOrder.Filter.AndFilters.Add(tbl_trone_orderItem.Fields.id, _apiOrder.trone_order_id);
+            //tOrder.Filter.AndFilters.Add(tbl_trone_orderItem.Fields.disable, false);
+            //var m = tOrder.GetRowByFilters();
+            var m = tbl_trone_orderItem.GetRowByIdWithCache(dBase, _apiOrder.trone_order_id);
+            if (m == null || m.disable)
                 return false;
             this.CP_Id = m.cp_id;
             SetConfig(m);//找到对应的渠道上量(相当于执行 base.LoadCPAPI())
@@ -123,8 +123,16 @@ namespace n8wan.Public.Logical
             l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.api_id, _apiMatchAPI.id);
             l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.trone_id, Trone.id);
             l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.status, new int[] { 1011, 1013, 2023 });//一次成，2次成功，二次超时
+#if DEBUG
+            var t = l.GetRowByFilters();
+            System.Diagnostics.Debug.Write("查找API_Order:");
+            System.Diagnostics.Debug.Write(l.LastSqlExecute);
+            System.Diagnostics.Debug.WriteLine("IsFound:{0}", t != null);
 
+            return t;
+#else
             return l.GetRowByFilters();//查到订单号
+#endif
         }
 
         protected override void SendQuery()
@@ -149,6 +157,7 @@ namespace n8wan.Public.Logical
             ptrs.Add("provinceId", PushObject.GetValue(EPushField.province));
             ptrs.Add("paycode", _apiOrder.trone_order_id.ToString("100000"));
             ptrs.Add("ordernum", string.Format("{0:yyyyMM}{1}", _apiOrder.FirstDate, _apiOrder.id));
+            ptrs.Add("virtualMobile", base.GetVirtualMobile());
 
             string qs = UrlEncode(ptrs);
 

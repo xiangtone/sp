@@ -65,15 +65,16 @@
     <Compile Include="LightDataModel\tbl_cityItem.cs" />
     <Compile Include="LightDataModel\tbl_countryItem.cs" />
     <Compile Include="LightDataModel\tbl_cpItem.cs" />
+    <Compile Include="LightDataModel\tbl_cp_mr_dailyItem.cs" />
     <Compile Include="LightDataModel\tbl_cp_push_urlItem.cs" />
     <Compile Include="LightDataModel\tbl_cp_trone_rateItem.cs" />
     <Compile Include="LightDataModel\tbl_currencyItem.cs" />
     <Compile Include="LightDataModel\tbl_day_month_limitItem.cs" />
     <Compile Include="LightDataModel\tbl_groupItem.cs" />
     <Compile Include="LightDataModel\tbl_mobile_white_listItem.cs" />
+    <Compile Include="LightDataModel\tbl_mr_dailyItem.cs" />
     <Compile Include="LightDataModel\tbl_sp_troneItem.cs" />
     <Compile Include="LightDataModel\tbl_sp_trone_apiItem.cs" />
-    <Compile Include="LightDataModel\tbl_tmp_mrItem.cs" />
     <Compile Include="LightDataModel\tbl_trone_orderItem.cs" />
     <Compile Include="LightDataModel\tbl_trone_paycodeItem.cs" />
     <Compile Include="LightDataModel\tbl_zyl_detailItem.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="LightDataModel_manual\tbl_cpItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_mrItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_mrItem_plus.cs" />
+    <Compile Include="LightDataModel_manual\tbl_cp_mr_daily.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_push_urlItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_cp_trone_rateItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_day_month_limitItem_plus.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="LightDataModel\tbl_troneItem.cs" />
     <Compile Include="LightDataModel\tbl_userItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_mrItem_plus.cs" />
+    <Compile Include="LightDataModel_manual\tbl_mr_dailyItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_phone_locateItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_provinceItem.cs" />
     <Compile Include="LightDataModel_manual\tbl_request_logItem.cs" />
@@ -124,6 +127,7 @@
     <Compile Include="Logical\IHold_DataItem.cs" />
     <Compile Include="Logical\IPushModel.cs" />
     <Compile Include="Logical\ISMS_DataItem.cs" />
+    <Compile Include="Logical\CityToPhone.cs" />
     <Compile Include="Logical\XmlBaseSync.cs" />
     <Compile Include="Logical\JSonBaseSync.cs" />
     <Compile Include="Logical\MiGopBaseSync.cs" />

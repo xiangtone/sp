@@ -37,7 +37,8 @@ namespace n8wan.Public.Logical
         /// <summary>
         /// API订单号
         /// </summary>
-        ApiOrderId
+        ApiOrderId,
+        city
     }
 
     /// <summary>
@@ -75,6 +76,8 @@ namespace n8wan.Public.Logical
         int sp_trone_id { get; }
 
         int province_id { get; }
+
+        int city_id { get; }
 
     }
 }

@@ -336,6 +336,24 @@ namespace n8wan.Public.Logical
                 if (_MrItem.cp_id == 0 || _MrItem.cp_id == 34)
                     DoPush(trone);
             }
+
+
+            try
+            {
+                if (_MrItem != null)
+                {
+                    LightDataModel.tbl_mr_dailyItem daily = null;
+                    if (IsMo)
+                    {
+                        daily = LightDataModel.tbl_mr_dailyItem.GetVRDaily(dBase, _MrItem);
+                    }
+                    daily = _MrItem.CopyToDailyMr(daily);
+                    dBase.SaveData(daily);
+
+                }
+            }
+            catch { }
+
             WriteDebug(db3.PerformanceReport());
             WriteDebug("ALL done", true);
         }
@@ -1080,6 +1098,8 @@ namespace n8wan.Public.Logical
             {
                 int id = int.Parse(mc.Groups[1].Value);
                 api = LightDataModel.tbl_sp_api_urlItem.QueryById(dBase, id);
+                if (api.Disable)
+                    api = null;
                 //l.Filter.AndFilters.Add(LightDataModel.tbl_sp_api_urlItem.Fields.id, id);
             }
             else

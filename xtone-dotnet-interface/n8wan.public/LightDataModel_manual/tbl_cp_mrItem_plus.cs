@@ -20,6 +20,28 @@ namespace LightDataModel
             get { return FIX_TABLE_NAME; }
         }
 
+        public tbl_cp_mr_dailyItem CopyToDailyCpMr(tbl_cp_mr_dailyItem daily)
+        {
+            bool isNew = daily == null;
+            if (isNew)
+                daily = new tbl_cp_mr_dailyItem();
+            string[] fields = new string[] {
+                "imei"	,"imsi"	,"mobile"	,"mcc"	,"province_id"	,"city_id"	,"trone_order_id"	,"ori_trone"	,
+                "ori_order"	,"linkid"	,"cp_param"	,"service_code"	,"price"	,"ip"	,"syn_status"	,
+                "mr_table"	,"mr_id"	,"ivr_time"	,"trone_type"	,"mr_date"	,"create_date"	};
+
+            daily.IgnoreEquals = true;
+            foreach (var f in fields)
+            {
+                object t = this[f];
+                if (isNew && t == null)
+                    continue;
+                daily[f] = this[f];
+            }
+            if (isNew)
+                daily.cp_mr_id = this.id;
+            return daily;
+        }
 
         #region 静态方法
         /// <summary>

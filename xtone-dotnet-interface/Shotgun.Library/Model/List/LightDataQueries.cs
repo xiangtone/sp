@@ -521,6 +521,6 @@ namespace Shotgun.Model.List
         /// <summary>
         /// 需要执行跨库操时，需要设置
         /// </summary>
-        public virtual string Schema { get; protected set; }
+        public virtual string Schema { get; set; }
     }
 }

@@ -44,5 +44,8 @@ namespace sdk_Request.Model
         public WX_SMS_TYPE type2 { get; set; }
         [DataMember]
         public int interval { get; set; }
+        [IgnoreDataMember]
+        public new sdk_Request.Logical.E_SMS_TYPE SMSType { get; set; }
+
     }
 }

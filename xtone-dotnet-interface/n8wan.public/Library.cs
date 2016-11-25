@@ -35,138 +35,85 @@ namespace n8wan.Public
         public static string GetPhoneByImsi(string imsi)
         {
 
-            string h0;
-            string h1;
-            string h2;
-            string h3;
-            const string s56789 = "56789";
-            string strDigit;
+            if (imsi == null || imsi.Length < 10)
+                return string.Empty;
 
-            if (string.IsNullOrEmpty(imsi))
-            {
-                return "13800000000";
-            }
-
+            int pfxId;
+            string pfxNum = null, h0, h1, h2, h3;
             if (imsi.StartsWith("46000"))
             {
-                //
+                if (!int.TryParse(imsi.Substring(8, 1), out pfxId))
+                    return string.Empty;
+
+                h0 = imsi.Substring(9, 1);
                 h1 = imsi.Substring(5, 1);
                 h2 = imsi.Substring(6, 1);
                 h3 = imsi.Substring(7, 1);
-                var st = imsi.Substring(8, 1);
-                h0 = imsi.Substring(9, 1);
 
-                if (s56789.IndexOf(st, StringComparison.Ordinal) >= 0)
+                switch (pfxId)
                 {
-                    return "13" + st + "0" + h1 + h2 + h3;
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9: return "13" + pfxId.ToString() + "0" + h1 + h2 + h3;
                 }
-                else
-                {
-                    var tempint = (int.Parse(st) + 5);
-
-                    return "13" + tempint + h0 + h1 + h2 + h3;
-                }
+                return "13" + (pfxId + 5).ToString() + h0 + h1 + h2 + h3;
             }
-
 
             if (imsi.StartsWith("46002"))
             {
-                strDigit = imsi.Substring(5, 1);
+                if (!int.TryParse(imsi.Substring(5, 1), out pfxId))
+                    return string.Empty;
                 h0 = imsi.Substring(6, 1);
                 h1 = imsi.Substring(7, 1);
                 h2 = imsi.Substring(8, 1);
                 h3 = imsi.Substring(9, 1);
 
-                if (strDigit.Equals("0"))
+                switch (pfxId)
                 {
-                    return "134" + h0 + h1 + h2 + h3;
+                    case 0: pfxNum = "134"; break;
+                    case 1: pfxNum = "151"; break;
+                    case 2: pfxNum = "152"; break;
+                    case 3: pfxNum = "150"; break;
+                    case 4: pfxNum = "184"; break;
+                    case 5: pfxNum = "183"; break;
+                    case 6: pfxNum = "182"; break;
+                    case 7: pfxNum = "187"; break;
+                    case 8: pfxNum = "158"; break;
+                    case 9: pfxNum = "159"; break;
                 }
-                else if (strDigit.Equals("1"))
-                {
-                    return "151" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("2"))
-                {
-                    return "152" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("3"))
-                {
-                    return "150" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("5"))
-                {
-                    return "183" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("6"))
-                {
-                    return "182" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("7"))
-                {
-                    return "187" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("8"))
-                {
-                    return "158" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("9"))
-                {
-                    return "159" + h0 + h1 + h2 + h3;
-                }
-            }
-
-            if (imsi.StartsWith("46003"))
-            {
-                strDigit = imsi.Substring(5, 1);
-                h0 = imsi.Substring(6, 1);
-                h1 = imsi.Substring(7, 1);
-                h2 = imsi.Substring(8, 1);
-                h3 = imsi.Substring(9, 1);
-
-                if (!strDigit.Equals("0")) return "153" + h0 + h1 + h2 + h3;
-                if (h0 == "9" && h1 + h2 == "00")
-                {
-                    return "13301" + h3 + imsi.Substring(10, 1);
-                }
-                return "133" + h0 + h1 + h2 + h3;
-            }
-            if (imsi.StartsWith("46011"))
-            {
-                //strDigit = imsi.Substring(5, 1);
-                h0 = imsi.Substring(6, 1);
-                h1 = imsi.Substring(7, 1);
-                h2 = imsi.Substring(8, 1);
-                h3 = imsi.Substring(9, 1);
-                return "177" + h0 + h1 + h2 + h3;
+                return pfxNum + h0 + h1 + h2 + h3;
             }
 
             if (imsi.StartsWith("46007"))
             {
-                //
-                strDigit = imsi.Substring(5, 1);
+                if (!int.TryParse(imsi.Substring(5, 1), out pfxId))
+                    return string.Empty;
                 h0 = imsi.Substring(6, 1);
                 h1 = imsi.Substring(7, 1);
                 h2 = imsi.Substring(8, 1);
                 h3 = imsi.Substring(9, 1);
+                switch (pfxId)
+                {
+                    case 0: pfxNum = "170"; break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4: break;
+                    case 5: pfxNum = "178"; break;
+                    case 6: break;
+                    case 7: pfxNum = "157"; break;
+                    case 8: pfxNum = "188"; break;
+                    case 9: pfxNum = "147"; break;
+                }
 
-                if (strDigit.Equals("5"))
-                {
-                    return "178" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("7"))
-                {
-                    return "157" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("8"))
-                {
-                    return "188" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("9"))
-                {
-                    return "147" + h0 + h1 + h2 + h3;
-                }
+                if (pfxNum != null)
+                    return pfxNum + h0 + h1 + h2 + h3;
+
+                return string.Empty;
+
             }
-
 
             if (imsi.StartsWith("46001"))
             {
@@ -175,35 +122,29 @@ namespace n8wan.Public
                 h2 = imsi.Substring(6, 1);
                 h3 = imsi.Substring(7, 1);
                 h0 = imsi.Substring(8, 1);
-                strDigit = imsi.Substring(9, 1);	//for A
-                if (strDigit.Equals("0") || strDigit.Equals("1"))
+
+                if (!int.TryParse(imsi.Substring(9, 1), out pfxId))
+                    return string.Empty;
+
+                switch (pfxId)
                 {
-                    return "130" + h0 + h1 + h2 + h3;
+                    case 0:
+                    case 1: pfxNum = "130"; break;
+                    case 2: pfxNum = "132"; break;
+                    case 3: pfxNum = "156"; break;
+                    case 4: pfxNum = "155"; break;
+                    case 5: pfxNum = "185"; break;
+                    case 6: pfxNum = "186"; break;
+                    case 7: pfxNum = "145"; break;
+                    case 8: pfxNum = "170"; break;
+                    case 9: pfxNum = "131"; break;
                 }
-                else if (strDigit.Equals("9"))
-                {
-                    return "131" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("2"))
-                {
-                    return "132" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("3"))
-                {
-                    return "156" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("4"))
-                {
-                    return "155" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("6"))
-                {
-                    return "186" + h0 + h1 + h2 + h3;
-                }
-                else if (strDigit.Equals("7"))
-                {
-                    return "145" + h0 + h1 + h2 + h3;
-                }
+                return pfxNum + h0 + h1 + h2 + h3;
+            }
+
+            if (imsi.StartsWith("46003"))
+            { //电信IMSI段
+
             }
 
             return string.Empty;
@@ -218,7 +159,7 @@ namespace n8wan.Public
         /// <returns></returns>
         public static string DownloadHTML(string url, string postdata, int timeout, string encode)
         {
-            return DownloadHTML(url, postdata, timeout, encode, null,null);
+            return DownloadHTML(url, postdata, timeout, encode, null, null);
         }
 
         /// <summary>

@@ -82,26 +82,32 @@ namespace LightDataModel
             }
         }
 
-        public tbl_tmp_mrItem CopyToNewTmpMr()
+        /// <summary>
+        /// 复制自身到mr_daily中
+        /// </summary>
+        /// <param name="daily">为空时，返回新实体，否则将改变实体的值</param>
+        /// <returns></returns>
+        public tbl_mr_dailyItem CopyToDailyMr(tbl_mr_dailyItem daily)
         {
-            tbl_tmp_mrItem tmp = new tbl_tmp_mrItem();
-            tmp.imei = this.imei;
-            tmp.imsi = this.imsi;
-            tmp.mobile = this.mobile;
-            tmp.mcc = this.mcc;
-            tmp.province_id = this.province_id;
-            tmp.city_id = this.city_id;
-            tmp.ori_trone = this.ori_trone;
-            tmp.ori_order = this.ori_order;
-            tmp.linkid = this.linkid;
-            tmp.cp_param = this.cp_param;
-            tmp.service_code = this.service_code;
-            tmp.price = this.price;
-            tmp.ip = this.ip;
-            tmp.status = this.status;
-            tmp.mr_date = DateTime.Now;
-            tmp.create_date = DateTime.Now;
-            return tmp;
+            bool isNew = daily == null;
+            if (isNew)
+                daily = new tbl_mr_dailyItem();
+            string[] fields = new string[] {
+                    "imei","imsi","mobile","user_md10","mcc","province_id","city_id","sp_trone_id","trone_id",
+                    "trone_order_id","ori_trone","ori_order","linkid","cp_param","service_code","price","ip","status",
+                    "syn_flag","mo_table","mo_id","mr_date","create_date","IsMatch","sp_api_url_id","sp_id","cp_id",
+                    "ivr_time","trone_type","api_order_id" };
+            daily.IgnoreEquals = true;
+            foreach (var f in fields)
+            {
+                object t = this[f];
+                if (isNew && t == null)
+                    continue;
+                daily[f] = this[f];
+            }
+            if (isNew)
+                daily.mr_id = this.id;
+            return daily;
         }
 
         string ICPPushModel.GetValue(EPushField f)
@@ -118,6 +124,7 @@ namespace LightDataModel
                 case EPushField.Status: return this.status;
                 case EPushField.province: return this.province_id.ToString();
                 case EPushField.ApiOrderId: return this.api_order_id.ToString();
+                case EPushField.city: return this.city_id.ToString();
             }
             throw new NotImplementedException();
         }
