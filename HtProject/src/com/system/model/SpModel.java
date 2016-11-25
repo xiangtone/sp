@@ -16,6 +16,8 @@ public class SpModel
 	private String	phone;
 	private String	mail;
 	private String commerceUserName;
+	
+	private int status;
 
 	public String getQq()
 	{
@@ -146,5 +148,15 @@ public class SpModel
 	{
 		this.commerceUserName = commerceUserName;
 	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	
 
 }

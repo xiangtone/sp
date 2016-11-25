@@ -1,19 +1,29 @@
 package com.system.server;
 
+import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
+import com.system.model.ExportDetailModel;
 import com.system.dao.SpBillingDao;
 import com.system.dao.SpTroneRateDao;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
+import com.system.excel.ExcelManager;
 import com.system.model.SettleAccountModel;
+import com.system.model.SpBillExportModel;
 import com.system.model.SpBillingModel;
 import com.system.model.SpBillingSpTroneModel;
 import com.system.model.SpTroneRateModel;
+import com.system.util.ConfigManager;
 
 public class SpBillingServer
 {
@@ -98,9 +108,10 @@ public class SpBillingServer
 	{
 		String sql = "SELECT  SUM(amount) amount, ";
 		sql += " SUM(amount*rate) pre_billing, ";
-		sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount ";
+		//增加了 reduce_data_amount 和 reduce_money_amount 后就取消 reduce_type 及 reduce_amount 这两个参数的使用
+		//sql += " SUM(CASE reduce_type WHEN 0 THEN reduce_amount*rate  WHEN 1 THEN reduce_amount END) reduce_amount ";
+		sql += " SUM(amount*rate - ((amount - reduce_data_amount)*rate - reduce_money_amount)) reduce_amount ";
 		sql += " FROM daily_log.`tbl_sp_billing_sp_trone` WHERE sp_billing_id = " + spBillingId + " AND STATUS = 0; ";
-
 		
 		JdbcControl control = new JdbcControl();
 		float[] result = (float[])control.query(sql, new QueryCallBack()
@@ -149,6 +160,10 @@ public class SpBillingServer
 		return new SpBillingDao().recallSpBilling(spBillingId);
 	}
 	
+	public void updateSpBillingActurePay(int spBillingId,float money,String date)
+	{
+		new SpBillingDao().updateSpBillingActurePay(spBillingId, money,date);
+	}
 	public void updateSpBillingActurePay(int spBillingId,float money)
 	{
 		new SpBillingDao().updateSpBillingActurePay(spBillingId, money);
@@ -168,5 +183,140 @@ public class SpBillingServer
 	{
 		return new SpBillingDao().loadSpBilling(startDate, endDate, spId,jsType,userId,rightType,status,pageIndex);
 	}
+	
+	/**
+	 * 财务对结算审核更新状态和时间
+	 * @param id
+	 * @param type
+	 * @param status
+	 * @param date
+	 */
+	
+	public void updateSpBillingModel(int id,int type,int status,String date){
+		new SpBillingDao().updateSpBillingModel(id,type,status,date);
+		
+	}
+	/**
+	 * 导出账单数据
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsTypes
+	 * @param status
+	 * @return
+	 */
+	public List<SpBillExportModel> exportExcelData(String startDate,String endDate,int spId,String jsTypes,String status)
+	{
+		return new SpBillingDao().exportExcelData(startDate, endDate, spId, jsTypes, status);
+	} 
+	/**
+	 * 导出账单数据
+	 * @param channelType
+	 * @param dateType
+	 * @param channelName
+	 * @param startDate
+	 * @param endDate
+	 * @param list
+	 * @param os
+	 */
+	public void exportSettleAccount(String startDate,String endDate,List<SpBillExportModel> list,OutputStream os)
+	{
+		String date = getDateFormat(startDate,endDate);
+		String filePath =ConfigManager.getConfigData("EXCEL_DEMO")+"Finalce-SP-Demo.xls";
+		Map<Integer,Map<String,Object>> map=exportDataHandle(list);
+		new ExcelManager().writeBillDataToExcel(date, map, filePath, os);
+	}
+	private String getDateFormat(String startDate,String endDate)
+	{
+		String date = startDate + ":" + endDate;
+		try
+		{
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+			return sdf2.format(sdf1.parse(startDate)) + "-" + sdf2.format(sdf1.parse(endDate));
+		}
+		catch(Exception ex)
+		{
+			
+		}
+		return date;
+	}
+	@SuppressWarnings("unchecked")
+	public Map<Integer,Map<String,Object>>exportDataHandle(List<SpBillExportModel> list){
+		//Map<Integer,Map<String,Object>> maps=new HashMap<Integer, Map<String,Object>>(); 
+		LinkedHashMap<Integer,Map<String,Object>> maps=new LinkedHashMap<Integer, Map<String,Object>>();
+		List<ExportDetailModel> tempList=null;
+		Map<String,Object> tempMap=null;
+		float preBilling=0;
+		float kaipiaoAmount=0; 
+		for(SpBillExportModel billExportModel:list){
+			if(maps.containsKey(billExportModel.getBillId())){
+				tempMap=maps.get(billExportModel.getBillId());
+				tempList=(List<ExportDetailModel>)tempMap.get("list");
+				//票帐金额和开票金额
+				preBilling=Float.parseFloat((String)tempMap.get("preBilling"));
+				kaipiaoAmount=Float.parseFloat((String)tempMap.get("kaipiaoAmount"));
+				ExportDetailModel detailModel=new ExportDetailModel();
+				detailModel.setProductName(billExportModel.getProductName());
+				detailModel.setSpTroneName(billExportModel.getSpTroneName());
+				detailModel.setRate(billExportModel.getRate());
+				detailModel.setAmount(billExportModel.getAmount());
+				detailModel.setActureAmount(billExportModel.getActureAmount());
+				detailModel.setReduceAmount(billExportModel.getReduceAmount());
+				detailModel.setReduceType(billExportModel.getReduceType());
+				
+				//Add By Andy 2016.10.27
+				detailModel.setReduceDataAmount(billExportModel.getReduceDataAmount());
+				detailModel.setReduceMoneyAmount(billExportModel.getReduceMoneyAmount());
+				
+				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
+				preBilling+=Float.parseFloat(billExportModel.getActureAmount());
+				kaipiaoAmount+=Float.parseFloat(billExportModel.getActureAmount());
+				tempList.add(detailModel);
+				tempMap.put("list", tempList);
+				tempMap.put("preBilling", preBilling+"");
+				tempMap.put("kaipiaoAmount", kaipiaoAmount+"");
+				maps.put(billExportModel.getBillId(), tempMap);
+			}else{
+				Map<String,Object> map=new HashMap<String, Object>();
+				map.put("billMonth",billExportModel.getBillMonth());
+				map.put("jsName",billExportModel.getJsName());
+				map.put("startDate", billExportModel.getStartDate());
+				map.put("endDate", billExportModel.getEndDate());
+				map.put("nickName", billExportModel.getNickName());
+				map.put("spFullNam", billExportModel.getSpFullNam());
+				List<ExportDetailModel> delist=new ArrayList<ExportDetailModel>();
+				ExportDetailModel detailModel=new ExportDetailModel();
+				detailModel.setProductName(billExportModel.getProductName());
+				detailModel.setSpTroneName(billExportModel.getSpTroneName());
+				detailModel.setRate(billExportModel.getRate());
+				detailModel.setAmount(billExportModel.getAmount());
+				detailModel.setActureAmount(billExportModel.getActureAmount());
+				detailModel.setReduceAmount(billExportModel.getReduceAmount());
+				detailModel.setReduceType(billExportModel.getReduceType());
+				
+				//Add By Andy 2016.10.27
+				detailModel.setReduceDataAmount(billExportModel.getReduceDataAmount());
+				detailModel.setReduceMoneyAmount(billExportModel.getReduceMoneyAmount());
+				
+				detailModel.setSpTroneBillAmount(billExportModel.getSpTroneBillAmount());
+				delist.add(detailModel);
+				map.put("list", delist);
+				map.put("preBilling", billExportModel.getActureAmount());
+				map.put("billingDate", billExportModel.getBillingDate());
+				map.put("kaipiaoAmount", billExportModel.getActureAmount());
+				map.put("applyKaipiaoDate", billExportModel.getApplyKaipiaoDate());
+				map.put("kaipiaoDate", billExportModel.getKaipiaoDate());
+				map.put("payTime", billExportModel.getPayTime());
+				map.put("actureBilling", billExportModel.getActureBilling());
+				map.put("status", billExportModel.getStatus());
+				map.put("statusName", billExportModel.getStatusName());
+				maps.put(billExportModel.getBillId(), map);
+			}
+		}
+		return maps;
+	}
+	
+	
 	
 }

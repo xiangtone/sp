@@ -2,6 +2,7 @@ package com.system.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.system.model.CpBillingTroneOrderDetailModel;
 import com.system.model.SettleAccountModel;
 import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
+import com.system.model.CpBillExportModel;
 
 public class CpBillingDao
 {
@@ -209,7 +211,7 @@ public class CpBillingDao
 	 */
 	public CpBillingModel getCpBillingModel(int id)
 	{
-		String sql = "SELECT a.create_date,a.id,a.amount,a.`cp_id`,b.`short_name` cp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status";
+		String sql = "SELECT a.create_date,a.id,a.amount,a.`cp_id`,b.`short_name` cp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status,a.start_bill_date,a.get_bill_date,a.apply_pay_bill_date, a.pay_time ";
 		sql += " FROM daily_config.`tbl_cp_billing` a";
 		sql += " LEFT JOIN daily_config.`tbl_cp` b ON a.`cp_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
@@ -238,6 +240,14 @@ public class CpBillingDao
 					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
 					model.setAmount(rs.getFloat("amount"));
+					//新增三个账单时间
+					model.setStartBillDate(StringUtil.getString(rs.getString("start_bill_date"), ""));
+					model.setGetBillDate(StringUtil.getString(rs.getString("get_bill_date"), ""));
+					model.setApplyPayBillDate(StringUtil.getString(rs.getString("apply_pay_bill_date"), ""));
+					
+					model.setPayTime(StringUtil.getString(rs.getString("pay_time"), ""));
+
+
 					
 					return model;
 				}
@@ -373,6 +383,8 @@ public class CpBillingDao
 							model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 							model.setCreateDate(StringUtil.getString(rs.getString("create_date"), ""));
 							model.setAmount(rs.getFloat("amount"));
+							//增加开票金额
+							model.setKaipiaoBilling(rs.getFloat("kaipiao_billing"));
 							
 							list.add(model);
 						}
@@ -450,6 +462,12 @@ public class CpBillingDao
 		String sql = "UPDATE daily_config.`tbl_cp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + cpBillingId;
 		new JdbcControl().execute(sql);
 	}
+	//完成对账是更新对账时间
+	public void updateCpBillingActurePay(int cpBillingId,float money,String date)
+	{
+		String sql = "UPDATE daily_config.`tbl_cp_billing` SET acture_billing = " + money + ",pay_time ='"+date+"',status = 6 WHERE id = " + cpBillingId;
+		new JdbcControl().execute(sql);
+	}
 	
 	/**
 	 * 增加CP帐单下面业务汇总数据
@@ -489,7 +507,128 @@ public class CpBillingDao
 		
 		new JdbcControl().execute(sql);
 	}
+	public void updateCpBillingModel(int id,int type,int status,String date,float kaipiaoMoney){
+		String replaceStr="";
+		if(type==1){
+			replaceStr="start_bill_date='"+date+"'";
+		}
+		if(type==2){
+			replaceStr="get_bill_date='"+date+"',kaipiao_billing="+kaipiaoMoney;
+		}
+		if(type==3){
+			replaceStr="apply_pay_bill_date='"+date+"'";
+		}
+		String sql="UPDATE daily_config.`tbl_cp_billing` SET "+replaceStr+",status ="+status+"  WHERE id ="+id;
+		new JdbcControl().execute(sql);
+
+	}
 	
-	
-	
+	/**
+	 * 导出的CP账单数据
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param jsTypes
+	 * @param status
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CpBillExportModel> exportExcelData(String startDate,String endDate,int cpId,String jsTypes,String status)
+	{	
+		String startDateStr="";
+		String endDateStr="";
+		if(!StringUtil.isNullOrEmpty(startDate)){
+			 startDateStr="AND start_date >= '"+startDate+"'";
+		}
+		if(!StringUtil.isNullOrEmpty(endDate)){
+			endDateStr=" AND end_date<= '"+endDate+"'";
+		}
+		String sql="SELECT b.id AS bill_id ,a.id detail_id,DATE_FORMAT(b.start_date,'%Y%m') AS bill_month,i.`name`,"+
+					" b.`start_date`,b.`end_date`,e.`nick_name`,c.`full_name`,CONCAT(h.name_cn,'-',g.name) product_name,"+
+					" d.`name` sp_trone_name,a.`amount`,a.rate,a.amount*a.rate sp_trone_billing_amount,a.reduce_amount,"+
+					" a.reduce_type,CASE WHEN a.reduce_type = 0 THEN (a.amount - a.reduce_amount)*rate ELSE a.amount*rate - a.reduce_amount END sp_trone_billing_acture_amount,"+
+					" b.pre_billing,b.start_bill_date,b.kaipiao_billing kaipiao_amount,b.get_bill_date,b.apply_pay_bill_date,b.pay_time,"+
+					" b.acture_billing,b.status "+
+					" FROM (SELECT * FROM daily_log.`tbl_cp_billing_sp_trone` WHERE 1=1 "+startDateStr+endDateStr+") a"+
+					" LEFT JOIN daily_config.tbl_cp_billing b ON a.`cp_billing_id` = b.`id`"+
+					" LEFT JOIN daily_config.`tbl_cp` c ON b.cp_id = c.id"+
+					" LEFT JOIN daily_config.`tbl_sp_trone` d ON a.`sp_trone_id` = d.id"+
+					" LEFT JOIN daily_config.`tbl_user` e ON c.`commerce_user_id` = e.`id`"+
+					" LEFT JOIN daily_config.`tbl_product_2` f ON d.`product_id` = f.`id`"+
+					" LEFT JOIN daily_config.`tbl_product_1` g ON f.`product_1_id` = g.`id`"+
+					" LEFT JOIN daily_config.`tbl_operator` h ON g.`operator_id` = h.`id`"+
+					" LEFT JOIN daily_config.`tbl_js_type` i ON b.`js_type` = i.`type_id` WHERE 1=1";
+
+		if(!StringUtil.isNullOrEmpty(status)){
+			sql+=" AND b.status IN ("+status+")";
+		}
+		if(!StringUtil.isNullOrEmpty(jsTypes)){
+			sql+=" AND i.type_id IN ("+jsTypes+")";
+		}
+		if(cpId>=0){
+			sql+=" AND c.id="+cpId;
+			
+		}
+		sql+=" ORDER BY bill_month,i.`name`,start_date,e.`nick_name`,c.full_name,product_name,sp_trone_name";
+		return (List<CpBillExportModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<CpBillExportModel> list = new ArrayList<CpBillExportModel>();
+				CpBillExportModel model = null;
+		        DecimalFormat df2 = new DecimalFormat("0.000");  
+				while(rs.next())
+				{
+		
+					model = new CpBillExportModel();
+					model.setBillId(rs.getInt("bill_id"));
+					model.setDetailId(rs.getInt("detail_id"));
+					model.setBillMonth(StringUtil.getString(rs.getString("bill_month"), ""));
+					model.setJsName(StringUtil.getString(rs.getString("name"), ""));
+					model.setStartDate(StringUtil.getString(rs.getString("start_date"), ""));
+					model.setEndDate(StringUtil.getString(rs.getString("end_date"), ""));
+					model.setNickName(StringUtil.getString(rs.getString("nick_name"), ""));
+					model.setCpFullNam(StringUtil.getString(rs.getString("full_name"), ""));
+					model.setProductName(StringUtil.getString(rs.getString("product_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+					model.setAmount(rs.getFloat("amount"));
+					model.setRate(Float.parseFloat(df2.format(rs.getFloat("rate"))));
+					model.setSpTroneBillAmount(rs.getFloat("sp_trone_billing_amount"));
+					model.setReduceAmount(rs.getFloat("reduce_amount"));
+					model.setReduceType(rs.getInt("reduce_type"));
+					model.setActureAmount(rs.getFloat("sp_trone_billing_acture_amount"));
+					model.setPreBilling(rs.getFloat("pre_billing"));
+					model.setBillingDate(StringUtil.getString(rs.getString("start_bill_date"), ""));
+					model.setKaipiaoAmount(rs.getFloat("kaipiao_amount"));
+					model.setGetbillDate(StringUtil.getString(rs.getString("get_bill_date"), ""));
+					model.setApplyPayBillDate(StringUtil.getString(rs.getString("apply_pay_bill_date"), ""));
+					model.setPayTime(StringUtil.getString(rs.getString("pay_time"), ""));
+					model.setActureBilling(rs.getFloat("acture_billing"));
+
+					model.setStatus(rs.getInt("status"));
+					model.setStatusName(getStatusNameByStatu(rs.getInt("status")));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	public String getStatusNameByStatu(int status){
+		String msg="";
+		switch (status) {
+		case 0:
+			msg="发起"; break;
+		case 1: msg="运营审核"; break;
+		case 2: msg="CP审核"; break;
+		case 3: msg="发起帐单"; break;
+		case 4: msg="收到票据"; break;
+		case 5: msg="申请付款"; break;
+		case 6: msg="已付款" ; break;
+		default:
+			break;
+		}
+		return msg;
+	}
 }

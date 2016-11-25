@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.system.dao.GroupDao;
 import com.system.model.GroupModel;
+import com.system.model.UserModel;
 
 public class GroupServer
 {
@@ -54,5 +55,15 @@ public class GroupServer
 		dao.delGroupRightById(groupId);
 		if(right!=null && !right.isEmpty())
 			dao.addGroupRight(groupId, right);
+	}
+	public List<UserModel> loadGroupUsersById(int id){
+		return new GroupDao().loadGroupUsersById(id);
+	} 
+	public void updateGroupUser(int groupId,List<Integer> userId)
+	{
+		GroupDao dao = new GroupDao();
+		dao.delGroupUserById(groupId);
+		if(userId!=null && !userId.isEmpty())
+			dao.addGroupUser(groupId, userId);
 	}
 }

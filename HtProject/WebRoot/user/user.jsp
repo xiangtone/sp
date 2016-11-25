@@ -143,6 +143,7 @@
 						<a href="useredit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a>
 						<a href="#" onclick="delUser(<%= model.getId() %>)">删除</a>
 						<a href="usergroup.jsp?query=<%= query %>&id=<%= model.getId() %>">角色分配</a>
+						<a href="usermenu.jsp?query=<%= query %>&id=<%= model.getId() %>">用户菜单</a>
 					</td>
 				</tr>
 				<%

@@ -68,8 +68,18 @@ public class RecordDao
 		model.setId(new JdbcControl().insertWithGenKey(sql, params));
 	}
 	
+	
 	public void updateRecord(ApiOrderModel model)
 	{
+		
+		if(!StringUtil.isNullOrEmpty(model.getMsg()))
+		{
+			if(model.getMsg().length()>=200)
+			{
+				model.setMsg(model.getMsg().substring(0, 200));
+			}
+		}
+		
 		String sql = "update daily_log.tbl_api_order_" + StringUtil.getMonthFormat() + " set sp_linkid = ? ,sp_exField = ?,cp_verifyCode = ?,port = ?,"
 				+ "msg=?,api_exdata=?,status=?,is_hidden=? where id = ?";
 		
@@ -90,13 +100,15 @@ public class RecordDao
 	
 	public void updateVeryCode(ApiOrderModel model,String tableName)
 	{
-		String sql = "update daily_log.tbl_api_order_" + tableName + " set cp_verifyCode = ?,SecondDate = now(), status = ?  where id = ? ";
+		String sql = "update daily_log.tbl_api_order_" + tableName + " set cp_verifyCode = ?,SecondDate = now(), status = ? , sp_linkid = ? , api_exdata  = ?  where id = ? ";
 		
 		Map<Integer,Object> params = new HashMap<Integer, Object>();
 		
 		params.put(1,model.getCpVerifyCode());
 		params.put(2, model.getStatus());
-		params.put(3, model.getId());
+		params.put(3, model.getSpLinkId());
+		params.put(4, model.getApiExdata());
+		params.put(5, model.getId());
 		
 		new JdbcControl().execute(sql, params);
 	}
@@ -151,6 +163,6 @@ public class RecordDao
 	
 	public static void main(String[] args)
 	{
-		System.out.println(StringUtil.getMonthFormat());
+		System.out.println("1234567".substring(0, 6));
 	}
 }

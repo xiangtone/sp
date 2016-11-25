@@ -30,7 +30,10 @@
 	{
 		int cpBillingId = StringUtil.getInteger(request.getParameter("id"), -1);
 		float actureBilling = StringUtil.getFloat(request.getParameter("money"), 0.0F);
-		new CpBillingServer().updateCpBillingActurePay(cpBillingId, actureBilling);
+		
+		//增加付款时间
+		String cpBillDate=StringUtil.getString(request.getParameter("cpdate"), "");
+		new CpBillingServer().updateCpBillingActurePay(cpBillingId, actureBilling,cpBillDate);
 		out.println("OK," + cpBillingId);
 		return;
 	}
@@ -56,7 +59,9 @@
 	{
 		int spBillingId = StringUtil.getInteger(request.getParameter("id"), -1);
 		float actureBilling = StringUtil.getFloat(request.getParameter("money"), 0.0F);
-		new SpBillingServer().updateSpBillingActurePay(spBillingId, actureBilling);
+		String date = StringUtil.getString(request.getParameter("date"),"");
+
+		new SpBillingServer().updateSpBillingActurePay(spBillingId, actureBilling,date);
 		out.println("OK," + spBillingId);
 		return;
 	}

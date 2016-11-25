@@ -432,6 +432,27 @@ public class StringUtil
     	
     	return result;
     }
+    /**
+     * 获取前月第一天
+     * @return
+     */
+    public static String getLastMonthFirstDay(){
+    	Calendar   cal_1=Calendar.getInstance();//获取当前日期 
+        cal_1.add(Calendar.MONTH, -1);
+        cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
+        return sdf1.format(cal_1.getTime());
+    	
+    }
+    /**
+     * 获取前月最后一天
+     * @return
+     */
+    public static String getLastMonthEndDay(){
+    	Calendar cale = Calendar.getInstance();   
+        cale.set(Calendar.DAY_OF_MONTH,0);//设置为1号,当前日期既为本月第一天 
+        return sdf1.format(cale.getTime());
+    	
+    }
 	
 	public static void main(String[] args)
 	{

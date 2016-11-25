@@ -378,20 +378,7 @@ function arrayReverse(arr) {
 				</dl>
 				<br /><br /><br />
 				<dl>
-					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP" onclick="namePicker(this,cpList,onCpDataSelect)">
-							<option value="-1">全部</option>
-							<%
-							for(CpModel cp : cpList)
-							{
-								%>
-							<option value="<%= cp.getId() %>"><%= cp.getShortName() %></option>	
-								<%
-							}
-							%>
-						</select>
-					</dd>
+				
 					<!--
 					<dd>
 						<dd class="dd01_me">CP业务</dd>

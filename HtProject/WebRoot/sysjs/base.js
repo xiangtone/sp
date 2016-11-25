@@ -90,6 +90,14 @@ function getAjaxValue(url,onSuccess)
 	}); 
 }
 
+function isInteger(value)
+{
+	 if((/^(\+|-)?\d+$/.test(value)))
+		 return true;
+	 
+	 return false;
+}
+
 function isPositiveInteger(value)
 {
 	 if((/^(\+|-)?\d+$/.test(value)) && value>=0 )

@@ -10,7 +10,7 @@
 	request.setCharacterEncoding("utf-8");
 	int type = StringUtil.getInteger(request.getParameter("type"), -1);
 	int id = StringUtil.getInteger(request.getParameter("id"), -1);
-	
+
 	if(type==1)
 	{
 		String[] rights = request.getParameterValues("menu2id");
@@ -27,6 +27,20 @@
 		response.sendRedirect("groupright.jsp?msg=1&id=" + id);
 		
 		return;
+	}
+	if(type==2){  //更新group_user表
+		String[] users = request.getParameterValues("user_chex");
+		int pageIndex = StringUtil.getInteger(request.getParameter("pageIndex"), 1);
+		List<Integer> list = new ArrayList<Integer>();
+		for(String userId : users){
+			list.add(StringUtil.getInteger(userId, -1));
+		}	
+		new GroupServer().updateGroupUser(id, list);
+		
+		response.sendRedirect("groupuseredit.jsp?pageIndex="+pageIndex+"&msg=1&id=" + id);
+		
+		return;
+		
 	}
 
 

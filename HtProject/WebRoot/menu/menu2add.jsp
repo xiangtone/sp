@@ -155,6 +155,14 @@
 				<dd class="dd03_me">
 					<textarea rows="5" cols="30" name="action_url" id="input_action_url" style="width: 200px"></textarea>
 				</dd>
+				
+			<div style="clear: both;"><br /></div>
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">备注</dd>
+					<dd class="dd03_me"></dd>
+					&nbsp;
+					&nbsp;
+					<textarea name="remark"  style="border:solid 1px black;" overflow-y="auto" overflow-x="hidden" maxlength="1000" cols="38" rows="5"  id="remark" ></textarea>
 
 				<br />
 				<br />

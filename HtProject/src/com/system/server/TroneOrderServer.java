@@ -99,4 +99,20 @@ public class TroneOrderServer
 	{
 		return new TroneOrderDao().loadTroneOrder(spId, spTroneId, cpId, status ,pageIndex,keyWord,userId);
 	}
+	/**
+	 * 
+	 * @param userId
+	 * @param spId
+	 * @param spTroneId
+	 * @param cpId
+	 * @param status
+	 * @param pageIndex
+	 * @param keyWord
+	 * @return
+	 */
+	
+	public Map<String, Object> loadTroneOrder(int userId,int spId,int spTroneId,int cpId, int status,int pageIndex,String keyWord)
+	{
+		return new TroneOrderDao().loadTroneOrder(userId,spId, spTroneId, cpId, status ,pageIndex,keyWord);
+	}
 }

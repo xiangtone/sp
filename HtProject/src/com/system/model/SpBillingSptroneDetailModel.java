@@ -13,11 +13,15 @@ public class SpBillingSptroneDetailModel
 	private String spTroneName;
 	private String mrDate;
 	private float amount;
-	private float reduceAmount;
-	private int reduceType;
+	private float reduceAmount; //核减费用
+	private int reduceType; //核减类型  已废用
 	private float rate;
 	private String remark;
 	private int status;
+	
+	//后面再加进来的
+	private float reduceDataAmount; //核减的信息费
+	private float reduceMoneyAmount; //梳头的结算款
 	
 	public int getId()
 	{
@@ -106,6 +110,22 @@ public class SpBillingSptroneDetailModel
 	public void setSpBillingId(int spBillingId)
 	{
 		this.spBillingId = spBillingId;
+	}
+	public float getReduceDataAmount()
+	{
+		return reduceDataAmount;
+	}
+	public void setReduceDataAmount(float reduceDataAmount)
+	{
+		this.reduceDataAmount = reduceDataAmount;
+	}
+	public float getReduceMoneyAmount()
+	{
+		return reduceMoneyAmount;
+	}
+	public void setReduceMoneyAmount(float reduceMoneyAmount)
+	{
+		this.reduceMoneyAmount = reduceMoneyAmount;
 	}
 	
 }
