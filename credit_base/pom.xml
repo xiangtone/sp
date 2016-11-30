@@ -131,6 +131,13 @@
 				<final.name>credit</final.name>
 			</properties>
 		</profile>
+		<profile>
+			<id>szld</id>
+			<properties>
+				<runtime.env>config\szld</runtime.env>
+				<final.name>credit</final.name>
+			</properties>
+		</profile>
 	</profiles>
   <dependencies>
 		<dependency>
