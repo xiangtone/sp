@@ -8,9 +8,13 @@
 	String date2 = StringUtil.getString(request.getParameter("date2"), StringUtil.getDefaultDate());
 	int analyType = StringUtil.getInteger(request.getParameter("analy"), -1);
 	String msg = "重新分析数据成功";
+	
 	if (analyType==1) 
 	{
-		new DailyAnalyServer().analyDailyMr(date1);
+		boolean isSuc = new DailyAnalyServer().analyDailyMr(date1);
+		
+		if(!isSuc)
+			msg = "分析失败，有分析任务进行中";
 	}
 	else if(analyType==2)
 	{

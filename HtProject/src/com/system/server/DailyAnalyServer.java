@@ -5,9 +5,21 @@ import com.system.util.StringUtil;
 
 public class DailyAnalyServer
 {
+	private static boolean isAnalysing = false;
+	
 	public boolean analyDailyMr(String date)
 	{
+		if(isAnalysing)
+			return false;
+
+		isAnalysing = true;
+		
 		String dateMonth = StringUtil.getMonthFormat(date);
-		return new DailyAnalyDao().analyDailyMr(date, dateMonth);
+		
+		new DailyAnalyDao().analyDailyMr(date, dateMonth);
+		
+		isAnalysing = false;
+		
+		return true;
 	}
 }
