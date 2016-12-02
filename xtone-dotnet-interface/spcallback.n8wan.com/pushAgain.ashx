@@ -63,7 +63,7 @@ public class pushAgain : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MyS
         }
 
         ap.MrIds = allId;
-        ap.MRDate = DateTime.Now;
+        ap.MRDate = mrDate;
         ap.DoAgain();
 
         //ap.DoAgain();

@@ -121,6 +121,11 @@ namespace n8wan.Public.Logical
         /// </summary>
         private Action<IEnumerable<T>> _onExpired;
 
+        /// <summary>
+        /// 正在销毁数据
+        /// </summary>
+        private bool _clearing;
+
         public StaticCache()
             : this(null)
         {
@@ -151,7 +156,11 @@ namespace n8wan.Public.Logical
         public String IdField { get { return _idField; } }
         public Static_Cache_Staus Status { get { return _satus; } }
 
-        private void LoadFreshData()
+        /// <summary>
+        /// 加载数据到缓存
+        /// </summary>
+        /// <param name="isThreadPool">是否在当前线程上加载</param>
+        private void LoadFreshData(bool isSync)
         {
             if (_satus != Static_Cache_Staus.Idel || IsManualLoad)
                 return;
@@ -160,7 +169,10 @@ namespace n8wan.Public.Logical
                 if (_satus != Static_Cache_Staus.Idel)
                     return;
                 _satus = Static_Cache_Staus.Loading;
-                ThreadPool.QueueUserWorkItem(this.LoadData);
+                if (isSync)
+                    this.LoadData(null);
+                else
+                    ThreadPool.QueueUserWorkItem(this.LoadData);
             }
         }
 
@@ -222,18 +234,43 @@ namespace n8wan.Public.Logical
         /// </summary>
         private Dictionary<IDX, T> CheckExpired()
         {
-            if (_data == null)
-            {
-                LoadFreshData();
+
+            bool isExp = _data == null || DateTime.Now > _expired;
+            if (!isExp)
+                return _data;
+
+
+            if (_clearing)
                 return null;
-            }
-            if (DateTime.Now > _expired)
+            lock (this)
             {
-                ClearCache();
-                LoadFreshData();
-                return null;
+                if (_clearing)
+                    return null;
+                _clearing = true;
             }
-            return _data;
+
+            ThreadPool.QueueUserWorkItem(e =>
+            {
+                try
+                {
+                    ClearCache();
+                    LoadFreshData(true);
+                    //Shotgun.Library.ErrLogRecorder.
+                }
+#if !DEBUG
+                    catch (Exception ex)
+                    {
+                        WriteLog(ex.Message);
+                    }
+#endif
+                finally
+                {
+                    _clearing = false;
+                }
+            }, null);
+
+            return null;
+
 
         }
 
@@ -336,34 +373,39 @@ namespace n8wan.Public.Logical
         /// <summary>
         /// 清除缓存数据
         /// </summary>
-        [STAThread]
         public override void ClearCache()
         {
-            OnExpired();
+            var _expData = _data;
             _data = null;
+            if (_expData != null)
+                OnExpired(_expData);
             _satus = Static_Cache_Staus.Idel;
             base.Remove(this);
             WriteLog(false, 0, 0);
         }
 
-        private void OnExpired()
+        private void OnExpired(Dictionary<IDX, T> _expData)
         {
-            if (_onExpired == null)
+            if (_onExpired == null || _expData == null)
                 return;
 
             try
             {
-                _onExpired(_data.Values);
+                _onExpired(_expData.Values);
             }
 #if !DEBUG
             catch (Exception ex)
             {
-                WriteLog(ex.ToString());
+                WriteLog("过期回调出错："+ex.ToString());
             }
 #endif
             finally { }
         }
 
+        /// <summary>
+        /// 缓存销毁通知，可用于保存数据
+        /// </summary>
+        /// <param name="func"></param>
         public void SetExpriedProc(Action<IEnumerable<T>> func)
         {
             _onExpired = func;

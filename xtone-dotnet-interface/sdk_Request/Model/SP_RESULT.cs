@@ -19,7 +19,7 @@ namespace sdk_Request.Model
         [IgnoreDataMember]
         public API_ERROR status { get; set; }
 
-        [DataMember]
+        [DataMember(Order = 0)]
         public E_SMS_TYPE SMSType { get; set; }
 
         public SP_RESULT()

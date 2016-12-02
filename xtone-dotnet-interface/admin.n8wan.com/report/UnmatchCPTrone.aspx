@@ -84,10 +84,10 @@
                     <td><%#GetTB_SP((int) Eval("sp_id") ) %></td>
                     <td><a href="/sp/tbl_troneList.aspx?urlId=<%#Eval("sp_api_url_id") %>"><%#GetTB((int) Eval("sp_api_url_id") ) %></a></td>
                     <td><%#GetTB_TD((int) Eval("trone_id") ) %></td>
-                    <td><%#Eval("linkid") %></td>
-                    <td><%#Eval("ori_trone") %></td>
-                    <td><%#Eval("ori_order") %></td>
-                    <td><%#Eval("mobile") %></td>
+                    <td><%#Server.HtmlEncode((string)Eval("linkid")) %></td>
+                    <td><%#Server.HtmlEncode((string)Eval("ori_trone")) %></td>
+                    <td><%#Server.HtmlEncode((string)Eval("ori_order")) %></td>
+                    <td><%#Server.HtmlEncode((string)Eval("mobile")) %></td>
                     <td><%#Eval("cp_id") %></td>
                     <td><%#Eval("cp_param") %></td>
                     <td><%#Eval("ip")%></td>

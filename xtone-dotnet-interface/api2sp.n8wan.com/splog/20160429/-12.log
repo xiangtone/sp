@@ -1,2 +1,0 @@
-12:05:00.059 http://115.29.201.88/sync/hzdsworeq?mobile=13127812668&chargeCode=HY2203801000
-12:05:01.131 +1072ms {"result":{"orderId":3025749,"actionList":[{"actionType":1,"actionTarget":"http://api.jiebasdk.com/SmsPay/YbkConfirmPayment/","actionParam":{"orderId":"S003025749","authCode":"{authCode}"},"actionRemark":null,"interval":0}]},"code":0,"msg":"??"}

@@ -1,6 +1,0 @@
-11:52:03.302 http://115.29.201.88/sync/hzdsworeq?mobile=13127812668&chargeCode=HY2203801000
-11:52:04.523 +1220ms {"result":{"orderId":3024800,"actionList":[{"actionType":1,"actionTarget":"http://api.jiebasdk.com/SmsPay/YbkConfirmPayment/","actionParam":{"orderId":"S003024800","authCode":"{authCode}"},"actionRemark":null,"interval":0}]},"code":0,"msg":"??"}
-11:53:00.437 http://115.29.201.88/sync/hzdsworeq?mobile=13127812668&chargeCode=HY2203801000
-11:53:03.736 +3298ms {"result":{"orderId":3024890,"actionList":[{"actionType":1,"actionTarget":"http://api.jiebasdk.com/SmsPay/YbkConfirmPayment/","actionParam":{"orderId":"S003024890","authCode":"{authCode}"},"actionRemark":null,"interval":0}]},"code":0,"msg":"??"}
-11:53:35.992 http://115.29.201.88/sync/hzdsworeq?mobile=13127812668&chargeCode=HY2203801000
-11:53:37.253 +1262ms {"result":{"orderId":3024933,"actionList":[{"actionType":1,"actionTarget":"http://api.jiebasdk.com/SmsPay/YbkConfirmPayment/","actionParam":{"orderId":"S003024933","authCode":"{authCode}"},"actionRemark":null,"interval":0}]},"code":0,"msg":"??"}

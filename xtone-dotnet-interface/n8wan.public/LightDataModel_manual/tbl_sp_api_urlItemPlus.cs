@@ -14,7 +14,7 @@ namespace LightDataModel
         {
             var m = cache.GetDataByIdx(id);
             if (m != null)
-                return m.Disable ? null : m;
+                return m;
 
             var q = GetQueries(dBase);
             m = q.GetRowById(id);
@@ -22,7 +22,7 @@ namespace LightDataModel
             if (m == null)
                 return null;
             cache.InsertItem(m);
-            return m.Disable ? null : m;
+            return m;
         }
 
         public static tbl_sp_api_urlItem QueryByVirtualPage(Shotgun.Database.IBaseDataClass2 dBase, string virtualPage)

@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
+import com.system.model.SpcpProfitModel;
 import com.system.util.StringUtil;
 import com.system.vmodel.FinancialSpCpDataShowModel;
 
@@ -216,7 +217,166 @@ public class FinalcialSpCpDataDao
 			}
 		});
 	}
-	
+	/**
+	 * 利润查询
+	 * @param startDate
+	 * @param endDate
+	 * @param spId
+	 * @param cpId
+	 * @param dataType
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SpcpProfitModel> loadProfitData(String startDate,String endDate,int spId,int spTroneId,int cpId)
+	{
+		String query = "";
+		
+		if(spId>0)
+			query += " and a.sp_id = " + spId;
+		
+		if(cpId>0)
+			query += " and b.cp_id = " + cpId;
+		
+		if(spTroneId>-1)
+			query+= " and a.sp_trone_id = " + spTroneId;
+		
+		String sql="SELECT a.*,b.*,c.`full_name` cp_name,c.`short_name` cp_short_name FROM(";
+		sql+=" SELECT c.id sp_id,c.`full_name` sp_name,b.id sp_trone_id,b.`name` sp_trone_name,a.amount FROM"; 
+		sql+=" (SELECT sp_trone_id,SUM((amount-reduce_data_amount)*rate - reduce_money_amount) amount FROM daily_log.`tbl_sp_billing_sp_trone` ";
+		sql+=" WHERE start_date>= '"+startDate+"' AND start_date<= '"+endDate+"' GROUP BY sp_trone_id) a";
+		sql+=" LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
+	    sql+=" LEFT JOIN daily_config.`tbl_sp` c ON b.`sp_id` = c.`id`) a";
+	    sql+=" LEFT JOIN (SELECT a.sp_trone_id,b.cp_id,SUM(CASE reduce_type WHEN 0 THEN (a.amount-a.reduce_amount)*rate  WHEN 1 THEN a.amount*rate - a.reduce_amount END) pay_amount FROM daily_log.`tbl_cp_billing_sp_trone` a"; 
+		sql+=" LEFT JOIN daily_config.`tbl_cp_billing` b ON a.cp_billing_id = b.id";
+		sql+=" WHERE a.start_date>= '"+startDate+"' AND a.start_date<= '"+endDate+"'"; 
+		sql+=" GROUP BY sp_trone_id,cp_id )b ON a.sp_trone_id = b.sp_trone_id";
+		sql+=" LEFT JOIN daily_config.tbl_cp c ON b.cp_id = c.id where 1=1 ";
+		sql+=query;
+		sql+=" order by sp_id";
+		
+		return (List<SpcpProfitModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpcpProfitModel> list = new ArrayList<SpcpProfitModel>();
+				int spId;
+				String spFullName;
+				int spTroneId;
+				String spTroneName;
+				double amount;
+				int cpId;
+				String cpFullName;
+				String cpShortName;
+				double payAmount;
+				SpcpProfitModel model = null;
+				SpcpProfitModel.SpTroneModel spTroneModel = null;
+				
+				while(rs.next())
+				{
+					spId = rs.getInt("sp_id");
+					spFullName = StringUtil.getString(rs.getString("sp_name"), "");
+					spTroneId = rs.getInt("sp_trone_id");
+					spTroneName = StringUtil.getString(rs.getString("sp_trone_name"), "");
+					amount=rs.getDouble("amount");
+					cpId = rs.getInt("cp_id");
+					cpFullName = StringUtil.getString(rs.getString("cp_name"), "");
+					cpShortName = StringUtil.getString(rs.getString("cp_short_name"), "");	
+					payAmount=rs.getDouble("pay_amount");
+					boolean existSp = false;
+					
+					for(SpcpProfitModel spcpProfitModel : list)
+					{
+						if(spcpProfitModel.spId == spId)
+						{
+							existSp = true;
+							break;
+						}
+					}
+					
+					if(!existSp)
+					{
+						model = new SpcpProfitModel();
+						
+						model.spId = spId;
+						model.spFullName = spFullName;
+						
+						spTroneModel = model.new SpTroneModel();
+						spTroneModel.spTroneId = spTroneId;
+						spTroneModel.spTroneName = spTroneName;
+						spTroneModel.amount=amount;
+						model.list.add(spTroneModel);
+						
+						SpcpProfitModel.SpTroneModel.CpModelData cpModelData = spTroneModel.new CpModelData();
+						
+						cpModelData.cpId = cpId;
+						cpModelData.cpShortName = cpShortName;
+						cpModelData.cpFullName = cpFullName;
+						cpModelData.payAmount=payAmount;
+						
+						
+						spTroneModel.list.add(cpModelData);
+						
+						list.add(model);
+					}
+					else
+					{
+						boolean existSpTrone = false;
+						for(SpcpProfitModel.SpTroneModel spTroneModel1 : model.list)
+						{
+							if(spTroneModel1.spTroneId==spTroneId)
+							{
+								existSpTrone = true;
+								break;
+							}
+						}
+						if(!existSpTrone)
+						{
+							spTroneModel = model.new SpTroneModel();
+							spTroneModel.spTroneId = spTroneId;
+							spTroneModel.spTroneName = spTroneName;
+							spTroneModel.amount=amount;
+							
+							model.list.add(spTroneModel);
+							
+							SpcpProfitModel.SpTroneModel.CpModelData cpModelData = spTroneModel.new CpModelData();
+							
+							cpModelData.cpId = cpId;
+							cpModelData.cpShortName = cpShortName;
+							cpModelData.cpFullName = cpFullName;
+							cpModelData.payAmount=payAmount;
+							spTroneModel.list.add(cpModelData);
+						}
+						else
+						{
+							SpcpProfitModel.SpTroneModel.CpModelData cpModelData = spTroneModel.new CpModelData();
+							
+							cpModelData.cpId = cpId;
+							cpModelData.cpShortName = cpShortName;
+							cpModelData.cpFullName = cpFullName;
+							cpModelData.payAmount=payAmount;
+							
+							spTroneModel.list.add(cpModelData);
+							
+							spTroneModel.spTroneRowSpan++;
+						}
+						model.spRowSpan++;
+					}
+					spId = 0;
+					spFullName="";
+					spTroneId = 0;
+					spTroneName = "";
+					amount = 0;
+					cpId = 0;
+					cpFullName="";
+					cpShortName = "";
+					payAmount=0;
+				}
+				
+				return list;
+			}
+		});
+	}
 	public static void main(String[] args)
 	{
 		List<FinancialSpCpDataShowModel> list = new FinalcialSpCpDataDao().loadData("2015-10-01", "2015-11-30",1,2,0);

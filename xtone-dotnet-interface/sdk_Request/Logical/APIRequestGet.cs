@@ -292,7 +292,8 @@ namespace sdk_Request.Logical
         {
             var rlt = new Model.SP_RESULT() { status = _errCode, description = _errMsg };
             var sp = new Model.APIResponseModel(rlt, _aqm);
-            _aqm.status = ResultStatusMap(rlt);
+            if (_aqm != null)
+                _aqm.status = ResultStatusMap(rlt);
 
             Response.Write(sp.ToJson());
         }
