@@ -62,7 +62,7 @@
       <Project>{638ee824-4bd3-4ec8-9c9d-129437f20187}</Project>
       <Name>n8wan.Public</Name>
     </ProjectReference>
-    <ProjectReference Include="E:\Website.git\xtone-dotnet-interface\Shotgun.Library\Shotgun.Library.csproj">
+    <ProjectReference Include="..\Shotgun.Library\Shotgun.Library.csproj">
       <Project>{c357d039-e3b2-4f1c-bcb3-d8895d133ae0}</Project>
       <Name>Shotgun.Library</Name>
     </ProjectReference>
