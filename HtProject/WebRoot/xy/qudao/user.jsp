@@ -17,11 +17,9 @@
 	String defaultStartDate = StringUtil.getPreDayOfMonth();
 	String defaultEndDate = StringUtil.getDefaultDate();
 
-	String appKey = StringUtil.getString(request.getParameter("appkey"),
+	String keyWord = StringUtil.getString(request.getParameter("keyword"),
 			"");
 	int appType = StringUtil.getInteger(request.getParameter("app_type"), 0);
-	String channelKey = StringUtil
-			.getString(request.getParameter("channelkey"), "");
 	String startDate = StringUtil
 			.getString(request.getParameter("startdate"), defaultStartDate);
 	String endDate = StringUtil
@@ -29,7 +27,7 @@
 	
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
 
-	Map<String, Object> map =  new UserServer().loadUserData(startDate,endDate, appKey, channelKey,pageIndex,appType);
+	Map<String, Object> map =  new UserServer().loadUserData(startDate,endDate, keyWord,pageIndex,appType);
 		
 	List<XyUserModel> list = (List<XyUserModel>)map.get("list");
 	
@@ -37,8 +35,7 @@
 	
 	Map<String,String> params = new HashMap<String,String>();
 	
-	params.put("appkey", appKey);
-	params.put("channelkey", channelKey);
+	params.put("keyword", keyWord);
 	params.put("startdate", startDate);
 	params.put("enddate", endDate);
 	params.put("app_type", appType+"");
@@ -149,13 +146,9 @@
 						<input name="enddate" type="text" value="<%=endDate%>" 
 							onclick="WdatePicker({isShowClear:false,readOnly:true})">
 					</dd>
-					<dd class="dd01_me">应用包KEY</dd>
+					<dd class="dd01_me">关键字</dd>
 					<dd class="dd03_me">
-						<input name="appkey" value="<%=appKey%>" type="text">
-					</dd>
-					<dd class="dd01_me">渠道ID</dd>
-					<dd class="dd03_me">
-						<input name="channelkey" value="<%=channelKey%>" type="text">
+						<input name="keyword" value="<%= keyWord %>" type="text">
 					</dd>
 					<dd class="dd01_me">应用类型</dd>
 					<dd class="dd04_me">
