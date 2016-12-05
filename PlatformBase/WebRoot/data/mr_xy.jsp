@@ -31,12 +31,13 @@
 	
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
-	int coId = 2;
+	int coId = 4;
 	
-	float amount = 0;
 	
 	List<SpModel> spList = new SpServer().loadSpData(coId);
 	List<CpModel> cpList = new CpServer().loadCpData(coId);
+	
+	float amount = 0;
 
 	List<BaseDataShowModel> list =  new BaseDataShowServer().loadShowData(startDate, endDate,spId, cpId, coId,  showType);
 	//1 按日期，2按周，3按月，4按SP，5按CP，6按SP业务线，7按CP业务线，8按SP业务名称，
@@ -60,20 +61,23 @@
 <script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 	
-	$(function(){
+	$(function()
+	{
 		resetForm();
 	});
 	
 	function resetForm()
 	{
 		$("#sel_showtype").val("<%= showType %>");
+		$("#sel_sp").val("<%= spId %>");
+		$("#sel_cp").val("<%= cpId %>");
 	}
 	
 </script>
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="mr_tl.jsp"  method="get" style="margin-top: 10px">
+			<form action="mr_xy.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">

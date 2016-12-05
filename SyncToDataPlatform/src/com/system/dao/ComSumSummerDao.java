@@ -12,6 +12,7 @@ import com.system.database.IJdbcControl;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.database.TlJdbcControl;
+import com.system.database.XyJdbcControl;
 import com.system.database.YdJdbcControl;
 import com.system.model.ComSumSummerModel;
 import com.system.model.FeeDateDataModel;
@@ -72,7 +73,11 @@ public class ComSumSummerDao
 				
 			case 3:
 				keepCpId = 162;
-				break;			
+				break;
+				
+			case 4:
+				keepCpId = 165;
+				break;
 				
 			default:
 				break;
@@ -270,7 +275,11 @@ public class ComSumSummerDao
 				
 			case 3:
 				control = new YdJdbcControl();
-				break;			
+				break;	
+			
+			case 4:
+				control = new XyJdbcControl();
+				break;
 				
 			default:
 				break;

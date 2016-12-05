@@ -81,7 +81,7 @@ public class ComSumAnalyServer
 		FeeDateDataModel oriModel = null;
 		FeeDateDataModel descModel = null;
 		
-		for(int i=1; i<=3; i++)
+		for(int i=1; i<=4; i++)
 		{
 			Map<String, FeeDateDataModel> descMap = dao.loadDescSource(i, startDate, endDate);
 			Map<String, FeeDateDataModel> oriMap = dao.loadOriSource(i, startDate, endDate);
@@ -119,4 +119,11 @@ public class ComSumAnalyServer
 			analyComSumData(coId, date, date);
 		}
 	}
+	
+	public static void main(String[] args)
+	{
+		ComSumAnalyServer csas = new ComSumAnalyServer();
+		csas.analyComSumData(4, "2015-10-01", "2016-10-01");
+	}
+	
 }
