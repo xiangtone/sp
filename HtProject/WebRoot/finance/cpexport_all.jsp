@@ -126,7 +126,34 @@
 		window.location.href = "cpexport_all.jsp?export=1&datetype=" + jsType + "&cp_id=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate;
 	}
 	
+	function resetCheckBox(data)
+	{
+		var objs = document.getElementsByName("chk_data");
+		for(i=0; i<objs.length; i++)
+		{
+			objs[i].checked = data;	
+		}
+	}	
 	
+	function exprortBatch()
+	{
+		var objs = document.getElementsByName("chk_data");
+		var ids = "";
+		for(i=0; i<objs.length; i++)
+		{
+			if(objs[i].checked==true)
+			{
+				ids += objs[i].id + ",";
+			}
+		}
+		var ids=ids.substring(0, ids.length-1);
+		if(ids==null||ids==""){
+			alert("请选择需要导出的账单！");
+			return;
+		}
+		window.location.href="util.jsp?base_js_type=<%=dateType%>&base_cp_ids=" + ids + "&base_startdate=<%=startDate%>&base_enddate=<%=endDate%>&exprort_zip=2";
+	
+	}
 </script>
 <body style="padding-top: 40px">
 	<div class="main_content">
@@ -179,6 +206,9 @@
 					<dd class="ddbtn" style="margin-left: 10px;" />
 					<input type="button" value="查  询" onclick="subForm()">
 					</dd>
+					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
+						<input class="btn_match" value="批量导出" type="button" onclick="exprortBatch()"  />
+					</dd>
 				</dl>
 			</form>
 			</div>
@@ -194,10 +224,11 @@
 						<td>结算率</td>
 						<td>合作方分成</td>
 						<td>操作</td>
+						<td>全选<input type="checkbox" onclick="resetCheckBox(this.checked)" /></td>
 					</tr>
 				</thead>
 				<tbody>
-					<%
+					<% 
 						if (map != null)
 						{
 							SpFinanceShowModel sfsModel = null;
@@ -222,7 +253,7 @@
 												+ StringUtil.getDecimalFormat(sfsModel.getAmount()
 														* sfsModel.getJiesuanlv())
 												+ "</td><td rowspan='" + tmpList.size()
-												+ "'><a href='javascript:;' onclick=exportCpBillData(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>导出</a></td></tr>");
+												+ "'><a href='javascript:;' onclick=exportCpBillData(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>导出</a></td><td rowspan='" + tmpList.size()+"'><input type='checkbox' id="+sfsModel.getSpId()+" name='chk_data'></td></tr>");
 									}
 									else
 									{
@@ -237,7 +268,7 @@
 									}
 								}
 								out.println(
-										"<tr style='background-color: #E0EEEE;'><td colspan='5' >合计</td><td>"
+										"<tr style='background-color: #E0EEEE;'><td colspan='6' >合计</td><td>"
 												+ StringUtil.getDecimalFormat(totalAmount) + "</td><td></td></tr>");
 							}
 						}
