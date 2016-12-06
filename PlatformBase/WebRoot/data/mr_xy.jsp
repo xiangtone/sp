@@ -33,11 +33,10 @@
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int coId = 4;
 	
+	float amount = 0;
 	
 	List<SpModel> spList = new SpServer().loadSpData(coId);
 	List<CpModel> cpList = new CpServer().loadCpData(coId);
-	
-	float amount = 0;
 
 	List<BaseDataShowModel> list =  new BaseDataShowServer().loadShowData(startDate, endDate,spId, cpId, coId,  showType);
 	//1 按日期，2按周，3按月，4按SP，5按CP，6按SP业务线，7按CP业务线，8按SP业务名称，
@@ -61,8 +60,7 @@
 <script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 	
-	$(function()
-	{
+	$(function(){
 		resetForm();
 	});
 	
@@ -71,6 +69,40 @@
 		$("#sel_showtype").val("<%= showType %>");
 		$("#sel_sp").val("<%= spId %>");
 		$("#sel_cp").val("<%= cpId %>");
+	}
+	
+	var spList = new Array();
+	
+	<%
+	for(SpModel spModel : spList)
+	{
+		%>
+		spList.push(new joSelOption(<%= spModel.getSpId() %>,1,'<%= spModel.getShortName() %>'));
+		
+		<%
+	}
+	%>
+	
+	function onSpDataSelect(joData)
+	{
+		$("#sel_sp").val(joData.id);
+	}
+	
+	
+	var cpList = new Array();
+	
+	<%
+	for(CpModel cpModel : cpList)
+	{
+		%>
+		cpList.push(new joSelOption(<%= cpModel.getCpId() %>,1,'<%= cpModel.getShortName() %>'));
+		<%
+	}
+	%>
+	
+	function onCpDataSelect(joData)
+	{
+		$("#sel_cp").val(joData.id);
 	}
 	
 </script>

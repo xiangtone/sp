@@ -1,6 +1,6 @@
-<%@page import="com.system.model.CpModel"%>
 <%@page import="com.system.server.CpServer"%>
 <%@page import="com.system.server.SpServer"%>
+<%@page import="com.system.model.CpModel"%>
 <%@page import="com.system.model.SpModel"%>
 <%@page import="com.system.model.BaseDataShowModel"%>
 <%@page import="com.system.server.BaseDataShowServer"%>
@@ -67,6 +67,42 @@
 	function resetForm()
 	{
 		$("#sel_showtype").val("<%= showType %>");
+		$("#sel_sp").val("<%= spId %>");
+		$("#sel_cp").val("<%= cpId %>");
+	}
+	
+	var spList = new Array();
+	
+	<%
+	for(SpModel spModel : spList)
+	{
+		%>
+		spList.push(new joSelOption(<%= spModel.getSpId() %>,1,'<%= spModel.getShortName() %>'));
+		
+		<%
+	}
+	%>
+	
+	function onSpDataSelect(joData)
+	{
+		$("#sel_sp").val(joData.id);
+	}
+	
+	
+	var cpList = new Array();
+	
+	<%
+	for(CpModel cpModel : cpList)
+	{
+		%>
+		cpList.push(new joSelOption(<%= cpModel.getCpId() %>,1,'<%= cpModel.getShortName() %>'));
+		<%
+	}
+	%>
+	
+	function onCpDataSelect(joData)
+	{
+		$("#sel_cp").val(joData.id);
 	}
 	
 </script>
