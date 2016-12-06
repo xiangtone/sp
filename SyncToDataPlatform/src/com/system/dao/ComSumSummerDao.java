@@ -12,6 +12,7 @@ import com.system.database.IJdbcControl;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.database.TlJdbcControl;
+import com.system.database.XyJdbcControl;
 import com.system.database.YdJdbcControl;
 import com.system.model.ComSumSummerModel;
 import com.system.model.FeeDateDataModel;
@@ -43,7 +44,7 @@ public class ComSumSummerDao
 		sql.append(" FROM");
 		sql.append(" (");
 		sql.append(" SELECT mr_date,trone_order_id,b.trone_id,province_id,SUM(data_rows) data_rows,SUM(a.amount) amount,record_type,c.id cp_id");
-		sql.append(" FROM daily_log.`tbl_mr_summer` a");
+		sql.append(" FROM daily_log.`tbl_mr_summer_2` a");
 		sql.append(" LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id`");
 		sql.append(" LEFT JOIN daily_config.`tbl_cp` c ON b.`cp_id` = c.id");
 		sql.append(" WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'");
@@ -52,7 +53,7 @@ public class ComSumSummerDao
 		sql.append(" LEFT JOIN");
 		sql.append(" (");
 		sql.append(" SELECT mr_date,trone_order_id,province_id,SUM(data_rows) data_rows,SUM(amount) amount ");
-		sql.append(" FROM daily_log.`tbl_cp_mr_summer` ");
+		sql.append(" FROM daily_log.`tbl_cp_mr_summer_2` ");
 		sql.append(" WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'");
 		sql.append(" GROUP BY mr_date,trone_order_id,province_id");
 		sql.append(" ) b ON a.trone_order_id = b.trone_order_id AND a.province_id = b.province_id AND a.mr_date = b.mr_date");
@@ -72,7 +73,11 @@ public class ComSumSummerDao
 				
 			case 3:
 				keepCpId = 162;
-				break;			
+				break;
+				
+			case 4:
+				keepCpId = 165;
+				break;
 				
 			default:
 				break;
@@ -185,7 +190,7 @@ public class ComSumSummerDao
 	@SuppressWarnings("unchecked")
 	public Map<String,FeeDateDataModel> loadOriSource(int coId,String startDate,String endDate)
 	{
-		String sql = " SELECT mr_date,SUM(data_rows) data_rows,SUM(amount) amount FROM daily_log.`tbl_mr_summer` a";
+		String sql = " SELECT mr_date,SUM(data_rows) data_rows,SUM(amount) amount FROM daily_log.`tbl_mr_summer_2` a";
 		sql += " WHERE mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
 		sql += " GROUP BY mr_date ORDER BY mr_date";
 		
@@ -270,7 +275,11 @@ public class ComSumSummerDao
 				
 			case 3:
 				control = new YdJdbcControl();
-				break;			
+				break;	
+			
+			case 4:
+				control = new XyJdbcControl();
+				break;
 				
 			default:
 				break;

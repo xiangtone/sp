@@ -36,7 +36,7 @@ public class BaseDataAnalyServer
 		List<SpModel> addList = new ArrayList<SpModel>();
 		List<SpModel> updateList = new ArrayList<SpModel>();
 		
-		for(int i=1; i<=3; i++)
+		for(int i=1; i<=4; i++)
 		{
 			Map<Integer, SpModel> oriSource = dao.loadOriSpData(i);
 			Map<Integer, SpModel> descSource = dao.loadDescSpData(i);
@@ -86,7 +86,7 @@ public class BaseDataAnalyServer
 		List<CpModel> addList = new ArrayList<CpModel>();
 		List<CpModel> updateList = new ArrayList<CpModel>();
 		
-		for(int i=1; i<=3; i++)
+		for(int i=1; i<=4; i++)
 		{
 			Map<Integer, CpModel> oriSource = dao.loadOriCpData(i);
 			Map<Integer, CpModel> descSource = dao.loadDescCpData(i);
@@ -136,7 +136,7 @@ public class BaseDataAnalyServer
 		List<SpTroneModel> addList = new ArrayList<SpTroneModel>();
 		List<SpTroneModel> updateList = new ArrayList<SpTroneModel>();
 		
-		for(int i=1; i<=3; i++)
+		for(int i=1; i<=4; i++)
 		{
 			Map<Integer, SpTroneModel> oriSource = dao.loadOriSpTroneData(i);
 			Map<Integer, SpTroneModel> descSource = dao.loadDescSpTroneData(i);
@@ -186,7 +186,7 @@ public class BaseDataAnalyServer
 		List<TroneModel> addList = new ArrayList<TroneModel>();
 		List<TroneModel> updateList = new ArrayList<TroneModel>();
 		
-		for(int i=1; i<=3; i++)
+		for(int i=1; i<=4; i++)
 		{
 			Map<Integer, TroneModel> oriSource = dao.loadOriTroneData(i);
 			Map<Integer, TroneModel> descSource = dao.loadDescTroneData(i);
@@ -236,7 +236,7 @@ public class BaseDataAnalyServer
 		List<CpSpTroneModel> addList = new ArrayList<CpSpTroneModel>();
 		List<CpSpTroneModel> updateList = new ArrayList<CpSpTroneModel>();
 		
-		for(int i=1; i<=3; i++)
+		for(int i=1; i<=4; i++)
 		{
 			Map<Integer, CpSpTroneModel> oriSource = dao.loadOriCpSpTroneData(i);
 			Map<Integer, CpSpTroneModel> descSource = dao.loadDescCpSpTroneData(i);

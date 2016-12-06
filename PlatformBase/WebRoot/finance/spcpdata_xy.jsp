@@ -17,7 +17,7 @@
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
 	int loadData = StringUtil.getInteger(request.getParameter("load"),-1);
 	
-	int coId = 1;
+	int coId = 4;
 	
 	List<SpModel> spList = new SpServer().loadSpData(coId);
 	List<CpModel> cpList = new CpServer().loadCpData(coId);
@@ -89,7 +89,7 @@
 <body>
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
-			<form action="spcpdata_ht.jsp" method="post" id="exportform">
+			<form action="spcpdata_xy.jsp" method="post" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
 					<dd class="dd01_me">开始日期</dd>

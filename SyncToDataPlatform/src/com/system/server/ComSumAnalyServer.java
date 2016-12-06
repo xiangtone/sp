@@ -81,7 +81,68 @@ public class ComSumAnalyServer
 		FeeDateDataModel oriModel = null;
 		FeeDateDataModel descModel = null;
 		
-		for(int i=1; i<=3; i++)
+		for(int i=1; i<=4; i++)
+		{
+			Map<String, FeeDateDataModel> descMap = dao.loadDescSource(i, startDate, endDate);
+			Map<String, FeeDateDataModel> oriMap = dao.loadOriSource(i, startDate, endDate);
+			
+			analyDataList.clear();
+			
+			for(String oriDate : oriMap.keySet())
+			{
+				oriModel = oriMap.get(oriDate);
+				descModel = descMap.get(oriDate);
+				
+				//如果目标数据为空或者是两者金额不一致，就需要重新分析了
+				if(descModel==null || oriModel.getAmount() != descModel.getAmount())
+				{
+					analyDataList.add(oriDate);
+				}
+			}
+			
+			if(!analyDataList.isEmpty())
+			{
+				startAnalyComSumData(i,analyDataList);
+			}
+		}
+	}
+	
+	private void tempAnalyData()
+	{
+		for(int i=10; i<12; i++)
+		{
+			Calendar ca = Calendar.getInstance();
+			
+			ca.set(Calendar.YEAR,2016);
+			ca.set(Calendar.MONTH, i);
+			ca.set(Calendar.DAY_OF_MONTH,1);
+			
+			String startDate = StringUtil.getDateFormat(ca.getTime());
+			
+			ca.add(Calendar.MONTH, 1);
+			ca.add(Calendar.DAY_OF_MONTH, -1);
+			
+			String endDate = StringUtil.getDateFormat(ca.getTime());
+			
+			System.out.println(startDate + "---" + endDate);
+			
+			tempAnalyData(startDate,endDate);
+		}
+		
+	}
+	
+	private void tempAnalyData(String startDate,String endDate)
+	{
+		ComSumSummerDao dao = new ComSumSummerDao();
+		
+		List<String> analyDataList = new ArrayList<String>();
+		
+		FeeDateDataModel oriModel = null;
+		FeeDateDataModel descModel = null;
+		
+		
+		
+		for(int i=1; i<=4; i++)
 		{
 			Map<String, FeeDateDataModel> descMap = dao.loadDescSource(i, startDate, endDate);
 			Map<String, FeeDateDataModel> oriMap = dao.loadOriSource(i, startDate, endDate);
@@ -119,4 +180,12 @@ public class ComSumAnalyServer
 			analyComSumData(coId, date, date);
 		}
 	}
+	
+	public static void main(String[] args)
+	{
+		ComSumAnalyServer csas = new ComSumAnalyServer();
+		//csas.analyComSumData(4, "2015-10-01", "2016-10-01");
+		csas.tempAnalyData();
+	}
+	
 }

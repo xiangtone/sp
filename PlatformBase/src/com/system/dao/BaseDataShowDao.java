@@ -42,6 +42,16 @@ public class BaseDataShowDao
 			sql += " AND a.co_id = " + coId;
 		}
 		
+		if(spId>0)
+		{
+			sql += " AND d.sp_id = " + spId;
+		}
+		
+		if(cpId>0)
+		{
+			sql += " AND e.cp_id = " + cpId;
+		}
+		
 		sql += " AND mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
 		sql += " GROUP BY " + queryType[1] + " ORDER BY " + queryType[0] + " ASC";
 		sql += " LIMIT 1000";
