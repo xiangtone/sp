@@ -25,7 +25,16 @@ public class CpServer {
 	public Map<String, Object> loadCp(int pageIndex, String keyWord) {
 		return new CpDao().loadCp(pageIndex, keyWord);
 	}
-
+	/**
+	 * 增加状态字段
+	 * @param pageIndex
+	 * @param keyWord
+	 * @return
+	 */
+	public Map<String, Object> loadCp(int pageIndex, int status, String keyWord) {
+		return new CpDao().loadCp(pageIndex,status, keyWord);
+	//	return new CpDao().loadCp(pageIndex, keyWord);
+	}
 	public CpModel loadCpById(int id) {
 		return new CpDao().loadCpById(id);
 	}

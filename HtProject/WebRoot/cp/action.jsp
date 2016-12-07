@@ -10,6 +10,7 @@
 	String shortName = StringUtil.getString(request.getParameter("short_name"), "");
 	String contractPerson = StringUtil.getString(request.getParameter("contract_person"), "");
 	int commerceUserId = StringUtil.getInteger(request.getParameter("commerce_user_id"), 0);
+	int status=StringUtil.getInteger(request.getParameter("status"), 1);
 	String qq = StringUtil.getString(request.getParameter("qq"), "");
 	String email = StringUtil.getString(request.getParameter("email"), "");
 	String phone = StringUtil.getString(request.getParameter("phone"), "");
@@ -41,6 +42,7 @@
 	model.setContractStartDate(contractStartDate);
 	model.setContractEndDate(contractEndDate);
 	model.setCommerceUserId(commerceUserId);
+	model.setStatus(status);
 	
 	
 	if(id>0)

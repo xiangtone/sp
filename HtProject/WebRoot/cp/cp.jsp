@@ -12,8 +12,9 @@
 <%
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
 	String keyWord = StringUtil.getString(request.getParameter("keyword"), "");
+	int cpStatus=StringUtil.getInteger(request.getParameter("status"), -1);
 
-	Map<String, Object> map =  new CpServer().loadCp(pageIndex,keyWord);
+	Map<String, Object> map =  new CpServer().loadCp(pageIndex,cpStatus,keyWord);
 		
 	List<CpModel> list = (List<CpModel>)map.get("list");
 	
@@ -44,7 +45,11 @@
 			window.location.href = "troneaction.jsp?did=" + id;	
 		}
 	}
-	
+	$(function()
+			{
+				$("#status").val(<%= cpStatus %>);
+			
+			});
 </script>
 
 <body>
@@ -58,6 +63,15 @@
 					<dd class="dd03_me">
 						<input name="keyword" id="input_keyword" value="<%= keyWord %>" type="text" style="width: 150px">
 					</dd>
+					<dd class="dd01_me">状态</dd>
+						<dd class="dd04_me">
+						<select name="status" id="status" style="width: 100px;">
+							<option value="-1">全部</option>
+							<option value="1">正常</option>
+							<option value="0">关闭</option>
+						</select>
+					</dd>
+					
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" >
 					</dd>
@@ -84,10 +98,11 @@
 			<tbody>
 				<%
 					int rowNum = 1;
+					String stopStyle = "class=\"StopStyle\"";
 					for (CpModel model : list)
 					{
 				%>
-				<tr>
+				<tr <%= model.getStatus() == 0 ? stopStyle : "" %>>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
 					<td><%= model.getId() + 2000 %></td>
 					<td><%=model.getFullName()%></td>

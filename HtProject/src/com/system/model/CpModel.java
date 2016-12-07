@@ -18,7 +18,7 @@ public class CpModel
 	private String qq;
 	private String phone;
 	private String mail;
-	
+	private int status;
 	public String getQq()
 	{
 		return qq;
@@ -146,6 +146,12 @@ public class CpModel
 	public void setCommerceUserName(String commerceUserName)
 	{
 		this.commerceUserName = commerceUserName;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	
 	

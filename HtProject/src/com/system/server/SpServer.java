@@ -29,6 +29,17 @@ public class SpServer
 	{
 		return new SpDao().loadSp(pageIndex, keyWord);
 	}
+	/**
+	 * 增加SP状态查询
+	 * @param pageIndex
+	 * @param status
+	 * @param keyWord
+	 * @return
+	 */
+	public Map<String, Object> loadSp(int pageIndex,int status,String keyWord)
+	{
+		return new SpDao().loadSp(pageIndex,status, keyWord);
+	}
 	public Map<String, Object> loadSp(int pageIndex,String keyWord,int userId)
 	{
 		return new SpDao().loadSp(pageIndex, keyWord,userId);
