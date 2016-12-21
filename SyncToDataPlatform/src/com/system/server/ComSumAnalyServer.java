@@ -109,7 +109,7 @@ public class ComSumAnalyServer
 	
 	private void tempAnalyData()
 	{
-		for(int i=10; i<12; i++)
+		for(int i=9; i<11; i++)
 		{
 			Calendar ca = Calendar.getInstance();
 			

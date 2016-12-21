@@ -110,4 +110,9 @@ public class UserModel
 		this.createUserId = createUserId;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return id + "-" + name + "-" + nickName;
+	}
 }

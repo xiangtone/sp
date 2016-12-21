@@ -37,7 +37,7 @@ public class LoadCacheServlet implements Servlet
 	@Override
 	public void init(ServletConfig arg0) throws ServletException
 	{
-		RightConfigCacheMgr.init();
+		RightConfigCacheMgr.refreshAllCache();
 	}
 
 	@Override
