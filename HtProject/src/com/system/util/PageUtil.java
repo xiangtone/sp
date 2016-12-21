@@ -108,7 +108,7 @@ public class PageUtil {
 
 		result += nextPage;
 
-		result += "<script> function pageJump() { var pageIndex = document.getElementById('sel_page').selectedIndex; if(pageIndex>=1){ window.location.href = '" + query + pageIndexHead + "' + pageIndex; } } </script><select id='sel_page'>";
+		result += "<script> function pageJump() { var pageIndex = document.getElementById('sel_page').selectedIndex; if(pageIndex>=0){ window.location.href = '" + query + pageIndexHead + "' + (pageIndex + 1); } } </script><select id='sel_page'>";
 		
 		for (int i = 1; i <= pageCount; i++)
 		{

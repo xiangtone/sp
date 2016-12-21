@@ -81,7 +81,7 @@
 	double spAmount = (Double)map.get("spamount");
 	double cpAmount = (Double)map.get("cpamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","SP商务","CP商务"};
+	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","SP商务","CP商务","运营商", "数据类型", "第一业务线", "第二业务线"};
 	
 	
 %>
@@ -430,6 +430,10 @@
 							<!-- <option value="11">按小时</option> -->
 							<option value="12">SP商务</option>
 							<option value="13">CP商务</option>
+							<option value="14">运营商</option>
+							<option value="15">数据类型</option>
+							<option value="16">第一业务线</option>
+							<option value="17">第二业务线</option>
 							
 						</select>
 					</dd>

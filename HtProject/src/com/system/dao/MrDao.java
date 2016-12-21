@@ -347,6 +347,12 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		
+		
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";	
+		
 		sql += " where 1=1 " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
@@ -361,6 +367,11 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
 		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate i ON b.cp_jiesuanlv_id = i.`id`";
 		//sql	+= " LEFT JOIN daily_config.tbl_cp_trone_rate i ON e.id = i.cp_id AND h.id = i.sp_trone_id";
+		
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
+		
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
 		sql += " where 1=1 " + query;
