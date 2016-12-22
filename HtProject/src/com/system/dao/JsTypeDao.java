@@ -15,7 +15,7 @@ public class JsTypeDao
 	@SuppressWarnings("unchecked")
 	public List<JsTypeModel> loadJsType()
 	{
-		String sql = "select * from daily_config.tbl_js_type";
+		String sql = "SELECT * FROM daily_config.tbl_js_type ORDER BY sort_id ASC";
 		
 		return (List<JsTypeModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{

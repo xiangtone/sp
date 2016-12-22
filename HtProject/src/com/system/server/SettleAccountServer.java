@@ -164,6 +164,10 @@ public class SettleAccountServer
 			case 7:
 				dateTypeValue = "对公N+2结";
 				break;
+			case 8:
+				dateTypeValue = "对公N+3结";
+				break;
+				
 			default:
 				break;
 		}

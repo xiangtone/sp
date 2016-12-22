@@ -136,6 +136,7 @@ filter: alpha(opacity=0);
 					<label><input style="" type="checkbox" title="对公双周结" class="chpro" name="js_type"value="1" checked="checked">&nbsp;&nbsp;对公双周结</label>&nbsp;&nbsp;
 					<label><input style="" type="checkbox" title="对公N+1结" class="chpro" name="js_type"value="2" checked="checked">&nbsp;&nbsp;对公N+1结</label>&nbsp;&nbsp;
 					<label><input style="" type="checkbox" title="对公N+2结" class="chpro" name="js_type"value="7" checked="checked">&nbsp;&nbsp;对公N+2结</label>&nbsp;&nbsp;
+					<label><input style="" type="checkbox" title="对公N+3结" class="chpro" name="js_type"value="8" checked="checked">&nbsp;&nbsp;对公N+3结</label>&nbsp;&nbsp;
 					<label><input style="" type="checkbox" title="对私周结" class="chpro" name="js_type"value="3" checked="checked">&nbsp;&nbsp;对私周结</label>&nbsp;&nbsp;
 					<label><input style="" type="checkbox" title="对私双周结" class="chpro" name="js_type"value="4" checked="checked">&nbsp;&nbsp;对私双周结</label>&nbsp;&nbsp;
 					<label><input style="" type="checkbox" title="对私月结" class="chpro" name="js_type"value="5" checked="checked">&nbsp;&nbsp;对私月结</label>&nbsp;&nbsp;
