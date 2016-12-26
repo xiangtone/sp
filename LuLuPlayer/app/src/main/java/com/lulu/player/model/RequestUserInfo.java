@@ -37,16 +37,40 @@ public class RequestUserInfo {
 
     private String imei;
 
+    @SerializedName("appkey")
+    private String appkey;
+
+    @SerializedName("channel")
+    private String channel;
+
     public RequestUserInfo() {
     }
 
-    public RequestUserInfo(String imsi, String imei, String mac, String androidVersion, String androidLevel, String model) {
+    public RequestUserInfo(String imsi, String imei, String mac, String androidVersion, String androidLevel, String model, String appkey, String channel) {
         this.imsi = imsi;
         this.imei = imei;
         this.mac = mac;
         this.androidVersion = androidVersion;
         this.androidLevel = androidLevel;
         this.model = model;
+        this.appkey = appkey;
+        this.channel = channel;
+    }
+
+    public String getAppkey() {
+        return appkey;
+    }
+
+    public void setAppkey(String appkey) {
+        this.appkey = appkey;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 
     public String getImsi() {

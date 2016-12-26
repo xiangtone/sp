@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
+import android.widget.TextView;
 
 import com.lulu.player.R;
 import com.lulu.player.adapter.GridViewAdapter;
@@ -19,7 +19,9 @@ import com.lulu.player.mvp.MvpFragment;
 import com.lulu.player.pay.view.PayActivity;
 import com.lulu.player.utils.ACache;
 import com.lulu.player.utils.JsonDecode;
+import com.lulu.player.utils.ToastUtils;
 import com.lulu.player.video.VideoActivity;
+import com.lulu.player.view.ScrollGridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,10 @@ import butterknife.Bind;
 public class DiamondFragment extends MvpFragment<DiamondPresenter> implements DiamondView {
 
     @Bind(R.id.diamond_gridView)
-    GridView diamondGV;
+    ScrollGridView diamondGV;
+
+    @Bind(R.id.header_diamond)
+    TextView header;
 
     private ACache cache;
 
@@ -75,9 +80,11 @@ public class DiamondFragment extends MvpFragment<DiamondPresenter> implements Di
                     Intent intent = new Intent(getActivity(), VideoActivity.class);
                     intent.putExtra(Constants.VIDEO_URL, mVideos.get(position).getVideoUrl());
                     startActivityForResult(intent, Constants.REQUEST_CODE);
-                } else {
+                } else if (cache.getAsString(Constants.LEVEL).equals("1")) {
                     Intent intent = new Intent(getActivity(), PayActivity.class);
                     startActivity(intent);
+                } else {
+                    ToastUtils.showShortMessage(getActivity(), "请您先成为黄金会员");
                 }
             }
         });
@@ -122,6 +129,9 @@ public class DiamondFragment extends MvpFragment<DiamondPresenter> implements Di
 
     @Override
     public void onResume() {
+        header.setFocusable(true);
+        header.setFocusableInTouchMode(true);
+        header.requestFocus();
         super.onResume();
 
     }

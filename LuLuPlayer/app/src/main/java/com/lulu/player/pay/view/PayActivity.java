@@ -61,10 +61,13 @@ public class PayActivity extends MvpActivity<PayPresenter> implements PayView, V
     //支付方式 1wx 2ali 默认微信
     private int payType = 1;
 
+    //1 黄金  2 钻石
     private int levelId;
 
     //7 微信 2 支付宝
-    private int flag = 7;
+    private int flag;
+
+    private int sdkId;
 
     private String appKey, channnel, orderId;
 
@@ -91,10 +94,17 @@ public class PayActivity extends MvpActivity<PayPresenter> implements PayView, V
                     if (cache.getAsString(Constants.LEVEL).equals("1")) {
 
                         img_gold_vip.setVisibility(View.GONE);
+                        img_diamond_vip.setVisibility(View.GONE);
+                        max.setVisibility(View.VISIBLE);
+                        max.setText("恭喜您已成为黄金会员");
+                        view.setVisibility(View.VISIBLE);
+                        btn_wx.setVisibility(View.GONE);
+                        btn_ali.setVisibility(View.GONE);
                     } else if (cache.getAsString(Constants.LEVEL).equals("2")) {
 
                         img_diamond_vip.setVisibility(View.GONE);
                         max.setVisibility(View.VISIBLE);
+                        max.setText("恭喜您已成为钻石会员");
                         view.setVisibility(View.VISIBLE);
                         btn_wx.setVisibility(View.GONE);
                         btn_ali.setVisibility(View.GONE);
@@ -108,7 +118,7 @@ public class PayActivity extends MvpActivity<PayPresenter> implements PayView, V
                     break;
                 case 4003:
                     //弹出的支付方式选择框按返回键或者其他地方消失的时候的回调
-                    ToastUtils.showShortMessage(PayActivity.this, "支付失败");
+                    ToastUtils.showShortMessage(PayActivity.this, "支付取消");
 
                     break;
                 default:
@@ -134,23 +144,24 @@ public class PayActivity extends MvpActivity<PayPresenter> implements PayView, V
         //初始化
         XTSDK.getInstance().init(this, Constants.PHONE_NUM, handler);
 
-        if (cache.getAsString(Constants.LEVEL).equals("1")) {
+        if (cache.getAsString(Constants.LEVEL).equals("0")) {
+            img_diamond_vip.setVisibility(View.GONE);
+            levelId = 1;
+        } else if (cache.getAsString(Constants.LEVEL).equals("1")) {
             img_gold_vip.setVisibility(View.GONE);
+            levelId = 2;
         }
 
     }
 
     @Override
     protected void initViews() {
-        btn_wx.setSelected(true);
-        btn_ali.setSelected(false);
+
     }
 
     @Override
     protected void initListeners() {
         img_close.setOnClickListener(this);
-        img_gold_vip.setOnClickListener(this);
-        img_diamond_vip.setOnClickListener(this);
         btn_wx.setOnClickListener(this);
         btn_ali.setOnClickListener(this);
     }
@@ -170,8 +181,31 @@ public class PayActivity extends MvpActivity<PayPresenter> implements PayView, V
     public void createOrder(Order order) {
         int price = order.getPrice();
         orderId = order.getOrderId();
-        PayParams params = new PayParams(price, order.getOrderId(), order.getLevelName(), "ht" + order.getOrderId());
-        XTSDK.getInstance().pay(this, params, flag);
+        sdkId = order.getSdkId();
+
+        if (sdkId == 1) {
+            //浩天支付宝
+            flag = 2;
+            PayParams params = new PayParams(price, order.getOrderId(), order.getLevelName(), "ht" + order.getOrderId());
+            XTSDK.getInstance().pay(this, params, flag);
+
+        } else if (sdkId == 2) {
+            //中信微信wap
+
+        } else if (sdkId == 3) {
+            //威富通微信wap
+            flag = 7;
+            PayParams params = new PayParams(price, order.getOrderId(), order.getLevelName(), "ht" + order.getOrderId());
+            XTSDK.getInstance().pay(this, params, flag);
+
+        } else if (sdkId == 4) {
+            //外接支付宝
+
+        } else if (sdkId == 5) {
+            //外接微信
+
+        }
+
     }
 
     @Override
@@ -196,34 +230,17 @@ public class PayActivity extends MvpActivity<PayPresenter> implements PayView, V
             case R.id.img_pay_close:
                 finish();
                 break;
-            case R.id.img_pay_gold:
-                levelId = 1;
+            case R.id.wx_pay_btn:
+                payType = 1;
                 RequestOrder request = new RequestOrder("", levelId, payType,
                         cache.getAsString(Constants.IMEI), 1, appKey, channnel);
                 presenter.createOrder(request);
                 break;
-            case R.id.img_pay_diamond:
-                if (cache.getAsString(Constants.LEVEL).equals("1")) {
-                    levelId = 2;
-                    RequestOrder request2 = new RequestOrder("", levelId, payType,
-                            cache.getAsString(Constants.IMEI), 1, appKey, channnel);
-                    presenter.createOrder(request2);
-                } else {
-                    ToastUtils.showShortMessage(PayActivity.this, "请先成为黄金会员");
-                }
-
-                break;
-            case R.id.wx_pay_btn:
-                btn_wx.setSelected(true);
-                btn_ali.setSelected(false);
-                payType = 1;
-                flag = 7;
-                break;
             case R.id.ali_pay_btn:
-                btn_ali.setSelected(true);
-                btn_wx.setSelected(false);
                 payType = 2;
-                flag = 2;
+                RequestOrder request2 = new RequestOrder("", levelId, payType,
+                        cache.getAsString(Constants.IMEI), 1, appKey, channnel);
+                presenter.createOrder(request2);
                 break;
         }
 

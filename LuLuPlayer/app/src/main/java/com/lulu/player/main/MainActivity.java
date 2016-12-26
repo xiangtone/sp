@@ -1,10 +1,20 @@
 package com.lulu.player.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -23,6 +33,7 @@ import com.lulu.player.main.my.view.MyFragment;
 import com.lulu.player.pay.view.PayActivity;
 import com.lulu.player.utils.ACache;
 import com.lulu.player.view.NoSlideViewPager;
+import com.lulu.player.view.ToastHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,12 +68,80 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
 
     private long mExitTime;
 
+    private int count = 35246;
+
+    private Handler handler = new Handler();
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+
+            count += 1;
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.toast, null);
+            ToastHelper.makeText(MainActivity.this, "第" + count + "位会员充值成功", ToastHelper.LENGTH_SHORT).setView(view)
+                    .setAnimation(R.style.anim_view).show();
+            handler.postDelayed(this, 10000);
+        }
+    };
+
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViewPager();
         initTabBar();
         cache = ACache.get(this);
+        if (Build.VERSION.SDK_INT < 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            ViewGroup mContentView = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
+            ViewGroup mContentParent = (ViewGroup) mContentView.getParent();
+
+            View statusBarView = mContentParent.getChildAt(0);
+            if (statusBarView != null && statusBarView.getLayoutParams() != null &&
+                    statusBarView.getLayoutParams().height == getStatusBarHeight(this)) {
+                //避免重复调用时多次添加 View
+                statusBarView.setBackgroundColor(Color.rgb(58, 44, 53));
+                return;
+            }
+
+            //创建一个假的 View, 并添加到 ContentParent
+            statusBarView = new View(this);
+            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(this));
+            statusBarView.setBackgroundColor(Color.rgb(58, 44, 53));
+            mContentParent.addView(statusBarView, 0, lp);
+
+            //ChildView 不需要预留系统空间
+            View mChildView = mContentView.getChildAt(0);
+            if (mChildView != null) {
+                ViewCompat.setFitsSystemWindows(mChildView, false);
+            }
+        } else {
+            Window window = getWindow();
+            //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //设置状态栏颜色
+            window.setStatusBarColor(Color.rgb(58, 44, 53));
+
+            ViewGroup mContentView = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
+            View mChildView = mContentView.getChildAt(0);
+            if (mChildView != null) {
+                //注意不是设置 ContentView 的 FitsSystemWindows, 而是设置 ContentView 的第一个子 View . 预留出系统 View 的空间.
+                ViewCompat.setFitsSystemWindows(mChildView, true);
+            }
+        }
+
     }
 
     private void initViewPager() {
@@ -165,6 +244,18 @@ public class MainActivity extends BaseActivity implements BaseFragment.OnFragmen
         titles.add("黄金区");
         titles.add("钻石区");
         titles.add("我的");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable, 5000);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
     }
 
     @Override

@@ -25,8 +25,8 @@ public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnPr
     public static final String KEY_URL = "view_url";
     private static final int PLAY_RETURN = 2 * 1000; // 2 seconds
     private static final String KEY_PLAY_POSITION = "play_position";
-    private static final String TOAST_ERROR_URL = "播放失败，请检查网址是否有误:" + KEY_URL;
-    private static final String TOAST_ERROR_PLAY = "播放失败，请检查网址是否存在!";
+    private static final String TOAST_ERROR_URL = "播放失败";
+    private static final String TOAST_ERROR_PLAY = "播放失败";
     private static final String DIALOG_TITLE = "奋力加载中，请稍后...";
     private static final int TIME_INTERVAL = 2000;
     private static String url;
@@ -100,7 +100,7 @@ public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Toast.makeText(getApplicationContext(), TOAST_ERROR_PLAY + "\n" + url, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), TOAST_ERROR_PLAY , Toast.LENGTH_LONG).show();
         progressDialog.cancel();
         finish();
 
@@ -129,8 +129,8 @@ public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Intent intent=new Intent();
-        setResult(Constants.RESULT_OK,intent);
+        Intent intent = new Intent();
+        setResult(Constants.RESULT_OK, intent);
         finish();
     }
 }

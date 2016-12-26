@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
@@ -23,6 +22,7 @@ import com.lulu.player.pay.view.PayActivity;
 import com.lulu.player.utils.ACache;
 import com.lulu.player.utils.JsonDecode;
 import com.lulu.player.video.VideoActivity;
+import com.lulu.player.view.ScrollGridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class FreeFragment extends MvpFragment<FreePresenter> implements FreeView
     ConvenientBanner banner;
 
     @Bind(R.id.free_gridView)
-    GridView freeGV;
+    ScrollGridView freeGV;
 
     private GridViewAdapter mAdapter;
 

@@ -45,6 +45,9 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
     @Bind(R.id.my_upgrade_text)
     TextView upgrade;
 
+    @Bind(R.id.service)
+    TextView phone;
+
     private String user_name, password_text;
 
     private List<Levels> mLevels;
@@ -146,14 +149,20 @@ public class MyFragment extends MvpFragment<MyPresenter> implements MyView {
             case "0":
                 level.setText("体验会员");
                 special.setText("观看体验区电影");
+                phone.setText("客服电话：请您先成为会员才可查看");
+                upgrade.setText(getResources().getString(R.string.my_cozuo_c));
                 break;
             case "1":
                 level.setText("黄金会员");
                 special.setText("观看黄金区电影");
+                phone.setText(getResources().getString(R.string.my_qq));
+                upgrade.setText(getResources().getString(R.string.my_cozuo_c_2));
                 break;
             case "2":
                 level.setText("钻石会员");
                 special.setText("观看所有电影");
+                phone.setText(getResources().getString(R.string.my_qq));
+                upgrade.setText(getResources().getString(R.string.my_cozuo_cc_3));
                 break;
         }
     }
