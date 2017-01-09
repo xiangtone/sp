@@ -164,7 +164,6 @@ public class JdbcControl
 		finally
 		{
 			free(null,pstmt,conn);
-			new SysUserActionDao().recordUserAction(sql);
 		}
 		
 		return false;

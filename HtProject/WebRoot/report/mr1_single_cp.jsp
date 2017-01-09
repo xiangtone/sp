@@ -68,9 +68,11 @@
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"), -1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
+	int isUnHoldData = StringUtil.getInteger(request.getParameter("is_unhold_data"), -1);
+	
 	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
 			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId+"", cprightList,
-			sortType);
+			isUnHoldData,sortType);
 
 	//List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -274,6 +276,8 @@ function arrayReverse(arr) {
 		$("#sel_data_type").val(<%=dataType%>);
 		$("#sel_commerce_user").val(<%=spCommerceUserId%>);
 		$("#sel_cp_commerce_user").val(<%=cpCommerceUserId%>);
+		
+		$("#sel_is_unhold_data").val(<%= isUnHoldData %>);
 	});
 	
 
@@ -353,6 +357,14 @@ function arrayReverse(arr) {
 							<option value="1">隔天</option>
 							<option value="2">IVR</option>
 							<option value="3">第三方支付</option>
+						</select>
+					</dd>
+					<dd class="dd01_me">导量类型</dd>
+					<dd class="dd04_me">
+						<select name="is_unhold_data" id="sel_is_unhold_data" style="width: 100px;">
+							<option value="-1">全部</option>
+							<option value="1">导量</option>
+							<option value="0">非导量</option>
 						</select>
 					</dd>
 					<br />

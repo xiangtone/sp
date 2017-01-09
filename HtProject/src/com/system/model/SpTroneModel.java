@@ -36,6 +36,9 @@ public class SpTroneModel
 	//商务ID
 	private int commerceUserId;
 	
+	//是否是导量数据，0为否，1为是
+	private int isUnHoldData;
+	
 	public int getTroneType()
 	{
 		return troneType;
@@ -243,6 +246,14 @@ public class SpTroneModel
 	}
 	public void setCommerceUserId(int commerceUserId) {
 		this.commerceUserId = commerceUserId;
+	}
+	public int getIsUnHoldData()
+	{
+		return isUnHoldData;
+	}
+	public void setIsUnHoldData(int isUnHoldData)
+	{
+		this.isUnHoldData = isUnHoldData;
 	}
 	
 	

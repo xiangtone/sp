@@ -57,7 +57,7 @@
 	params.put("trone_status",status + "");
 	params.put("keyword",keyWord);
 	
-	String pageData = PageUtil.initPageQuery("troneorder.jsp",params,rowCount,pageIndex);
+	String pageData = PageUtil.initPageQuery("troneorderquery.jsp",params,rowCount,pageIndex);
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

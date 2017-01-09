@@ -17,11 +17,13 @@
 	
 	String logoImg = ConfigManager.getConfigData("SYSTEM_LOGO", "logo.png");
 	
+	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台ss");
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>运营管理平台</title>
+<title><%= sysTitle %></title>
 
 <link href="head_data/public.css" rel="stylesheet" type="text/css" />
 

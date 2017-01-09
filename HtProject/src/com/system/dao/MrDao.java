@@ -19,7 +19,7 @@ public class MrDao
 {
 	public Map<String, Object> getMrAnalyData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int isUnHoldData,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -57,6 +57,11 @@ public class MrDao
 		
 		if(!(StringUtil.isNullOrEmpty(cpCommerceUserId)||"-1".equals(cpCommerceUserId)))
 			query += " and e.commerce_user_id in (" + cpCommerceUserId+")";
+		
+		if(isUnHoldData>=0)
+		{
+			query+= " and h.is_unhold_data = " + isUnHoldData;
+		}
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
@@ -285,7 +290,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrAnalyLrData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int isUnHoldData,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -330,6 +335,12 @@ public class MrDao
 //		
 //		if(cpCommerceUserId>0)
 //			query += " and e.commerce_user_id = " + cpCommerceUserId;
+		
+		
+		if(isUnHoldData>=0)
+		{
+			query+= " and h.is_unhold_data = " + isUnHoldData;
+		}
 		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];

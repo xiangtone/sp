@@ -12,11 +12,11 @@ public class MrServer
 {
 	public Map<String, Object> getMrData(String startDate, String endDate,
 			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType,String spCommerceUserId,String cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType,String spCommerceUserId,String cpCommerceUserId,int isUnHoldData,int sortType)
 	{
 		
 		Map<String, Object> result = new MrDao().getMrAnalyData(startDate, endDate, spId, spTroneId,troneId,
-				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
+				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,isUnHoldData,sortType);
 		
 		//如果数据类型，只能重新处理标题
 		if(sortType==15)
@@ -62,10 +62,10 @@ public class MrServer
 	
 	public Map<String, Object> getMrLrData(String startDate, String endDate,
 			int spId,int spTroneId, int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType,String spCommerceUserId,String cpCommerceUserId,int sortType)
+			int cityId,int operatorId,int dataType,String spCommerceUserId,String cpCommerceUserId,int isUnHoldData,int sortType)
 	{
 		return new MrDao().getMrAnalyLrData(startDate, endDate, spId, spTroneId,troneId,
-				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,sortType);
+				cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId,cpCommerceUserId,isUnHoldData,sortType);
 	}
 	
 	public Map<String, Object> getMrDataQiBa(String startDate, String endDate,

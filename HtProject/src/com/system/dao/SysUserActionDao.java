@@ -12,7 +12,16 @@ public class SysUserActionDao
 {
 	public void recordUserAction(String sql)
 	{
-		int userId = RightConfigCacheMgr.threadPolls.get(Thread.currentThread().getId());
+		int userId = -1;
+		
+		try
+		{
+			userId = RightConfigCacheMgr.threadPolls.get(Thread.currentThread().getId());
+		}
+		catch(Exception ex){}
+		
+		if(userId<=0)
+			return;
 		
 		final String addsql = "INSERT INTO daily_log.`tbl_user_action_log`(user_id,execsql) value (" + userId + ",'" + sql.replaceAll("'", "''") + "')";
 		
