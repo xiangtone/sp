@@ -8,6 +8,8 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.lulu.player.R;
 import com.lulu.player.common.Constants;
@@ -17,6 +19,7 @@ import com.lulu.player.model.RequestUserInfo;
 import com.lulu.player.model.UserInfo;
 import com.lulu.player.mvp.MvpActivity;
 import com.lulu.player.utils.ACache;
+import com.lulu.player.utils.MetaDataUtils;
 import com.lulu.player.utils.NetWorkUtils;
 import com.lulu.player.utils.ToastUtils;
 
@@ -29,7 +32,7 @@ import com.lulu.player.utils.ToastUtils;
  */
 public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideView {
 
-    private String IMSI, IMEI, mac, androidVersion, androidLevel, model;
+    private String IMSI, IMEI, mac, androidVersion, androidLevel, model, appKey, channel;
 
     private ACache cache;
 
@@ -69,10 +72,15 @@ public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideV
         model = "" + android.os.Build.MODEL;
         IMEI = "" + manager.getDeviceId();
 
+        appKey = MetaDataUtils.getValue(this, "EP_APPKEY");
+        channel = MetaDataUtils.getValue(this, "EP_CHANNEL");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         cache = ACache.get(this);
         progressDialog = new ProgressDialog(this);
@@ -81,7 +89,7 @@ public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideV
         if (NetWorkUtils.isNetworkAvailable(this)) {
             if (cache.getAsString(Constants.USER_NAME) == null) {
                 cache.put(Constants.IMEI, IMEI);
-                RequestUserInfo info = new RequestUserInfo(IMSI, IMEI, mac, androidVersion, androidLevel, model);
+                RequestUserInfo info = new RequestUserInfo(IMSI, IMEI, mac, androidVersion, androidLevel, model, appKey, channel);
                 presenter.getInfo(info);
             }
         }
@@ -150,7 +158,7 @@ public class GuideActivity extends MvpActivity<GuidePresenter> implements GuideV
     @Override
     public void onBackPressed() {
         if (progressDialog.isShowing()) {
-            progressDialog.dismiss();
+            progressDialog.cancel();
         } else {
             super.onBackPressed();
         }
