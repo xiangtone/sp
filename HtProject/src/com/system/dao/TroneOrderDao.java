@@ -46,6 +46,8 @@ public class TroneOrderDao
 					model.setSpId(rs.getInt("sp_id"));
 					model.setTroneName(StringUtil.getString(rs.getString("trone_name"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
+					
 					list.add(model);
 				}
 				
@@ -92,6 +94,7 @@ public class TroneOrderDao
 					model.setPrice(rs.getFloat("price"));
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					
 					list.add(model);
 				}
@@ -139,6 +142,7 @@ public class TroneOrderDao
 					model.setPrice(rs.getFloat("price"));
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					list.add(model);
 				}
 				
@@ -178,6 +182,7 @@ public class TroneOrderDao
 					model.setHoldPercent(rs.getInt("hold_percent"));
 					model.setTroneName(StringUtil.getString(rs.getString("trone_name"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					list.add(model);
 				}
 				
@@ -267,6 +272,7 @@ public class TroneOrderDao
 					model.setPrice(rs.getFloat("price"));
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					list.add(model);
 				}
 				return list;
@@ -315,6 +321,7 @@ public class TroneOrderDao
 					model.setSpTroneId(rs.getInt("sp_trone_id"));
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					
 					return model;
 				}
@@ -326,13 +333,13 @@ public class TroneOrderDao
 	public boolean addTroneOrder(TroneOrderModel model)
 	{
 		
-		String sql = "insert into daily_config.tbl_trone_order(trone_id,order_num,cp_id,order_trone_name,is_dynamic,push_url_id,disable,is_unknow,hold_percent,hold_amount,hold_is_custom,hold_start) values(" + model.getTroneId() + ",'"
+		String sql = "insert into daily_config.tbl_trone_order(trone_id,order_num,cp_id,order_trone_name,is_dynamic,push_url_id,disable,is_unknow,hold_percent,hold_amount,hold_is_custom,hold_start,is_unhold_data) values(" + model.getTroneId() + ",'"
 				+ model.getOrderNum() + "'," + model.getCpId() + ",'"
 				+ model.getOrderTroneName() + "'," + model.getDynamic() + ","
 				+ model.getPushUrlId() + "," + model.getDisable() + ","
 				+ model.getIsUnKnow() + "," + model.getHoldPercent() + ","
 				+ model.getHoldAmount() + "," + model.getIsHoldCustom() + ","
-				+ model.getHoldAcount() + ")";
+				+ model.getHoldAcount() + "," + model.getIsUnholdData() + ")";
 
 		return new JdbcControl().execute(sql);
 		
@@ -347,7 +354,7 @@ public class TroneOrderDao
 				+ model.getPushUrlId() + ",disable=" + model.getDisable()
 				+ ",is_unknow=" + model.getIsUnKnow() + ",hold_percent="
 				+ model.getHoldPercent() + ",hold_amount=" + model.getHoldAmount() + ",hold_is_custom="
-				+ model.getIsHoldCustom() + ",hold_start = " + model.getHoldAcount() + " where id = " + model.getId();
+				+ model.getIsHoldCustom() + ",hold_start = " + model.getHoldAcount() + ",is_unhold_data = " + model.getIsUnholdData() + " where id = " + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}
@@ -405,6 +412,7 @@ public class TroneOrderDao
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setProvince(StringUtil.getString(rs.getString("provinces"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					
 					model.setRemark(StringUtil.getString(rs.getString("ramark"), ""));
 					
@@ -541,6 +549,7 @@ public class TroneOrderDao
 					model.setPrice(rs.getFloat("price"));
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					list.add(model);
 				}
 				return list;
@@ -645,6 +654,7 @@ public class TroneOrderDao
 					model.setPrice(rs.getFloat("price"));
 					model.setHoldAcount(rs.getInt("hold_start"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					list.add(model);
 				}
 				return list;

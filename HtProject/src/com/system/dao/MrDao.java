@@ -60,7 +60,7 @@ public class MrDao
 		
 		if(isUnHoldData>=0)
 		{
-			query+= " and h.is_unhold_data = " + isUnHoldData;
+			query+= " and h.is_unhold_data = " + isUnHoldData + " and b.is_unhold_data = " + isUnHoldData;
 		}
 		
 		String[] result = getSortType(sortType);
@@ -339,7 +339,7 @@ public class MrDao
 		
 		if(isUnHoldData>=0)
 		{
-			query+= " and h.is_unhold_data = " + isUnHoldData;
+			query+= " and h.is_unhold_data = " + isUnHoldData + " and b.is_unhold_data = " + isUnHoldData;
 		}
 		
 		String[] result = getSortType(sortType);

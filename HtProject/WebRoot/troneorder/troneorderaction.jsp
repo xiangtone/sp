@@ -17,6 +17,7 @@
 	int holdIsCustom = StringUtil.getInteger(request.getParameter("hold_custom"), 0);
 	String orderNum = StringUtil.getString(request.getParameter("order_num"),"");
 	int holdAccount = StringUtil.getInteger(request.getParameter("hold_account"), 0);
+	int isUnHoldData = StringUtil.getInteger(request.getParameter("is_unhold_data"), 0);
 	
 	String query = StringUtil.getString(request.getParameter("query"), "");
 	
@@ -33,6 +34,7 @@
 	model.setIsHoldCustom(holdIsCustom);
 	model.setOrderNum(orderNum);
 	model.setHoldAcount(holdAccount);
+	model.setIsUnholdData(isUnHoldData);
 	
 	if(id<=0)
 	{

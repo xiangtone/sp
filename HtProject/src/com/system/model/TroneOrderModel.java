@@ -25,6 +25,7 @@ public class TroneOrderModel
 	private int holdAcount;
 	private String provinceList;
 	private String province;
+	private int isUnholdData;
 	
 	private int commerceUserId;
 	
@@ -227,6 +228,14 @@ public class TroneOrderModel
 	public void setRemark(String remark)
 	{
 		this.remark = remark;
+	}
+	public int getIsUnholdData()
+	{
+		return isUnholdData;
+	}
+	public void setIsUnholdData(int isUnholdData)
+	{
+		this.isUnholdData = isUnholdData;
 	}
 	
 	
