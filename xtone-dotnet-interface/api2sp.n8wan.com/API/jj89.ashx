@@ -10,8 +10,14 @@ public class jj89 : sdk_Request.Logical.APIRequestGet
 {
     protected override sdk_Request.Model.SP_RESULT GetSpCmd()
     {
-        var url = "http://121.14.38.20:25494/if_mtk/service?operation=102" + "&imei=" + OrderInfo.imei + "&imsi=" + OrderInfo.imsi + "&sid=73500138" + OrderInfo.id + "&paycode=" + PayModel.paycode + "&app_id=" + PayModel.appid +
+
+        OrderInfo.apiExdata = "73500138" + OrderInfo.id.ToString();
+
+        var url = "http://121.14.38.20:25494/if_mtk/service?operation=102" + "&imei=" + OrderInfo.imei
+            + "&imsi=" + OrderInfo.imsi + "&sid=" + OrderInfo.apiExdata
+            + "&paycode=" + PayModel.paycode + "&app_id=" + PayModel.appid +
             "&channel_id=" + PayModel.channelid + "&ip=" + OrderInfo.clientIp;
+
         var html = GetHTML(url, 15000, null);
         if (string.IsNullOrEmpty(html))
         {
@@ -38,7 +44,7 @@ public class jj89 : sdk_Request.Logical.APIRequestGet
         }
         var sms1 = new sdk_Request.Model.SP_SMS_Result();
         sms1.port = jobj["smsport"].Value<string>();
-        sms1.msg = jobj["smsmsg"].Value<string>();
+        sms1.msg = System.Text.ASCIIEncoding.Default.GetString(Convert.FromBase64String(jobj["smsmsg"].Value<string>()));
         return sms1;
     }
 }

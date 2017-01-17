@@ -33,9 +33,10 @@ public class jj96 : sdk_Request.Logical.APIRequestGet
                 + "&net_info=" + OrderInfo.netType
                 + "&extra=" + OrderInfo.id
                 + "&timestamp=" + DateTime.Now.ToString("yyyyMMddHHmmss")
-                + "&proid=" + package[0]
+                + "&proid=小猪快跑" 
+                + "&protype=1"
                 + "&client_ip=" + OrderInfo.clientIp;
-        var html = GetHTML(url, 10000, null);
+        var html = GetHTML(url, 20000, null);
         var jobj = JObject.Parse(html);
         if (string.IsNullOrEmpty(html))
         {
