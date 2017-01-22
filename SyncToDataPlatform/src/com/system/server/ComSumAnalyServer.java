@@ -109,7 +109,7 @@ public class ComSumAnalyServer
 	
 	private void tempAnalyData()
 	{
-		for(int i=9; i<11; i++)
+		for(int i=9; i<=10; i++)
 		{
 			Calendar ca = Calendar.getInstance();
 			
@@ -140,9 +140,7 @@ public class ComSumAnalyServer
 		FeeDateDataModel oriModel = null;
 		FeeDateDataModel descModel = null;
 		
-		
-		
-		for(int i=1; i<=4; i++)
+		for(int i=3; i<=3; i++)
 		{
 			Map<String, FeeDateDataModel> descMap = dao.loadDescSource(i, startDate, endDate);
 			Map<String, FeeDateDataModel> oriMap = dao.loadOriSource(i, startDate, endDate);

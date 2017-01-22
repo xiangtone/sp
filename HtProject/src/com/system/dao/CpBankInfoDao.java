@@ -66,7 +66,7 @@ public class CpBankInfoDao {
 		
 		if(!StringUtil.isNullOrEmpty(keyWord))
 		{
-			sql += " AND (cpb.bank_name LIKE '%"+keyWord+"%' or cpb.user_name LIKE '%"+keyWord+"%' or cp.short_name LIKE '%"+keyWord+"%' )";
+			sql += " AND (cpb.bank_name LIKE '%"+keyWord+"%' or cpb.user_name LIKE '%"+keyWord+"%' or cp.short_name LIKE '%"+keyWord+"%' or cp.full_name LIKE '%"+keyWord+"%')";
 		}
 		if(type>=0){
 			sql +=" AND cpb.type="+type;

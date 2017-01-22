@@ -21,7 +21,7 @@
 	List<CpModel> cpList = new CpServer().loadCp();
 	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(startDate, endDate,spId,cpId,dataType) : new ArrayList<FinancialSpCpDataShowModel>();
 	String lrjsp="<a style='color: blue;'href='mr_lr_spcp.jsp?startdate="+startDate+"&enddate="+endDate+"&sp_id="+spId+"&cp_id="+cpId+">查看利润</a>";
-//	<a style="color: blue;"href="mr_lr_spcp.jsp?<%=request.getQueryString()%>">查看利润</a>
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

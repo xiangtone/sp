@@ -19,6 +19,16 @@
 	
 	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台ss");
 	
+	String sysUser = ConfigManager.getConfigData("SYSTEM_USER","SZHT");
+	
+	String splitorBand = "";
+	
+	if("SJHD".equalsIgnoreCase(sysUser))
+	{
+		splitorBand = "style=\"background-image: url('head_data/splitor_sjhd.png');\"";
+	}
+	
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -73,7 +83,7 @@
 			&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" onclick="goEditInfo()">修改资料</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="loginaction.jsp?type=-1" target="_parent">退出</a>&nbsp;&nbsp;
 		</div>
 	</div>
-	<div class="nav">
+	<div class="nav" <%= splitorBand %>>
 		<div class="nav_left">&nbsp;</div>
 		<div class="nav_right">
 			<%

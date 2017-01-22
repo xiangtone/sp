@@ -157,6 +157,13 @@
 				<final.name>HtProject</final.name>
 			</properties>
 		</profile>
+		<profile>
+			<id>htsj</id>
+			<properties>
+				<runtime.env>config\htsj</runtime.env>
+				<final.name>dis.n8wan.com</final.name>
+			</properties>
+		</profile>
 	</profiles>
 	<dependencies>
 		<dependency>
