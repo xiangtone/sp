@@ -220,6 +220,7 @@
 					<td>SP业务名称</td>
 					<td>通道名称</td>
 					<td>价格</td>
+					<td>导量</td>
 					<td>指令</td>
 					<td>扣量设置</td>
 					<td>扣量比</td>
@@ -244,6 +245,7 @@
 					<td><%=model.getSpTroneName()%></td>
 					<td><%=model.getTroneName() %></td>
 					<td><%= model.getPrice() %></td>
+					<td><%= model.getIsUnholdData()==1 ? "是" : "否" %></td>
 					<td><%=model.getOrderNum() %></td>
 					<td><%=model.getIsHoldCustom()==0 ? "URL" : "当前" %></td>
 					<td><%=model.getHoldPercent() %></td>

@@ -60,7 +60,7 @@
 
 	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
 			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId+"", cpCommerceUserId+"",
-			sortType);
+			-1,sortType);
 
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
