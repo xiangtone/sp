@@ -1,3 +1,5 @@
+<%@page import="com.system.model.PayCodeExportChildModel"%>
+<%@page import="com.system.model.PayCodeExportModel"%>
 <%@page import="com.system.util.ConfigManager"%>
 <%@page import="java.io.OutputStream"%>
 <%@page import="java.net.URLEncoder"%>
@@ -30,21 +32,15 @@
 	
 	int status = StringUtil.getInteger(request.getParameter("status"), -1);
 	
-	List<TroneOrderModel> list = new ArrayList();
-	
-	if(cpId > 0)
-	  	list =  new TroneOrderServer().loadTroneOrderListByCpSpTroneId(cpId, spTroneId, status);
-	
 	List<CpModel> cpList = new CpServer().loadCp();
-	
-	List<SpTroneModel> spTroneList = new ArrayList();
-	
-	if(cpId>0)
-		spTroneList = new SpTroneServer().loadTroneListByCpid(cpId);
 	
 	int isLoad = StringUtil.getInteger(request.getParameter("export"), -1);
 	
-	if(isLoad>0 && !list.isEmpty())
+	List<PayCodeExportModel> exportList = new TroneOrderServer().loadPayCodeExportModelListByCpSpTroneId(cpId, spTroneId, status);
+	
+	System.out.println("exportList size:" + exportList.size());
+	
+	if(isLoad>0 && !exportList.isEmpty())
 	{
 		response.setContentType("application/octet-stream;charset=utf-8");
 		
@@ -60,20 +56,31 @@
 		
 		String fileName = cpName +  "_" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".txt";
 		
-		if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
-		{
-			fileName = URLEncoder.encode(fileName, "UTF-8");
-		} 
-		else 
-		{
-			fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
-		}
-		
-		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+		response.setHeader("Content-Disposition", "attachment;filename=" + new String(fileName.getBytes("GBK"), "ISO8859-1"));
 		
 		StringBuffer sbData = new StringBuffer();
 		
-		sbData.append(cpName + "\r\n");
+		sbData.append("公司名称：" + cpName + "\r\n\r\n");
+		
+		for(int i=0; i<exportList.size(); i++)
+		{
+			PayCodeExportModel exportModel = exportList.get(i);
+			
+			sbData.append("业务：" + exportModel.getSpTroneName() + "\r\n");
+			sbData.append("上量方式:" + exportModel.getUpDataTypeName() + "\r\n");
+			sbData.append("省份:" + exportModel.getPrivincesName() + "\r\n");
+			sbData.append("下行语:" + exportModel.getRemark() + "\r\n");
+			sbData.append("PayCode\t价格\t指令\t通道\r\n");
+			
+			for(PayCodeExportChildModel childModel : exportModel.getChildList())
+			{
+				sbData.append((100000 + childModel.getPayCode()) + "\t" + childModel.getPrice() +"\t" + childModel.getOrders() + "\t" + childModel.getTroneNum() + "\r\n");
+			}
+			
+			sbData.append("\r\n");
+		}
+		
+		/*
 		
 		sbData.append("PayCode\t业务名称\t价格\t状态\t省份\t备注\r\n");
 		
@@ -85,6 +92,8 @@
 			sbData.append((orderModel.getId() + 100000) + "\t" + orderModel.getSpTroneName() + "\t" + orderModel.getPrice() 
 			+ "\t" + ((orderModel.getDisable() ==0 || orderModel.getSpTroneStatus() == 1) ? "启用" : "停用") + "\t" + orderModel.getProvinceList() + "\t" + orderModel.getRemark() + "\r\n");
 		}
+		
+		*/
         
         out.clear();
         
@@ -94,6 +103,19 @@
         
         return;
 	}
+	
+	
+	List<TroneOrderModel> list = new ArrayList();
+	
+	if(cpId > 0)
+	  	list =  new TroneOrderServer().loadTroneOrderListByCpSpTroneId(cpId, spTroneId, status);
+	
+	List<SpTroneModel> spTroneList = new ArrayList();
+	
+	if(cpId>0)
+		spTroneList = new SpTroneServer().loadTroneListByCpid(cpId);
+	
+	
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

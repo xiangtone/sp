@@ -11,6 +11,8 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.CpSpTroneSynModel;
+import com.system.model.PayCodeExportChildModel;
+import com.system.model.PayCodeExportModel;
 import com.system.model.TroneOrderModel;
 import com.system.util.StringUtil;
 
@@ -417,6 +419,89 @@ public class TroneOrderDao
 					model.setRemark(StringUtil.getString(rs.getString("ramark"), ""));
 					
 					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	
+	//不要问我为什么这样处理这个状态，得问邓先生！
+	@SuppressWarnings("unchecked")
+	public List<PayCodeExportModel> loadPayCodeExportModelListByCpSpTroneId(int cpId,int spTroneId,int status)
+	{
+		String  sql = "SELECT d.id sp_trone_id,d.name sp_trone_name,e.name up_data_type_name,d.provinces,";
+		sql += " a.id pay_code,c.price,c.orders,c.trone_num,d.ramark remark";
+		sql += " FROM daily_config.tbl_trone_order a";
+		sql += " LEFT JOIN daily_config.tbl_cp b ON a.cp_id = b.id ";
+		sql += " LEFT JOIN daily_config.tbl_trone c ON a.trone_id = c.id ";
+		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.id ";
+		sql += " LEFT JOIN daily_config.tbl_up_data_type e ON d.up_data_type = e.id";
+		sql += " WHERE 1=1 and d.trone_api_id > 0 ";
+		
+		if(cpId>0)
+		{
+			sql += " AND b.id = " + cpId;
+		}
+		
+		if(spTroneId>0)
+		{
+			sql += " AND d.id = " + spTroneId;
+		}
+		
+		if(status >=0 )
+		{
+			sql += " AND c.status = " + status + " and  a.disable = " +  (status==0 ? 1 : 0) ;
+		}
+		
+		sql += " ORDER BY d.id,a.id ASC";
+		
+		
+		return (List<PayCodeExportModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<PayCodeExportModel> list = new ArrayList<PayCodeExportModel>();
+				
+				PayCodeExportModel model = null;
+				
+				while(rs.next())
+				{
+					int spTroneId = rs.getInt("sp_trone_id");
+					
+					model = null;
+					
+					for(PayCodeExportModel tmpModel : list)
+					{
+						if(tmpModel.getSpTroneId() == spTroneId)
+						{
+							model = tmpModel;
+							break;
+						}
+					}
+					
+					if(model==null)
+					{
+						model = new PayCodeExportModel();
+						model.setSpTroneId(spTroneId);
+						model.setPrivinces(StringUtil.getString(rs.getString("provinces"), ""));
+						model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+						model.setUpDataTypeName(StringUtil.getString(rs.getString("up_data_type_name"), ""));
+						model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
+						model.setChildList(new ArrayList<PayCodeExportChildModel>());
+						list.add(model);
+					}
+						
+					PayCodeExportChildModel childModel = new PayCodeExportChildModel();
+					
+					childModel.setOrders(StringUtil.getString(rs.getString("orders"), ""));
+					childModel.setPayCode(rs.getInt("pay_code"));
+					childModel.setTroneNum(StringUtil.getString(rs.getString("trone_num"), ""));
+					childModel.setPrice(rs.getInt("price"));
+					
+					model.getChildList().add(childModel);
 				}
 				
 				return list;
