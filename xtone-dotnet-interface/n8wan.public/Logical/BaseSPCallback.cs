@@ -44,6 +44,10 @@ namespace n8wan.Public.Logical
         /// SP传入IP未被确认（非正常SP数据同步）
         /// </summary>
         const int C_TM_SERVER_IP_ERROR = -5;
+        /// <summary>
+        /// 多条SP通道
+        /// </summary>
+        const int C_TM_MULTI_TRONE = -6;
 
         /// <summary>
         /// url映射数据库字段(sql,url)
@@ -65,6 +69,11 @@ namespace n8wan.Public.Logical
         /// 保存正在处理的linkid，防止SP快速同步时，出重复数据
         /// </summary>
         static List<string> _linkidProcing = new List<string>();
+
+        /// <summary>
+        /// 设置当前接收的同步数据是否同步渠道
+        /// </summary>
+        protected E_CP_SYNC_MODE SyncFlag { get; set; }
 
         protected virtual bool OnInit() { return true; }
 
@@ -96,7 +105,7 @@ namespace n8wan.Public.Logical
 #if DB_LOG_RECORD
                 RecordRequest();
 #endif
-
+                SyncFlag = E_CP_SYNC_MODE.Auto;
                 if (!OnInit())
                 {
                     WriteError("init fail/invalid data!");
@@ -200,6 +209,7 @@ namespace n8wan.Public.Logical
             _linkId = null;
             _MoItem = null;
             _MrItem = null;
+            SyncFlag = E_CP_SYNC_MODE.Auto;
         }
 
         /// <summary>
@@ -552,13 +562,25 @@ namespace n8wan.Public.Logical
             //throw new NotImplementedException();
             if (!_MrItem.IsMatch || trone == null)
                 return;
+
+            var syncFlag = SyncFlag;
+            if (syncFlag == E_CP_SYNC_MODE.Auto)
+            {
+                if (_MrItem.linkid.IndexOf("test", StringComparison.OrdinalIgnoreCase) != -1)
+                    syncFlag = E_CP_SYNC_MODE.ForceHide;
+                else if (_MrItem.linkid.IndexOf("cishi", StringComparison.OrdinalIgnoreCase) != -1)
+                    syncFlag = E_CP_SYNC_MODE.ForceHide;
+            }
+
+
             var logFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today));
 
             var apiPush = new HTAPIPusher()
             {
                 dBase = dBase,
                 Trone = trone,
-                LogFile = logFile
+                LogFile = logFile,
+                PushFlag = syncFlag
             };
 
             if (apiPush.LoadCPAPI())
@@ -584,6 +606,8 @@ namespace n8wan.Public.Logical
             var cp = new AutoMapPush();
             cp.dBase = dBase;
             cp.Trone = trone;
+            cp.PushFlag = syncFlag;
+
             //cp.UnionUserId = -1;
             cp.LogFile = logFile;
 
@@ -704,7 +728,13 @@ namespace n8wan.Public.Logical
             if (_MrItem.status == null)
                 return string.Format("\"{0}\" null", U2DMap["status"]);
 
-            var rx = Library.GetRegex(api.MrStatus);
+            var rexp = api.MrStatus;
+            if (!rexp.StartsWith("^"))
+                rexp = "^" + rexp;
+            if (!rexp.EndsWith("$"))
+                rexp += "$";
+
+            var rx = new Regex(rexp, RegexOptions.IgnoreCase);// Library.GetRegex(api.MrStatus);
             if (!rx.IsMatch(_MrItem.status))
                 return string.Format("\"{0}\" \"{1}\" unaccpated", U2DMap["status"], _MrItem.status);
 
@@ -869,20 +899,23 @@ namespace n8wan.Public.Logical
 
             m.trone_id = C_TM_NOT_Order;
             LightDataModel.tbl_troneItem trone = null;
+            int iCount = 0;
             foreach (var cmd in cmds)
             {
                 var cMsg = cmd.orders;
                 if (string.IsNullOrEmpty(cMsg) && string.IsNullOrEmpty(mMsg))
                 {
                     trone = cmd;
-                    break;
+                    iCount++;
+                    continue;
                 }
                 if (cmd.match_price)
                 {//无规则指令，直接匹配价格
                     if (cmd.price == (m.price / 100m))
                     {
                         trone = cmd;
-                        break;
+                        iCount++;
+                        continue;
                     }
                 }
                 else if (cmd.is_dynamic)
@@ -891,7 +924,8 @@ namespace n8wan.Public.Logical
                     if (rx.IsMatch(mMsg))
                     {
                         trone = cmd;
-                        break;
+                        iCount++;
+                        continue;
                     }
                 }
                 else
@@ -899,13 +933,20 @@ namespace n8wan.Public.Logical
                     if (mMsg.Equals(cMsg, StringComparison.OrdinalIgnoreCase))
                     {
                         trone = cmd;
-                        break;
+                        iCount++;
+                        continue;
                     }
                 }
             }
-
-            if (trone == null)
+            if (iCount == 0)
                 return null;
+
+            if (iCount > 1)
+            {
+                m.trone_id = C_TM_MULTI_TRONE;
+                return null;
+            }
+
             if (m.price > 0)
             {//SP价格校验 防止配置错
                 if (trone.price != (m.price / 100m))
@@ -948,7 +989,7 @@ namespace n8wan.Public.Logical
         //}
 
 
-        private Logical.ISMS_DataItem LoadItem()
+        protected virtual Logical.ISMS_DataItem LoadItem()
         {
             var linkId = GetLinkId();
             if (string.IsNullOrEmpty(linkId))
@@ -995,7 +1036,7 @@ namespace n8wan.Public.Logical
             return _linkId;
         }
 
-        protected LightDataModel.tbl_moItem GetMOItemByLinkId(string linkId)
+        protected virtual LightDataModel.tbl_moItem GetMOItemByLinkId(string linkId)
         {
             if (string.IsNullOrEmpty(api.MoCheck))
                 return null;//仅MR模式
@@ -1019,7 +1060,7 @@ namespace n8wan.Public.Logical
             return null;
         }
 
-        protected LightDataModel.tbl_mrItem GetMRItemByLinkId(string linkId)
+        protected virtual LightDataModel.tbl_mrItem GetMRItemByLinkId(string linkId)
         {
             var q = LightDataModel.tbl_mrItem.GetQueries(dBase);
             q.Filter.AndFilters.Add(LightDataModel.tbl_mrItem.Fields.sp_api_url_id, this.api.id);

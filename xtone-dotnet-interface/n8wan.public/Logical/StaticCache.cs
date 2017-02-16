@@ -353,8 +353,17 @@ namespace n8wan.Public.Logical
                     return;
             }
             base.Add(this);
-
-            dt[(IDX)data[this._indexField]] = data;
+            try
+            {
+                lock (this)
+                    dt[(IDX)data[this._indexField]] = data;
+            }
+            catch (Exception ex)
+            {
+                WriteLog(ex.ToString());
+                WriteLog("缓存记录数据：" + dt.Count);
+                return;
+            }
             WriteLog(true, 0, 1);
         }
 
