@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="./css/frozen.css"
+          media="all">
+    <link rel="stylesheet" type="text/css" href="./css/common_av.css"
+          media="all">
+    <script src="./scripts/zepto.min.js"></script>
+    <script src="./scripts/frozen.js"></script>
+    <script src="./scripts/vue.min.js"></script>
+    <script src="./scripts/common_av_cz.js"></script>
+</head>
+
+<body id="body" v-cloak>
+<header id="header" class="ui-header ui-header-positive ui-border-b">
+    <h1>{{nowleve}}</h1>
+</header>
+<section id="slider" class="ui-slider" style="height: 1.5rem;">
+    <ul class="ui-slider-content"
+        style="width: 600%; transition-property: transform; transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0.001s; transform: translate(-360px, 0px) translateZ(0px);">
+        <li v-on:click="play(vo)" class="" v-for="vo in flowlist">
+            <span style="background-image: url('{{vo['imgurl']}}')"><em>{{vo['title']}}</em></span>
+        </li>
+    </ul>
+    <ul class="ui-slider-indicators" v-for="vo in flowlist">
+        <li class="current"></li>
+    </ul>
+</section>
+<section class="ui-panel">
+    <h2>试看专区</h2>
+    <ul class="ui-grid-halve" id="vlist" style="padding:0 0.4rem 0 0.4rem">
+        <li v-on:click="play(vo)" v-for="vo in bodylist">
+            <div class="ui-grid-halve-img">
+            <span style="background-image:url('{{vo['imgurl']}}')">
+                	<img src="http://tupian.walldeumidifier.cn//wap/Public/sp2/img/shibo.png"
+                         style="position: absolute;width:25%;height:0.9rem;margin-left: 75%;">
+                <!--<p style="position: absolute;-->
+                 <!--color: white;font-size: 0.6rem;background-color: #c71ecc;">已播{{vo['scane']}}次</p>-->
+                    <p style="position: absolute;right: 0.2rem;color: white;font-size: 0.6rem;">{{vo['desc']}}</p>
+            </span>
+            </div>
+            <h4 class="ui-nowrap">
+                <span style="width: 50%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;margin: 0;display: block;float: left;margin: 0;">{{vo['title']}}</span>
+                <span style="border-radius: 5px;opacity: 0.8;border-radius: 3px;margin: 0;float: right;display: block;line-height: 0.8rem;font-size: 0.5rem;background-color: #c71ecc;padding: 0.1rem;color: white">{{vo['tag']}}</span>
+                <span style="border-radius: 5px;opacity: 0.8;border-radius: 3px;margin: 0;float: right;display: block;line-height: 0.8rem;font-size: 0.5rem;background-color: #c71ecc;padding: 0.1rem;color: white;margin-right: 0.1rem;">{{vo['tag2']}}</span>
+            </h4>
+        </li>
+    </ul>
+</section>
+<footer id="footer" class="ui-footer ui-footer-stable ui-border-t">
+    <ul class="ui-tiled ui-border-t">
+        <li v-on:click="tab('http://139.129.232.203:10087/api.php?s=AutoWap/url/name/index')" class="active" id="m_index"><i class="ui-icon-emo"></i><span id="sp_index">{{menu_index}}</span>
+        </li>
+        <li v-on:click="tab('http://139.129.232.203:10087/api.php?s=AutoWap/url/name/member')" id="m_member"><i class="ui-icon-wallet"></i>{{menu_vip}}</li>
+        <li v-on:click="tab('http://139.129.232.203:10087/api.php?s=AutoWap/url/name/category')" id="m_category"><i class="ui-icon-dressup"></i>频道区</li>
+        <li v-on:click="tab('http://139.129.232.203:10087/api.php?s=AutoWap/url/name/my')" id="m_my"><i class="ui-icon-personal"></i>我的</li>
+    </ul>
+</footer>
+<div style="text-align: center; font-size: 16px;;color: red" class="topay paytip" id="dv_more">更多精华资源，仅限{{upleve}}专享&gt;&gt;</div>
+<div class="u-layer-ath" style="display: none">
+    <div class="ath_addhome_area"></div>
+    <div class="ath_close_area" data-role="button"></div>
+</div>
+
+
+<!-- 提示付费窗口 -->
+
+<link rel="stylesheet" type="text/css" href="./css/dialog.css"
+      media="all">
+<div id="paybox" class="ui-dialog">
+    <div class="ui-dialog-cnt layermchild dialogwidth">
+        <a class="ui-icon-close-page dialogicon" data-role="button"></a>
+
+        <div class="pop">
+            <div class="popup">
+                <div class="popupPic"><img src="http://tupian.walldeumidifier.cn//wap/Public/sp2/img/pay_header.jpg"
+                                           alt=""></div>
+                <div class="popmainbox">
+                    <div class="vipText">开通VIP会员，尽情释放体内的洪荒之力！</div>
+                    <div class="chooseType">
+                        <div class="relative typeList silver-right">
+                            <label>
+                                <div class="type">
+                                    <div class="typePos">
+                                        <input type="radio" id="vip_radio1" name="vipType" class="grayRadio"
+                                               value="0"><i class="black">黄金会员</i>
+                                        <br><span class="typeGray typeGraytwo">黄金区资源任意浏览</span>
+                                    </div>
+                                </div>
+                                <div class="price priceMargin">￥38.00</div>
+                            </label>
+                        </div>
+                        <div class="relative typeList gold-right">
+                            <label>
+                                <div class="type">
+                                    <div class="typePos">
+                                        <input type="radio" id="vip_radio2" name="vipType" class="grayRadio"
+                                               value="1"><i class="yellow">钻石会员</i>
+                                        <br><span class="typeGray typeGrayone">更多高清资源任意浏览</span>
+                                    </div>
+                                </div>
+                                <div class="price priceMargin">￥68.00</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="payType payTypecenter">
+                        <a target="_blank" href="javascript:show_pay(1);" class="payTypea payTypem"><img
+                                src="http://tupian.walldeumidifier.cn//wap/Public/sp2/img/wx.jpg" alt=""></a>
+
+                        <p></p>
+                        <a target="_blank" href="javascript:show_pay(2);" class="payTypea payTypemt"><img
+                                src="http://tupian.walldeumidifier.cn//wap/Public/sp2/img/zfb.jpg"
+                                alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="paybox1" class="ui-dialog">
+    <div class="ui-dialog-cnt layermchild dialogwidth">
+        <a class="ui-icon-close-page dialogicon" data-role="button"></a>
+
+        <div class="pop">
+            <div class="popup">
+                <div class="popupPic"><img src="./images/pay_header.jpg"
+                                           alt=""></div>
+                <div class="popmainbox">
+                    <div class="vipText">开通VIP会员，尽情释放体内的洪荒之力！</div>
+                    <div class="chooseType">
+                        <div class="relative typeList silver-right">
+                            <label>
+                                <div class="type">
+                                    <div class="typePos">
+                                        <input type="radio" id="vip_radio3" name="vipType" class="grayRadio"
+                                               value="2"><i class="black">钻石会员</i>
+                                        <br><span class="typeGray typeGraytwo">更多高清资源任意浏览</span>
+                                    </div>
+                                </div>
+                                <div class="price priceMargin">￥30.00</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="payType payTypecenter">
+                        <a target="_blank" href="javascript:show_pay(1);" class="payTypea payTypem"><img
+                                src="./images/wx.jpg" alt=""></a>
+
+                        <p></p>
+                        <a target="_blank" href="javascript:show_pay(2);" class="payTypea payTypemt"><img src="./images/zfb.jpg"
+     alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="paybox2" class="ui-dialog">
+    <div class="ui-dialog-cnt layermchild dialogwidth">
+        <a class="ui-icon-close-page dialogicon" data-role="button"></a>
+
+        <div class="pop">
+            <div class="popup">
+                <div class="popupPic"><img src="./images/pay_header.jpg"
+     alt=""></div>
+                <div class="popmainbox">
+                    <div class="vipText">开通VIP会员，尽情释放体内的洪荒之力！</div>
+                    <div class="chooseType">
+                        <div class="relative typeList silver-right">
+                            <label>
+                                <div class="type">
+                                    <div class="typePos">
+                                        <input type="radio" id="vip_radio4" name="vipType" class="grayRadio"
+                                               value="3"><i class="black">黑金会员</i>
+                                        <br><span class="typeGray typeGraytwo">所有资源任意浏览</span>
+                                    </div>
+                                </div>
+                                <div class="price priceMargin">￥30.00</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="payType payTypecenter">
+                        <a target="_blank" href="javascript:show_pay(1);" class="payTypea payTypem"><img src="./images/wx.jpg" alt=""></a>
+
+                        <p></p>
+                        <a target="_blank" href="javascript:show_pay(2);" class="payTypea payTypemt"><img src="./images/zfb.jpg" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form style="display: none" id="pfrom"></form>
+<script>
+    //type 1 微信 2 支付宝
+    function show_pay(type) {
+        var vipType = $("input[type='radio']:checked").attr("value");
+        var price = 38;
+        var pid = 1;
+        switch (vipType) {
+            case "0":
+                price = 38;
+                pid = 1;
+                break;
+            case "1":
+                price = 68;
+                pid = 2;
+                break;
+            case "2":
+                price = 30;
+                pid = 5;
+                break;
+            case "3":
+                price = 30;
+                pid = 6;
+                break;
+        }
+
+        if (type == 1) {
+//            alert("wx");
+            var cid = getCookie("cid");
+//            alert("mm_cid:"+cid);
+            wx_pay(price, pid);
+        }
+        else {
+//            alert("ali");
+            ali_pay(price, pid);
+        }
+    }
+    //提醒支付
+    function pay() {
+        var level = getCookie("level");
+        if(level==null||level==""){
+            level="0";
+        }
+        var c_id="";
+        switch (level){
+            case "0": //普通用户
+                c_id ="paybox";
+                $("#vip_radio2").attr("checked","checked");
+                break;
+            case "1": //黄金会员->升级
+                $("#vip_radio3").attr("checked","checked");
+                c_id ="paybox1";
+                break;
+            case "2": //钻石会员->升级
+                $("#vip_radio4").attr("checked","checked");
+                c_id ="paybox2";
+                break;
+            case "3":
+                return;
+                break;
+        }
+        var o = $("#"+c_id).dialog("show");
+        o.on("dialog:action", function (o) {
+//            1 == o.index && (window.location.href = "/s2.php?s=/Home/Sp/buy");   //tag  应该修改为支付跳转
+            1 == o.index && (window.location.href = "http://139.129.232.203:10087/api.php?s=AutoWap/url/name/index");   //tag  应该修改为支付跳转
+        })
+    }
+</script>
+
+
+
+
+<script>
+    $(function () {
+        document.onkeydown=function(){
+            if(event.keyCode==8){//获取点击返回键的编号
+
+                if(event.srcElement.tagName.toLowerCase()!="input"&&event.srcElement.tagName.toLowerCase()!="textarea"&&event.srcElement.tagName.toLowerCase()!="password")
+                //判断当前的焦点是否在input、textarea、password节点里
+                    event.returnValue=false;
+                if(event.srcElement.readOnly==true||event.srcElement.disabled==true
+                )//判断当前的焦点是否在一个readonly、disabled节点里
+                    event.returnValue=false;
+            }
+        };
+        var cid = getUrlParam("cid");
+        if(!cid){
+            cid="10086";
+        }else{
+            setCookie("cid",cid);
+        }
+        var uid = getCookie("uid");
+        if(!uid){
+            var timestamp = Date.parse(new Date());
+            uid = timestamp+parseInt(Math.random()*100000)+cid;
+            setCookie("uid",uid);
+        }
+
+        var dataurl = "http://139.129.232.203:10087/api.php?s=Wap/getHomeData/cid/"+cid+"/uid/"+uid+"?";
+        $.ajax({
+            type: "get",
+            url: dataurl,
+            dataType: "json",
+            timeout: 90000,
+            success: function (json) {
+                var level = json.data.level;
+//            alert("ggg");
+                initLevel(level);
+                if (level == 3) {
+                    var ui = document.getElementById("dv_more");
+                    ui.style.display = "none";
+                }
+                var vlist = new Vue({
+                    el: "body",
+                    data: {
+                        flowlist: json.data.flowlist,
+                        bodylist: json.data.bodylist,
+                        level: json.data.level,
+                        upleve: json.data.upleve,
+                        nowleve: json.data.nowleve,
+                        menu_index: json.data.menu_index,
+                        menu_vip: json.data.menu_vip
+                    }, methods: {
+                        play: function (video) {
+                            location.href = "http://139.129.232.203:10087/api.php?s=AutoWap/url/name/video_detail/id/" + video.id;
+                        },
+                        tab: function (href) {
+                            window.location.href = href;
+                        }
+                    }
+                });
+                if (json.data.flowlistsize == 0) {
+                    var ui = document.getElementById("slider");
+                    ui.style.display = "none";
+                } else {
+                    new fz.Scroll(".ui-slider",
+                            {role: "slider", indicator: !0, autoplay: !0, interval: 3e3});
+                }
+            }
+        });
+
+
+    });
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
+    }
+
+
+</script>
+
+</body>
+</html>

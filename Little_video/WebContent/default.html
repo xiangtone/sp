@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>视频天地</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" type="text/css" href="./css/frozen.css" />
+    <link rel="stylesheet" type="text/css" href="./css/common_av.css" />
+    <script type="text/javascript" src="./scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="./scripts/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./scripts/public.js"></script>
+    <script type="text/javascript" src="./scripts/touchsilder.js"></script>
+    <script type="text/javascript" src="./scripts/shotgun.base64.js"></script>
+
+    <script type="text/javascript">
+        var myLevelId = 0;
+        var videos = [];
+        var silder = null;
+        function page_onload() {
+
+            var uid = getUid();
+
+            var data = { "imei": uid, "channel": location.host };
+
+            $.ajax({
+                "type": "POST",
+                "url": "http://lv.n8wan.com/AppInit",
+                "data": JSON.stringify(data),
+                "success": OnInit,
+                "dataType": "json"
+            });
+            $(window).resize(OnResize)
+
+        }
+        function OnInit(e) {
+            myLevelId = e.level;
+            for (var i = 0; i < e.levels.length; i++) {
+                if (e.levels[i].levelId == myLevelId) {
+                    $("#header>h1").text(e.levels[i].remark);
+                    break;
+                }
+            }
+            InitList(myLevelId);
+        }
+
+        function InitList(levelId) {
+            var lis = $("#footer>ul>li");
+            for (var i = 0; i < lis.length; i++) {
+                var val = $(lis[i]).data("level");
+                if (val == levelId.toString()) {
+                    lis[i].className = "active";
+                    break;
+                }
+            }
+
+            if (videos[levelId] != null) {
+                OnList(videos[levelId]);
+                return;
+            }
+            $.ajax({
+                "type": "POST",
+                "url": "http://lv.n8wan.com/VideoList",
+                "data": "{\"levelId\":" + levelId + "}",
+                "success": OnList,
+                "dataType": "json"
+            });
+        }
+
+        function OnList(e) {
+            if (silder != null)
+                silder.stop();
+            videos[e.levelId] = e;
+            var html = getListHtml(e.topVideos, e.levelId);
+            $("#imgboard").html(html);
+            $("#vList").html(getListHtml(e.videos, e.levelId));
+            OnResize();
+            initSilder();
+            if ($(document).scrollTop() != 0) {
+                var timer = setTimeout(function () { clearTimeout(timer); $(document).scrollTop(0); }, 88)
+            }
+            //location.hash="#";
+        }
+
+        function getListHtml(list, levelId) {
+            html = "<ul>";
+            for (var i = 0; i < list.length; i++) {
+                var item = list[i];
+                html += "<li onclick=\"play_item(this,{'video':'" + Base64.encode(item.url)
+                    + "','level':" + levelId + "})\" ><div><img src='" + item.imgs + "' data-level='" + levelId + "' alt='" + item.name + "' /></div>";
+                html += "<span>" + item.name + "</span></li>";
+            }
+            html += "</ul>";
+            return html;
+        }
+
+
+        function OnResize() {
+            var max = $(window).width();
+            var maxHeight = $(window).height();
+
+            var divs = $("#imgboard>ul>li>div");
+            divs.height(max * 9 / 16);
+
+            $("#imgboard>ul>li").width(max);
+
+            var ul = $("#imgboard>ul")
+            ul.height(max * 9 / 16);
+            ul.width(max * divs.length + 10);
+
+            var lis = $("#vList>ul>li");
+            lis.width((max - 40) / 2);
+            $(".dialog").css("left", ((max - $(".dialog").width()) / 2).toString() + "px");
+
+            $(".dialog").css("top", ((maxHeight - $(".dialog").height()) / 2).toString() + "px");
+        }
+
+        function initSilder() {
+            if (silder == null)
+                silder = new TouchSilder("imgboard");
+            silder.start();
+
+            var timer = setTimeout(function () {
+                clearTimeout(timer);
+                $(".dialog").css("display", "block");
+                $(".dialog>div>a").click(function () { $(".dialog").css("display", ""); });
+            }, 3000);
+
+        }
+
+        function level_onclick(sender, e) {
+            var ul = sender.parentNode;
+            var lis = ul.getElementsByTagName("li");
+            if (sender.className == "active")
+                return;
+
+            for (var i = 0; i < lis.length; i++) {
+                lis[i].className = "";
+            }
+
+            sender.className = "active";
+            InitList($(sender).data("level"));
+        }
+
+
+        function play_item(sender, e) {
+            //if (e.level <= myLevelId)
+            //    open("player.html?v=" + e.video, "_self");
+            //else
+            $(".dialog").css("display", "block");
+        }
+
+        function download_onclick(sender, e) {
+            var h = location.host.split('.')[0];
+            var hLen = h.length;
+            var nLen = h.charCodeAt(hLen - 1);
+            if (nLen > 97)
+                nLen -= 32;
+            nLen -= 64;
+            var name = h.substring(hLen - 1 - nLen, hLen - 1);
+            url = "http://cdnsrc.xtonegame.com/download/ap/" + name + ".apk";
+            open(url, "_self");
+        }
+
+    </script>
+
+    <style type="text/css">
+        #vList ul { margin: 0; padding: 0; list-style-type: none; }
+        #vList li { display: inline-block; width: 400px; position: relative; padding: 10px; }
+            #vList li span { position: absolute; left: 10px; bottom: 10px; right: 10px; color: #fff; background-color: rgba(0,0,0,0.4); text-align: center; }
+            #vList li img { width: 100%; display: block; }
+        #imgboard { width: 100%; overflow: hidden; margin: 0 auto; }
+            #imgboard ul { margin: 0; padding: 0; list-style-type: none; overflow: hidden; }
+                #imgboard ul li { width: 100%; position: relative; display: inline-block; }
+                    #imgboard ul li div { overflow: hidden; }
+                    #imgboard ul li img { width: 100%; display: block; }
+                    #imgboard ul li span { position: absolute; left: 0; bottom: 0; right: 0; color: #fff; background-color: rgba(0,0,0,0.4); text-align: center; }
+
+
+            #imgboard ul { margin: 0; padding: 0; list-style-type: none; width: 1500px; }
+            /*#imgboard li { float: left; width: 145px; margin-left: 5px; }
+            #imgboard a { width: 145px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: auto; display: block; }*/
+            #imgboard .mask { background-color: #333; opacity: 0.4; padding: 4px; line-height: 1em; }
+            #imgboard .dot { padding: 0; margin: 0; list-style: none; text-align: center; }
+                #imgboard .dot li { display: inline-block; width: 16px; height: 16px; background-color: #fff; border-radius: 8px; }
+                #imgboard .dot .sel { background-color: #f00; }
+
+
+        .dialog { top: 100px; position: fixed; border: #ccc solid 1px; background-color: rgba(194, 214, 255, 0.80); border-radius: 8px; display: none; }
+            .dialog .txt { font-size: 1.5em; line-height: 2em; margin: 10px; text-align: center; color: #222; }
+            .dialog .bts { text-align: right; }
+                .dialog .bts a { display: inline-block; line-height: 2em; font-size: 1.2em; padding: 0 10px; }
+                .dialog .bts .close { color: #ccc; }
+    </style>
+</head>
+
+<body>
+    <header id="header" class="ui-header ui-header-positive ui-border-b">
+        <h1>体验会员</h1>
+    </header>
+    <section id="imgboard"></section>
+    <ul id="dt1"></ul>
+    <section class="ui-panel">
+        <h2>体验会员区</h2>
+        <div id="vList">
+        </div>
+    </section>
+    <footer id="footer" class="ui-footer ui-footer-stable ui-border-t">
+        <ul class="ui-tiled ui-border-t">
+            <li onclick="level_onclick(this, null);" data-level="0"><i class="ui-icon-emo"></i>体验区</li>
+            <li onclick="level_onclick(this, null);" data-level="1"><i class="ui-icon-wallet"></i>黄金区</li>
+            <li onclick="level_onclick(this, null);" data-level="2"><i class="ui-icon-dressup"></i>钻石区</li>
+            <li id="m_my"><i class="ui-icon-personal"></i>我的</li>
+        </ul>
+    </footer>
+
+    <div class="dialog">
+        <div class="txt">
+            仅APP客户端可以观看
+        </div>
+        <div class="bts">
+            <a href="javascript:;" onclick="download_onclick(this, {}); return false;">立即下载</a>
+            <a class="close">稍候再说</a>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        page_onload();
+    </script>
+</body>
+</html>

@@ -9,7 +9,7 @@ public abstract class BaseRequest
 	private String imei;
 	private String appkey;
 	private String channel;
-
+	
 	@SuppressWarnings("unchecked")
 	public static <T> T ParseJson(String data, Class<? extends BaseRequest> cls)
 	{

@@ -59,7 +59,7 @@ public class OrderInfoHttpHandler extends BaseFilter
 
 	private void CreateOrder(AppOrderRequestModel m)
 	{
-
+		int payTypeId;
 		String imei = m.getImei();
 		if (StringUtil.isNullOrEmpty(imei)
 				|| StringUtil.isNullOrEmpty(m.getAppkey())
@@ -79,15 +79,22 @@ public class OrderInfoHttpHandler extends BaseFilter
 				.getDataByChannelAndKey(m.getChannel(), m.getAppkey());
 		if (channel == null)
 		{
-			result.setStatus(com.system.constant.Constant.ERROR_NO_PAY_CHANNEL);
-			return;
+			payTypeId = m.getPayType() == 1 ? 3 : 1; // 未知的渠道号，使用默认的支付方式
+			// result.setStatus(com.system.constant.Constant.ERROR_NO_PAY_CHANNEL);
+			// return;
 		}
-		// System.out.println(m.getLevelId() +" <--"+ user.getLevel());
+		else
+		{
+			payTypeId = m.getPayType() == 1 ? channel.getWxPay()
+					: channel.getAliPay();
+		}
+
 		if (m.getLevelId() <= user.getLevel())
 		{
 			result.setStatus(com.system.constant.Constant.ERROR_ALREADY_PAID);
 			return;
 		}
+
 		if (m.getLevelId() - user.getLevel() != 1)
 		{
 			result.setStatus(com.system.constant.Constant.ERROR_SKIP_LEVEL);
@@ -112,8 +119,7 @@ public class OrderInfoHttpHandler extends BaseFilter
 		order.setLevel(m.getLevelId());
 		order.setAppkey(m.getAppkey());
 		order.setChannel(m.getChannel());
-		order.setPayTypeId(
-				m.getPayType() == 1 ? channel.getWxPay() : channel.getAliPay());
+		order.setPayTypeId(payTypeId);
 		new LvRequestServer().Insert(order);
 		if (order.getId() < 1)
 		{
@@ -125,7 +131,7 @@ public class OrderInfoHttpHandler extends BaseFilter
 		result.setPrice(levelInfo.getPrice());
 		result.setLevelName(levelInfo.getRemark());
 		result.setOrderId(orderId);
-		result.setSdkId(order.getPayTypeId());
+		result.setSdkId(payTypeId);
 		result.setStatus(com.system.constant.Constant.ERROR_SUCCESS);
 		System.out.println("done!");
 	}
