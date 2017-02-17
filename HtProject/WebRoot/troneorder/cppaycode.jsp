@@ -38,8 +38,6 @@
 	
 	List<PayCodeExportModel> exportList = new TroneOrderServer().loadPayCodeExportModelListByCpSpTroneId(cpId, spTroneId, status);
 	
-	System.out.println("exportList size:" + exportList.size());
-	
 	if(isLoad>0 && !exportList.isEmpty())
 	{
 		response.setContentType("application/octet-stream;charset=utf-8");

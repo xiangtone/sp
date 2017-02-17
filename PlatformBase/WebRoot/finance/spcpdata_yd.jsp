@@ -22,7 +22,7 @@
 	List<SpModel> spList = new SpServer().loadSpData(coId);
 	List<CpModel> cpList = new CpServer().loadCpData(coId);
 	
-	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(coId,startDate, endDate,spId,cpId) : new ArrayList<FinancialSpCpDataShowModel>();
+	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(coId,startDate + "-01", endDate + "-31",spId,cpId) : new ArrayList<FinancialSpCpDataShowModel>();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -95,12 +95,12 @@
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">
 						<input name="startdate" type="text" value="<%=startDate%>"
-							onclick="WdatePicker({isShowClear:false,readOnly:true})">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt: 'yyyy-MM'})">
 					</dd>
 					<dd class="dd01_me">结束日期</dd>
 					<dd class="dd03_me">
 						<input name="enddate" type="text" value="<%=endDate%>"
-							onclick="WdatePicker({isShowClear:false,readOnly:true})">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt: 'yyyy-MM'})">
 					</dd>
 					<dd class="dd01_me">SP</dd>
 					<dd class="dd04_me">

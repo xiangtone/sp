@@ -10,8 +10,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
-	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
+	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthFormat());
+	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthFormat());
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
@@ -22,7 +22,7 @@
 	List<SpModel> spList = new SpServer().loadSpData(coId);
 	List<CpModel> cpList = new CpServer().loadCpData(coId);
 	
-	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(coId,startDate, endDate,spId,cpId) : new ArrayList<FinancialSpCpDataShowModel>();
+	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(coId,startDate + "-01", endDate + "-31",spId,cpId) : new ArrayList<FinancialSpCpDataShowModel>();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -86,21 +86,21 @@
 		$("#sel_cp").val(joData.id);
 	}
 </script>
-<body>
+<body>	
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<form action="spcpdata_ht.jsp" method="post" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
-					<dd class="dd01_me">开始日期</dd>
+					<dd class="dd01_me">开始月份</dd>
 					<dd class="dd03_me">
 						<input name="startdate" type="text" value="<%=startDate%>"
-							onclick="WdatePicker({isShowClear:false,readOnly:true})">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt: 'yyyy-MM'})">
 					</dd>
-					<dd class="dd01_me">结束日期</dd>
+					<dd class="dd01_me">结束月份</dd>
 					<dd class="dd03_me">
 						<input name="enddate" type="text" value="<%=endDate%>"
-							onclick="WdatePicker({isShowClear:false,readOnly:true})">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt: 'yyyy-MM'})">
 					</dd>
 					<dd class="dd01_me">SP</dd>
 					<dd class="dd04_me">
