@@ -49,12 +49,6 @@
 			return;
 		}
 		
-		if(isNullOrEmpty(pwd))
-		{
-			alert("密码不能为空");
-			return;
-		}
-		
 		document.getElementById("addform").submit();
 	}
 	
@@ -69,8 +63,8 @@
 		$("#input_mail").val("<%= model.getMail() %>");
 		$("#input_qq").val("<%= model.getQq() %>");
 		$("#input_phone").val("<%= model.getPhone() %>");
-		$("#input_new_pwd_1").val("<%= model.getPassword() %>");
-		$("#input_new_pwd_2").val("<%= model.getPassword() %>");
+		$("#input_new_pwd_1").val("<%= "" %>");
+		$("#input_new_pwd_2").val("<%= "" %>");
 		setRadioCheck("status",<%= model.getStatus() %>);
 	}
 </script>

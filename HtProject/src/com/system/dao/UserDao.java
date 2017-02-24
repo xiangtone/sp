@@ -320,8 +320,8 @@ public class UserDao
 	
 	public boolean updateUser(UserModel model)
 	{
-		String sql = "update daily_config.tbl_user set name = '" + model.getName() + "', pwd = md5('"
-				+ model.getPassword() + "') ,nick_name = '" + model.getNickName()
+		String sql = "update daily_config.tbl_user set name = '" + model.getName() + "'," + (StringUtil.isNullOrEmpty(model.getPassword()) ? "" : " pwd = md5('"
+				+ model.getPassword() + "') ,") + "nick_name = '" + model.getNickName()
 				+ "',mail='" + model.getMail() + "',qq='" + model.getQq()
 				+ "',phone='" + model.getPhone() + "',status=" + model.getStatus() + " where id ="
 				+ model.getId();

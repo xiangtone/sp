@@ -12,11 +12,158 @@ import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.model.MrReportModel;
+import com.system.model.params.ReportParamsModel;
 import com.system.util.SqlUtil;
 import com.system.util.StringUtil;
 
 public class MrDao
 {
+	public Map<String, Object> getMrAnalyData(ReportParamsModel params)
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		String query = "";
+		
+		if(params.getSpId() >0)
+			query += " and d.id = " + params.getSpId();
+		
+		if(params.getTroneId() >0)
+			query += " and c.id = " + params.getTroneId();
+		
+		if(params.getCpId()>0)
+			query += " and e.id = " + params.getCpId();
+		
+		if(params.getTroneOrderId()>0)
+			query += " and b.id = " + params.getTroneOrderId();
+		
+		if(params.getProvinceId()>0)
+			query += " and f.id = " + params.getProvinceId();
+		
+		if(params.getCityId()>0)
+			query += " and g.id =" + params.getCityId();
+		
+		if(params.getSpTroneId()>0)
+			query += " and h.id = " + params.getSpTroneId();
+		
+		if(params.getOperatorId()>0)
+			query += " and n.flag = " + params.getOperatorId();
+		
+		if(params.getDataType()>-1)
+			query+= " and a.record_type = " + params.getDataType();
+		
+		if(params.getJsType()>-1)
+		{
+			//这里加入结算类型判断
+			query+= " and h.js_type = " + params.getJsType();
+		}
+		
+		if(!(StringUtil.isNullOrEmpty(params.getSpCommerceUserId())||"-1".equals(params.getSpCommerceUserId())))
+			query += " and d.commerce_user_id in (" + params.getSpCommerceUserId()+")";
+		
+		if(!(StringUtil.isNullOrEmpty(params.getCpCommerceUserId())||"-1".equals(params.getCpCommerceUserId())))
+			query += " and e.commerce_user_id in (" + params.getCpCommerceUserId() +")";
+		
+		if(params.getIsUnHoldData()>=0)
+		{
+			query+= " and h.is_unhold_data = " + params.getIsUnHoldData() + " and b.is_unhold_data = " + params.getIsUnHoldData();
+		}
+		
+		String[] result = getSortType(params.getShowType());
+		String queryParams = result[0];
+		String joinId = result[1];
+		
+		String sql = "select a.show_title,aa,bb,cc,dd from (";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) aa,sum(a.amount) bb ";
+		sql += " from daily_log.tbl_mr_summer a";
+		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id ";
+		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql += " left join daily_config.tbl_sp d on h.sp_id = d.id";
+		sql += " left join daily_config.tbl_cp e on b.cp_id = e.id ";
+		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
+		//sql += " LEFT JOIN daily_config.tbl_js_type o on h.js_type = o.type_id";
+		
+		sql += " where a.mr_date >= '" + params.getStartDate() + "' and a.mr_date <= '" + params.getEndDate() + "' " + query;
+		sql += " group by join_id order by show_title asc )a";
+		sql += " left join(";
+		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) cc,sum(a.amount) dd ";
+		sql += " from daily_log.tbl_cp_mr_summer a ";
+		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
+		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
+		sql += " left join daily_config.tbl_sp d on h.sp_id = d.id";
+		sql += " left join daily_config.tbl_cp e on a.cp_id = e.id";
+		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
+		//sql += " LEFT JOIN daily_config.tbl_js_type o on h.js_type = o.type_id";
+		
+		sql += " where a.mr_date >= '" + params.getStartDate() + "' and a.mr_date <= '" + params.getEndDate() + "' " + query;
+		sql += " group by join_id order by show_title asc";
+		sql += " )b on a.join_id = b.join_id;";
+		
+		
+		JdbcControl control = new JdbcControl();
+		
+		final List<Object> datalist = new ArrayList<Object>();
+		
+		map.put("list", control.query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<MrReportModel> list = new ArrayList<MrReportModel>();
+				int dataRows=0,showDataRows = 0;
+				double amount=0,showAmount = 0;
+				while(rs.next())
+				{
+					MrReportModel model = new MrReportModel();
+					
+					model.setTitle1(rs.getString("show_title"));
+					model.setDataRows(rs.getInt(2));
+					model.setAmount(rs.getFloat(3));
+					model.setShowDataRows(rs.getInt(4));
+					model.setShowAmount(rs.getFloat(5));
+					
+					dataRows += model.getDataRows();
+					showDataRows += model.getShowDataRows();
+					amount += model.getAmount();
+					showAmount += model.getShowAmount();
+					
+					list.add(model);
+				}
+				
+				datalist.add(dataRows);
+				datalist.add(showDataRows);
+				datalist.add(amount);
+				datalist.add(showAmount);
+				
+				return list;
+			}
+		}));
+		
+		map.put("datarows", datalist.get(0));
+		map.put("showdatarows", datalist.get(1));
+		map.put("amount", datalist.get(2));
+		map.put("showamount", datalist.get(3));
+		
+		return map;
+	}
+	
+	
+	
+	
+	
 	public Map<String, Object> getMrAnalyData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
 			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int isUnHoldData,int sortType)
@@ -940,6 +1087,129 @@ public class MrDao
 		return map;
 	}
 	
+	//2016.07.26 废弃，查询方式更新，采用新的查询方式，从原来所需要的时间从4S减少到3S。。。哈哈。。
+		//2016.08.01 重新启用，因为有个小时的时间不能处理。。痛苦
+		public Map<String, Object> getMrTodayData(String tableName,ReportParamsModel model)
+		{
+			Map<String, Object> map = new HashMap<String, Object>();
+			
+			String query = "";
+			
+			if(model.getSpId()>0)
+				query += " and d.id = " + model.getSpId();
+			
+			if(model.getTroneId()>0)
+				query += " and c.id = " + model.getTroneId();
+			
+			if(model.getCpId()>0)
+				query += " and e.id = " + model.getCpId();
+			
+			if(model.getTroneOrderId()>0)
+				query += " and b.id = " + model.getTroneOrderId();
+			
+			if(model.getProvinceId()>0)
+				query += " and f.id = " + model.getProvinceId();
+			
+			if(model.getCityId()>0)
+				query += " and g.id = " + model.getCityId();
+			
+			if(model.getSpTroneId()>0)
+				query += " and h.id = " + model.getSpTroneId();
+			
+			if(!(StringUtil.isNullOrEmpty(model.getSpCommerceUserId())||"-1".equals(model.getSpCommerceUserId()))){
+				query += " and j.id in (" + model.getSpCommerceUserId()+")";
+			}
+//			if(spCommerceUserId>0)
+//				query += " and j.id = " + spCommerceUserId;
+			if(!(StringUtil.isNullOrEmpty(model.getCpCommerceUserId())||"-1".equals(model.getCpCommerceUserId()))){
+				query += " and k.id in (" + model.getCpCommerceUserId()+")";
+			}
+//			if(cpCommerceUserId>0)
+//				query += " and k.id = " + cpCommerceUserId;
+			
+			String[] result = getSortType(model.getShowType());
+			String queryParams = result[0];
+			String joinId = result[1];
+			
+			String sql = "select a.show_title,aa,bb,cc,dd,a.join_id from (";
+			sql += " select  " + joinId + " join_id," + queryParams + " show_title,count(*) aa,sum(c.price) bb ";
+			sql += " from daily_log.tbl_mr_" + tableName + " a";
+			sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id ";
+			sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+			sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+			sql += " left join daily_config.tbl_cp e on b.cp_id = e.id ";
+			sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+			sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+			sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+			sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+			sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+			
+			sql += " where a.mr_date >= '" + model.getStartDate() + "' and a.mr_date <= '" + model.getStartDate() + "' " + query;
+			sql += " group by join_id order by show_title asc )a";
+			sql += " left join(";
+			sql += " select  " + joinId + " join_id," + queryParams + " show_title,count(*) cc,sum(c.price) dd ";
+			sql += " from daily_log.tbl_cp_mr_" + tableName + " a ";
+			sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
+			sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+			sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+			sql += " left join daily_config.tbl_cp e on b.cp_id = e.id";
+			sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+			sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+			sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+			sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+			sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+			sql += " where a.mr_date >= '" + model.getStartDate() + "' and a.mr_date <= '" + model.getStartDate() + "' " + query;
+			sql += " group by join_id order by show_title asc";
+			sql += " )b on a.join_id = b.join_id;";		
+			
+			JdbcControl control = new JdbcControl();
+			
+			final List<Object> datalist = new ArrayList<Object>();
+			
+			map.put("list", control.query(sql, new QueryCallBack()
+			{
+				@Override
+				public Object onCallBack(ResultSet rs) throws SQLException
+				{
+					List<MrReportModel> list = new ArrayList<MrReportModel>();
+					int dataRows=0,showDataRows = 0;
+					double amount=0,showAmount = 0;
+					while(rs.next())
+					{
+						MrReportModel model = new MrReportModel();
+						
+						model.setTitle1(rs.getString("show_title"));
+						model.setJoinId(rs.getString("join_id"));
+						model.setDataRows(rs.getInt(2));
+						model.setAmount(rs.getFloat(3));
+						model.setShowDataRows(rs.getInt(4));
+						model.setShowAmount(rs.getFloat(5));
+						
+						dataRows += model.getDataRows();
+						showDataRows += model.getShowDataRows();
+						amount += model.getAmount();
+						showAmount += model.getShowAmount();
+						
+						list.add(model);
+					}
+					
+					datalist.add(dataRows);
+					datalist.add(showDataRows);
+					datalist.add(amount);
+					datalist.add(showAmount);
+					
+					return list;
+				}
+			}));
+			
+			map.put("datarows", datalist.get(0));
+			map.put("showdatarows", datalist.get(1));
+			map.put("amount", datalist.get(2));
+			map.put("showamount", datalist.get(3));
+			
+			return map;
+		}
+	
 	//新的SQL查询数据方式
 	//2016.08.01 废弃，因为有个小时的时间不能处理。。痛苦
 	/*
@@ -1263,6 +1533,11 @@ public class MrDao
 			case 17: //二级业务线
 				queryParams = "  CONCAT(n.name_cn,'-',m.name,'-',l.name) ";
 				joinId = " l.id ";
+				break;
+				
+			case 18: //真的是CP业务
+				queryParams = "  CONCAT(d.short_name,'-',h.name,'-',e.short_name) ";
+				joinId = " b.cp_jiesuanlv_id ";
 				break;
 				
 			default:
