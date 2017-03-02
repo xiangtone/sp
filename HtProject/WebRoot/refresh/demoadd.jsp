@@ -4,7 +4,7 @@
 	pageEncoding="UTF-8"%>
 <%
 	String guildTitle = StringUtil
-			.getString(request.getParameter("title"), "翔通运营管理平台");
+			.getString(request.getParameter("title"), "运营管理平台");
 
 	//guildTitle = new String(guildTitle.getBytes("ISO-8859-1"),"UTF-8");
 	
@@ -28,7 +28,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <body>
