@@ -69,7 +69,8 @@
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP通道","省份","城市","SP业务","小时","SP商务","CP商务","CP业务"};
+	String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
+			"运营商", "数据类型", "第一业务线", "第二业务线","CP业务"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

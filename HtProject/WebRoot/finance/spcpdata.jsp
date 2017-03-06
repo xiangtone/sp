@@ -133,11 +133,12 @@
 			</form>
 			</div>
 			<br /><br />
-			<table cellpadding="0" cellspacing="0">
+			<table cellpadding="0" cellspacing="0" style="margin-top: 15px;">
 				<thead>
 					<tr>
 						<td>SP全称</td>
 						<td>SP简称</td>
+						<td>业务线</td>
 						<td>SP业务名称</td>
 						<td>SP数据量</td>
 						<td>SP金额</td>
@@ -156,7 +157,7 @@
 						out.println("<tr><td rowspan=\"" + model.spRowSpan + "\">" + model.spFullName + "</td><td rowspan=\"" + model.spRowSpan + "\">" + model.spShortName + "</td>");
 						for(FinancialSpCpDataShowModel.SpTroneModel spTroneModel : model.list)
 						{
-							out.println("<td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.spTroneName + "</td>");
+							out.println("<td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.productLineName + "</td><td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.spTroneName + "</td>");
 							for(FinancialSpCpDataShowModel.SpTroneModel.CpModelData cpModelData : spTroneModel.list)
 							{
 								out.println("<td>" + cpModelData.dataRows + "</td><td>" + cpModelData.amount + "</td><td>"+ 
