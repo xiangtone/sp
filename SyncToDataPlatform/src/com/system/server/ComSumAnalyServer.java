@@ -109,11 +109,12 @@ public class ComSumAnalyServer
 	
 	private void tempAnalyData()
 	{
-		for(int i=11; i<=11; i++)
+		//控制月份(0-11)
+		for(int i=0; i<=2; i++)
 		{
 			Calendar ca = Calendar.getInstance();
 			
-			ca.set(Calendar.YEAR,2016);
+			ca.set(Calendar.YEAR,2017);
 			ca.set(Calendar.MONTH, i);
 			ca.set(Calendar.DAY_OF_MONTH,1);
 			
@@ -140,6 +141,7 @@ public class ComSumAnalyServer
 		FeeDateDataModel oriModel = null;
 		FeeDateDataModel descModel = null;
 		
+		//控制公司
 		for(int i=4; i<=4; i++)
 		{
 			Map<String, FeeDateDataModel> descMap = dao.loadDescSource(i, startDate, endDate);
@@ -184,6 +186,8 @@ public class ComSumAnalyServer
 		ComSumAnalyServer csas = new ComSumAnalyServer();
 		//csas.analyComSumData(4, "2015-10-01", "2016-10-01");
 		csas.tempAnalyData();
+		
+		//csas.tempAnalyData("2016-09-01", "2016-09-01");
 	}
 	
 }

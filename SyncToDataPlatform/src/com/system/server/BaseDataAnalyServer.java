@@ -19,8 +19,8 @@ public class BaseDataAnalyServer
 	
 	public void startAnalyBaseData()
 	{
-		analyBaseSpData();
-		analyBaseCpData();
+		//analyBaseSpData();
+		//analyBaseCpData();
 		analyBaseSpTroneData();
 		analyBaseTroneData();
 		analyCpSpTroneData();
@@ -36,7 +36,7 @@ public class BaseDataAnalyServer
 		List<SpModel> addList = new ArrayList<SpModel>();
 		List<SpModel> updateList = new ArrayList<SpModel>();
 		
-		for(int i=1; i<=4; i++)
+		for(int i=3; i<=3; i++)
 		{
 			Map<Integer, SpModel> oriSource = dao.loadOriSpData(i);
 			Map<Integer, SpModel> descSource = dao.loadDescSpData(i);
