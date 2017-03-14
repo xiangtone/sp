@@ -1,3 +1,4 @@
+<%@page import="com.system.server.CommRightServer"%>
 <%@page import="com.system.server.UserServer"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.ConfigManager"%>
@@ -53,13 +54,50 @@
 	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
 
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
+	
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"), -1);
+	
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
+	
+	//查询SP权限，0表示SP商务
+	String userRightList = new CommRightServer().getRightListByUserId(userId, 0);
+	
+	String[] rightStrs = null;
+	
+	if(userRightList == null || "".equals(userRightList))
+	{
+		userRightList = userId + "";
+	}
+	else
+	{
+		rightStrs = userRightList.split(",");
+	}
+	
+	//把用户列表再次展示出来
+	if(rightStrs!=null)
+	{
+		List<UserModel> tmpUserList = new ArrayList<UserModel>();
+		
+		for(String sId : rightStrs)
+		{
+			for(UserModel tmpModel : userList)
+			{
+				if(sId.equalsIgnoreCase(tmpModel.getId() + ""))
+				{
+					tmpUserList.add(tmpModel);
+					break;
+				}
+			}
+		}
+		
+		userList = tmpUserList;
+	}
+	
 
 	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
-			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId+"", cpCommerceUserId+"",
+			troneOrderId, provinceId, cityId, operatorId, dataType, userRightList, cpCommerceUserId+"",
 			-1,sortType);
 
 	List<SpModel> spList = new SpServer().loadSp();
@@ -81,7 +119,7 @@
 	double showAmount = (Double) map.get("showamount");
 
 	String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
-			"运营商", "数据类型", "第一业务线", "第二业务线"};
+			"运营商", "数据类型", "第一业务线", "第二业务线","CP业务"};
 
 	out.clear();
 %>
@@ -451,7 +489,15 @@ function arrayReverse(arr) {
 					<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user"
 							style="width: 100px;">
-							<option value="<%=userId%>"><%=userName %></option>
+							<option value="-1">全部</option>
+							<%
+							for(UserModel tmpUser : userList)
+							{
+								%>
+							<option value="<%= tmpUser.getId() %>"><%= tmpUser.getNickName() %></option>	
+								<%
+							}
+							%>
 						</select>
 					</dd>
 					<dd class="dd01_me">CP商务</dd>
@@ -479,6 +525,7 @@ function arrayReverse(arr) {
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
 							<option value="5">CP</option>
+							<option value="18">CP业务</option>
 							<option value="7">CP通道</option>
 							<option value="8">省份</option>
 							<option value="9">城市</option>
@@ -494,7 +541,10 @@ function arrayReverse(arr) {
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
-					
+					<dd class="dd01_me">
+						<a style="color: blue;"
+							href="sp_person_mr1_lr.jsp?<%=request.getQueryString()%>">查看利润</a>
+					</dd>
 				</dl>
 			</form>
 		</div>

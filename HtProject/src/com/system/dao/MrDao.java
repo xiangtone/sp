@@ -1483,7 +1483,7 @@ public class MrDao
 				joinId = " c.id ";
 				break;
 			case 7:
-				queryParams = " concat(e.short_name,'-',d.short_name,'-',c.trone_name,'-',c.price)  ";
+				queryParams = " concat(e.short_name,'(',b.order_num,')-',d.short_name,'-',c.trone_name,'-',c.price)  ";
 				joinId = " b.id ";
 				break;
 			case 8:

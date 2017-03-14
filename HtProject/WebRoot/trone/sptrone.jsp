@@ -21,7 +21,9 @@
 
 	String query = Base64UTF.encode(request.getQueryString());
 	
-	Map<String, Object> map = new SpTroneServer().loadSpTroneList(pageIndex,keyWord);
+	int daoLiang = StringUtil.getInteger(request.getParameter("daoliang"), -1);
+	
+	Map<String, Object> map = new SpTroneServer().loadSpTroneList2(pageIndex,keyWord,daoLiang);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 
@@ -82,7 +84,7 @@
 	
 	$(function()
 	{
-		
+		$("#sel_daoliang").val("<%= daoLiang  %>");
 	});
 	
 	
@@ -150,11 +152,19 @@
 					<a href="sptroneadd.jsp">增 加</a>
 				</dd>
 				<form action="sptrone.jsp" method="get" id="formid">
-						<dl>					
+					<dl>					
 						<dd class="dd01_me">关键字</dd>
 						<dd class="dd03_me">
 							<input name="keyword" id="input_keyword" value="<%= keyWord %>"
 								type="text" style="width: 150px">
+						</dd>
+						<dd class="dd01_me">导量类型</dd>
+						<dd class="dd04_me">
+							<select name="daoliang" id="sel_daoliang">
+								<option value="-1">全部</option>
+								<option value="0">非导量</option>
+								<option value="1">导量</option>
+							</select>
 						</dd>
 						<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 							<input class="btn_match" name="search" value="查 询" type="submit">
