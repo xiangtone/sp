@@ -125,6 +125,20 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>sjhd</id>
+			<properties>
+				<runtime.env>config\sjhd</runtime.env>
+				<final.name>credit</final.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>jpwx</id>
+			<properties>
+				<runtime.env>config\jpwx</runtime.env>
+				<final.name>credit</final.name>
+			</properties>
+		</profile>
+		<profile>
 			<id>shkk</id>
 			<properties>
 				<runtime.env>config\shkk</runtime.env>

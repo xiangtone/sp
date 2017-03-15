@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import com.system.constant.Constant;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
@@ -103,7 +105,7 @@ public class SpTroneDao
 		return map;
 	}
 	
-	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord)
+	public Map<String, Object> loadOriSpTroneList(int pageIndex,String keyWord,int isDaoLiang)
 	{
 		String query = " a.*,b.short_name,b.commerce_user_id,h.`name_cn`,d.id trone_api_id,d.name trone_api_name,e.nick_name commerce_name,"
 				+ "CONCAT(h.`name_cn`,'-',g.`name`,'-',f.`name`) service_name ";
@@ -131,7 +133,11 @@ public class SpTroneDao
 			}
 		}
 		
-		if(queryTroneType>=0)
+		if(isDaoLiang>=0)
+		{
+			sql += " and a.is_unhold_data = " + isDaoLiang;
+		}
+		else if(queryTroneType>=0)
 		{
 			 sql += " and a.trone_type = " + queryTroneType;
 		}

@@ -16,6 +16,7 @@ public class FinancialSpCpDataShowModel
 	{
 		public int spTroneId;
 		public String productName;
+		public String productLineName;//产品线
 		public String spContactName;
 		public String spTroneName;
 		public double spJieSuanLv;

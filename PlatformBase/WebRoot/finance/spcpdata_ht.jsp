@@ -10,17 +10,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthHeadDate());
-	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthEndDate());
+	String startDate = StringUtil.getString(request.getParameter("startdate"), StringUtil.getMonthFormat());
+	String endDate = StringUtil.getString(request.getParameter("enddate"), StringUtil.getMonthFormat());
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
 	int loadData = StringUtil.getInteger(request.getParameter("load"),-1);
 	
-	List<SpModel> spList = new SpServer().loadSpData(1);
-	List<CpModel> cpList = new CpServer().loadCpData(1);
+	int coId = 1;
 	
-	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(1,startDate, endDate,spId,cpId) : new ArrayList<FinancialSpCpDataShowModel>();
+	List<SpModel> spList = new SpServer().loadSpData(coId);
+	List<CpModel> cpList = new CpServer().loadCpData(coId);
+	
+	List<FinancialSpCpDataShowModel> list = loadData > 0 ? new FinalcialSpCpDataServer().loadData(coId,startDate + "-01", endDate + "-31",spId,cpId) : new ArrayList<FinancialSpCpDataShowModel>();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -31,6 +33,11 @@
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../sysjs/base.js"></script>
+<script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
+<script type="text/javascript" src="../sysjs/pinyin.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 
 	$(function()
@@ -44,26 +51,60 @@
 	{
 		document.getElementById("exportform").submit();
 	}
+	
+	var spList = new Array();
+	
+	<%
+	for(SpModel spModel : spList)
+	{
+		%>
+		spList.push(new joSelOption(<%= spModel.getSpId() %>,1,'<%= spModel.getShortName() %>'));
+		
+		<%
+	}
+	%>
+	
+	function onSpDataSelect(joData)
+	{
+		$("#sel_sp").val(joData.id);
+	}
+	
+	
+	var cpList = new Array();
+	
+	<%
+	for(CpModel cpModel : cpList)
+	{
+		%>
+		cpList.push(new joSelOption(<%= cpModel.getCpId() %>,1,'<%= cpModel.getShortName() %>'));
+		<%
+	}
+	%>
+	
+	function onCpDataSelect(joData)
+	{
+		$("#sel_cp").val(joData.id);
+	}
 </script>
-<body>
+<body>	
 	<div class="main_content">
 		<div class="content" style="margin-top: 10px">
 			<form action="spcpdata_ht.jsp" method="post" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
-					<dd class="dd01_me">开始日期</dd>
+					<dd class="dd01_me">开始月份</dd>
 					<dd class="dd03_me">
 						<input name="startdate" type="text" value="<%=startDate%>"
-							onclick="WdatePicker({isShowClear:false,readOnly:true})">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt: 'yyyy-MM'})">
 					</dd>
-					<dd class="dd01_me">结束日期</dd>
+					<dd class="dd01_me">结束月份</dd>
 					<dd class="dd03_me">
 						<input name="enddate" type="text" value="<%=endDate%>"
-							onclick="WdatePicker({isShowClear:false,readOnly:true})">
+							onclick="WdatePicker({isShowClear:false,readOnly:true,dateFmt: 'yyyy-MM'})">
 					</dd>
 					<dd class="dd01_me">SP</dd>
 					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" title="选择SP">
+						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
 								<option value="-1">全部</option>
 								<%
 								for(SpModel sp : spList)
@@ -77,7 +118,7 @@
 					</dd>
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP">
+						<select name="cp_id" id="sel_cp" title="选择CP" onclick="namePicker(this,cpList,onCpDataSelect)">
 								<option value="-1">全部</option>
 								<%
 								for(CpModel cp : cpList)
@@ -103,6 +144,7 @@
 						<td>序号</td>
 						<td>SP全称</td>
 						<td>SP业务名称</td>
+						<td>SP金额</td>
 						<td>CP全称</td>
 						<td>CP金额</td>
 						<td>SP结算比例</td>
@@ -118,6 +160,7 @@
 						for(FinancialSpCpDataShowModel.SpTroneModel spTroneModel : model.list)
 						{
 							out.println("<td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.spTroneName + "</td>");
+							out.println("<td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.spTroneAmount + "</td>");
 							for(FinancialSpCpDataShowModel.SpTroneModel.CpModelData cpModelData : spTroneModel.list)
 							{
 								out.println("<td>" + cpModelData.cpFullName + "</td><td>"

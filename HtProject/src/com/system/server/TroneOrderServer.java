@@ -6,6 +6,7 @@ import java.util.Map;
 import com.system.dao.ProvinceDao;
 import com.system.dao.TroneOrderDao;
 import com.system.model.CpSpTroneSynModel;
+import com.system.model.PayCodeExportModel;
 import com.system.model.ProvinceModel;
 import com.system.model.TroneOrderModel;
 
@@ -85,6 +86,42 @@ public class TroneOrderServer
 		
 	}
 	
+	//Load Cp PayCodeExportModel
+	public List<PayCodeExportModel> loadPayCodeExportModelListByCpSpTroneId(int cpId,int spTroneId,int status)
+	{
+		List<PayCodeExportModel> list =new TroneOrderDao().loadPayCodeExportModelListByCpSpTroneId(cpId, spTroneId, status);
+		
+		List<ProvinceModel> proList = new ProvinceDao().loadProvinceList();
+		
+		for(PayCodeExportModel model : list)
+		{
+			String proStrList = "";
+			
+			String[] pros = model.getPrivinces() .split(",");
+			
+			if(pros==null || pros.length<0)
+				continue;
+			
+			for(String proId : pros)
+			{
+				for(ProvinceModel province : proList)
+				{
+					if(proId.equals(province.getId() + ""))
+						proStrList += province.getName() + ",";
+				}
+			}
+			
+			if(proStrList.length()>0)
+				proStrList = proStrList.substring(0, proStrList.length()-1);
+			
+			model.setPrivincesName(proStrList);
+		}
+		
+		return list;
+		
+	}
+	
+	
 	public CpSpTroneSynModel loadCpSpTroneSynModelById(int id)
 	{
 		return new TroneOrderDao().loadCpSpTroneSynModelById(id);
@@ -114,5 +151,10 @@ public class TroneOrderServer
 	public Map<String, Object> loadTroneOrder(int userId,int spId,int spTroneId,int cpId, int status,int pageIndex,String keyWord)
 	{
 		return new TroneOrderDao().loadTroneOrder(userId,spId, spTroneId, cpId, status ,pageIndex,keyWord);
+	}
+	
+	public static void main(String[] args)
+	{
+		new TroneOrderServer().loadPayCodeExportModelListByCpSpTroneId(129, -1, -1);
 	}
 }

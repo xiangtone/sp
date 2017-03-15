@@ -128,7 +128,7 @@ public class CommRightDao {
 				{					
 					return StringUtil.getString(rs.getString("right_list"), "");
 				}
-				return null;
+				return "";
 			}
 		});
 		

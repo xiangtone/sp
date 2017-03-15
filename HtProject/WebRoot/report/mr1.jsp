@@ -1,3 +1,6 @@
+<%@page import="com.system.model.params.ReportParamsModel"%>
+<%@page import="com.system.server.JsTypeServer"%>
+<%@page import="com.system.model.JsTypeModel"%>
 <%@page import="com.system.server.UserServer"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.ConfigManager"%>
@@ -36,7 +39,7 @@
 	String startDate = StringUtil.getString(request.getParameter("startdate"), defaultStartDate);
 	String endDate = StringUtil.getString(request.getParameter("enddate"), defaultEndDate);
 
-	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 1);
+	int showType = StringUtil.getInteger(request.getParameter("sort_type"), 1);
 
 	int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
@@ -49,16 +52,41 @@
 	int dataType = StringUtil.getInteger(request.getParameter("data_type"), -1);
 	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
 	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
-
+	int isUnHoldData = StringUtil.getInteger(request.getParameter("is_unhold_data"), -1);
+	int jsTypeId = StringUtil.getInteger(request.getParameter("js_type"), -1);
+	
+	
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"), -1);
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"), -1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 
+	ReportParamsModel params = new ReportParamsModel();
+	params.setStartDate(startDate);
+	params.setEndDate(endDate);
+	params.setShowType(showType);
+	params.setSpId(spId);
+	params.setCpId(cpId);
+	params.setSpTroneId(spTroneId);
+	params.setTroneId(troneId);
+	params.setTroneOrderId(troneOrderId);
+	params.setProvinceId(provinceId);
+	params.setCityId(cityId);
+	params.setOperatorId(operatorId);
+	params.setDataType(dataType);
+	params.setSpCommerceUserId(spCommerceUserId + "");
+	params.setCpCommerceUserId(cpCommerceUserId + "");
+	params.setIsUnHoldData(isUnHoldData);
+	params.setJsType(jsTypeId);
+	
+	Map<String, Object> map = new MrServer().getMrData(params);
+	
+	/*
 	Map<String, Object> map = new MrServer().getMrData(startDate, endDate, spId, spTroneId, troneId, cpId,
-			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId+"", cpCommerceUserId+"",
-			sortType);
+			troneOrderId, provinceId, cityId, operatorId, dataType, spCommerceUserId+"", cpCommerceUserId+"",isUnHoldData,
+			showType);
+	*/
 
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -72,6 +100,9 @@
 	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
 
 	List<MrReportModel> list = (List<MrReportModel>) map.get("list");
+	
+	List<JsTypeModel> jsTypeList = new JsTypeServer().loadJsType();
+	
 
 	int dataRows = (Integer) map.get("datarows");
 	int showDataRows = (Integer) map.get("showdatarows");
@@ -79,7 +110,7 @@
 	double showAmount = (Double) map.get("showamount");
 
 	String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
-			"运营商", "数据类型", "第一业务线", "第二业务线"};
+			"运营商", "数据类型", "第一业务线", "第二业务线","CP业务"};
 
 	out.clear();
 %>
@@ -87,7 +118,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
@@ -250,7 +281,9 @@ function arrayReverse(arr) {
 	
 	$(function()
 	{
-		$("#sel_sort_type").val(<%=sortType%>);
+		$("#sel_sort_type").val(<%=showType%>);
+		
+		$("#sel_js_type").val(<%= jsTypeId %>);
 		
 		//SP的二级联动
 		$("#sel_sp").val(<%=spId%>);
@@ -275,6 +308,8 @@ function arrayReverse(arr) {
 		$("#sel_data_type").val(<%=dataType%>);
 		$("#sel_commerce_user").val(<%=spCommerceUserId%>);
 		$("#sel_cp_commerce_user").val(<%=cpCommerceUserId%>);
+		
+		$("#sel_is_unhold_data").val(<%= isUnHoldData %>);
 	});
 	
 
@@ -372,8 +407,7 @@ function arrayReverse(arr) {
 					</dd>
 					<dd class="dd01_me">SP业务</dd>
 					<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;"
-							onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
+						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;" ></select>
 					</dd>
 					<dd class="dd01_me">SP通道</dd>
 					<dd class="dd04_me">
@@ -388,6 +422,14 @@ function arrayReverse(arr) {
 							<option value="1">隔天</option>
 							<option value="2">IVR</option>
 							<option value="3">第三方支付</option>
+						</select>
+					</dd>
+					<dd class="dd01_me">导量类型</dd>
+					<dd class="dd04_me">
+						<select name="is_unhold_data" id="sel_is_unhold_data" style="width: 100px;">
+							<option value="-1">全部</option>
+							<option value="1">导量</option>
+							<option value="0">非导量</option>
 						</select>
 					</dd>
 					<br />
@@ -473,6 +515,20 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
+					<dd class="dd01_me">业务结算类型</dd>
+					<dd class="dd04_me">
+						<select name="js_type" id="sel_js_type"
+							style="width: 100px;">
+							<option value="-1">全部</option>
+							<%
+								for (JsTypeModel jsType : jsTypeList) {
+							%>
+							<option value="<%= jsType.getJsType() %>"><%=jsType.getJsName() %></option>
+							<%
+								}
+							%>
+						</select>
+					</dd>
 					<dd class="dd01_me" style="font-weight: bold; font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式"
@@ -484,6 +540,7 @@ function arrayReverse(arr) {
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
 							<option value="5">CP</option>
+							<option value="18">CP业务</option>
 							<option value="7">CP通道</option>
 							<option value="8">省份</option>
 							<option value="9">城市</option>
@@ -510,7 +567,7 @@ function arrayReverse(arr) {
 			<thead>
 				<tr>
 					<td>序号</td>
-					<td onclick="TableSorter('table_id',1,'date')"><%=titles[sortType - 1]%></td>
+					<td onclick="TableSorter('table_id',1,'date')"><%=titles[showType - 1]%></td>
 					<td onclick="TableSorter('table_id',2,'float')">数据量(条)</td>
 					<td onclick="TableSorter('table_id',3,'float')">金额(元)</td>
 					<td onclick="TableSorter('table_id',4,'float')">失败量(条)</td>

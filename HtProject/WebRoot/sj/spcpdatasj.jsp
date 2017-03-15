@@ -26,11 +26,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
+<script type="text/javascript" src="../sysjs/MapUtil.js"></script>
+<script type="text/javascript" src="../sysjs/pinyin.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
 <script type="text/javascript">
 
 	$(function()
@@ -44,11 +47,30 @@
 	{
 		document.getElementById("exportform").submit();
 	}
+	var spList = new Array();
+	<%for (SpModel spModel : spList) {%>
+		spList.push(new joSelOption(<%=spModel.getId()%>,1,'<%=spModel.getShortName()%>'));
+		<%}%>
+	
+	var cpList = new Array();
+	<%for (CpModel cpModel : cpList) {%>
+		cpList.push(new joSelOption(<%=cpModel.getId()%>,1,'<%=cpModel.getShortName()%>'));
+		<%}%>
+		
+	function onSpDataSelect(joData)
+	{
+		$("#sel_sp").val(joData.id);
+	}
+	
+	function onCpDataSelect(joData)
+	{
+		$("#sel_cp").val(joData.id);
+	}
 </script>
-<body>
+<body style="padding-top: 40px">
 	<div class="main_content">
-		<div class="content" style="margin-top: 10px">
-			<form action="spcpdatasj.jsp" method="post" id="exportform">
+		<div class="content" style="position: fixed; left: 0px; right: 0px">
+			<form action="spcpdatasj.jsp" method="get" id="exportform">
 				<dl>
 					<input type="hidden" value="1" name="load" />
 					<dd class="dd01_me">开始日期</dd>
@@ -63,7 +85,7 @@
 					</dd>
 					<dd class="dd01_me">SP</dd>
 					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" title="选择SP">
+						<select name="sp_id" id="sel_sp" onclick="namePicker(this,spList,onSpDataSelect)" title="选择SP">
 								<option value="-1">全部</option>
 								<%
 								for(SpModel sp : spList)
@@ -77,7 +99,7 @@
 					</dd>
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP">
+						<select name="cp_id" id="sel_cp" onclick="namePicker(this,cpList,onCpDataSelect)" title="选择CP">
 								<option value="-1">全部</option>
 								<%
 								for(CpModel cp : cpList)
@@ -89,6 +111,7 @@
 								%>
 						</select>
 					</dd>
+					<!--  
 					<dd class="dd01_me">数据类型</dd>
 						<dd class="dd04_me">
 						<select name="data_type" id="sel_data_type" style="width: 100px;">
@@ -97,13 +120,21 @@
 							<option value="1">包月</option>
 						</select>
 					</dd>
+					-->
 					<dd class="dd00_me"></dd>
 					<dd class="dd00_me"></dd>
-					<dd class="ddbtn" style="margin-left: 10px;" />
-					<input type="button" value="查  询" onclick="subForm()">
+					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
+						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
+					<!--  
+					<dd class="dd01_me">
+						<a style="color: blue;"
+							href="mr_lr_spcp.jsp?<%=request.getQueryString()%>">查看利润</a>
+					</dd>
+					-->
 				</dl>
 			</form>
+			</div>
 			<br /><br />
 			<table cellpadding="0" cellspacing="0">
 				<thead>
@@ -140,7 +171,6 @@
 				%>
 				</tbody>
 			</table>
-		</div>
 
 	</div>
 </body>

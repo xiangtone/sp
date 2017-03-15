@@ -15,9 +15,26 @@ public class SpTroneServer
 		return new SpTroneDao().loadSpTroneList(pageIndex,spId,userId,spTroneName);
 	}
 	
+	//废弃
 	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord)
 	{
-		return new SpTroneDao().loadSpTroneList(pageIndex,keyWord);
+		int isUnHoldData = -1;
+		
+		if("导量".equalsIgnoreCase(keyWord))
+		{
+			isUnHoldData = 1;
+		}
+		else if("非导量".equalsIgnoreCase(keyWord))
+		{
+			isUnHoldData = 0;
+		}
+		
+		return new SpTroneDao().loadOriSpTroneList(pageIndex,keyWord,isUnHoldData);
+	}
+	
+	public Map<String, Object> loadSpTroneList2(int pageIndex,String keyWord,int isUnHoldData)
+	{
+		return new SpTroneDao().loadOriSpTroneList(pageIndex,keyWord,isUnHoldData);
 	}
 	
 	public void addSpTrone(SpTroneModel model)

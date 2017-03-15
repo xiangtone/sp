@@ -69,14 +69,15 @@
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时","SP商务","CP商务"};
+	String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
+			"运营商", "数据类型", "第一业务线", "第二业务线","CP业务"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
@@ -460,7 +461,8 @@ function arrayReverse(arr) {
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
 							<option value="5">CP</option>
-							<option value="7">CP业务</option>
+							<option value="18">CP业务</option>
+							<option value="7">CP通道</option>
 							<!-- 暂时先隐藏 -->
 							<!--
 							<option value="2">周数</option>

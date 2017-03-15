@@ -27,11 +27,11 @@ public class FinalcialSpCpDataDao
 		if(dataType>-1)
 			query+= " and a.record_type = " + dataType;
 		
-		String sql = "SELECT a.sp_id,a.sp_name,a.sp_full_name,a.sp_trone_id,a.sp_trone_name,a.cp_id,";
+		String sql = "SELECT a.sp_id,a.sp_name,a.sp_full_name,a.sp_trone_id,a.product_line_name,a.sp_trone_name,a.cp_id,";
 		sql += " a.cp_name,a.cp_full_name,a.data_rows,a.amount,b.show_data_rows,b.show_amounts,";
 		sql += " a.sp_jie_suan_lv,b.cp_jie_suan_lv";
 		sql += " FROM(";
-		sql += " SELECT d.id sp_id,d.`short_name` sp_name,d.full_name sp_full_name,c.id sp_trone_id,c.`name` sp_trone_name,";
+		sql += " SELECT d.id sp_id,d.`short_name` sp_name,d.full_name sp_full_name,c.id sp_trone_id,c.`name` sp_trone_name,CONCAT(i.name_cn,'-',h.name,'-',g.name) product_line_name,";
 		sql += " f.id cp_id,f.`short_name` cp_name,f.`full_name` cp_full_name,c.`jiesuanlv` sp_jie_suan_lv,SUM(a.data_rows) data_rows,SUM(a.amount) amount";
 		sql += " FROM daily_log.tbl_mr_summer a";
 		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
@@ -39,6 +39,12 @@ public class FinalcialSpCpDataDao
 		sql += " LEFT JOIN daily_config.tbl_sp d ON c.`sp_id` = d.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
 		sql += " LEFT JOIN daily_config.tbl_cp f ON e.`cp_id` = f.id";
+		
+		//增加SP业务线
+		sql += " LEFT JOIN daily_config.tbl_product_2 g ON c.product_id = g.id ";
+		sql += " LEFT JOIN daily_config.tbl_product_1 h ON g.product_1_id = h.id ";
+		sql += " LEFT JOIN daily_config.tbl_operator i ON h.operator_id = i.flag ";
+		
 		sql += " WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "'" + query;
 		sql += " GROUP BY d.id,c.id,f.id ORDER BY CONVERT(d.`short_name` USING gbk),CONVERT(c.`name` USING gbk),CONVERT(f.`short_name` USING gbk) ASC";
 		sql += " ) a";
@@ -73,6 +79,7 @@ public class FinalcialSpCpDataDao
 				String spFullName;
 				int spTroneId;
 				String spTroneName;
+				String productLineName;
 				double spJieSuanLv;
 				int dataRows;
 				double amount;
@@ -93,6 +100,7 @@ public class FinalcialSpCpDataDao
 					spShortName = StringUtil.getString(rs.getString("sp_name"), "");
 					spTroneId = rs.getInt("sp_trone_id");
 					spTroneName = StringUtil.getString(rs.getString("sp_trone_name"), "");
+					productLineName = StringUtil.getString(rs.getString("product_line_name"), "");
 					spJieSuanLv = rs.getDouble("sp_jie_suan_lv");
 					dataRows = rs.getInt("data_rows");
 					amount = rs.getDouble("amount");
@@ -126,6 +134,7 @@ public class FinalcialSpCpDataDao
 						spTroneModel.spJieSuanLv = spJieSuanLv;
 						spTroneModel.spTroneId = spTroneId;
 						spTroneModel.spTroneName = spTroneName;
+						spTroneModel.productLineName = productLineName;
 						
 						model.list.add(spTroneModel);
 						
@@ -161,6 +170,7 @@ public class FinalcialSpCpDataDao
 							spTroneModel.spJieSuanLv = spJieSuanLv;
 							spTroneModel.spTroneId = spTroneId;
 							spTroneModel.spTroneName = spTroneName;
+							spTroneModel.productLineName = productLineName;
 							
 							model.list.add(spTroneModel);
 							

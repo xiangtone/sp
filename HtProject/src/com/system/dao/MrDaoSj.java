@@ -83,7 +83,7 @@ public class MrDaoSj
 		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
 		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
 		sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
-		sql += " left join daily_config.tbl_cp e on a.cp_id = e.id";
+		sql += " left join daily_config.tbl_cp e on b.cp_id = e.id";
 		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
 		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";

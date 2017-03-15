@@ -139,6 +139,7 @@ public class ComSumSummerDao
 						}
 						
 						//正常传送给CP的数据
+						
 						if(showAmount>0)
 						{
 							ComSumSummerModel model = new ComSumSummerModel();
@@ -165,6 +166,7 @@ public class ComSumSummerDao
 							model.setCpId(lastKeepCpId);
 							list.add(model);
 						}
+						
 					}
 					
 					return list;
@@ -277,6 +279,43 @@ public class ComSumSummerDao
 		}
 		
 		return control;
+	}
+	
+	public static void main(String[] args)
+	{
+		String startDate = "2016-09-01";
+		String endDate = "2016-09-30";
+		StringBuffer sql = new StringBuffer(512);
+
+		sql.append(
+				" SELECT a.mr_date,a.trone_id,a.trone_order_id,a.province_id,a.data_rows,");
+		sql.append(
+				" a.amount,b.data_rows show_data_rows,b.amount show_amount,record_type,cp_id");
+		sql.append(" FROM");
+		sql.append(" (");
+		sql.append(
+				" SELECT mr_date,trone_order_id,b.trone_id,province_id,SUM(data_rows) data_rows,SUM(a.amount) amount,record_type,c.id cp_id");
+		sql.append(" FROM daily_log.`tbl_mr_summer_2` a");
+		sql.append(
+				" LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id`");
+		sql.append(" LEFT JOIN daily_config.`tbl_cp` c ON b.`cp_id` = c.id");
+		sql.append(" WHERE mr_date >= '" + startDate + "' AND mr_date <= '"
+				+ endDate + "'");
+		sql.append(" GROUP BY mr_date,trone_order_id,province_id");
+		sql.append(" ) a");
+		sql.append(" LEFT JOIN");
+		sql.append(" (");
+		sql.append(
+				" SELECT mr_date,trone_order_id,province_id,SUM(data_rows) data_rows,SUM(amount) amount ");
+		sql.append(" FROM daily_log.`tbl_cp_mr_summer_2` ");
+		sql.append(" WHERE mr_date >= '" + startDate + "' AND mr_date <= '"
+				+ endDate + "'");
+		sql.append(" GROUP BY mr_date,trone_order_id,province_id");
+		sql.append(
+				" ) b ON a.trone_order_id = b.trone_order_id AND a.province_id = b.province_id AND a.mr_date = b.mr_date");
+		sql.append(" ORDER BY a.mr_date,trone_order_id,province_id");
+		
+		System.out.println(sql);
 	}
 	
 }

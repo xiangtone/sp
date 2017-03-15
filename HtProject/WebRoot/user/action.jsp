@@ -120,12 +120,8 @@
 	
 	if(type==5)
 	{
-		if(oldPwd.equalsIgnoreCase(StringUtil.getMd5String(pwd,32)))
-		{
-			model.setPassword(oldPwd);
-		}
-		else
-			model.setPassword(pwd);
+		
+		model.setPassword(pwd);
 		
 		model.setStatus(StringUtil.getInteger(request.getParameter("status"), 1));
 		
