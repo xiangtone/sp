@@ -61,6 +61,8 @@
 	
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 	
+	boolean isFirstLoad = StringUtil.getInteger(request.getParameter("isfirstload"), -1) == -1 ? true : false;
+	
 	//查询SP权限，0表示SP商务
 	String userRightList = new CommRightServer().getRightListByUserId(userId, 0);
 	
@@ -93,6 +95,12 @@
 		}
 		
 		userList = tmpUserList;
+	}
+	
+	//如果是公司或是商务就不是全部
+	if(spCommerceUserId>0 || isFirstLoad)
+	{
+		userRightList = spCommerceUserId + "";
 	}
 	
 
@@ -383,6 +391,7 @@ function arrayReverse(arr) {
 	<div class="main_content">
 		<div class="content">
 			<form action="sp_person_mr1.jsp" method="get" style="margin-top: 10px">
+				<input type="hidden" name="isfirstload" value="1" />
 				<dl>
 					<dd class="dd01_me">开始日期</dd>
 					<dd class="dd03_me">

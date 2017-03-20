@@ -1021,6 +1021,11 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
+		
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
@@ -1035,6 +1040,11 @@ public class MrDao
 		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
 		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
+		
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + startDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";		
@@ -1496,7 +1506,7 @@ public class MrDao
 				break;
 				
 			case 10:
-				queryParams = " CONCAT(d.short_name,'-',h.name)  ";
+				queryParams = " CONCAT(d.short_name,'-',h.name,'[',m.name,'-',l.name,']')  ";
 				joinId = " h.id ";
 				break;
 				

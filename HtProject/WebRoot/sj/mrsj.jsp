@@ -422,8 +422,8 @@
 							<option value="6">SP通道</option>
 							<option value="5">CP</option>
 							<option value="7">CP通道</option>
-							<option value="8">省份</option>
-							<option value="9">城市</option>
+							<!-- <option value="8">省份</option> -->
+							<!-- <option value="9">城市</option> -->
 							<!-- <option value="11">按小时</option> -->
 							<option value="12">SP商务</option>
 							<option value="13">CP商务</option>

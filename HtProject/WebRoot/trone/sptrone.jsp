@@ -184,10 +184,9 @@
 					<td>数据类型</td>
 					<td>结算类型</td>
 					<td><%= jiuSuanName %></td>
+					<td>是否导量</td>
 					<td>日限</td>
 					<td>月限</td>
-					<td>用户日限</td>
-					<td>用户月限</td>
 					<td>状态</td>
 					<td>操作</td>
 				</tr>
@@ -212,10 +211,9 @@
 					<td ondblclick="editShowData('<%= model.getId() %>')">
 						<span id="span_<%= model.getId() %>"><%= model.getJieSuanLv() %></span>
 					</td>
+					<td><%= model.getIsUnHoldData()==0 ? "否" : "是" %></td>
 					<td><%= model.getDayLimit() %></td>
 					<td><%= model.getMonthLimit() %></td>
-					<td><%= model.getUserDayLimit() %></td>
-					<td><%= model.getUserMonthLimit() %></td>
 					<td><%= model.getStatus()==1 ? "开启" : "关闭" %></td>
 					<td><a href="sptroneedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a></td>
 				</tr>

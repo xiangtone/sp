@@ -52,6 +52,7 @@
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 	
+	boolean isFirstLoad = StringUtil.getInteger(request.getParameter("isfirstload"), -1) == -1 ? true : false;
 	
 	//查询SP权限，0表示SP商务
 	String userRightList = new CommRightServer().getRightListByUserId(userId, 0);
@@ -85,6 +86,12 @@
 		}
 		
 		userList = tmpUserList;
+	}
+	
+	//如果是公司或是商务就不是全部
+	if(spCommerceUserId>0 || isFirstLoad)
+	{
+		userRightList = spCommerceUserId + "";
 	}
 
 	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId, userRightList ,cpCommerceUserId+"",sortType);
@@ -387,6 +394,7 @@ function arrayReverse(arr) {
 	<div class="main_content">
 		<div class="content" >
 			<form action="sp_person_mr2.jsp"  method="get">
+				<input type="hidden" name="isfirstload" value="1" />
 				<dl>
 					<dd class="dd01_me" onclick="openDetailData('aaa')">开始日期</dd>
 					<dd class="dd03_me">
