@@ -39,6 +39,9 @@ public class SpTroneModel
 	//是否是导量数据，0为否，1为是
 	private int isUnHoldData;
 	
+	//当走API的时候，并且判断手机号的地区时，可以选择是否强制拒绝还是交由上游去处理
+	private int isForceHold;
+	
 	public int getTroneType()
 	{
 		return troneType;
@@ -254,6 +257,14 @@ public class SpTroneModel
 	public void setIsUnHoldData(int isUnHoldData)
 	{
 		this.isUnHoldData = isUnHoldData;
+	}
+	public int getIsForceHold()
+	{
+		return isForceHold;
+	}
+	public void setIsForceHold(int isForceHold)
+	{
+		this.isForceHold = isForceHold;
 	}
 	
 	

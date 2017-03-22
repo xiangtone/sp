@@ -434,6 +434,19 @@ $(function()
 							%>
 						</select>
 					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me" title="当API选择匹配地区时，如果判断不出用户的地区，是否强制返回不再请求上游">强制拒绝</dd>
+					<dd class="dd03_me">
+						<input type="radio" name="is_force_hold" style="width: 35px;float:left" value="0" checked="checked">
+						<label style="font-size: 14px;float:left">否</label>
+						<input type="radio" name="is_force_hold"  style="width: 35px;float:left" value="1"  >
+						<label style="font-size: 14px;float:left">是</label>
+					</dd>
+					
 					<br />
 					<br />
 					<br />
