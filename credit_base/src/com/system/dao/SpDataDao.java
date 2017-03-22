@@ -51,6 +51,7 @@ public class SpDataDao
 					model.setMonthLimit(rs.getFloat("month_limit"));
 					model.setUserDayLimit(rs.getFloat("user_day_limit"));
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
+					model.setForceHold(rs.getInt("is_force_hold")==0 ? false:true);
 					
 					list.add(model);
 				}

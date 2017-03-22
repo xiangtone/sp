@@ -50,6 +50,7 @@ public class RequestServerV1
 		
 		TroneOrderModel troneOrderModel = CpDataCache.getTroneOrderModelById(model.getTroneOrderId());
 		
+		//填充伪手机号及查找城市省份
 		fillFakeMoblieAndCityId(model);
 		
 		int troneId = troneOrderModel==null ? -1 : troneOrderModel.getTroneId();
@@ -91,14 +92,57 @@ public class RequestServerV1
 			}
 		}
 		
-		//地区匹配
-		if(!isLocateMatch(spTroneApiModel.getLocateMatch(), model,spTroneModel))
+		//处理地区匹配信息      默认0不匹配，1手机号匹配，2IP地区匹配，3手机和IP地区都必须匹配
+		switch(spTroneApiModel.getLocateMatch())
 		{
-			response.setStatus(Constant.CP_BASE_PARAMS_AREA_NOT_MATCH);
-			model.setStatus(response.getStatus());
-			saveRequest(model);
-			joresult.accumulate("description", "屏蔽地区");
-			return StringUtil.getJsonFormObject(response);
+			case 0:
+				break;
+				
+			case 1:
+				if(model.getCityId() <= 0 && spTroneModel.isForceHold())
+				{
+					response.setStatus(Constant.CP_PHONE_LOCATE_FAIL);
+					model.setStatus(response.getStatus());
+					saveRequest(model);
+					joresult.accumulate("description", "未识别地区号码");
+					return StringUtil.getJsonFormObject(response);
+				}
+				else
+				{
+					ProvinceModel provinceModel = LocateCache.getProvinceByCityId(model.getCityId());
+					
+					String[] strProvinces = spTroneModel.getProvinces().split(",");
+					
+					boolean isLocateMatch = false;
+					
+					for(String province : strProvinces)
+					{
+						if(Integer.valueOf(province)==provinceModel.getId())
+						{
+							isLocateMatch = true;
+							break;
+						}
+					}
+					
+					if(!isLocateMatch)
+					{
+						response.setStatus(Constant.CP_BASE_PARAMS_AREA_NOT_MATCH);
+						model.setStatus(response.getStatus());
+						saveRequest(model);
+						joresult.accumulate("description", "屏蔽地区");
+						return StringUtil.getJsonFormObject(response);
+					}
+				}
+				break;
+				
+			case 2:
+				break;
+				
+			case 3:
+				break;
+				
+			default:
+				break;
 		}
 		
 		//开始日月限判断
@@ -283,31 +327,6 @@ public class RequestServerV1
 		new RecordServer().udpateVisistModel(model);
 	}
 	
-	protected boolean isLocateMatch(int locateMatchType,ApiOrderModel model,SpTroneModel spTroneModel)
-	{
-		//在这里匹配地区
-		//地区匹配,默认0不匹配，1手机号匹配，2IP地区匹配，3手机和IP地区都必须匹配
-		switch(locateMatchType)
-		{
-			case 0:
-				break;
-				
-			case 1:
-				return isPhoneLocateMatch(model,spTroneModel);
-				
-			case 2:
-				break;
-				
-			case 3:
-				break;
-				
-			default:
-				break;
-		}
-		return true;
-	}
-	
-	
 	protected void fillFakeMoblieAndCityId(ApiOrderModel model)
 	{
 		if(StringUtil.isNullOrEmpty(model.getImsi()) && StringUtil.isNullOrEmpty(model.getMobile()))
@@ -329,41 +348,6 @@ public class RequestServerV1
 		
 		if(cityId>0)
 			model.setCityId(cityId);
-	}
-	
-	
-	/**
-	 * 这个函数只用于处理这种情况：只用于识别得了号码的用户，并且是不符合地区的才返回FALSE，其它情况一律返回TRUE
-	 * @param model
-	 * @param spTroneModel
-	 * @return
-	 */
-	protected boolean isPhoneLocateMatch(ApiOrderModel model,SpTroneModel spTroneModel)
-	{
-		int cityId = model.getCityId();
-		
-		if(cityId<0)
-			return true;
-		
-		ProvinceModel provinceModel = LocateCache.getProvinceByCityId(cityId);
-		
-		if(provinceModel==null)
-			return true;
-		
-		if(StringUtil.isNullOrEmpty(spTroneModel.getProvinces()))
-		{
-			return true;
-		}
-		
-		String[] strProvinces = spTroneModel.getProvinces().split(",");
-		
-		for(String province : strProvinces)
-		{
-			if(Integer.valueOf(province)==provinceModel.getId())
-				return true;
-		}
-		
-		return false;
 	}
 	
 	protected boolean isFieldFill(String[] apiFields,ApiOrderModel model,JSONObject jo)
