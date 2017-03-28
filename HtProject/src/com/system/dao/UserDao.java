@@ -307,6 +307,8 @@ public class UserDao
 		});
 	}
 	
+	//废掉，以后PASSWORD 的 MD5 不再在数据库层处理，直接在SERVER层处理
+	/*
 	public boolean updateUserWithPwd(UserModel model)
 	{
 		String sql = "update daily_config.tbl_user set name = '" + model.getName() + "', pwd = md5('"
@@ -317,11 +319,37 @@ public class UserDao
 		
 		return new JdbcControl().execute(sql);
 	}
+	*/
 	
+	public boolean updateUserWithPwd(UserModel model)
+	{
+		String sql = "update daily_config.tbl_user set name = '" + model.getName() + "', pwd = '"
+				+ model.getPassword() + "',nick_name = '" + model.getNickName()
+				+ "',mail='" + model.getMail() + "',qq='" + model.getQq()
+				+ "',phone='" + model.getPhone() + "' where id ="
+				+ model.getId();
+		
+		return new JdbcControl().execute(sql);
+	}
+	
+	//废掉，以后PASSWORD 的 MD5 不再在数据库层处理，直接在SERVER层处理
+	/*
 	public boolean updateUser(UserModel model)
 	{
 		String sql = "update daily_config.tbl_user set name = '" + model.getName() + "'," + (StringUtil.isNullOrEmpty(model.getPassword()) ? "" : " pwd = md5('"
 				+ model.getPassword() + "') ,") + "nick_name = '" + model.getNickName()
+				+ "',mail='" + model.getMail() + "',qq='" + model.getQq()
+				+ "',phone='" + model.getPhone() + "',status=" + model.getStatus() + " where id ="
+				+ model.getId();
+		
+		return new JdbcControl().execute(sql);
+	}
+	*/
+	
+	public boolean updateUser(UserModel model)
+	{
+		String sql = "update daily_config.tbl_user set name = '" + model.getName() + "'," + (StringUtil.isNullOrEmpty(model.getPassword()) ? "" : " pwd = '"
+				+ model.getPassword() + "',") + "nick_name = '" + model.getNickName()
 				+ "',mail='" + model.getMail() + "',qq='" + model.getQq()
 				+ "',phone='" + model.getPhone() + "',status=" + model.getStatus() + " where id ="
 				+ model.getId();
@@ -368,6 +396,8 @@ public class UserDao
 		});
 	}
 	
+	//废掉，以后PASSWORD 的 MD5 不再在数据库层处理，直接在SERVER层处理
+	/*
 	public void addUser(UserModel model)
 	{
 		String sql = "insert into daily_config.tbl_user(name,pwd,nick_name,mail,qq,phone,create_user) value(?,?,?,?,?,?,?)";
@@ -376,6 +406,24 @@ public class UserDao
 		
 		param.put(1, model.getName());
 		param.put(2, StringUtil.getMd5String(model.getPassword(), 32));
+		param.put(3, model.getNickName());
+		param.put(4, model.getMail());
+		param.put(5, model.getQq());
+		param.put(6, model.getPhone());
+		param.put(7, model.getCreateUserId());
+		
+		new JdbcControl().execute(sql, param);
+	}
+	*/
+	
+	public void addUser(UserModel model)
+	{
+		String sql = "insert into daily_config.tbl_user(name,pwd,nick_name,mail,qq,phone,create_user) value(?,?,?,?,?,?,?)";
+		
+		Map<Integer, Object> param = new HashMap<Integer, Object>();
+		
+		param.put(1, model.getName());
+		param.put(2, model.getPassword());
 		param.put(3, model.getNickName());
 		param.put(4, model.getMail());
 		param.put(5, model.getQq());

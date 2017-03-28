@@ -34,10 +34,10 @@ public class FinalcialSpCpDataDao
 		sql += " SELECT d.id sp_id,d.`short_name` sp_name,d.full_name sp_full_name,c.id sp_trone_id,c.`name` sp_trone_name,CONCAT(i.name_cn,'-',h.name,'-',g.name) product_line_name,";
 		sql += " f.id cp_id,f.`short_name` cp_name,f.`full_name` cp_full_name,c.`jiesuanlv` sp_jie_suan_lv,SUM(a.data_rows) data_rows,SUM(a.amount) amount";
 		sql += " FROM daily_log.tbl_mr_summer a";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
+		sql += " LEFT JOIN daily_config.`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
+		sql += " LEFT JOIN daily_config.`tbl_trone` b ON e.`trone_id` = b.`id`";
 		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
 		sql += " LEFT JOIN daily_config.tbl_sp d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
 		sql += " LEFT JOIN daily_config.tbl_cp f ON e.`cp_id` = f.id";
 		
 		//增加SP业务线

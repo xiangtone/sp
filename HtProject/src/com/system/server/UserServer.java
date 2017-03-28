@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.system.dao.UserDao;
 import com.system.model.UserModel;
+import com.system.util.StringUtil;
 
 public class UserServer
 {
@@ -15,6 +16,7 @@ public class UserServer
 	
 	public boolean updateUserWithPwd(UserModel model)
 	{
+		model.setPassword(StringUtil.getMd5String(model.getPassword(), 32));
 		return new UserDao().updateUserWithPwd(model);
 	}
 	
@@ -40,11 +42,13 @@ public class UserServer
 	
 	public boolean updateUser(UserModel model)
 	{
+		model.setPassword(StringUtil.getMd5String(model.getPassword(), 32));
 		return new UserDao().updateUser(model);
 	}
 	
 	public void addUser(UserModel model)
 	{
+		model.setPassword(StringUtil.getMd5String(model.getPassword(), 32));
 		new UserDao().addUser(model);
 	}
 	
