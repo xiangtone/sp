@@ -77,7 +77,7 @@
 				<div style="clear: both;"></div>
 			</form>
 			
-			<form action="analy.jsp" method="post" id="formid2"
+			<form style="display:none" action="analy.jsp" method="post" id="formid2"
 				style="border: 1px solid #ccc; padding-bottom: 32px; width: 60%; margin-left: 10px;margin-top: 10px;">
 				<input type="hidden" value="2" name="analy" />
 				<h1
