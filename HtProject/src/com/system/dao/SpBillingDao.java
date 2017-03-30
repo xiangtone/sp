@@ -22,7 +22,7 @@ public class SpBillingDao
 {
 	public boolean isSpBillingCross(int spId,int jsType,String startDate,String endDate)
 	{
-		String sql = "SELECT COUNT(*) FROM daily_config.`tbl_sp_billing` WHERE sp_id = " + spId + " AND js_type = " + jsType;
+		String sql = "SELECT COUNT(*) FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` WHERE sp_id = " + spId + " AND js_type = " + jsType;
 		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
 				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date))";
 		
@@ -46,9 +46,9 @@ public class SpBillingDao
 	{
 		String sql = " SELECT d.`id` sp_trone_id,SUM(a.amount) amount,d.`jiesuanlv` rate ";
 		sql += " FROM daily_log.tbl_mr_summer a ";
-		sql += " LEFT JOIN daily_config.`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_trone` c ON b.`trone_id` = c.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` c ON b.`trone_id` = c.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
 		sql += " WHERE 1=1 ";
 		sql += " AND a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "' ";
 		sql += " AND d.`js_type` = " + jsType;
@@ -83,7 +83,7 @@ public class SpBillingDao
 	
 	public int addSpBilling(int spId,int jsType,String startDate,String endDate,float preBilling,float amount)
 	{
-		String sql = "INSERT INTO daily_config.`tbl_sp_billing`(sp_id,js_type,start_date,end_date,pre_billing,amount) VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing`(sp_id,js_type,start_date,end_date,pre_billing,amount) VALUES(?,?,?,?,?,?)";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		
@@ -118,10 +118,10 @@ public class SpBillingDao
 		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,a.amount,a.reduce_amount,a.rate,a.reduce_type ";
 		
 		sql += " FROM daily_log.`tbl_sp_billing_sp_trone` a ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` c ON b.`product_id` = c.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` d ON c.`product_1_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` e ON d.`operator_id` = e.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` c ON b.`product_id` = c.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` d ON c.`product_1_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` e ON d.`operator_id` = e.`id` ";
 		
 		sql += " WHERE 1=1 AND a.status = 0 AND a.sp_billing_id =" + spBillingId + " order by name_cn,name";
 		
@@ -160,9 +160,9 @@ public class SpBillingDao
 	public SpBillingModel getSpBillingModel(int id)
 	{
 		String sql = "SELECT a.*,b.`short_name` sp_name,c.`name` js_name";
-		sql += " FROM daily_config.`tbl_sp_billing` a";
-		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` b ON a.`sp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_js_type` c ON a.`js_type` = c.`type_id`";
 		sql += " WHERE 1=1 and a.id = " + id;
 		
 		return (SpBillingModel)new JdbcControl().query(sql, new QueryCallBack()
@@ -210,9 +210,9 @@ public class SpBillingDao
 		endDate = SqlUtil.sqlEncode(endDate);		
 		
 		String sql = "SELECT " + Constant.CONSTANT_REPLACE_STRING;
-		sql += " FROM daily_config.`tbl_sp_billing` a";
-		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` b ON a.`sp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_js_type` c ON a.`js_type` = c.`type_id`";
 		sql += " WHERE 1=1";
 		
 		if(spId>0)
@@ -311,7 +311,7 @@ public class SpBillingDao
 	 */
 	public void delSpBilling(int spBillingId)
 	{
-		String sql1 = "DELETE FROM daily_config.`tbl_sp_billing` WHERE id = " + spBillingId;
+		String sql1 = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` WHERE id = " + spBillingId;
 		String sql2 = "DELETE FROM daily_log.tbl_sp_billing_sp_trone where sp_billing_id = " + spBillingId;
 		JdbcControl control = new JdbcControl();
 		control.execute(sql1);
@@ -325,13 +325,13 @@ public class SpBillingDao
 	 */
 	public void updateSpBillingStatus(int spBillingId,int status)
 	{
-		String sql = "UPDATE daily_config.`tbl_sp_billing` SET STATUS = " + status + " WHERE id = " + spBillingId;
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` SET STATUS = " + status + " WHERE id = " + spBillingId;
 		new JdbcControl().execute(sql);
 	}
 	
 	public boolean recallSpBilling(int spBillingId)
 	{
-		String sql = "select status from daily_config.tbl_sp_billing where id = " + spBillingId;
+		String sql = "select status from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_billing where id = " + spBillingId;
 		
 		JdbcControl control = new JdbcControl();
 		
@@ -351,7 +351,7 @@ public class SpBillingDao
 		
 		if(status==1)
 		{
-			control.execute("UPDATE daily_config.`tbl_sp_billing` SET STATUS = 0 WHERE id = " + spBillingId);
+			control.execute("UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` SET STATUS = 0 WHERE id = " + spBillingId);
 			return true;
 		}
 		
@@ -360,12 +360,12 @@ public class SpBillingDao
 	
 	public void updateSpBillingActurePay(int spBillingId,float money,String payTime)
 	{
-		String sql = "UPDATE daily_config.`tbl_sp_billing` SET acture_billing = " + money + ",pay_time = '"+payTime+"',status = 2 WHERE id = " + spBillingId;
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` SET acture_billing = " + money + ",pay_time = '"+payTime+"',status = 2 WHERE id = " + spBillingId;
 		new JdbcControl().execute(sql);
 	}
 	public void updateSpBillingActurePay(int spBillingId,float money)
 	{
-		String sql = "UPDATE daily_config.`tbl_sp_billing` SET acture_billing = " + money + ",pay_time =now(),status = 2 WHERE id = " + spBillingId;
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` SET acture_billing = " + money + ",pay_time =now(),status = 2 WHERE id = " + spBillingId;
 		new JdbcControl().execute(sql);
 	}
 	/**
@@ -385,9 +385,9 @@ public class SpBillingDao
 		endDate = SqlUtil.sqlEncode(endDate);		
 		
 		String sql = "SELECT " + Constant.CONSTANT_REPLACE_STRING;
-		sql += " FROM daily_config.`tbl_sp_billing` a";
-		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` b ON a.`sp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_js_type` c ON a.`js_type` = c.`type_id`";
 		sql += " WHERE 1=1";
 		if(rightType>0){
 			sql += " AND (b.commerce_user_id="+userId+" or b.commerce_user_id in ("+getRigthListByUser(userId)+"))";
@@ -477,7 +477,7 @@ public class SpBillingDao
 		return map;
 	}
 	public String getRigthListByUser(int userId){
-		String sql="select right_list from daily_config.tbl_ds_user_right ur where ur.user_id="+userId+" and ur.type=0";
+		String sql="select right_list from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right ur where ur.user_id="+userId+" and ur.type=0";
 		return (String)new JdbcControl().query(sql, new QueryCallBack(){
 
 			@Override
@@ -503,7 +503,7 @@ public class SpBillingDao
 		if(type==3){
 			replaceStr="kaipiao_date='"+date+"'";
 		}
-		String sql="UPDATE daily_config.`tbl_sp_billing` SET "+replaceStr+",status ="+status+"  WHERE id ="+id;
+		String sql="UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` SET "+replaceStr+",status ="+status+"  WHERE id ="+id;
 		new JdbcControl().execute(sql);
 
 	}
@@ -525,14 +525,14 @@ public class SpBillingDao
 				   " a.reduce_type,((a.amount - a.reduce_data_amount)*rate - a.reduce_money_amount) sp_trone_billing_acture_amount,a.reduce_data_amount,reduce_money_amount,"+
 				   " b.pre_billing,b.billing_date,b.pre_billing kaipiao_amount,b.apply_kaipiao_date,b.kaipiao_date,b.pay_time,b.acture_billing,b.status"+ 
 				   " FROM (SELECT * FROM daily_log.`tbl_sp_billing_sp_trone` WHERE 1=1 "+startDateStr+endDateStr+" ) a "+
-				   " LEFT JOIN daily_config.tbl_sp_billing b ON a.`sp_billing_id` = b.`id`"+
-				   " LEFT JOIN daily_config.`tbl_sp_trone` c ON a.`sp_trone_id` = c.id"+
-				   " LEFT JOIN daily_config.`tbl_sp` d ON b.`sp_id` = d.`id`"+
-				   " LEFT JOIN daily_config.`tbl_user` e ON d.`commerce_user_id` = e.`id`"+
-				   " LEFT JOIN daily_config.`tbl_product_2` f ON c.`product_id` = f.`id`"+
-				   " LEFT JOIN daily_config.`tbl_product_1` g ON f.`product_1_id` = g.`id`"+
-				   " LEFT JOIN daily_config.`tbl_operator` h ON g.`operator_id` = h.`id`"+
-				   " LEFT JOIN daily_config.`tbl_js_type` i ON b.`js_type` = i.`type_id` WHERE 1=1";
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_billing b ON a.`sp_billing_id` = b.`id`"+
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON a.`sp_trone_id` = c.id"+
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON b.`sp_id` = d.`id`"+
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_user` e ON d.`commerce_user_id` = e.`id`"+
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` f ON c.`product_id` = f.`id`"+
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` g ON f.`product_1_id` = g.`id`"+
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` h ON g.`operator_id` = h.`id`"+
+				   " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_js_type` i ON b.`js_type` = i.`type_id` WHERE 1=1";
 		if(!StringUtil.isNullOrEmpty(status)){
 			sql+=" AND b.status IN ("+status+")";
 		}

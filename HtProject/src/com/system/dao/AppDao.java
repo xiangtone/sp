@@ -19,7 +19,7 @@ public class AppDao {
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
-				+ " FROM daily_config.`tbl_xy_app` ORDER BY id ASC ";
+				+ " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` ORDER BY id ASC ";
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -65,7 +65,7 @@ public class AppDao {
 		//String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
-				+ " FROM daily_config.`tbl_xy_app` ORDER BY id ASC ";
+				+ " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` ORDER BY id ASC ";
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -111,7 +111,7 @@ public class AppDao {
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
-				+ " FROM daily_config.`tbl_xy_app` a left join daily_config.tbl_user b on a.user_id = b.id WHERE 1=1 ";
+				+ " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id WHERE 1=1 ";
 		
 		if(!StringUtil.isNullOrEmpty(appname))
 		{
@@ -173,7 +173,7 @@ public class AppDao {
 	
 	public Integer loadIdByName(String appname)
 	{
-		String sql = "SELECT id FROM daily_config.`tbl_xy_app` where appname='"+appname+"'";
+		String sql = "SELECT id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` where appname='"+appname+"'";
 		
 		return (Integer)new JdbcControl().query(sql,
 				new QueryCallBack() {
@@ -189,7 +189,7 @@ public class AppDao {
 	
 	public AppModel loadAppById(int id)
 	{
-		String sql = "SELECT * FROM daily_config.`tbl_xy_app` where id = "+id;
+		String sql = "SELECT * FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` where id = "+id;
 		
 		
 		return (AppModel)new JdbcControl().query(sql,
@@ -218,7 +218,7 @@ public class AppDao {
 	
 	public boolean updataApp(AppModel model)
 	{
-		String sql = "UPDATE daily_config.`tbl_xy_app` SET "
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` SET "
 				+ "appkey='"+model.getAppkey()+"',"
 				+ " appname='"+model.getAppname()+"',"
 			    + " hold_percent="+model.getHold_percent()+","
@@ -229,13 +229,13 @@ public class AppDao {
 	
 	public boolean deletApp(int id)
 	{
-		String sql = "DELETE FROM daily_config.`tbl_xy_app` WHERE id="+id;
+		String sql = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` WHERE id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean addApp(AppModel model)
 	{
-		String sql = "insert into daily_config.`tbl_xy_app`("
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app`("
 				+ "appkey,appname,hold_percent,remark,app_type) value("
 				+ "'"+model.getAppkey()+"','"+model.getAppname()+"',"+model.getHold_percent()
 				+ ",'"+model.getRemark()+"',"+model.getAppType()+")";
@@ -245,7 +245,7 @@ public class AppDao {
 	
 	public boolean updateAppLoginAccount(int appId,int userId)
 	{
-		String sql = "update daily_config.tbl_xy_app set user_id = " + userId + " where id = " + appId;
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app set user_id = " + userId + " where id = " + appId;
 		
 		return new JdbcControl().execute(sql);
 	}

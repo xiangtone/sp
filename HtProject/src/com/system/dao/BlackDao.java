@@ -18,7 +18,7 @@ public class BlackDao {
 	@SuppressWarnings("unchecked")
 	public List<BlackModel> loadBlack()
 	{
-		String sql = "select * from daily_config.tbl_black order by id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black order by id asc";
 
 		return (List<BlackModel>) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -51,8 +51,8 @@ public class BlackDao {
 	public Map<String, Object> loadBlack(int pageIndex)
 	{
 //		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-//				+ " from daily_config.tbl_cp order by convert(short_name using gbk) asc";
-		String sql="select"+Constant.CONSTANT_REPLACE_STRING+" from daily_config.tbl_black tb where 1=1";
+//				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp order by convert(short_name using gbk) asc";
+		String sql="select"+Constant.CONSTANT_REPLACE_STRING+" from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black tb where 1=1";
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
@@ -108,8 +108,8 @@ public class BlackDao {
 	public Map<String, Object> loadBlack(int pageIndex, String keyWord)
 	{
 //		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-//				+ " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id left join daily_config.tbl_user c on a.commerce_user_id = c.id  where 1=1";
-		String sql="select "+Constant.CONSTANT_REPLACE_STRING+" from daily_config.tbl_black tb where 1=1";
+//				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1";
+		String sql="select "+Constant.CONSTANT_REPLACE_STRING+" from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black tb where 1=1";
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
 
@@ -179,7 +179,7 @@ public class BlackDao {
 
 	public BlackModel loadBlackById(int id)
 	{
-		String sql = "select * from daily_config.tbl_black tb where tb.id = "
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black tb where tb.id = "
 				+ id;
 		return (BlackModel) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -214,7 +214,7 @@ public class BlackDao {
 
 	public boolean addBlack(BlackModel model)
 	{
-		String sql="insert into daily_config.tbl_black(imei,imsi,phone,remark) "
+		String sql="insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black(imei,imsi,phone,remark) "
 				+ "value('"+model.getImei()+"',"
 				+"'"+model.getImsi()+"',"
 				+"'"+model.getPhone()+"',"
@@ -225,7 +225,7 @@ public class BlackDao {
 	}
 	public void addBlack(BlackModel model,String[] strs,String colName){
 		StringBuffer sql=new StringBuffer();
-		sql.append("insert into daily_config.tbl_black("+colName+", remark)");
+		sql.append("insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black("+colName+", remark)");
 		if(strs==null){
 		    sql.append("value('"+model.getPlData()+"','"+model.getRemark()+"')");
 		}else{
@@ -241,7 +241,7 @@ public class BlackDao {
 
 	public boolean updateBlack(BlackModel model)
 	{
-		String sql = "update daily_config.tbl_black set imei = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black set imei = '"
 				+ model.getImei() + "',imsi = '"
 				+ model.getImsi() + "',phone='"
 				+ model.getPhone() + "',remark='" + model.getRemark()
@@ -249,7 +249,7 @@ public class BlackDao {
 		return new JdbcControl().execute(sql);
 	}
 	public boolean delete(int id){
-	String sql="delete from daily_config.tbl_black where id="+id;
+	String sql="delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_black where id="+id;
 	return new JdbcControl().execute(sql);
 	}
 	

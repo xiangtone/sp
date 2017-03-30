@@ -1,3 +1,4 @@
+<%@page import="com.system.model.params.ReportParamsModel"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.system.server.MrDetailServer"%>
 <%@page import="com.system.vo.DetailDataVo"%>
@@ -27,7 +28,17 @@
 	
 	String month = StringUtil.getString(request.getParameter("month"),defaultMonth);
 	
-	List<DetailDataVo> list = new MrDetailServer().loadDetailDataBySummer(queryDate, spId, cpId, spTroneId, troneId, showType, joinId);
+	ReportParamsModel params = new ReportParamsModel();
+	params.setStartDate(queryDate);
+	params.setEndDate(queryDate);
+	params.setSpId(spId);
+	params.setCpId(cpId);
+	params.setSpTroneId(spTroneId);
+	params.setTroneId(troneId);
+	params.setShowType(showType);
+	
+	
+	List<DetailDataVo> list = new MrDetailServer().loadDetailDataBySummer(params, joinId);
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

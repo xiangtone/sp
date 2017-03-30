@@ -31,7 +31,7 @@ public class CpBillingDao
 	 */
 	public int addCpBilling(int cpId,int jsType,String startDate,String endDate,float preBilling,float amount)
 	{
-		String sql = "INSERT INTO daily_config.`tbl_cp_billing`(cp_id,js_type,start_date,end_date,pre_billing,amount) VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing`(cp_id,js_type,start_date,end_date,pre_billing,amount) VALUES(?,?,?,?,?,?)";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		
@@ -55,7 +55,7 @@ public class CpBillingDao
 	 */
 	public boolean isCpBillingCross(int cpId,int jsType,String startDate,String endDate)
 	{
-		String sql = "SELECT COUNT(*) FROM daily_config.`tbl_cp_billing` WHERE cp_id = " + cpId + " AND js_type = " + jsType;
+		String sql = "SELECT COUNT(*) FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` WHERE cp_id = " + cpId + " AND js_type = " + jsType;
 		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
 				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date))";
 		
@@ -88,9 +88,9 @@ public class CpBillingDao
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "' ";
 		sql += " GROUP BY mr_date,trone_order_id ";
 		sql += " )a ";
-		sql += " LEFT JOIN daily_config.`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_trone` c ON b.`trone_id` = c.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_cp_trone_rate` d ON b.`cp_id` = d.`cp_id` AND c.`sp_trone_id` = d.`sp_trone_id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` c ON b.`trone_id` = c.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` d ON b.`cp_id` = d.`cp_id` AND c.`sp_trone_id` = d.`sp_trone_id` ";
 		sql += " WHERE 1=1 AND b.`cp_id` = " + cpId + "  AND d.`js_type` = " + jsType;
 		sql += " GROUP BY a.`mr_date`,c.`sp_trone_id`";
 
@@ -131,9 +131,9 @@ public class CpBillingDao
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "' ";
 		sql += " GROUP BY mr_date,trone_order_id,province_id ";
 		sql += " )a ";
-		sql += " LEFT JOIN daily_config.`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_trone` c ON b.`trone_id` = c.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_cp_trone_rate` d ON b.`cp_id` = d.`cp_id` AND c.`sp_trone_id` = d.`sp_trone_id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` c ON b.`trone_id` = c.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` d ON b.`cp_id` = d.`cp_id` AND c.`sp_trone_id` = d.`sp_trone_id` ";
 		sql += " WHERE 1=1 AND b.`cp_id` = " + cpId + "  AND d.`js_type` = " + jsType;
 		sql += " GROUP BY a.`mr_date`,a.`trone_order_id`,a.`province_id` ";
 
@@ -173,9 +173,9 @@ public class CpBillingDao
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "' ";
 		sql += " GROUP BY mr_date,trone_order_id ";
 		sql += " )a ";
-		sql += " LEFT JOIN daily_config.`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_trone` c ON b.`trone_id` = c.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_cp_trone_rate` d ON b.`cp_id` = d.`cp_id` AND c.`sp_trone_id` = d.`sp_trone_id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` c ON b.`trone_id` = c.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` d ON b.`cp_id` = d.`cp_id` AND c.`sp_trone_id` = d.`sp_trone_id` ";
 		sql += " WHERE 1=1 AND b.`cp_id` = " + cpId + "  AND d.`js_type` = " + jsType;
 		sql += " GROUP BY c.`sp_trone_id` ";
 
@@ -212,9 +212,9 @@ public class CpBillingDao
 	public CpBillingModel getCpBillingModel(int id)
 	{
 		String sql = "SELECT a.create_date,a.id,a.amount,a.`cp_id`,b.`short_name` cp_name,a.`js_type`,c.`name` js_name,a.`pre_billing`,a.`remark`,a.start_date,a.end_date,a.tax_rate,a.acture_billing,a.status,a.start_bill_date,a.get_bill_date,a.apply_pay_bill_date, a.pay_time ";
-		sql += " FROM daily_config.`tbl_cp_billing` a";
-		sql += " LEFT JOIN daily_config.`tbl_cp` b ON a.`cp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` b ON a.`cp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_js_type` c ON a.`js_type` = c.`type_id`";
 		sql += " WHERE 1=1 and a.id = " + id;
 		
 		return (CpBillingModel)new JdbcControl().query(sql, new QueryCallBack()
@@ -262,10 +262,10 @@ public class CpBillingDao
 		String sql = "SELECT b.`name`,CONCAT(e.`name_cn`,'-',d.name) name_cn,a.amount,a.reduce_amount,a.rate,a.reduce_type ";
 		
 		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` a ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` c ON b.`product_id` = c.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` d ON c.`product_1_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` e ON d.`operator_id` = e.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` c ON b.`product_id` = c.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` d ON c.`product_1_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` e ON d.`operator_id` = e.`id` ";
 		
 		sql += " WHERE 1=1 AND a.status = 0 AND a.cp_billing_id =" + cpBillingId + " order by name_cn,name";
 		
@@ -303,9 +303,9 @@ public class CpBillingDao
 		endDate = SqlUtil.sqlEncode(endDate);		
 		
 		String sql = "SELECT " + Constant.CONSTANT_REPLACE_STRING;
-		sql += " FROM daily_config.`tbl_cp_billing` a";
-		sql += " LEFT JOIN daily_config.`tbl_cp` b ON a.`cp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_js_type` c ON a.`js_type` = c.`type_id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` b ON a.`cp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_js_type` c ON a.`js_type` = c.`type_id`";
 		sql += " WHERE 1=1";
 		
 		if(cpId>0)
@@ -401,7 +401,7 @@ public class CpBillingDao
 	 */
 	public void delCpBilling(int cpBillingId)
 	{
-		String sql1 = "DELETE FROM daily_config.`tbl_cp_billing` WHERE id = " + cpBillingId;
+		String sql1 = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` WHERE id = " + cpBillingId;
 		String sql2 = "DELETE FROM daily_log.tbl_cp_billing_sp_trone where cp_billing_id = " + cpBillingId;
 		String sql3 = "DELETE FROM daily_log.tbl_cp_billing_trone_order_detail where cp_billing_id = " + cpBillingId;
 		JdbcControl control = new JdbcControl();
@@ -417,7 +417,7 @@ public class CpBillingDao
 	 */
 	public void updateCpBillingStatus(int cpBillingId,int status)
 	{
-		String sql = "UPDATE daily_config.`tbl_cp_billing` SET STATUS = " + status + " WHERE id = " + cpBillingId;
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` SET STATUS = " + status + " WHERE id = " + cpBillingId;
 		new JdbcControl().execute(sql);
 	}
 	
@@ -447,7 +447,7 @@ public class CpBillingDao
 				return null;
 			}
 		});
-		String sqlUpdate = "UPDATE daily_config.`tbl_cp_billing` SET amount = ?,reduce_amount = ?,pre_billing = ?  WHERE id = ? ";
+		String sqlUpdate = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` SET amount = ?,reduce_amount = ?,pre_billing = ?  WHERE id = ? ";
 		Map<Integer, Object> params = new HashMap<Integer, Object>();
 		params.put(1, result[0]);
 		params.put(2, result[1]);
@@ -459,13 +459,13 @@ public class CpBillingDao
 	
 	public void updateCpBillingActurePay(int cpBillingId,float money)
 	{
-		String sql = "UPDATE daily_config.`tbl_cp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + cpBillingId;
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` SET acture_billing = " + money + ",pay_time = NOW(),status = 3 WHERE id = " + cpBillingId;
 		new JdbcControl().execute(sql);
 	}
 	//完成对账是更新对账时间
 	public void updateCpBillingActurePay(int cpBillingId,float money,String date)
 	{
-		String sql = "UPDATE daily_config.`tbl_cp_billing` SET acture_billing = " + money + ",pay_time ='"+date+"',status = 6 WHERE id = " + cpBillingId;
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` SET acture_billing = " + money + ",pay_time ='"+date+"',status = 6 WHERE id = " + cpBillingId;
 		new JdbcControl().execute(sql);
 	}
 	
@@ -518,7 +518,7 @@ public class CpBillingDao
 		if(type==3){
 			replaceStr="apply_pay_bill_date='"+date+"'";
 		}
-		String sql="UPDATE daily_config.`tbl_cp_billing` SET "+replaceStr+",status ="+status+"  WHERE id ="+id;
+		String sql="UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` SET "+replaceStr+",status ="+status+"  WHERE id ="+id;
 		new JdbcControl().execute(sql);
 
 	}
@@ -550,14 +550,14 @@ public class CpBillingDao
 					" b.pre_billing,b.start_bill_date,b.kaipiao_billing kaipiao_amount,b.get_bill_date,b.apply_pay_bill_date,b.pay_time,"+
 					" b.acture_billing,b.status "+
 					" FROM (SELECT * FROM daily_log.`tbl_cp_billing_sp_trone` WHERE 1=1 "+startDateStr+endDateStr+") a"+
-					" LEFT JOIN daily_config.tbl_cp_billing b ON a.`cp_billing_id` = b.`id`"+
-					" LEFT JOIN daily_config.`tbl_cp` c ON b.cp_id = c.id"+
-					" LEFT JOIN daily_config.`tbl_sp_trone` d ON a.`sp_trone_id` = d.id"+
-					" LEFT JOIN daily_config.`tbl_user` e ON c.`commerce_user_id` = e.`id`"+
-					" LEFT JOIN daily_config.`tbl_product_2` f ON d.`product_id` = f.`id`"+
-					" LEFT JOIN daily_config.`tbl_product_1` g ON f.`product_1_id` = g.`id`"+
-					" LEFT JOIN daily_config.`tbl_operator` h ON g.`operator_id` = h.`id`"+
-					" LEFT JOIN daily_config.`tbl_js_type` i ON b.`js_type` = i.`type_id` WHERE 1=1";
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_billing b ON a.`cp_billing_id` = b.`id`"+
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` c ON b.cp_id = c.id"+
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON a.`sp_trone_id` = d.id"+
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_user` e ON c.`commerce_user_id` = e.`id`"+
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` f ON d.`product_id` = f.`id`"+
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` g ON f.`product_1_id` = g.`id`"+
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` h ON g.`operator_id` = h.`id`"+
+					" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_js_type` i ON b.`js_type` = i.`type_id` WHERE 1=1";
 
 		if(!StringUtil.isNullOrEmpty(status)){
 			sql+=" AND b.status IN ("+status+")";

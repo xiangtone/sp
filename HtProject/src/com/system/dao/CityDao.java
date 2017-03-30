@@ -15,7 +15,7 @@ public class CityDao
 	@SuppressWarnings("unchecked")
 	public List<CityModel> loadCityList()
 	{
-		String sql = "select * from daily_config.tbl_city order by province_id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_city order by province_id asc";
 		
 		return (List<CityModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{

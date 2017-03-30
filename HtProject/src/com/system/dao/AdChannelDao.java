@@ -26,7 +26,7 @@ public class AdChannelDao {
 	{
 		String sqlcount = " count(*) ";
 		String sql = "select "+Constant.CONSTANT_REPLACE_STRING+"from "
-				+ "daily_config.`tbl_ad_channel` a LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid` = b.id"
+				+ "" + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid` = b.id"
 				+ " ORDER BY a.channel,b.appname ASC ";
 		
 		
@@ -82,8 +82,8 @@ public class AdChannelDao {
 	{
 		String sqlcount = " count(*) ";
 		String sql = "select "+Constant.CONSTANT_REPLACE_STRING+" from "
-				+ "daily_config.`tbl_ad_channel` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid` = b.id ";
+				+ "" + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` a "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid` = b.id ";
 		
 		
 		//String limit = " limit "+Constant.PAGE_SIZE*(pageindex-1) + "," + Constant.PAGE_SIZE;
@@ -120,8 +120,8 @@ public class AdChannelDao {
 	
 	public AdChannelModel loadAdQdName()
 	{
-		String sql = "SELECT a.name,a.channel FROM daily_config.`tbl_ad_channel` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid` = b.id";
+		String sql = "SELECT a.name,a.channel FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` a "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid` = b.id";
 		
 		AdChannelModel model = null;
 		
@@ -142,8 +142,8 @@ public class AdChannelDao {
 	{
 		String sqlcount = " count(*) ";
 		String sql = "select "+Constant.CONSTANT_REPLACE_STRING+"from "
-				+ "daily_config.`tbl_ad_channel` a LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid` = b.id "
-				+ " LEFT JOIN daily_config.`tbl_user` c ON a.`user_id` = c.id "
+				+ "" + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid` = b.id "
+				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_user` c ON a.`user_id` = c.id "
 				+ " WHERE 1=1 ";
 		
 		if(appid>0)
@@ -219,8 +219,8 @@ public class AdChannelDao {
 	
 	public AdChannelModel loadQdById(int id)
 	{
-		String sql = "SELECT * FROM daily_config.`tbl_ad_channel` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid` = b.id WHERE a.`id`="+id;
+		String sql = "SELECT * FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` a "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid` = b.id WHERE a.`id`="+id;
 		
 		return (AdChannelModel)new JdbcControl().query(sql, 
 				new QueryCallBack() {
@@ -247,7 +247,7 @@ public class AdChannelDao {
 	public boolean updataChannel(AdChannelModel model)
 	{
 		int id = new AdAppDao().loadIdByName(model.getAppname());
-		String sql = "UPDATE daily_config.`tbl_ad_channel` SET "
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` SET "
 				+ "appid="+id+","
 				+ "channel='"+model.getChannel()+"',"
 				+ "hold_percent='"+model.getHold_percent()+"',"
@@ -261,7 +261,7 @@ public class AdChannelDao {
 	{
 		int id = new AdAppDao().loadIdByName(model.getAppname());
 		
-		String sql = "insert into daily_config.`tbl_ad_channel`(appid,channel,hold_percent,name,scale,user_id) "
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel`(appid,channel,hold_percent,name,scale,user_id) "
 				+ "value("+id+",'"+model.getChannel()+"',"+model.getHold_percent()+",'"
 				+model.getName()+"',"+model.getScale()+","+model.getUserid()+")";
 		return new JdbcControl().execute(sql);
@@ -269,7 +269,7 @@ public class AdChannelDao {
 	
 	public boolean deletChannel(int id)
 	{
-		String sql = "DELETE FROM daily_config.`tbl_ad_channel` WHERE id="+id;
+		String sql = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` WHERE id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	

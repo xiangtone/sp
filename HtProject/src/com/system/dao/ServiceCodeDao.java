@@ -16,9 +16,9 @@ public class ServiceCodeDao
 	public List<ServiceCodeModel> loadServiceCode()
 	{
 		String sql = "SELECT c.`bj_flag`,a.id,CONCAT(c.name_cn,'-',b.`name`,'-',a.`name`) service_name";
-		sql += " FROM  daily_config.`tbl_product_2` a";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` b ON a.`product_1_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_operator` c ON b.`operator_id` = c.`flag`";
+		sql += " FROM  " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` b ON a.`product_1_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` c ON b.`operator_id` = c.`flag`";
 		sql += " ORDER BY c.`bj_flag` ASC,service_name ASC";
 		return (List<ServiceCodeModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{

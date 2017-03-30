@@ -20,7 +20,7 @@ public class TroneDao
 	@SuppressWarnings("unchecked")
 	public List<TroneModel> loadTrone()
 	{
-		String sql = "select a.*,b.commerce_user_id,b.short_name from daily_config.tbl_trone a left join daily_config.tbl_sp b on a.sp_id = b.id order by b.short_name asc";
+		String sql = "select a.*,b.commerce_user_id,b.short_name from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp b on a.sp_id = b.id order by b.short_name asc";
 
 		return (List<TroneModel>) new JdbcControl().query(sql,
 				new QueryCallBack()
@@ -61,7 +61,7 @@ public class TroneDao
 	@SuppressWarnings("unchecked")
 	public List<TroneModel> loadSpTrone()
 	{
-		String sql = "SELECT id,sp_id,name FROM `daily_config`.`tbl_sp_trone` ";
+		String sql = "SELECT id,sp_id,name FROM `" + com.system.constant.Constant.DB_DAILY_CONFIG + "`.`tbl_sp_trone` ";
 		
 		return (List<TroneModel>)new JdbcControl().query(sql, 
 				new QueryCallBack() {
@@ -84,7 +84,7 @@ public class TroneDao
 	@SuppressWarnings("unchecked")
 	public List<TroneModel> loadTrone(int spTroneId)
 	{
-		String sql = "select a.*,b.commerce_user_id,b.short_name from daily_config.tbl_trone a left join daily_config.tbl_sp b on a.sp_id = b.id left join daily_config.tbl_sp_trone c on a.sp_trone_id = c.id where a.status=1 and c.id = " + spTroneId + " order by b.short_name asc";
+		String sql = "select a.*,b.commerce_user_id,b.short_name from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp b on a.sp_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone c on a.sp_trone_id = c.id where a.status=1 and c.id = " + spTroneId + " order by b.short_name asc";
 
 		return (List<TroneModel>) new JdbcControl().query(sql,
 				new QueryCallBack()
@@ -127,9 +127,9 @@ public class TroneDao
 		String query = " a.*,c.commerce_user_id,c.`short_name`,b.`name` sp_trone_name ";
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
-		sql += " FROM daily_config.tbl_trone a";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_sp c ON b.`sp_id` = c.`id` where 1=1 ";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp c ON b.`sp_id` = c.`id` where 1=1 ";
 		
 		String wheres = "";
 		
@@ -195,9 +195,9 @@ public class TroneDao
 		String query = " a.*,c.commerce_user_id,c.`short_name`,b.`name` sp_trone_name ";
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
-		sql += " FROM daily_config.tbl_trone a";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_sp c ON b.`sp_id` = c.`id` where 1=1 ";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp c ON b.`sp_id` = c.`id` where 1=1 ";
 		
 		String wheres = "";
 		
@@ -266,9 +266,9 @@ public class TroneDao
 	public TroneModel getTroneById(int id)
 	{
 		String sql = "select  a.*,b.commerce_user_id,b.`short_name`,c.`name` sp_trone_name ";
-		sql += " FROM daily_config.tbl_trone a";
-		sql += " LEFT JOIN daily_config.`tbl_sp` b ON a.`sp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON a.`sp_trone_id` = c.`id` where 1=1 and a.id = " + id;
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` b ON a.`sp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON a.`sp_trone_id` = c.`id` where 1=1 and a.id = " + id;
 		
 		return (TroneModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -308,7 +308,7 @@ public class TroneDao
 	
 	public boolean addTrone(TroneModel model)
 	{
-		String sql = "insert into daily_config.tbl_trone(sp_id,sp_api_url_id,trone_name,orders,trone_num,sp_trone_id,price,is_dynamic,match_price) values(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone(sp_id,sp_api_url_id,trone_name,orders,trone_num,sp_trone_id,price,is_dynamic,match_price) values(?,?,?,?,?,?,?,?,?)";
 		
 		Map<Integer,Object> map = new HashMap<Integer, Object>();
 		
@@ -327,7 +327,7 @@ public class TroneDao
 	
 	public int insertTrone(TroneModel model)
 	{
-		String sql = "insert into daily_config.tbl_trone(sp_id,sp_api_url_id,trone_name,orders,trone_num,sp_trone_id,price,is_dynamic,match_price) values(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone(sp_id,sp_api_url_id,trone_name,orders,trone_num,sp_trone_id,price,is_dynamic,match_price) values(?,?,?,?,?,?,?,?,?)";
 		
 		Map<Integer,Object> map = new HashMap<Integer, Object>();
 		
@@ -348,7 +348,7 @@ public class TroneDao
 	
 	public boolean updateTrone(TroneModel model)
 	{
-		String sql = "update daily_config.tbl_trone set sp_id = ?,sp_api_url_id = ?,trone_name = ?,orders = ?,trone_num = ?,sp_trone_id = ?,price = ?,is_dynamic = ?,match_price = ?,status = ? where id = ?";
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone set sp_id = ?,sp_api_url_id = ?,trone_name = ?,orders = ?,trone_num = ?,sp_trone_id = ?,price = ?,is_dynamic = ?,match_price = ?,status = ? where id = ?";
 		
 		Map<Integer,Object> map = new HashMap<Integer, Object>();
 		
@@ -373,13 +373,13 @@ public class TroneDao
 	
 	public boolean deleteTrone(int delId)
 	{
-		String sql = "delete from daily_config.tbl_trone where id = " + delId;
+		String sql = "delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone where id = " + delId;
 		return new JdbcControl().execute(sql);
 	}
 	
 	public Integer checkAdd(int userId,int commerceId){
 		Map<String, Object> map=new HashMap<String, Object>();
-		String sql="select count(*) FROM daily_config.`tbl_group_user` a LEFT JOIN daily_config.tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
+		String sql="select count(*) FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_user` a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
 		JdbcControl control = new JdbcControl();
 		map.put("rows",control.query(sql, new QueryCallBack()
 		{
@@ -400,9 +400,9 @@ public class TroneDao
 		String query = " a.*,c.commerce_user_id,c.`short_name`,b.`name` sp_trone_name ";
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
-		sql += " FROM daily_config.tbl_trone a";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_sp c ON b.`sp_id` = c.`id` where 1=1 ";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp c ON b.`sp_id` = c.`id` where 1=1 ";
 		
 		String wheres = "";
 		

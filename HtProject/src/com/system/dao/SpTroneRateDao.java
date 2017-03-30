@@ -17,7 +17,7 @@ public class SpTroneRateDao
 {
 	public Map<String,Object> loadSpTroneRate(String keyWord,int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM daily_config.tbl_sp_trone_rate a  LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` LEFT JOIN daily_config.tbl_sp c ON b.`sp_id` = c.id WHERE 1=1";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_rate a  LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp c ON b.`sp_id` = c.id WHERE 1=1";
 		
 		if(!StringUtil.isNullOrEmpty(keyWord))
 		{
@@ -78,7 +78,7 @@ public class SpTroneRateDao
 	
 	public void addSpTroneRate(SpTroneRateModel model)
 	{
-		String sql = "insert into daily_config.tbl_sp_trone_rate(sp_trone_id,start_date,end_date,rate,remark) values(?,?,?,?,?)";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_rate(sp_trone_id,start_date,end_date,rate,remark) values(?,?,?,?,?)";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getSpTroneId());
@@ -92,7 +92,7 @@ public class SpTroneRateDao
 	
 	public void updateSpTroneRate(SpTroneRateModel model)
 	{
-		String sql = "update daily_config.tbl_sp_trone_rate set rate = ?,remark = ? where id = ?";
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_rate set rate = ?,remark = ? where id = ?";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getRate());
@@ -104,13 +104,13 @@ public class SpTroneRateDao
 	
 	public void delSpTroneRate(SpTroneRateModel model)
 	{
-		String sql = "delete from daily_config.tbl_sp_trone_rate where id = " + model.getId();
+		String sql = "delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_rate where id = " + model.getId();
 		new JdbcControl().execute(sql); 
 	}
 	
 	public SpTroneRateModel loadSpTroneRateById(int id)
 	{
-		String sql = "select a.*,b.`id` sp_trone_id,b.`name` sp_trone_name,c.id sp_id,c.`short_name` sp_name ,b.`jiesuanlv` ori_rate FROM daily_config.tbl_sp_trone_rate a  LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` LEFT JOIN daily_config.tbl_sp c ON b.`sp_id` = c.id WHERE a.id =" + id;
+		String sql = "select a.*,b.`id` sp_trone_id,b.`name` sp_trone_name,c.id sp_id,c.`short_name` sp_name ,b.`jiesuanlv` ori_rate FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_rate a  LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp c ON b.`sp_id` = c.id WHERE a.id =" + id;
 		
 		return (SpTroneRateModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -142,7 +142,7 @@ public class SpTroneRateDao
 	
 	public boolean isRateDateCross(int spTroneId,String startDate,String endDate)
 	{
-		String sql = "SELECT count(*) FROM daily_config.tbl_sp_trone_rate	WHERE sp_trone_id = "
+		String sql = "SELECT count(*) FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_rate	WHERE sp_trone_id = "
 				+ spTroneId + " AND ( ('" + startDate + "' >= start_date AND '"
 				+ startDate + "' <= end_date) OR('" + endDate
 				+ "' >= start_date AND '" + endDate + "' <= end_date) OR('"
@@ -167,8 +167,8 @@ public class SpTroneRateDao
 	@SuppressWarnings("unchecked")
 	public List<SpTroneRateModel> loadSpTroneRateList(int spId,int jsType,String startDate,String endDate)
 	{
-		String sql = "SELECT a.id,b.id sp_trone_id,a.`rate`,a.`start_date`,a.`end_date`,b.sp_id FROM daily_config.`tbl_sp_trone_rate` a";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
+		String sql = "SELECT a.id,b.id sp_trone_id,a.`rate`,a.`start_date`,a.`end_date`,b.sp_id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone_rate` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
 		sql += " WHERE b.`js_type` = " + jsType + " AND '" + startDate + "' >= a.`start_date` AND end_date <= '" + endDate + "'";
 		sql += " AND b.`sp_id` = " + spId;
 		

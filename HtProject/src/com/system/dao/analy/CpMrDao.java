@@ -49,7 +49,7 @@ public class CpMrDao
 	
 	public boolean deleteCpMr(String tableName,int cpId,String mrDate)
 	{
-		String sql = "delete daily_log.a from daily_log.tbl_cp_mr_201509 a,daily_config.tbl_trone_order b"
+		String sql = "delete daily_log.a from daily_log.tbl_cp_mr_201509 a," + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b"
 				+ " where a.trone_order_id = b.id and b.cp_id = 2  and a.mr_date = '" + mrDate + "'";
 		return new JdbcControl().execute(sql);
 	}
@@ -66,8 +66,8 @@ public class CpMrDao
 		String sql  = "insert into daily_log.tbl_cp_mr_summer(mr_date,cp_id,trone_order_id,"
 				+ "mcc,province_id,city_id,data_rows,amount) select a.mr_date,b.cp_id,"
 				+ "b.id trone_order_id,a.mcc,province_id,city_id,count(*) data_rows,sum(c.price) amount "
-				+ "from daily_log.tbl_cp_mr_" + tableName + " a left join daily_config.tbl_trone_order b "
-				+ "on a.trone_order_id = b.id  left join daily_config.tbl_trone c "
+				+ "from daily_log.tbl_cp_mr_" + tableName + " a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b "
+				+ "on a.trone_order_id = b.id  left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c "
 				+ "on b.trone_id = c.id where a.mr_date >= '" + startDate + "' "
 				+ "and a.mr_date <= '" + endDate + "' group by mr_date,cp_id, trone_order_id,"
 				+ "mcc,province_id,city_id order by mr_date asc";
@@ -80,8 +80,8 @@ public class CpMrDao
 	public boolean updateCpMrSummerAmount(String startDate,String endDate)
 	{
 		String sql = "update daily_log.tbl_cp_mr_summer a "
-				+ "left join daily_config.tbl_trone_order b on a.trone_order_id = b.id  "
-				+ "left join daily_config.tbl_trone c on b.trone_id = c.id set amount = data_rows*c.price "
+				+ "left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b on a.trone_order_id = b.id  "
+				+ "left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on b.trone_id = c.id set amount = data_rows*c.price "
 				+ "where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
 		
 		return new JdbcControl().execute(sql);

@@ -20,8 +20,8 @@ public class CpChannelDao {
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
 				+ " FROM ad_log.`tbl_channel_summer` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_channel` b ON a.`channelid`=b.`id` "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` c ON b.`appid`=c.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` b ON a.`channelid`=b.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` c ON b.`appid`=c.`id` "
 				+ "WHERE 1=1 ";
 		
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -77,8 +77,8 @@ public class CpChannelDao {
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
 				+ " FROM ad_log.`tbl_channel_summer` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_channel` b ON a.`channelid`=b.`id` "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` c ON b.`appid`=c.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` b ON a.`channelid`=b.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` c ON b.`appid`=c.`id` "
 				+ "WHERE 1=1 ";
 		
 		if(!StringUtil.isNullOrEmpty(startdate))
@@ -198,8 +198,8 @@ public class CpChannelDao {
 	{
 		String sql = "SELECT a.*,b.`name` channel,b.`id` channelid,c.`appname`,c.`appkey`,b.appid "
 				+ " FROM ad_log.`tbl_channel_summer` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_channel` b ON a.`channelid`=b.`id` "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` c ON b.`appid`=c.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` b ON a.`channelid`=b.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` c ON b.`appid`=c.`id` "
 				+ "where a.id = "+id;
 		
 		
@@ -254,8 +254,8 @@ public class CpChannelDao {
 	public Map<String, Object> loadQdShow(int pageIndex,int userid,String startDate,String endDate,String appname,String channel)
 	{
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING+" FROM ad_log.`tbl_channel_summer` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_channel` b ON a.`channelid`=b.`id` "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` c ON b.`appid` = c.id "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_channel` b ON a.`channelid`=b.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` c ON b.`appid` = c.id "
 				+ "WHERE b.user_id="+userid;
 		
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;

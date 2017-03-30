@@ -18,7 +18,7 @@ public class CpBillingDetailDao
 	{
 		String sql = "SELECT a.*,b.`name`";
 		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` a";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
 		sql += " WHERE a.`cp_billing_id` = " + cpBillingId;
 		
 		return (List<CpBillingSptroneDetailModel>)new JdbcControl().query(sql, new QueryCallBack()
@@ -52,7 +52,7 @@ public class CpBillingDetailDao
 	{
 		String sql = "SELECT a.*,b.`name`";
 		sql += " FROM daily_log.`tbl_cp_billing_sp_trone` a";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
 		sql += " WHERE a.`id` = " + id;
 		
 		return (CpBillingSptroneDetailModel)new JdbcControl().query(sql, new QueryCallBack()

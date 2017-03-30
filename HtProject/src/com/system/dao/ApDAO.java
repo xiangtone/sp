@@ -19,7 +19,7 @@ public class ApDAO
 	@SuppressWarnings("unchecked")
 	public List<ApModel> loadSp()
 	{
-		String sql = "select * from daily_config.tbl_ap order by convert(short_name using gbk) asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ap order by convert(short_name using gbk) asc";
 		return (List<ApModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -52,7 +52,7 @@ public class ApDAO
 	
 	public Map<String, Object> loadSp(int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_ap order by convert(short_name using gbk) asc";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ap order by convert(short_name using gbk) asc";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -104,7 +104,7 @@ public class ApDAO
 	
 	public ApModel loadApById(int id)
 	{
-		String sql = "select * from daily_config.tbl_ap where id = " + id;
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ap where id = " + id;
 		return (ApModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -133,7 +133,7 @@ public class ApDAO
 	
 	public boolean addAp(ApModel model)
 	{
-		String sql = "insert into daily_config.tbl_ap(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date) "
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ap(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date) "
 				+ "value('" + model.getFullName() + "','" + model.getShortName()
 				+ "','" + model.getContactPerson() + "','" + model.getQq()
 				+ "','" + model.getMail() + "','" + model.getPhone() + "','"
@@ -144,7 +144,7 @@ public class ApDAO
 
 	public boolean updateAp(ApModel model)
 	{
-		String sql = "update daily_config.tbl_ap set full_name = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ap set full_name = '"
 				+ model.getFullName() + "',short_name = '"
 				+ model.getShortName() + "',contract_person='"
 				+ model.getContactPerson() + "',qq='" + model.getQq()
@@ -156,7 +156,7 @@ public class ApDAO
 	}
 	
 	public boolean deletAp(int id){
-		String sql ="delete from daily_config.tbl_ap where id="+id;
+		String sql ="delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ap where id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	

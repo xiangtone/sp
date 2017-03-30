@@ -3,6 +3,7 @@ package com.system.server;
 import java.util.List;
 
 import com.system.dao.MrDetailDataDao;
+import com.system.model.params.ReportParamsModel;
 import com.system.util.StringUtil;
 import com.system.vo.DetailDataVo;
 
@@ -17,6 +18,12 @@ public class MrDetailServer
 	{
 		String table = StringUtil.getMonthFormat(date);
 		return new MrDetailDataDao().loadDetailDataBySummer(table,date,spId,cpId,spTroneId,troneId,type,joinId);
+	}
+	
+	public List<DetailDataVo> loadDetailDataBySummer(ReportParamsModel params,String joinId)
+	{
+		String table = StringUtil.getMonthFormat(params.getStartDate());
+		return new MrDetailDataDao().loadDetailDataBySummer(table,params,joinId);
 	}
 	
 	public List<DetailDataVo> loadDetailDataByCondition(String startDate,String endDate,int spId,int cpId,int spTroneId,int synType)

@@ -21,14 +21,14 @@ public class UpDataDetailDao {
 		sql+="pro.name,FirstDate,SecondDate,cp_verifyCode,api.status,sp_Linkid,api.api_exdata,";
 		sql+="api.sp_exField,api.clientip  ,api.port,api.msg ,api.lac,api.cid,api.packagename,sp.id as sp_id,spTrone.name AS sp_trone_name,st.description";
 		sql+=" FROM( SELECT * FROM daily_log.tbl_api_order_"+table+" where firstDate>='"+startDate+"' AND firstDate<='"+endDate+"' ORDER BY id DESC LIMIT 1000) api";
-		sql+=" LEFT JOIN daily_config.tbl_trone trone ON trone.id=api.trone_id";
-		sql+=" LEFT JOIN daily_config.tbl_trone_order cptrone ON cptrone.id=api.trone_order_id";
-		sql+=" LEFT JOIN daily_config.tbl_cp cp ON cp.id=cptrone.cp_id";
-		sql+=" LEFT JOIN daily_config.tbl_city city ON city.id=api.city";
-		sql+=" LEFT JOIN daily_config.tbl_province pro ON pro.id=city.province_id";
-		sql+=" LEFT JOIN daily_config.tbl_sp sp ON sp.id= trone.sp_id ";
-		sql+=" LEFT JOIN daily_config.tbl_api_order_status st ON api.status=st.code";
-		sql+=" LEFT JOIN daily_config.tbl_sp_trone spTrone ON spTrone.id=trone.sp_trone_id WHERE 1=1";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone trone ON trone.id=api.trone_id";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order cptrone ON cptrone.id=api.trone_order_id";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp cp ON cp.id=cptrone.cp_id";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_city city ON city.id=api.city";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_province pro ON pro.id=city.province_id";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp sp ON sp.id= trone.sp_id ";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_api_order_status st ON api.status=st.code";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone spTrone ON spTrone.id=trone.sp_trone_id WHERE 1=1";
 		//sql+=" AND firstDate>='"+startDate+"' AND firstDate<='"+endDate+"'";
 		//spId
 		if(spId>0)

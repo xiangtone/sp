@@ -20,7 +20,7 @@ public class AdCpDao {
 	{
 		String sqlcount = " count(*) ";
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING+" FROM ad_log.`tbl_app_summer` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid`=b.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid`=b.`id` "
 				+ "WHERE b.user_id="+id+" AND a.status=1 ";
 		
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
@@ -86,7 +86,7 @@ public class AdCpDao {
 	{
 		String sqlcount = " count(*) ";
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING+" FROM ad_log.`tbl_app_summer` a "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid`=b.`id` "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid`=b.`id` "
 				+ "WHERE b.user_id="+id+" AND a.status=1 ";
 		
 		if(!StringUtil.isNullOrEmpty(startdate))

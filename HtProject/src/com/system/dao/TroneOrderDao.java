@@ -21,7 +21,7 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<TroneOrderModel> loadTroneOrderListQiBa()
 	{
-		String sql  = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name from daily_config.tbl_trone_order a left join daily_config.tbl_cp b on a.cp_id = b.id left join daily_config.tbl_trone c on a.trone_id = c.id order by b.id,c.sp_id asc";
+		String sql  = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on a.trone_id = c.id order by b.id,c.sp_id asc";
 		
 		return (List<TroneOrderModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -61,10 +61,10 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<TroneOrderModel> loadTroneOrderListBySpTroneId(int spTroneId)
 	{
-		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price from daily_config.tbl_trone_order a "
-				+ " left join daily_config.tbl_cp b on a.cp_id = b.id "
-				+ " left join daily_config.tbl_trone c on a.trone_id = c.id "
-				+ " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
+		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a "
+				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id "
+				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on a.trone_id = c.id "
+				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
 				+ " WHERE b.id <> 34 and d.trone_type = 1 and d.id = "
 				+ spTroneId + "  order by b.short_name asc";
 		
@@ -109,10 +109,10 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<TroneOrderModel> loadTroneOrderListByTroneId(int troneId)
 	{
-		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price from daily_config.tbl_trone_order a "
-				+ " left join daily_config.tbl_cp b on a.cp_id = b.id "
-				+ " left join daily_config.tbl_trone c on a.trone_id = c.id "
-				+ " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
+		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a "
+				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id "
+				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on a.trone_id = c.id "
+				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
 				+ " WHERE b.id <> 34 and c.id = "
 				+ troneId + "  order by b.short_name asc";
 		
@@ -156,7 +156,7 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<TroneOrderModel> loadTroneOrderList()
 	{
-		String sql  = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price from daily_config.tbl_trone_order a left join daily_config.tbl_cp b on a.cp_id = b.id left join daily_config.tbl_trone c on a.trone_id = c.id  order by b.short_name asc";
+		String sql  = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on a.trone_id = c.id  order by b.short_name asc";
 		
 		return (List<TroneOrderModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -198,11 +198,11 @@ public class TroneOrderDao
 		String query = " b.sp_trone_id,e.commerce_user_id,c.`name` sp_trone_name,a.*, b.price,d.id sp_id, b.`trone_name`,d.`short_name` sp_name,e.`short_name` cp_name ";
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
-		sql += " FROM daily_config.`tbl_trone_order` a";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp` d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_cp` e ON a.`cp_id` = e.`id` WHERE 1=1 and e.id <> 34";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON a.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` e ON a.`cp_id` = e.`id` WHERE 1=1 and e.id <> 34";
 		
 		String wheres = "";
 		
@@ -287,11 +287,11 @@ public class TroneOrderDao
 	public TroneOrderModel getTroneOrderById(int id)
 	{
 		String sql = "select  b.sp_trone_id,e.commerce_user_id,c.`name` sp_trone_name,a.*, d.id sp_id, b.`trone_name`,d.`short_name` sp_name,e.`short_name` cp_name  ";
-		sql += " FROM daily_config.`tbl_trone_order` a";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp` d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_cp` e ON a.`cp_id` = e.`id` WHERE  a.id = " + id;
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON a.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` e ON a.`cp_id` = e.`id` WHERE  a.id = " + id;
 		
 		return (TroneOrderModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -335,7 +335,7 @@ public class TroneOrderDao
 	public boolean addTroneOrder(TroneOrderModel model)
 	{
 		
-		String sql = "insert into daily_config.tbl_trone_order(trone_id,order_num,cp_id,order_trone_name,is_dynamic,push_url_id,disable,is_unknow,hold_percent,hold_amount,hold_is_custom,hold_start,is_unhold_data) values(" + model.getTroneId() + ",'"
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order(trone_id,order_num,cp_id,order_trone_name,is_dynamic,push_url_id,disable,is_unknow,hold_percent,hold_amount,hold_is_custom,hold_start,is_unhold_data) values(" + model.getTroneId() + ",'"
 				+ model.getOrderNum() + "'," + model.getCpId() + ",'"
 				+ model.getOrderTroneName() + "'," + model.getDynamic() + ","
 				+ model.getPushUrlId() + "," + model.getDisable() + ","
@@ -349,7 +349,7 @@ public class TroneOrderDao
 	
 	public boolean updateTroneOrder(TroneOrderModel model)
 	{
-		String sql = "update daily_config.tbl_trone_order set trone_id = " + model.getTroneId() + ", order_num = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order set trone_id = " + model.getTroneId() + ", order_num = '"
 				+ model.getOrderNum() + "',cp_id=" + model.getCpId()
 				+ ",order_trone_name='" + model.getOrderTroneName()
 				+ "',is_dynamic=" + model.getDynamic() + ",push_url_id="
@@ -365,10 +365,10 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<TroneOrderModel> loadTroneOrderListByCpSpTroneId(int cpId,int spTroneId,int status)
 	{
-		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price,d.status,d.name sp_trone_name,d.provinces,d.ramark  from daily_config.tbl_trone_order a "
-				+ " left join daily_config.tbl_cp b on a.cp_id = b.id "
-				+ " left join daily_config.tbl_trone c on a.trone_id = c.id "
-				+ " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
+		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price,d.status,d.name sp_trone_name,d.provinces,d.ramark  from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a "
+				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id "
+				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on a.trone_id = c.id "
+				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
 				+ " WHERE b.id = "+ cpId + " and d.trone_api_id > 0 ";
 		
 				if(status>-1)
@@ -432,11 +432,11 @@ public class TroneOrderDao
 	{
 		String  sql = "SELECT d.id sp_trone_id,d.name sp_trone_name,e.name up_data_type_name,d.provinces,";
 		sql += " a.id pay_code,c.price,c.orders,c.trone_num,d.ramark remark";
-		sql += " FROM daily_config.tbl_trone_order a";
-		sql += " LEFT JOIN daily_config.tbl_cp b ON a.cp_id = b.id ";
-		sql += " LEFT JOIN daily_config.tbl_trone c ON a.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.id ";
-		sql += " LEFT JOIN daily_config.tbl_up_data_type e ON d.up_data_type = e.id";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b ON a.cp_id = b.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c ON a.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_up_data_type e ON d.up_data_type = e.id";
 		sql += " WHERE 1=1 and d.trone_api_id > 0 ";
 		
 		if(cpId>0)
@@ -512,12 +512,12 @@ public class TroneOrderDao
 	public CpSpTroneSynModel loadCpSpTroneSynModelById(int id)
 	{
 		String sql = "SELECT a.`order_num`,b.`trone_num`,c.url,f.`short_name` cp_name,e.`short_name` sp_name,d.`name` sp_trone_name,b.`price`,d.`trone_api_id`";
-		sql += " FROM daily_config.`tbl_trone_order` a";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_cp_push_url` c ON a.`push_url_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON b.`sp_trone_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp` e ON d.`sp_id` = e.`id`";
-		sql += " LEFT JOIN daily_config.tbl_cp f ON a.`cp_id` = f.`id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON a.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_push_url` c ON a.`push_url_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON b.`sp_trone_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` e ON d.`sp_id` = e.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp f ON a.`cp_id` = f.`id`";
 		sql += " WHERE a.id = " + id;
 		
 		return (CpSpTroneSynModel)new JdbcControl().query(sql, new QueryCallBack()
@@ -546,7 +546,7 @@ public class TroneOrderDao
 	
 	public void closeTroneOrderByTroneId(int troneId)
 	{
-		String sql = "udpate daily_config.tbl_trone_order set disable = 1 where trone_id = " + troneId;
+		String sql = "udpate " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order set disable = 1 where trone_id = " + troneId;
 		
 		new JdbcControl().execute(sql);
 	}
@@ -555,11 +555,11 @@ public class TroneOrderDao
 		String query = " b.sp_trone_id,e.commerce_user_id,c.`name` sp_trone_name,a.*, b.price,d.id sp_id, b.`trone_name`,d.`short_name` sp_name,e.`short_name` cp_name ";
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
-		sql += " FROM daily_config.`tbl_trone_order` a";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp` d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_cp` e ON a.`cp_id` = e.`id` WHERE 1=1 and e.id <> 34";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON a.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` e ON a.`cp_id` = e.`id` WHERE 1=1 and e.id <> 34";
 		
 		String wheres = "";
 		
@@ -659,12 +659,12 @@ public class TroneOrderDao
 		String query = " b.sp_trone_id,e.commerce_user_id,c.`name` sp_trone_name,a.*, b.price,d.id sp_id, b.`trone_name`,d.`short_name` sp_name,e.`short_name` cp_name ";
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
-		sql += " FROM daily_config.`tbl_trone_order` a";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp` d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_user` f ON f.`id` = d.`commerce_user_id`";
-		sql += " LEFT JOIN daily_config.`tbl_cp` e ON a.`cp_id` = e.`id` WHERE 1=1 and e.id <> 34";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON a.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_user` f ON f.`id` = d.`commerce_user_id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` e ON a.`cp_id` = e.`id` WHERE 1=1 and e.id <> 34";
 		
 		String wheres = "";
 		

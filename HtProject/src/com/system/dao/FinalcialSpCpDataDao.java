@@ -34,16 +34,16 @@ public class FinalcialSpCpDataDao
 		sql += " SELECT d.id sp_id,d.`short_name` sp_name,d.full_name sp_full_name,c.id sp_trone_id,c.`name` sp_trone_name,CONCAT(i.name_cn,'-',h.name,'-',g.name) product_line_name,";
 		sql += " f.id cp_id,f.`short_name` cp_name,f.`full_name` cp_full_name,c.`jiesuanlv` sp_jie_suan_lv,SUM(a.data_rows) data_rows,SUM(a.amount) amount";
 		sql += " FROM daily_log.tbl_mr_summer a";
-		sql += " LEFT JOIN daily_config.`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON e.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.tbl_sp d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.tbl_cp f ON e.`cp_id` = f.id";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON e.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp f ON e.`cp_id` = f.id";
 		
 		//增加SP业务线
-		sql += " LEFT JOIN daily_config.tbl_product_2 g ON c.product_id = g.id ";
-		sql += " LEFT JOIN daily_config.tbl_product_1 h ON g.product_1_id = h.id ";
-		sql += " LEFT JOIN daily_config.tbl_operator i ON h.operator_id = i.flag ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 g ON c.product_id = g.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 h ON g.product_1_id = h.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator i ON h.operator_id = i.flag ";
 		
 		sql += " WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "'" + query;
 		sql += " GROUP BY d.id,c.id,f.id ORDER BY CONVERT(d.`short_name` USING gbk),CONVERT(c.`name` USING gbk),CONVERT(f.`short_name` USING gbk) ASC";
@@ -53,14 +53,14 @@ public class FinalcialSpCpDataDao
 		sql += " SELECT d.id sp_id,d.`short_name` sp_name,d.full_name sp_full_name,c.id sp_trone_id,c.`name` sp_trone_name,";
 		sql += " f.id cp_id,f.`short_name` cp_name,f.`full_name` cp_full_name,g.`rate` cp_jie_suan_lv,SUM(a.data_rows) show_data_rows,SUM(a.amount) show_amounts";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a";
-		sql += " LEFT JOIN daily_config.`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
-		sql += " LEFT JOIN daily_config.tbl_trone b ON e.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.tbl_sp_trone c ON b.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.tbl_sp d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN daily_config.tbl_cp f ON e.`cp_id` = f.`id`";
-//		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON f.id = g.`cp_id` AND c.`id` = g.`sp_trone_id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` e ON a.`trone_order_id` = e.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone b ON e.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone c ON b.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp f ON e.`cp_id` = f.`id`";
+//		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate g ON f.id = g.`cp_id` AND c.`id` = g.`sp_trone_id`";
 		
-		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON e.cp_jiesuanlv_id = g.id";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate g ON e.cp_jiesuanlv_id = g.id";
 		
 		sql += " WHERE a.`mr_date` >= '" + startDate + "' AND a.`mr_date` <= '" + endDate + "'" + query;
 		sql += " GROUP BY d.id,c.id,f.id ORDER BY CONVERT(d.`short_name` USING gbk),CONVERT(c.`name` USING gbk),CONVERT(f.`short_name` USING gbk) ASC";
@@ -254,13 +254,13 @@ public class FinalcialSpCpDataDao
 		sql+=" SELECT c.id sp_id,c.`full_name` sp_name,b.id sp_trone_id,b.`name` sp_trone_name,a.amount FROM"; 
 		sql+=" (SELECT sp_trone_id,SUM((amount-reduce_data_amount)*rate - reduce_money_amount) amount FROM daily_log.`tbl_sp_billing_sp_trone` ";
 		sql+=" WHERE start_date>= '"+startDate+"' AND start_date<= '"+endDate+"' GROUP BY sp_trone_id) a";
-		sql+=" LEFT JOIN daily_config.`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
-	    sql+=" LEFT JOIN daily_config.`tbl_sp` c ON b.`sp_id` = c.`id`) a";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id`";
+	    sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` c ON b.`sp_id` = c.`id`) a";
 	    sql+=" LEFT JOIN (SELECT a.sp_trone_id,b.cp_id,SUM(CASE reduce_type WHEN 0 THEN (a.amount-a.reduce_amount)*rate  WHEN 1 THEN a.amount*rate - a.reduce_amount END) pay_amount FROM daily_log.`tbl_cp_billing_sp_trone` a"; 
-		sql+=" LEFT JOIN daily_config.`tbl_cp_billing` b ON a.cp_billing_id = b.id";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` b ON a.cp_billing_id = b.id";
 		sql+=" WHERE a.start_date>= '"+startDate+"' AND a.start_date<= '"+endDate+"'"; 
 		sql+=" GROUP BY sp_trone_id,cp_id )b ON a.sp_trone_id = b.sp_trone_id";
-		sql+=" LEFT JOIN daily_config.tbl_cp c ON b.cp_id = c.id where 1=1 ";
+		sql+=" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp c ON b.cp_id = c.id where 1=1 ";
 		sql+=query;
 		sql+=" order by sp_id";
 		

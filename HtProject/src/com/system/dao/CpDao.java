@@ -20,7 +20,7 @@ public class CpDao
 	public List<CpModel> loadCp()
 	{
 		//增加状态字段过滤
-		String sql = "select * from daily_config.tbl_cp where status=1 order by convert(short_name using gbk) asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp where status=1 order by convert(short_name using gbk) asc";
 
 		return (List<CpModel>) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -65,7 +65,7 @@ public class CpDao
 	@SuppressWarnings("unchecked")
 	public List<CpModel> loadCpQiBa()
 	{
-		String sql = "select * from daily_config.tbl_cp order by id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp order by id asc";
 
 		return (List<CpModel>) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -110,7 +110,7 @@ public class CpDao
 	public Map<String, Object> loadCp(int pageIndex)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-				+ " from daily_config.tbl_cp order by convert(short_name using gbk) asc";
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp order by convert(short_name using gbk) asc";
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
@@ -178,7 +178,7 @@ public class CpDao
 	public Map<String, Object> loadCp(int pageIndex, String keyWord)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-				+ " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id left join daily_config.tbl_user c on a.commerce_user_id = c.id  where 1=1";
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1";
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
@@ -260,7 +260,7 @@ public class CpDao
 
 	public CpModel loadCpById(int id)
 	{
-		String sql = "select * from daily_config.tbl_cp a  left join daily_config.tbl_user b on a.commerce_user_id = b.id where a.id = "
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a  left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where a.id = "
 				+ id;
 		return (CpModel) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -308,7 +308,7 @@ public class CpDao
 
 		StringBuffer sb = new StringBuffer();
 		sb.append(
-				"select * from daily_config.tbl_cp a  left join daily_config.tbl_user b on a.commerce_user_id = b.id where a.id in( ");
+				"select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a  left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where a.id in( ");
 
 		for (int id : ids)
 		{
@@ -364,7 +364,7 @@ public class CpDao
 
 	public boolean addCp(CpModel model)
 	{
-		String sql = "insert into daily_config.tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id,status) "
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id,status) "
 				+ "value('" + model.getFullName() + "','" + model.getShortName()
 				+ "','" + model.getContactPerson() + "','" + model.getQq()
 				+ "','" + model.getMail() + "','" + model.getPhone() + "','"
@@ -376,7 +376,7 @@ public class CpDao
 
 	public boolean updateCp(CpModel model)
 	{
-		String sql = "update daily_config.tbl_cp set full_name = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp set full_name = '"
 				+ model.getFullName() + "',short_name = '"
 				+ model.getShortName() + "',contract_person='"
 				+ model.getContactPerson() + "',qq='" + model.getQq()
@@ -390,7 +390,7 @@ public class CpDao
 
 	public boolean updateCpAccount(int cpId, int userId)
 	{
-		String sql = "update daily_config.tbl_cp set user_id = " + userId
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp set user_id = " + userId
 				+ " where id = " + cpId;
 		return new JdbcControl().execute(sql);
 	}
@@ -445,7 +445,7 @@ public class CpDao
 	}
 	public Integer checkAdd(int userId,int commerceId){
 		Map<String, Object> map=new HashMap<String, Object>();
-		String sql="select count(*) FROM daily_config.`tbl_group_user` a LEFT JOIN daily_config.tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
+		String sql="select count(*) FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_user` a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
 		JdbcControl control = new JdbcControl();
 		map.put("rows",control.query(sql, new QueryCallBack()
 		{
@@ -465,7 +465,7 @@ public class CpDao
 	public Map<String, Object> loadCp(int pageIndex, String keyWord,int userId)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-				+ " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id left join daily_config.tbl_user c on a.commerce_user_id = c.id  where 1=1";
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1";
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
@@ -556,7 +556,7 @@ public class CpDao
 	public Map<String, Object> loadCp(int pageIndex,int status,String keyWord)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-				+ " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id left join daily_config.tbl_user c on a.commerce_user_id = c.id  where 1=1";
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1";
 		if(status>=0){
 			sql+=" and a.status="+status;
 		}

@@ -15,7 +15,7 @@ public class SpApiUrlDao
 	@SuppressWarnings("unchecked")
 	public List<SpApiUrlModel> loadSpApiUrl()
 	{
-		String sql = "select * from daily_config.tbl_sp_api_url";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_api_url";
 		return (List<SpApiUrlModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override

@@ -20,7 +20,7 @@ public class CpAppDao {
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
 				+ "FROM ad_log.`tbl_app_summer` a"
-				+ "  LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid`=b.`id`";
+				+ "  LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid`=b.`id`";
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -74,7 +74,7 @@ public class CpAppDao {
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
 				+ "FROM ad_log.`tbl_app_summer` a"
-				+ "  LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid`=b.`id` WHERE 1=1 ";
+				+ "  LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid`=b.`id` WHERE 1=1 ";
 		
 		sql+="  AND fee_date>='"+startDate+"' AND fee_date<='"+endDate+"'  "; //用于拼接查询的计费时间的时间范围
 		
@@ -191,7 +191,7 @@ public class CpAppDao {
 	public CpAppModel loadCpAppById(int id)
 	{
 		String sql = "SELECT a.*,b.appname,b.appkey,b.id FROM ad_log.`tbl_app_summer` a   "
-				+ "LEFT JOIN daily_config.`tbl_ad_app` b ON a.`appid`=b.`id` where a.id = "+id;
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` b ON a.`appid`=b.`id` where a.id = "+id;
 		
 		
 		return (CpAppModel)new JdbcAdControl().query(sql,

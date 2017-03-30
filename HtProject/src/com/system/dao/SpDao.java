@@ -19,7 +19,7 @@ public class SpDao
 	public List<SpModel> loadSp()
 	{
 		//增加状态字段过滤
-		String sql = "select * from daily_config.tbl_sp where status=1 order by convert(short_name using gbk) asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp where status=1 order by convert(short_name using gbk) asc";
 		return (List<SpModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -53,7 +53,7 @@ public class SpDao
 	@SuppressWarnings("unchecked")
 	public List<SpModel> loadSpQiBa()
 	{
-		String sql = "select * from daily_config.tbl_sp order by id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp order by id asc";
 		return (List<SpModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -86,7 +86,7 @@ public class SpDao
 	
 	public Map<String, Object> loadSp(int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_sp order by convert(short_name using gbk) asc";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp order by convert(short_name using gbk) asc";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -138,7 +138,7 @@ public class SpDao
 	
 	public Map<String, Object> loadSp(int pageIndex,String keyWord)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_sp a left join daily_config.tbl_user b on a.commerce_user_id = b.id where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where 1=1 ";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -200,7 +200,7 @@ public class SpDao
 	
 	public SpModel loadSpById(int id)
 	{
-		String sql = "select * from daily_config.tbl_sp where id = " + id;
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp where id = " + id;
 		return (SpModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -232,7 +232,7 @@ public class SpDao
 	
 	public boolean addSp(SpModel model)
 	{
-		String sql = "insert into daily_config.tbl_sp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id,status) "
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id,status) "
 				+ "value('" + model.getFullName() + "','" + model.getShortName()
 				+ "','" + model.getContactPerson() + "','" + model.getQq()
 				+ "','" + model.getMail() + "','" + model.getPhone() + "','"
@@ -243,7 +243,7 @@ public class SpDao
 
 	public boolean updateSp(SpModel model)
 	{
-		String sql = "update daily_config.tbl_sp set full_name = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp set full_name = '"
 				+ model.getFullName() + "',short_name = '"
 				+ model.getShortName() + "',contract_person='"
 				+ model.getContactPerson() + "',qq='" + model.getQq()
@@ -256,7 +256,7 @@ public class SpDao
 	
 	public Map<String, Object> loadSp(int pageIndex,String keyWord,int userId)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_sp a left join daily_config.tbl_user b on a.commerce_user_id = b.id where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where 1=1 ";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -317,7 +317,7 @@ public class SpDao
 	}
 	public Integer checkAdd(int userId,int commerceId){
 		Map<String, Object> map=new HashMap<String, Object>();
-		String sql="select count(*) FROM daily_config.`tbl_group_user` a LEFT JOIN daily_config.tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
+		String sql="select count(*) FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_user` a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
 		JdbcControl control = new JdbcControl();
 		map.put("rows",control.query(sql, new QueryCallBack()
 		{
@@ -341,7 +341,7 @@ public class SpDao
 	 */
 	public Map<String, Object> loadSp(int pageIndex,int status,String keyWord)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_sp a left join daily_config.tbl_user b on a.commerce_user_id = b.id where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where 1=1 ";
 		if(status>=0){
 			sql+=" and a.status="+status;
 		}

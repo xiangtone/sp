@@ -15,7 +15,7 @@ public class LvChannelDao
 	 */ 
 	public LvChannelModel loadLvChannelModel(int userId,int symBiosIs)
 	{
-		String sql = "select * from daily_config.tbl_lv_channel where user_id = " + userId + " and symbiosis = " + symBiosIs;
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_lv_channel where user_id = " + userId + " and symbiosis = " + symBiosIs;
 		return (LvChannelModel)new JdbcLvControl().query(sql, new QueryCallBack()
 		{
 			@Override

@@ -48,7 +48,7 @@ public class Menu1Dao
 	
 	public Map<String, Object> loadMenu1(int menuHeadId,int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_menu_1 a left join daily_config.tbl_menu_head b on a.head_id = b.id ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1 a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_head b on a.head_id = b.id ";
 		String query = "";
 		if(menuHeadId>0)
 			query = " where head_id = " + menuHeadId;
@@ -93,7 +93,7 @@ public class Menu1Dao
 	
 	public Map<String, Object> loadMenu1(int menuHeadId,int pageIndex,int menu1Id)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_menu_1 a left join daily_config.tbl_menu_head b on a.head_id = b.id WHERE 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1 a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_head b on a.head_id = b.id WHERE 1=1 ";
 		String query = "";
 		if(menuHeadId>0)
 			query = " AND head_id = " + menuHeadId;
@@ -144,7 +144,7 @@ public class Menu1Dao
 	
 	public Menu1Model loadMenu1ModelById(int id)
 	{
-		String sql = "select * from daily_config.tbl_menu_1 where id = " + id;
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1 where id = " + id;
 		return (Menu1Model)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -166,28 +166,28 @@ public class Menu1Dao
 	
 	public boolean updateMenu1Model(Menu1Model model)
 	{
-		String sql = "update daily_config.tbl_menu_1 set head_id = " + model.getMenuHeadId() + ", name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1 set head_id = " + model.getMenuHeadId() + ", name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean updateMenu1Model(int id,int sort)
 	{
-		String sql = "update daily_config.tbl_menu_1 set sort ="+sort+" where id="+id;
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1 set sort ="+sort+" where id="+id;
 		
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean addMenu1Model(Menu1Model model)
 	{
-		String sql = "insert into daily_config.tbl_menu_1 (head_id,name,remark) value(" + model.getMenuHeadId() + ",'" + model.getName() + "','" + model.getRemark() + "')";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1 (head_id,name,remark) value(" + model.getMenuHeadId() + ",'" + model.getName() + "','" + model.getRemark() + "')";
 		return new JdbcControl().execute(sql);
 	}
 	
 	public List<Menu1Model> loadMenu1NameById(int id)
 	{
-		String sql = "SELECT a.name,a.id FROM daily_config.tbl_menu_1 a "
-				+ "LEFT JOIN daily_config.tbl_menu_head b ON a.head_id = b.id WHERE b.`id`="+id;
+		String sql = "SELECT a.name,a.id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1 a "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_head b ON a.head_id = b.id WHERE b.`id`="+id;
 		
 		
 		final List<Menu1Model> list = new ArrayList<Menu1Model>();
@@ -218,10 +218,10 @@ public class Menu1Dao
 	@SuppressWarnings("unchecked")
 	public List<Menu1Model> loadMenu1ListByUserId(int userId)
 	{
-		String sql="select * from tbl_menu_1 where id in (SELECT a.menu_1_id FROM daily_config.tbl_menu_2  a "  
-				+" LEFT JOIN  daily_config.tbl_menu_1  b ON a.menu_1_id=b.id"
-				+" LEFT JOIN daily_config.tbl_group_right c ON c.menu_2_id= a.id" 
-				+" left join daily_config.tbl_group_user d on c.group_id=d.group_id"
+		String sql="select * from tbl_menu_1 where id in (SELECT a.menu_1_id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_2  a "  
+				+" LEFT JOIN  " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_menu_1  b ON a.menu_1_id=b.id"
+				+" LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_right c ON c.menu_2_id= a.id" 
+				+" left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_user d on c.group_id=d.group_id"
 				+" where d.user_id="+userId+")"
 				+" ORDER BY sort,id ASC";
 		
