@@ -19,6 +19,16 @@ namespace n8wan.Public.Logical
 
         static Timer timerChecker = null;
 
+        /// <summary>
+        /// 用于提供线程同步
+        /// </summary>
+        public readonly object SyncRoot;
+
+        public StaticCache()
+        {
+            SyncRoot = this;
+        }
+        
         public static void ClearAllCache()
         {
             if (_allCache == null)
@@ -126,6 +136,7 @@ namespace n8wan.Public.Logical
         /// </summary>
         private bool _clearing;
 
+
         public StaticCache()
             : this(null)
         {
@@ -159,7 +170,7 @@ namespace n8wan.Public.Logical
         /// <summary>
         /// 加载数据到缓存
         /// </summary>
-        /// <param name="isThreadPool">是否在当前线程上加载</param>
+        /// <param name="isSync">是否在当前线程上加载</param>
         private void LoadFreshData(bool isSync)
         {
             if (_satus != Static_Cache_Staus.Idel || IsManualLoad)
@@ -179,13 +190,17 @@ namespace n8wan.Public.Logical
         void LoadData(object s)
         {
             int maxId = 0;
-            var cData = _data;//防止在其它地方补重置为null
+            var cData = _data;//防止在其它地方被重置为null
 
             if (cData == null)
                 _data = cData = new Dictionary<IDX, T>();
             else if (cData.Count > 0)
                 maxId = cData.Values.Max(e => (int)e[_idField]);
 
+#if DEBUG
+            var stw = new System.Diagnostics.Stopwatch();
+            stw.Start();
+#endif
 
             var q = new Shotgun.Model.List.LightDataQueries<T>(_tabName, _idField, null, new T().Schema);
             if (maxId > 0)
@@ -198,19 +213,40 @@ namespace n8wan.Public.Logical
             base.Add(this);
             try
             {
+                #if DEBUG
+                Console.WriteLine("pointA :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+                stw.Restart();
+#endif
                 var RowCount = q.TotalCount;
+#if DEBUG
+                Console.WriteLine("pointB :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+#endif
                 var PageCount = RowCount / q.PageSize + (RowCount % q.PageSize == 0 ? 0 : 1);
                 for (var i = 1; i <= PageCount; i++)
                 {
                     q.CurrentPage = i;
+#if DEBUG
+                    stw.Restart();
+#endif
                     var items = q.GetDataList();
+#if DEBUG
+                    Console.WriteLine("pointC :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+#endif
                     if (items == null)
                         break;
+#if DEBUG
+                    stw.Restart();
+#endif
                     items.ForEach(e => cData[(IDX)e[_indexField]] = e);
+#if DEBUG
+                    Console.WriteLine("pointD :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+#DEBUG                
                 }
+
+                _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
                 this._expired = DateTime.Now.Add(this.Expired);
                 this._satus = Static_Cache_Staus.AllLoad;
-                _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
+
 
             }
             catch (Exception ex)
@@ -246,7 +282,7 @@ namespace n8wan.Public.Logical
             {
                 if (_clearing)
                     return null;
-                _clearing = true;
+                _clearing = true;//正式进入清除状态
             }
 
             ThreadPool.QueueUserWorkItem(e =>
@@ -311,14 +347,9 @@ namespace n8wan.Public.Logical
             var tData = CheckExpired();
             if (tData == null)
                 return null;
-            try
-            {
-                return tData.Values.First(func);
-            }
-            catch
-            {
-                return null;
-            }
+
+            return tData.Values.FirstOrDefault(func);
+
 
         }
 
@@ -355,7 +386,7 @@ namespace n8wan.Public.Logical
             base.Add(this);
             try
             {
-                lock (this)
+                lock (base.SyncRoot)
                     dt[(IDX)data[this._indexField]] = data;
             }
             catch (Exception ex)
@@ -384,12 +415,16 @@ namespace n8wan.Public.Logical
         /// </summary>
         public override void ClearCache()
         {
-            var _expData = _data;
-            _data = null;
+            Dictionary<IDX, T> _expData;
+            lock (this.SyncRoot)
+            {
+                _expData = _data;
+                _satus = Static_Cache_Staus.Idel;
+                _data = null;
+                base.Remove(this);
+            }
             if (_expData != null)
                 OnExpired(_expData);
-            _satus = Static_Cache_Staus.Idel;
-            base.Remove(this);
             WriteLog(false, 0, 0);
         }
 

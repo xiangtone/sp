@@ -62,7 +62,7 @@ namespace n8wan.Public.Logical
 
         private static void PushDayLimit(int spTroneId, int cpId, decimal amount)
         {
-            if (string.IsNullOrEmpty(pushUrl))
+            if (string.IsNullOrEmpty(pushUrl) || !pushUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 return;
 
             var url = string.Format("{3}sptroneid={0}&cpid={1}&money={2}", spTroneId, cpId, amount, pushUrl);

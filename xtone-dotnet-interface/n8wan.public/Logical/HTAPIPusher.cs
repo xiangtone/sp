@@ -39,7 +39,9 @@ namespace n8wan.Public.Logical
 
             if (PushObject.cp_id > 0 && PushObject.cp_id != 34)
             {//已经关联的订单
-                _apiOrder = LoadApiOrder(PushObject.GetValue(EPushField.ApiOrderId));
+                var apiID = PushObject.GetValue(EPushField.ApiOrderId);
+                _apiOrder = LoadApiOrder(apiID);
+                WriteTrackLog(string.Format("已经关联订单, api id={0}", apiID));
             }
             else
             {//未匹配的新订单
@@ -48,6 +50,13 @@ namespace n8wan.Public.Logical
 
             if (_apiOrder == null)
                 return false;
+
+            var apiStatus = _apiOrder.status % 10000;
+            if (apiStatus != 1011 && apiStatus != 1013 && apiStatus != 2023)
+            {
+                WriteTrackLog("订单状态错误：" + apiStatus.ToString());
+                return false;//api 上量是状态错误，如有数据回传，有可能同步状态有问题
+            }
 
             //var tOrder = tbl_trone_orderItem.GetQueries(dBase);
             //tOrder.Filter.AndFilters.Add(tbl_trone_orderItem.Fields.id, _apiOrder.trone_order_id);
@@ -58,9 +67,10 @@ namespace n8wan.Public.Logical
                 return false;
             this.CP_Id = m.cp_id;
             SetConfig(m);//找到对应的渠道上量(相当于执行 base.LoadCPAPI())
+            tbl_mrItem mr = null;
             if (PushObject is tbl_mrItem)
             {
-                var mr = ((tbl_mrItem)PushObject);
+                mr = ((tbl_mrItem)PushObject);
                 mr.api_order_id = _apiOrder.id;
                 mr.user_md10 = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(string.Format("{0}_{1}_{2}", _apiOrder.imsi, _apiOrder.imei, _apiOrder.mobile), "MD5");
                 if (string.IsNullOrEmpty(mr.mobile) && !string.IsNullOrEmpty(_apiOrder.mobile))
@@ -73,15 +83,27 @@ namespace n8wan.Public.Logical
             //if (!LoadCPAPI())
             //    return false;
 
+            var ret = base.DoPush();
+            if (!ret)
+                return false;
+            if (mr == null)
+                return true;
+            _apiOrder.IgnoreEquals = true;
 
-
-            return base.DoPush();
+            //扣量和非扣量标识
+            _apiOrder.status = apiStatus + (mr.syn_flag == 0 ? 10000 : 20000);
+            try
+            {
+                _apiOrder.SaveToDatabase(dBase);
+            }
+            catch { }
+            return true;
         }
 
         /// <summary>
         /// 根据ID，加载指令的订单
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="id">为空或不存在时，返回NULL</param>
         /// <returns></returns>
         private tbl_api_orderItem LoadApiOrder(string id)
         {
@@ -122,17 +144,18 @@ namespace n8wan.Public.Logical
             }
             l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.api_id, _apiMatchAPI.id);
             l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.trone_id, Trone.id);
-            l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.status, new int[] { 1011, 1013, 2023 });//一次成，2次成功，二次超时
-#if DEBUG
-            var t = l.GetRowByFilters();
-            System.Diagnostics.Debug.Write("查找API_Order:");
-            System.Diagnostics.Debug.Write(l.LastSqlExecute);
-            System.Diagnostics.Debug.WriteLine("IsFound:{0}", t != null);
+            //l.Filter.AndFilters.Add(tbl_api_orderItem.Fields.status, new int[] { 1011, 1013, 2023 });//一次成，2次成功，二次超时
 
-            return t;
-#else
-            return l.GetRowByFilters();//查到订单号
-#endif
+
+            var t = l.GetRowByFilters();
+            if (t != null)
+                return t;
+            var sql = l.LastSqlExecute;
+            if (string.IsNullOrEmpty(sql))
+                WriteTrackLog("api order not found,sql:null");
+            else
+                WriteTrackLog("api order not found,sql:" + sql);
+            return null;
         }
 
         protected override void SendQuery()

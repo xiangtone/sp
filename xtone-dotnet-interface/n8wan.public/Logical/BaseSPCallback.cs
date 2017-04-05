@@ -568,19 +568,20 @@ namespace n8wan.Public.Logical
             {
                 if (_MrItem.linkid.IndexOf("test", StringComparison.OrdinalIgnoreCase) != -1)
                     syncFlag = E_CP_SYNC_MODE.ForceHide;
-                else if (_MrItem.linkid.IndexOf("cishi", StringComparison.OrdinalIgnoreCase) != -1)
+                else if (_MrItem.linkid.IndexOf("ceshi", StringComparison.OrdinalIgnoreCase) != -1)
                     syncFlag = E_CP_SYNC_MODE.ForceHide;
             }
 
 
             var logFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today));
-
+            var sb = new StringBuilder(250);
             var apiPush = new HTAPIPusher()
             {
                 dBase = dBase,
                 Trone = trone,
                 LogFile = logFile,
-                PushFlag = syncFlag
+                PushFlag = syncFlag,
+                TrackLog = sb
             };
 
             if (apiPush.LoadCPAPI())
@@ -594,7 +595,7 @@ namespace n8wan.Public.Logical
 #if !DEBUG
                 catch (Exception ex)
                 {
-                    Shotgun.Library.SimpleLogRecord.WriteLog(Request.MapPath("~/log/api_push_error.log"), ex.ToString());
+                    Shotgun.Library.SimpleLogRecord.WriteLog("api_push_error", ex.ToString());
                 }
 #endif
                 finally
@@ -607,17 +608,35 @@ namespace n8wan.Public.Logical
             cp.dBase = dBase;
             cp.Trone = trone;
             cp.PushFlag = syncFlag;
-
+            cp.TrackLog = sb;
             //cp.UnionUserId = -1;
             cp.LogFile = logFile;
 
             if (!cp.LoadCPAPI())
+            {
+                WriteTrackLog(sb);
                 return;
+            }
 
             cp.PushObject = _MrItem;
-            cp.DoPush();
+            if (cp.DoPush())
+                return;
+            WriteTrackLog(sb);
 
         }
+
+        object tlLocker = new object();
+        void WriteTrackLog(StringBuilder sb)
+        {
+            if (sb == null || sb.Length == 0)
+                return;
+            lock (tlLocker)
+            {
+                Shotgun.Library.SimpleLogRecord.WriteLog("no_match_cp", sb.ToString());
+            }
+
+        }
+
 
         int GetFee(string field)
         {
@@ -1052,10 +1071,13 @@ namespace n8wan.Public.Logical
                 q.TableDate = today.AddMonths(i);
                 if (q.TableDate.Year <= 2015 && q.TableDate.Month < 9)
                     continue;
-
-                var m = q.GetRowByFilters();
-                if (m != null)
-                    return m;
+                try
+                {
+                    var m = q.GetRowByFilters();
+                    if (m != null)
+                        return m;
+                }
+                catch { return null; }
             }
             return null;
         }
@@ -1072,10 +1094,16 @@ namespace n8wan.Public.Logical
                 q.TableDate = today.AddMonths(i);
                 if (q.TableDate.Year <= 2015 && q.TableDate.Month < 9)
                     continue;
-
-                var m = q.GetRowByFilters();
-                if (m != null)
-                    return m;
+                try
+                {
+                    var m = q.GetRowByFilters();
+                    if (m != null)
+                        return m;
+                }
+                catch
+                {
+                    return null;
+                }
             }
 
             return null;
