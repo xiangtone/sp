@@ -40,7 +40,8 @@
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script>
+<link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 $(function() 
 		{
@@ -313,7 +314,7 @@ $(function()
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">业务名称</dd>
 					<dd class="dd03_me">
-						<input type="text" name="sp_trone_name_1" title="业务名称" id="input_sp_trone_name"
+						<input type="text" name="sp_trone_name_1" title="业务名称" id="input_sp_trone_name" 
 							style="width: 200px">
 					</dd>
 					<br />

@@ -44,7 +44,7 @@
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
 <script type="text/javascript" src="../sysjs/base.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script><link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <script type="text/javascript">
 

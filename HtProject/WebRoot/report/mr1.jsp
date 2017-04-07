@@ -121,12 +121,13 @@
 <title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
+<link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../sysjs/base.js"></script>
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script>
 <script type="text/javascript">
 //排序 tableId: 表的id,iCol:第几列 ；
   var sortStatus;
@@ -387,7 +388,7 @@ function arrayReverse(arr) {
 					</dd>
 					<dd class="dd01_me">结束日期</dd>
 					<dd class="dd03_me">
-						<input name="enddate" type="text" value="<%=endDate%>"
+						<input name="enddate" type="text" value="<%=endDate%>" 
 							onclick="WdatePicker({isShowClear:false,readOnly:true})"
 							style="width: 100px;">
 					</dd>

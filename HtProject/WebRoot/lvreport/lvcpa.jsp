@@ -31,7 +31,7 @@
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script><link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 //排序 tableId: 表的id,iCol:第几列 ；
 var sortStatus;
