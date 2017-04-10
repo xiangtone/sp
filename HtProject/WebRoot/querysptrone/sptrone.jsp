@@ -199,7 +199,7 @@
 					<td><%= model.getCommerceUserName() %></td>
 					<td><%= troneTypes[model.getTroneType()]%></td>
 					<td><%= jsTypes[model.getJsTypes()] %></td>
-					<td ondblclick="editShowData('<%= model.getId() %>')">
+					<td>
 						<span id="span_<%= model.getId() %>"><%= model.getJieSuanLv() %></span>
 					</td>
 					<td><%= model.getDayLimit() %></td>

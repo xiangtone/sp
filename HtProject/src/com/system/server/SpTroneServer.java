@@ -3,8 +3,11 @@ package com.system.server;
 import java.util.List;
 import java.util.Map;
 
+import com.system.dao.ProvinceDao;
 import com.system.dao.SpTroneDao;
+import com.system.model.ProvinceModel;
 import com.system.model.SpTroneModel;
+import com.system.model.TroneOrderModel;
 import com.system.util.ConfigManager;
 import com.system.util.StringUtil;
 
@@ -15,7 +18,6 @@ public class SpTroneServer
 		return new SpTroneDao().loadSpTroneList(pageIndex,spId,userId,spTroneName);
 	}
 	
-	//废弃
 	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord)
 	{
 		int isUnHoldData = -1;
@@ -98,4 +100,46 @@ public class SpTroneServer
 	{
 		return new SpTroneDao().loadSpTroneList(pageIndex,keyWord,userId);
 	}
+	
+	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord,String userRight)
+	{
+		Map<String, Object> map =  new SpTroneDao().loadSpTroneList(pageIndex,keyWord,userRight);
+		
+		List<ProvinceModel> proList = new ProvinceDao().loadProvinceList();
+		
+		List<SpTroneModel> list = (List<SpTroneModel>) map.get("list");
+		
+		for(SpTroneModel model : list)
+		{
+			String proStrList = "";
+			
+			String[] pros = model.getProvinces() .split(",");
+			
+			if(pros==null || pros.length<0)
+				continue;
+			
+			for(String proId : pros)
+			{
+				for(ProvinceModel province : proList)
+				{
+					if(proId.equals(province.getId() + ""))
+						proStrList += province.getName() + ",";
+				}
+			}
+			
+			if(proStrList.length()>0)
+				proStrList = proStrList.substring(0, proStrList.length()-1);
+			
+			model.setProvinceList(proStrList);
+		}
+		
+		return map;
+		
+	}
+	
+	public void updateSpTroneProvince(int id,String pros)
+	{
+		new SpTroneDao().updateSpTroneProvince(id, pros);
+	}
+	
 }	

@@ -12,6 +12,7 @@ public class SpTroneModel
 	private int jsTypes;
 	private float jieSuanLv;
 	private String provinces;
+	private String provinceList;
 	private int troneApiId;
 	private String troneApiName;
 	private int troneType;
@@ -265,6 +266,14 @@ public class SpTroneModel
 	public void setIsForceHold(int isForceHold)
 	{
 		this.isForceHold = isForceHold;
+	}
+	public String getProvinceList()
+	{
+		return provinceList;
+	}
+	public void setProvinceList(String provinceList)
+	{
+		this.provinceList = provinceList;
 	}
 	
 	
