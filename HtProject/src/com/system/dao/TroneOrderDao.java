@@ -365,10 +365,12 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<TroneOrderModel> loadTroneOrderListByCpSpTroneId(int cpId,int spTroneId,int status)
 	{
-		String sql = "select a.*,b.commerce_user_id,b.short_name,c.sp_id,c.trone_name,c.price,d.status,d.name sp_trone_name,d.provinces,d.ramark  from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a "
+		String sql = "select a.*,b.commerce_user_id,b.short_name,d.sp_id,c.trone_num,c.orders trone_order,c.trone_name,c.price,d.status,d.name sp_trone_name,d.provinces,d.ramark  from " 
+				+ com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a "
 				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id "
 				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on a.trone_id = c.id "
 				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.id "
+				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` e ON d.`sp_id` = e.id "
 				+ " WHERE b.id = "+ cpId + " and d.trone_api_id > 0 ";
 		
 				if(status>-1)
@@ -417,6 +419,8 @@ public class TroneOrderDao
 					model.setIsUnholdData(rs.getInt("is_unhold_data"));
 					
 					model.setRemark(StringUtil.getString(rs.getString("ramark"), ""));
+					model.setTroneNum(StringUtil.getString(rs.getString("trone_num"), ""));
+					model.setTroneOrder(StringUtil.getString(rs.getString("trone_order"), ""));
 					
 					list.add(model);
 				}

@@ -68,7 +68,7 @@
 			sbData.append("上量方式:" + exportModel.getUpDataTypeName() + "\r\n");
 			sbData.append("省份:" + exportModel.getPrivincesName() + "\r\n");
 			sbData.append("下行语:" + exportModel.getRemark() + "\r\n");
-			sbData.append("PayCode\t价格\t指令\t通道\r\n");
+			sbData.append("计费点\t价格\t同步指令\t同步端口\r\n");
 			
 			for(PayCodeExportChildModel childModel : exportModel.getChildList())
 			{
@@ -223,6 +223,8 @@
 					<td>PayCode</td>
 					<td>业务名称</td>
 					<td>价格</td>
+					<td>同步指令</td>
+					<td>同步端口</td>
 					<td>状态</td>
 				</tr>
 			</thead>
@@ -238,6 +240,8 @@
 					<td><%= model.getId() + 100000 %></td>
 					<td><%= model.getSpTroneName() %></td>
 					<td><%= model.getPrice() %></td>
+					<td><%= model.getTroneOrder() %></td>
+					<td><%= model.getTroneNum() %></td>
 					<td><%= (model.getDisable()==0 && model.getSpTroneStatus()==1)  ? "启用" : "停用" %></td>
 				</tr>
 				<%
