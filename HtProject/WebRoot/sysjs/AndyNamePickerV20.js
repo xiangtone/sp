@@ -243,6 +243,8 @@ function namePicker(parentObj,joOptionList,onDataSelect)
 	
 	if(baseDataList==null)
 	{
+		joOptionList.push(new joSelOption(-1,"-1","#未选择"));
+		console.log("why i am here");
 		baseDataList = createBaseDataList(joOptionList);
 		dataMap.put("basedata" + objId,baseDataList);
 		dataMap.put("oncallback" + objId,onDataSelect);

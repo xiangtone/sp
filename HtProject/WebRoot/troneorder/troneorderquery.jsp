@@ -168,7 +168,7 @@
 			
 			<form action="troneorderquery.jsp"  method="get" style="margin-top: 10px">
 				<dl>
-					<dd class="dd01_me">CP</dd>
+					<dd class="dd01_me" style="margin-left: -13px;">CP</dd>
 					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp_id" onclick="namePicker(this,cpList,onCpDataSelect)">
 						<option value="-1">全部</option>

@@ -128,7 +128,7 @@
 			<form action="rate.jsp"  method="get" style="margin-top: 10px" id="addform">
 				<input type="hidden" value="2" name="refresh">
 				<dl>
-					<dd class="dd01_me">关键字</dd>
+					<dd class="dd01_me" style="margin-left: -15px;">关键字</dd>
 						<dd class="dd03_me"><input type="text" name="keyword" value="<%= keyWord %>"  /></dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" type="submit" name="search" value="查     询"  />

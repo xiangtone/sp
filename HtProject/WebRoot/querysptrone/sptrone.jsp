@@ -152,7 +152,7 @@
 			<dl>
 				<form action="sptrone.jsp" method="get" id="formid">
 						<dl>					
-						<dd class="dd01_me">关键字</dd>
+						<dd class="dd01_me" style="margin-left: -40px;">关键字</dd>
 						<dd class="dd03_me">
 							<input name="keyword" id="input_keyword" value="<%= keyWord %>"
 								type="text" style="width: 150px">

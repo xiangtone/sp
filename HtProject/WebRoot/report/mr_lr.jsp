@@ -65,14 +65,14 @@
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
-	List<TroneModel> troneList = new TroneServer().loadTroneList();
+	List<TroneModel> troneList = new ArrayList<TroneModel>(); //new TroneServer().loadTroneList();
 	//List<TroneOrderModel> troneOrderList = new TroneOrderServer().loadTroneOrderList();
 	
 	List<TroneOrderModel> troneOrderList = new ArrayList();
 	
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<CityModel> cityList = new CityServer().loadCityList();
-	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
+	List<SpTroneModel> spTroneList =  new ArrayList<SpTroneModel>();// new SpTroneServer().loadSpTroneList();
 		
 	List<MrReportModel> list = (List<MrReportModel>)map.get("list");
 	
@@ -124,13 +124,23 @@
 	
 	function onSpDataSelect(joData)
 	{
+		if(joData.id==-1)
+			$("#input_sp").val("");
+		else
+			$("#input_sp").val(joData.text);
+		
 		$("#sel_sp").val(joData.id);
 		troneChange();
 	}
 	
 	function onCpDataSelect(joData)
 	{
-		$("#sel_cp").val(joData.id);
+		if(joData.id==-1)
+			$("#input_cp").val("");
+		else
+			$("#input_cp").val(joData.text);
+		
+		$("#input_cp").val(joData.text);
 		troneOrderChange();
 	}
 
@@ -190,6 +200,15 @@
 		//SP的二级联动
 		$("#sel_sp").val(<%= spId %>);
 		$("#sel_sp").change(troneChange);
+		<%
+		if(spId>0)
+		{
+			%>
+		$("#input_sp").val($("#sel_sp").find("option:selected").text());
+			<%
+		}
+		%>
+		
 		troneChange();
 		$("#sel_sp_trone").val(<%= spTroneId %>);
 		$("#sel_trone").val(<%= troneId %>);
@@ -197,6 +216,14 @@
 		//CP的二级联动
 		$("#sel_cp").val(<%= cpId %>);	
 		$("#sel_cp").change(troneOrderChange);
+		<%
+		if(cpId>0)
+		{
+			%>
+		$("#input_cp").val($("#sel_cp").find("option:selected").text());
+			<%
+		}
+		%>
 		troneOrderChange();
 		$("#sel_trone_order").val(<%= troneOrderId %>);
 		
@@ -303,8 +330,9 @@
 							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
 					</dd>
 					<dd class="dd01_me">SP</dd>
-					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" style="width: 110px;" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
+					<dd class="dd03_me">
+						<input  type="text" id="input_sp" onclick="namePicker(this,spList,onSpDataSelect)" style="width: 100px;" readonly="readonly" >
+						<select name="sp_id" id="sel_sp" style="width: 110px;display: none" title="选择SP" >
 							<option value="-1">全部</option>
 							<%
 							for(SpModel sp : spList)
@@ -318,7 +346,7 @@
 					</dd>
 					<dd class="dd01_me">SP业务</dd>
 						<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;" onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
+						<select name="sp_trone" id="sel_sp_trone" style="width: 110px;" ></select>
 					</dd>
 					<dd class="dd01_me">SP通道</dd>
 						<dd class="dd04_me">
@@ -343,8 +371,9 @@
 					</dd>
 					<br /><br /><br />
 					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP" style="width: 110px;" onclick="namePicker(this,cpList,onCpDataSelect)">
+					<dd class="dd03_me">
+						<input  type="text" id="input_cp" onclick="namePicker(this,cpList,onCpDataSelect)" style="width: 100px;" readonly="readonly" >
+						<select name="cp_id" id="sel_cp" title="选择CP" style="width: 110px;display:none;" >
 							<option value="-1">全部</option>
 							<%
 							for(CpModel cp : cpList)
