@@ -13,6 +13,7 @@ import com.system.database.QueryCallBack;
 import com.system.model.CpSpTroneSynModel;
 import com.system.model.PayCodeExportChildModel;
 import com.system.model.PayCodeExportModel;
+import com.system.model.SpTroneModel;
 import com.system.model.TroneOrderModel;
 import com.system.util.StringUtil;
 
@@ -752,5 +753,41 @@ public class TroneOrderDao
 		
 		return map;
 	} 
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<com.system.model.SpTroneModel> loadSpTroneListByCpId(int cpId)
+	{
+		String sql = " SELECT d.id sp_id,d.short_name sp_name,c.id sp_trone_id,c.name sp_trone_name ";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone b ON a.trone_id = b.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone c ON b.sp_trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp d ON c.sp_id = d.id ";
+		sql += " WHERE a.cp_id = " + cpId;
+		sql += " GROUP BY c.id; ";
+		
+		return (List<com.system.model.SpTroneModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<com.system.model.SpTroneModel> list = new ArrayList<com.system.model.SpTroneModel>();
+				
+				while(rs.next())
+				{
+					SpTroneModel model = new SpTroneModel();
+					model.setId(rs.getInt("sp_trone_id"));
+					model.setSpName(StringUtil.getString(rs.getString("sp_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+					model.setSpId(rs.getInt("sp_id"));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	
 	
 }

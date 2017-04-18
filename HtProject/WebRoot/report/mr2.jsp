@@ -191,13 +191,24 @@ function arrayReverse(arr) {
 	
 	function onSpDataSelect(joData)
 	{
+		if(joData.id==-1)
+			$("#input_sp").val("");
+		else
+			$("#input_sp").val(joData.text);
+		
 		$("#sel_sp").val(joData.id);
 		troneChange();
 	}
 	
 	function onCpDataSelect(joData)
 	{
+		if(joData.id==-1)
+			$("#input_cp").val("");
+		else
+			$("#input_cp").val(joData.text);
+		
 		$("#sel_cp").val(joData.id);
+		troneOrderChange();
 	}
 
 	function joCity(id,provinceId,name)
@@ -271,6 +282,15 @@ function arrayReverse(arr) {
 		
 		//SP的二级联动
 		$("#sel_sp").val(<%= spId %>);
+		<%
+		if(spId>0)
+		{
+			%>
+		$("#input_sp").val($("#sel_sp").find("option:selected").text());
+			<%
+		}
+		%>
+		
 		$("#sel_sp").change(troneChange);
 		troneChange();
 		$("#sel_sp_trone").val(<%= spTroneId %>);
@@ -278,6 +298,16 @@ function arrayReverse(arr) {
 		
 		//CP的二级联动
 		$("#sel_cp").val(<%= cpId %>);	
+		
+		<%
+		if(cpId>0)
+		{
+			%>
+		$("#input_cp").val($("#sel_cp").find("option:selected").text());
+			<%
+		}
+		%>
+		
 		$("#sel_cp").change(troneOrderChange);
 		troneOrderChange();
 		$("#sel_trone_order").val(<%= troneOrderId %>);
@@ -355,8 +385,9 @@ function arrayReverse(arr) {
 						<input name="date"  type="text" value="<%=date%>" 
 							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
 					<dd class="dd01_me">SP</dd>
-					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
+					<dd class="dd03_me">
+						<input  type="text" id="input_sp" onclick="namePicker(this,spList,onSpDataSelect)" style="width: 100px;" readonly="readonly" >
+						<select name="sp_id" id="sel_sp" title="选择SP" style="display: none">
 							<option value="-1">全部</option>
 							<%
 							for(SpModel sp : spList)
@@ -370,7 +401,7 @@ function arrayReverse(arr) {
 					</dd>
 					<dd class="dd01_me">SP业务</dd>
 						<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
+						<select name="sp_trone" id="sel_sp_trone" ></select>
 					</dd>
 					<dd class="dd01_me">SP通道</dd>
 						<dd class="dd04_me">
@@ -380,8 +411,9 @@ function arrayReverse(arr) {
 				<br /><br /><br />
 				<dl>
 					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP" onclick="namePicker(this,cpList,onCpDataSelect)">
+					<dd class="dd03_me">
+						<input  type="text" id="input_cp" onclick="namePicker(this,cpList,onCpDataSelect)" style="width: 100px;" readonly="readonly" >
+						<select name="cp_id" id="sel_cp" title="选择CP" style="display: none">
 							<option value="-1">全部</option>
 							<%
 							for(CpModel cp : cpList)

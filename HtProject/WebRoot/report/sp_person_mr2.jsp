@@ -105,7 +105,7 @@
 	
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<CityModel> cityList = new CityServer().loadCityList();
-	List<SpTroneModel> spTroneList = new ArrayList<SpTroneModel>(); //new SpTroneServer().loadSpTroneList();
+	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
 		
 	List<MrReportModel> list = (List<MrReportModel>)map.get("list");
 	

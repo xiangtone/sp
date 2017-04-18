@@ -100,6 +100,18 @@
 			</activation>
 		</profile>
 		<profile>
+			<id>local</id>
+			<properties>
+				<runtime.env>config\local</runtime.env>
+				<final.name>HtProject</final.name>
+				<ftp.server.id>LocalSftpServer</ftp.server.id>
+				<ftp.to.url>sftp://192.168.1.11/data/server/tomcat_8_8/swap_dir/</ftp.to.url>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
 			<id>szht</id>
 			<properties>
 				<runtime.env>config\szht</runtime.env>

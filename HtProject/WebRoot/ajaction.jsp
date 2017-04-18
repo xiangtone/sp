@@ -104,8 +104,21 @@
 		
 		out.println(returnValue);
 	}
-	
-	
+	//取得CP对应的SP业务
+	else if(type==5)
+	{
+		int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
+		List<SpTroneModel> list = new TroneOrderServer().loadSpTroneListByCpId(cpId);
+		String returnValue = "";
+		if(!list.isEmpty())
+		{
+			for(SpTroneModel model: list)
+				returnValue += model.getId() + ",";
+			
+			returnValue = returnValue.subSequence(0, returnValue.length()-1).toString();
+		}
+		out.print(returnValue);
+	}
 	
 	
 	
