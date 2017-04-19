@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ApiReport.aspx.cs" Inherits="report_ApiReport" MasterPageFile="~/MasterPage.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPage.master" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="head">
     <script src="../scripts/jquery-3.1.1.js"></script>
@@ -13,8 +13,16 @@
             for (var i = d.getDate() ; i > 0 ; i--) {
                 html += "<option value=\"" + ds + i.toString() + "\">" + ds + i.toString() + "</option>";
             }
-
             $("#date").html(html);
+            html = "";
+            for (var i = 0; i < 24; i++) {
+                html += "<option>" + i + "</option>"
+            }
+            $("[name='s_hour']").html(html);
+            $("[name='e_hour']").html(html);
+            $("[name='s_hour']").val("0");
+            $("[name='e_hour']").val("23");
+
             date_onchange($("#date")[0], null);
             //var js = [{ "trone_order_id": "4740", "time": "17-02-04 10:00:00", "status": "1011", "count": "799" }, { "trone_order_id": "4740", "time": "17-02-04 10:00:00", "status": "1020", "count": "6" }, { "trone_order_id": "4740", "time": "17-02-04 10:00:00", "status": "1022", "count": "1073" }]
             //ondata(js);
@@ -23,11 +31,18 @@
 
         function date_onchange(sender, e) {
             sender.form.disabled = true;
+            var url = "../ajax/getApiData.ashx?method=initHead&date=" + sender.value;
+
+            var rx = /(\?|&|)mode=(.+)($|&)/
+            var mode = rx.exec(location.search);
+            if (mode != null)
+                url += "&mode=" + mode[2];
+            //alert(url);
             $.get(
                {
+                   "cache": false,
                    "dataType": "json",
-
-                   "url": "../ajax/getApiData.ashx?method=initHead&date=" + sender.value,
+                   "url": url,
                    "success": initHead,
                    "error": function (e) { alert(e) },
                    "complete": function (e) { sender.form.disabled = false; }
@@ -43,6 +58,11 @@
             var troneOrderId = $("select[name='troneOrderId']");
             data = e;
             ClearSelector(troneOrderId[0])
+            if (e.length == 0) {
+                alert("渠道都在zzz...");
+                return;
+            }
+
             for (var i = 0; i < e.length; i++) {
                 var item = e[i];
                 AppendOption(sp[0], item.sp_id, item.sp_name);
@@ -226,7 +246,7 @@
 
         function frm_onsubmit(sender, e) {
 
-            var type = sender["type"].value;
+            var type = $("[name='type']:checked").val();
             var paycode = sender["troneOrderId"].value;
             if (paycode == "0") {
                 paycode = "";
@@ -236,24 +256,38 @@
                 }
                 if (paycode != "")
                     paycode = paycode.substring(1);
+                else {
+                    alert("没有paycode可用");
+                    return;
+                }
             }
 
             var tab = document.getElementById("tab");
 
-
-
             tab.innerHTML = "<tr><td colspan=\"" + $(".datagrid th").length + "\">paycode(s)：" + paycode + "Loading.... </td></tr>";
 
             var url = "../ajax/getApiData.ashx?method=getdata&type=" + type + "&paycode=" + paycode + "&date=" + sender["date"].value;
-            $.get(
-            {
-                "dataType": "json",
-                "url": url,
-                "success": ondata,
-                "error": function (e) { alert(e) }
+            var s_hour = parseInt($("[name=s_hour]").val());
+            var e_hour = parseInt($("[name=e_hour]").val());
+            if (e_hour < s_hour) {
+                var t = s_hour;
+                s_hour = e_hour;
+                e_hour = s_hour;
+                $("[name=e_hour]").val(e_hour);
+                $("[name=s_hour]").val(s_hour);
             }
-            );
 
+            url += "&e_hour=" + e_hour + "&s_hour=" + s_hour;
+
+            $.get(
+                {
+                    "cache": false,
+                    "dataType": "json",
+                    "url": url,
+                    "success": ondata,
+                    "error": function (e) { alert(e) }
+                }
+            );
         }
 
         function ondata(e) {
@@ -280,6 +314,7 @@
                 if (lastItem == null || lastItem.type == item.type) {
                     summer[item.status] = item.count;
                     hasdata = true;
+
                 }
                 else {
                     html += "<tr>";
@@ -308,6 +343,7 @@
                 //html = html.replace(/rowspan="\#"/gi, "rowspan=\"" + trow.toString() + "\"")
                 html += "<td>" + lastItem.type + "</td>";
                 html += GetSummerData(summer);
+
                 summer = new Object();
                 html += "</tr>"
             }
@@ -334,6 +370,7 @@
 
         function GetSummerData(s) {
             var s1011 = 0, s1013 = 0, s1xxx = 0, s2xxx = 0;
+            var s1w = 0, s2w = 0;
             var m1xxx = "", m2xxx = "";
             var sum = 0;
             for (var k in s) {
@@ -353,9 +390,26 @@
                             s2xxx += v;
                             m2xxx += k + ":" + v + ",";
                         }
-
+                        else if (t > 9999) {
+                            if (t < 20000) {
+                                s1w += v;
+                            }
+                            else if (t < 30000)
+                                s2w += v;
+                            if (t < 30000) {
+                                t %= 10000;
+                                if (t == 1011)
+                                    s1011 += v;
+                                else if (t == 1013) {
+                                    s1013 += v;
+                                }
+                            }
+                        }
                 }
             }
+            s1011 += s1013;
+            s1011 += s2xxx;
+            s2w += s1w;
             if (m1xxx.length > 1)
                 m1xxx.length--;
             if (m2xxx.length > 1)
@@ -365,11 +419,31 @@
             html += "<td>" + s1013.toString() + "</td>";
             html += "<td title=\"" + m1xxx + "\">" + s1xxx.toString() + "</td>";
             html += "<td title=\"" + m2xxx + "\">" + s2xxx.toString() + "</td>";
- 
-            html += "<td>" + Math.round((s1011 + s1013) * 100 / sum, 2) + "%</td>"
-            html += "<td>" + Math.round((s1013) * 100 / sum, 2) + "%</td>"
+            html += "<td>" + sum + "</td>";
+
+            html += "<td>" + percnet(s1011, sum) + "</td>"
+
+            html += "<td title='验证码回传率" + percnet(m2xxx + s1013, sum) + "'>" + percnet(s1013, sum) + "</td>"//验证码成功率
+
+            html += "<td>" + (s2w - s1w) + "</td>";//cp收到
+            html += "<td>" + percnet(s2w - s1w, sum) + "</td>"//cp转化
+            html += "<td>" + s2w + "</td>";//总成功
+            html += "<td>" + percnet(s2w, sum) + "</td>"//真实转化
+
             return html;
+
         }
+
+        function percnet(p, s) {
+            if (isNaN(p) || isNaN(s) || s == 0)
+                return "N/A";
+            p *= 100;
+            var v = p / s;
+            if (isNaN(p))
+                return "N/A";
+            return v.toFixed(2) + "%";
+        }
+
 
     </script>
 
@@ -379,6 +453,9 @@
         日期：
         <select id="date" name="date" onchange="date_onchange(this,null)">
         </select>
+        <span style="display: none;">时间：<select name="s_hour"></select>
+            -
+        <select name="e_hour"></select></span>
         SP:<select id="sp" onchange="sp_onchange(this,null)"><option value="0">*全部*</option>
         </select>
         SP业务:<select id="spTroneId" onchange="sptrone_onchange(this,null)"><option value="0">*全部*</option>
@@ -391,6 +468,10 @@
         </select>
         <br />
         分组方式：<label><input type="radio" name="type" value="0" checked="checked" />时间</label>
+        <label>
+            <input type="radio" value="1" name="type" />省份转化</label>
+        <label>
+            <input type="radio" value="2" name="type" />业务</label>
         <input type="submit" value="确定" />
     </form>
     <table class="datagrid">
@@ -400,17 +481,36 @@
             <th>价格</th>
             <th>CP</th>
             <th>分类</th>
-            <th>1011</th>
-            <th>1013</th>
-            <th>1XXX</th>
-            <th>2XXX</th>
-            <th>指令</th>
+            <th title="取指令/下发验证码成功">1011</th>
+            <th title="验证码回传并且SP回应成功">1013</th>
+            <th title="取指令/下发验证码">1XXX</th>
+            <th title="验证码回传SP响应错误">2XXX</th>
+            <th title="所有请求">请求数</th>
+            <th title="状态1011/请求数">指令</th>
             <th>验证码</th>
-
+            <th title="CP收的成功数">成功</th>
+            <th title="CP转化">转化</th>
+            <th title="扣量前真实成功数">成功</th>
+            <th title="扣量前真实转化">转化</th>
         </tr>
         <tbody id="tab">
+            <td colspan="16">
+                <h1 style="text-align: center; font-family: 'Comic Sans MS'">Ready!</h1>
+            </td>
         </tbody>
     </table>
+
+    <pre>*注：
+1011：取指令/下发验证码成功
+1013：验证码回传并且SP回应成功
+1XXX：取指令/下发验证码出错
+2XXX：验证码回传SP响应错误。对于一次联网业务，此值常为0
+指令：状态1011/请求数*100%
+验证码：状态1013/请求数*100%。对于一次联网业务，此值常为0
+成功1：CP收到的成功回调数
+转化1：成功1/请求数*100%(CP的转化)
+成功2：总成功回调数
+转化2：成功2/请求数*100%(真实转化)</pre>
 
 </asp:Content>
 

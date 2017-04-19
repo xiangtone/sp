@@ -508,7 +508,8 @@ namespace n8wan.Public.Logical
         {
             if (TrackLog == null)
                 return;
-            TrackLog.AppendLine(msg);
+            TrackLog.AppendFormat("{0:hh:MM:ss}{1}", DateTime.Now, msg);
+            TrackLog.AppendLine();
         }
 
         public StringBuilder TrackLog { get; set; }

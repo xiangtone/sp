@@ -505,21 +505,21 @@ namespace n8wan.Public.Logical
 
         protected virtual void FillAreaInfo(LightDataModel.tbl_mrItem m)
         {
-            FillAreaInfo(dBase, m);
+            var city = FillAreaInfo(dBase, m);
+            m.city_id = city.id;
+            m.province_id = city.province_id;
         }
 
         /// <summary>
         /// 填充手机号归属地信息
         /// </summary>
         /// <param name="m"></param>
-        public static void FillAreaInfo(IBaseDataClass2 dBase, LightDataModel.tbl_mrItem m)
+        public static LightDataModel.tbl_cityItem FillAreaInfo(IBaseDataClass2 dBase, Logical.ISMS_DataItem m)
         {
             var num = m.mobile;
-            m.city_id = 416;
-            m.province_id = 32;
 
             if (string.IsNullOrEmpty(num) && string.IsNullOrEmpty(m.imsi))
-                return;
+                return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
 
             if (num == null)
                 num = string.Empty;
@@ -531,7 +531,7 @@ namespace n8wan.Public.Logical
             {
                 num = m.imsi;
                 if (string.IsNullOrEmpty(num) || num.Length != 15)
-                    return;
+                    return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
             } //else 长为15
 
             if (spNum == 0)
@@ -540,21 +540,20 @@ namespace n8wan.Public.Logical
                 {
                     var t = Public.Library.GetPhoneByImsi(num);
                     if (string.IsNullOrEmpty(t) || t.Length != 7)
-                        return;
+                        return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
                     spNum = int.Parse(t);
                 }
                 else
-                    return;
+                    return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
             }
 
 
 
             var cityInfo = LightDataModel.tbl_phone_locateItem.GetRowByMobile(dBase, spNum);
             if (cityInfo == null)
-                return;
-            m.city_id = cityInfo.id;
-            m.province_id = cityInfo.province_id;
-            //m.province_id=
+                return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
+
+            return cityInfo;
         }
 
         private void DoPush(LightDataModel.tbl_troneItem trone)
@@ -568,19 +567,20 @@ namespace n8wan.Public.Logical
             {
                 if (_MrItem.linkid.IndexOf("test", StringComparison.OrdinalIgnoreCase) != -1)
                     syncFlag = E_CP_SYNC_MODE.ForceHide;
-                else if (_MrItem.linkid.IndexOf("cishi", StringComparison.OrdinalIgnoreCase) != -1)
+                else if (_MrItem.linkid.IndexOf("ceshi", StringComparison.OrdinalIgnoreCase) != -1)
                     syncFlag = E_CP_SYNC_MODE.ForceHide;
             }
 
 
             var logFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today));
-
+            var sb = new StringBuilder(250);
             var apiPush = new HTAPIPusher()
             {
                 dBase = dBase,
                 Trone = trone,
                 LogFile = logFile,
-                PushFlag = syncFlag
+                PushFlag = syncFlag,
+                TrackLog = sb
             };
 
             if (apiPush.LoadCPAPI())
@@ -594,7 +594,7 @@ namespace n8wan.Public.Logical
 #if !DEBUG
                 catch (Exception ex)
                 {
-                    Shotgun.Library.SimpleLogRecord.WriteLog(Request.MapPath("~/log/api_push_error.log"), ex.ToString());
+                    Shotgun.Library.SimpleLogRecord.WriteLog("api_push_error", ex.ToString());
                 }
 #endif
                 finally
@@ -607,17 +607,33 @@ namespace n8wan.Public.Logical
             cp.dBase = dBase;
             cp.Trone = trone;
             cp.PushFlag = syncFlag;
-
+            cp.TrackLog = sb;
             //cp.UnionUserId = -1;
             cp.LogFile = logFile;
 
             if (!cp.LoadCPAPI())
+            {
+                WriteTrackLog(sb);
                 return;
+            }
 
             cp.PushObject = _MrItem;
-            cp.DoPush();
+            if (cp.DoPush() && _MrItem.cp_id != 34)
+                return;
+            if (!cp.IsSuccess)
+                sb.AppendLine(cp.ErrorMesage);
+            WriteTrackLog(sb);
 
         }
+
+
+        void WriteTrackLog(StringBuilder sb)
+        {
+            if (sb == null || sb.Length == 0)
+                return;
+            Shotgun.Library.SimpleLogRecord.WriteLog("no_match_cp", sb.ToString());
+        }
+
 
         int GetFee(string field)
         {
@@ -1052,10 +1068,13 @@ namespace n8wan.Public.Logical
                 q.TableDate = today.AddMonths(i);
                 if (q.TableDate.Year <= 2015 && q.TableDate.Month < 9)
                     continue;
-
-                var m = q.GetRowByFilters();
-                if (m != null)
-                    return m;
+                try
+                {
+                    var m = q.GetRowByFilters();
+                    if (m != null)
+                        return m;
+                }
+                catch { return null; }
             }
             return null;
         }
@@ -1072,10 +1091,16 @@ namespace n8wan.Public.Logical
                 q.TableDate = today.AddMonths(i);
                 if (q.TableDate.Year <= 2015 && q.TableDate.Month < 9)
                     continue;
-
-                var m = q.GetRowByFilters();
-                if (m != null)
-                    return m;
+                try
+                {
+                    var m = q.GetRowByFilters();
+                    if (m != null)
+                        return m;
+                }
+                catch
+                {
+                    return null;
+                }
             }
 
             return null;

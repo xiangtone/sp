@@ -53,7 +53,7 @@ namespace sdk_Request.Logical
 
 
         /// <summary>
-        /// 同步模式最大等待时间，超时后即转入异步模试
+        /// 同步模式最大等待时间，超时后即转入异步模试(单位：ms)
         /// </summary>
         protected virtual int TimeToAsyc { get { return 2 * 1000; } }
 

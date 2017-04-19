@@ -2,22 +2,37 @@
 
 using System;
 using System.Web;
+using System.Collections.Generic;
 
-public class test : IHttpHandler
+public class test : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySqlDBClass>
 {
-
-    public void ProcessRequest(HttpContext context)
+    class AnObject
     {
-        context.Response.ContentType = "text/plain";
-        context.Response.Write(n8wan.Public.Logical.CityToPhone.GetVirtualPhone("30800138000", 52, 0));
+        public int count { get; set; }
     }
 
-    public bool IsReusable
+    static Dictionary<int, AnObject> dict;
+
+    public override void BeginProcess()
     {
-        get
+        if (dict == null)
         {
-            return false;
-        }
-    }
+            Response.Write("new object");
+            dict = new Dictionary<int, AnObject>();
+            var obj = new AnObject();
+            obj.count = 123;
+            dict[1] = obj;
 
+        }
+
+        var obj_b = dict[1];
+        obj_b.count++;
+
+
+
+        var obj_c = dict[1];
+
+        Response.Write(obj_c.count);
+
+    }
 }
