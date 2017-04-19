@@ -21,8 +21,7 @@ public class jj97 : sdk_Request.Logical.APIRequestGet
         }
         string[] package = OrderInfo.packageName.Split(new char[] { '|', ',' }, 2);
         string url = "http://pay.sdk.new.5isy.com/center/getCommand.ashx?partnerId=2031"
-                + "&appId=2112"
-                + "&channelId=3058"
+                + "&appId=" + PayModel.channelid
                 + "&appFeeId=" + PayModel.paycode
                 + "&fee=" + PayModel.appid
                 + "&phone=" + OrderInfo.mobile

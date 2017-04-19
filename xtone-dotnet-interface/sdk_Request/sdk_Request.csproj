@@ -48,10 +48,13 @@
   <ItemGroup>
     <Compile Include="Logical\APIRequestGet.cs" />
     <Compile Include="Logical\API_ERROR.cs" />
+    <Compile Include="Logical\AsyncAPIRequestGet.cs" />
     <Compile Include="Logical\E_SMS_TYPE.cs" />
+    <Compile Include="Logical\VirtualIP.cs" />
     <Compile Include="Model\APIRquestModel.cs" />
     <Compile Include="Model\APIResponseModel.cs" />
     <Compile Include="Model\SP_RESULT.cs" />
+    <Compile Include="Model\wxSP_RESULT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +74,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

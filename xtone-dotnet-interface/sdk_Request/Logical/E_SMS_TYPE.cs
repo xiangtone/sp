@@ -23,6 +23,10 @@ namespace sdk_Request.Logical
         /// <summary>
         /// 无需发送短信，但需要截取下行验证码
         /// </summary>
-        VerifyCode
+        VerifyCode,
+        /// <summary>
+        /// 客户端HTTP访问
+        /// </summary>
+        HttpAction
     }
 }

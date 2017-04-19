@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 /// <summary>
-/// 卓羿文化-MM
+/// 112.74.111.56:9039
 /// </summary>
 public class jj56 : sdk_Request.Logical.APIRequestGet
 {
@@ -32,8 +32,14 @@ public class jj56 : sdk_Request.Logical.APIRequestGet
         OrderInfo.apiExdata = PayModel.paycode + (OrderInfo.id & 0xfFFff).ToString("x");
         if (OrderInfo.apiExdata.Length > 10)
             OrderInfo.apiExdata = OrderInfo.apiExdata.Substring(0, 10);
-
+        var jsmsType = jobj["smsType"].Value<string>();
         var sms = new sdk_Request.Model.SP_SMS_Result();
+        if (jsmsType != null && jsmsType == "text")
+        {
+            sms.port = jobj["accessNo"].Value<string>();
+            sms.msg = jobj["sms"].Value<string>();
+            return sms;
+        }
         sms.port = jobj["accessNo"].Value<string>();
         sms.msg = jobj["sms"].Value<string>();
         sms.SMSType = sdk_Request.Logical.E_SMS_TYPE.Data;

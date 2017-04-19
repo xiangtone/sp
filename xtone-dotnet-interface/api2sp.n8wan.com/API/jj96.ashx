@@ -15,11 +15,17 @@ public class jj96 : sdk_Request.Logical.APIRequestGet
         if (string.IsNullOrEmpty(OrderInfo.packageName))
         {
             SetError((sdk_Request.Logical.API_ERROR)1008, "参数package不能为空");
-           /// return null;
+            /// return null;
 
             OrderInfo.packageName = System.Web.HttpUtility.UrlEncode("游戏道具");
-         }
+        }
         string[] package = OrderInfo.packageName.Split(new char[] { '|', ',' }, 2);
+        var ip = OrderInfo.clientIp;
+        if (OrderInfo.imei == "866568022922909")
+        {
+            var city = getCityByImsi(OrderInfo.imsi);
+            ip = sdk_Request.Logical.VirtualIP.GetIpByProvinceId(city.province_id, OrderInfo.imsi);
+        }
         string url = "http://pay.sdk.new.5isy.com/center/getCommand.ashx?partnerId=2031"
                 + "&appId=2127"
                 + "&channelId=3236"
@@ -33,9 +39,9 @@ public class jj96 : sdk_Request.Logical.APIRequestGet
                 + "&net_info=" + OrderInfo.netType
                 + "&extra=" + OrderInfo.id
                 + "&timestamp=" + DateTime.Now.ToString("yyyyMMddHHmmss")
-                + "&proid=小猪快跑" 
+                + "&proid=小猪快跑"
                 + "&protype=1"
-                + "&client_ip=" + OrderInfo.clientIp;
+                + "&client_ip=" + ip;
         var html = GetHTML(url, 20000, null);
         var jobj = JObject.Parse(html);
         if (string.IsNullOrEmpty(html))
@@ -52,7 +58,7 @@ public class jj96 : sdk_Request.Logical.APIRequestGet
             {
                 case "1001": err = "应用ID为空"; break;
                 case "1002": err = "渠道ID为空"; break;
-                case "1004": code = sdk_Request.Logical.API_ERROR.ERROR_PAY_POINT;err = "计费点ID为空"; break;
+                case "1004": code = sdk_Request.Logical.API_ERROR.ERROR_PAY_POINT; err = "计费点ID为空"; break;
                 case "1005": err = "资费为空"; break;
                 case "1006": code = sdk_Request.Logical.API_ERROR.BLACK_USER; err = "黑名单"; break;
                 case "1007": code = sdk_Request.Logical.API_ERROR.AREA_CLOSE; err = "省份主动屏蔽"; break;
@@ -64,10 +70,10 @@ public class jj96 : sdk_Request.Logical.APIRequestGet
             SetError(code, err);
             return null;
         }
-        
+
 
         //36735976DM10031000_DM10031000
-        OrderInfo.spLinkId =jobj["orderid"].Value<string>();
+        OrderInfo.spLinkId = jobj["orderid"].Value<string>();
         OrderInfo.apiExdata = OrderInfo.id.ToString();
         var jinit_sms = jobj["init_sms"];
         if (jinit_sms.ToString() != "")
