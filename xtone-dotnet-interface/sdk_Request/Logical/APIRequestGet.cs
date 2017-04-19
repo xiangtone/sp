@@ -213,7 +213,7 @@ namespace sdk_Request.Logical
                     cid = 123,
                     imei = "866568022922909",
                     imsi = "460023192787105",
-                    //price = 1000,
+                    iccid = "898600161315F1003574",
                     lac = 456,
                     mobile = "13570830935",
                     id = 0x40000000 | (int)((DateTime.Now.Ticks / 100000) & 0x7FffFFFF)
@@ -283,6 +283,13 @@ namespace sdk_Request.Logical
             SetError(API_ERROR.GET_CMD_FAIL, Msg);
             return false;
         }
+
+        public bool SetError(JToken jtk)
+        {
+            SetError(API_ERROR.GET_CMD_FAIL, jtk);
+            return false;
+        }
+
         protected bool SetError(API_ERROR Error, string msg)
         {
             _errCode = Error;
@@ -290,6 +297,12 @@ namespace sdk_Request.Logical
             return false;
         }
 
+        protected bool SetError(API_ERROR Error, JToken jtk)
+        {
+            if (jtk == null)
+                return SetError(Error, null);
+            return SetError(Error, jtk.ToString());
+        }
         internal protected API_ERROR GetError() { return _errCode; }
 
         private void WriteError()
@@ -399,6 +412,47 @@ namespace sdk_Request.Logical
         protected string GetHTML(string url)
         {
             return DownloadHTML(url, null, 0, null, (IDictionary<string, string>)null);
+        }
+
+        protected string GetHTML(string url, IEnumerable<KeyValuePair<string, string>> keyValues, int timeout, string encode)
+        {
+            Encoding enc = null;
+            if (string.IsNullOrEmpty(encode))
+                enc = System.Text.ASCIIEncoding.UTF8;
+            else
+                enc = System.Text.ASCIIEncoding.GetEncoding(encode);
+            var sb = new StringBuilder(url);
+            if (url.Contains("?"))
+                sb.Append("&");
+            else
+                sb.Append("?");
+
+            foreach (var kv in keyValues)
+            {
+                sb.AppendFormat("{0}={1}&", System.Web.HttpUtility.UrlEncode(kv.Key, enc), System.Web.HttpUtility.UrlEncode(kv.Value, enc));
+            }
+            sb.Length--;
+            url += sb.ToString();
+            return GetHTML(url, timeout, encode);
+        }
+
+
+
+        protected string PostHTML(string url, IEnumerable<KeyValuePair<string, string>> keyValues, int timeout, string encode)
+        {
+            Encoding enc = null;
+            if (string.IsNullOrEmpty(encode))
+                enc = System.Text.ASCIIEncoding.UTF8;
+            else
+                enc = System.Text.ASCIIEncoding.GetEncoding(encode);
+            var sb = new StringBuilder();
+
+            foreach (var kv in keyValues)
+            {
+                sb.AppendFormat("{0}={1}&", System.Web.HttpUtility.UrlEncode(kv.Key, enc), System.Web.HttpUtility.UrlEncode(kv.Value, enc));
+            }
+            sb.Length--;
+            return PostHTML(url, sb.ToString(), timeout, encode);
         }
 
         /// <summary>
