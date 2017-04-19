@@ -8,13 +8,30 @@ using System.Collections.Generic;
 using System.Linq;
 public class getApiData : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySqlDBClass>
 {
+    enum UserMode
+    {
+        Full,
+        Cp,
+        Sp
+    }
+
     DateTime date;
+    int s_hour, e_hour;
+    UserMode userMode = UserMode.Full;
     static Dictionary<int, int> _maxIds;
     public override void BeginProcess()
     {
 
         if (!DateTime.TryParse(Request["date"], out date))
             date = DateTime.Today;
+        if (!int.TryParse(Request["s_Hour"], out s_hour))
+            s_hour = 0;
+        if (!int.TryParse(Request["e_Hour"], out e_hour))
+            e_hour = 23;
+        if ("cp".Equals(Request["mode"], StringComparison.InvariantCultureIgnoreCase))
+            userMode = UserMode.Cp;
+        else if ("sp".Equals(Request["mode"], StringComparison.InvariantCultureIgnoreCase))
+            userMode = UserMode.Sp;
         InitMaxIds();
 
         switch (Request["method"])
@@ -34,13 +51,19 @@ public class getApiData : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.My
             ids = " where " + ids;
         }
 
-        string sql = " select m.*,st.id sp_trone_id,st.sp_id , st.name sp_trone_name ,trone.trone_name,trone.price,sp.short_name sp_name , cp.short_name cp_name from ( \n"
-                + " select trone_Id,id trone_order_id ,cp_id from daily_config.tbl_trone_order   where id in( \n"
-                + " select distinct trone_order_id  from daily_log.tbl_api_order_" + date.ToString("yyyyMM") + ids + " \n"
-                + ")  ) m left join daily_config.tbl_trone trone on trone.id=m.trone_Id \n"
+        string sql = "select m.*,st.id sp_trone_id,st.sp_id , st.name sp_trone_name ,trone.trone_name,trone.price,sp.short_name sp_name , cp.short_name cp_name from ( \n"
+                + " select trone_Id,id trone_order_id ,cp_id from daily_config.tbl_trone_order where id in( \n"
+                + " select distinct trone_order_id  from daily_log.tbl_api_order_" + date.ToString("yyyyMM") + " api " + ids + " \n"
+                + ") ) m left join daily_config.tbl_trone trone on trone.id=m.trone_Id \n"
                 + " left join daily_config.tbl_sp_trone st on st.id=trone.sp_trone_id \n"
                 + " left join daily_config.tbl_sp sp on sp.id=trone.sp_id \n"
                 + " left join daily_config.tbl_cp cp on cp.id=m.cp_id";
+        var userName = HttpContext.Current.User.Identity.Name;
+        if (userMode == UserMode.Cp)
+            sql += "\n left join daily_config.tbl_user user on cp.commerce_user_id=user.id where user.name='" + dBase.SqlEncode(userName) + "'";
+        else if (userMode == UserMode.Sp)
+            sql += "\n left join daily_config.tbl_user user on sp.commerce_user_id=user.id where user.name='" + dBase.SqlEncode(userName) + "'";
+
 
         var sb = new System.Text.StringBuilder("[");
 
@@ -56,7 +79,6 @@ public class getApiData : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.My
             if (_maxIds == null)
                 InitMaxIds();
             return _maxIds;
-
         }
     }
 
@@ -73,8 +95,32 @@ public class getApiData : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.My
         if (!string.IsNullOrEmpty(idwhere))
             idwhere = " and " + idwhere;
 
-        var sql = " select trone_order_id , DATE_FORMAT(firstDate,'%y-%m-%d %H:00:00') type ,status,count(0) count from daily_log.tbl_api_order_201702 "
-                + "	where trone_order_id in(" + paycode + " ) " + idwhere + "  group by trone_order_id , DATE_FORMAT(firstDate,'%y-%m-%d %H:00:00') ,status ";
+        int groupType;
+        int.TryParse(Request["type"], out groupType);
+        string sql;
+        switch (groupType)
+        {
+            //case 0:
+            case 1:
+                sql = "select trone_order_id , pro.name type ,status,count(0) count from daily_log.tbl_api_order_{2:yyyyMM} api left join daily_config.tbl_city ct on ct.id=api.city "
+                    + " left join daily_config.tbl_province pro on pro.id=ct.province_id"
+                    + "	where trone_order_id in({0}) {1} group by trone_order_id , pro.name ,status ";
+                break;
+            case 2:
+                sql = "select trone_order_id ,trone_id type ,status,count(0) count from daily_log.tbl_api_order_{2:yyyyMM} api "
+                    + "	where trone_order_id in({0}) {1} group by trone_order_id , trone_id ,status ";
+                break;
+            default:
+                sql = "select trone_order_id , DATE_FORMAT(firstDate,'%y-%m-%d %H:00:00') type ,status,count(0) count from daily_log.tbl_api_order_{2:yyyyMM} api "
+                    + "	where trone_order_id in({0}) {1} group by trone_order_id , DATE_FORMAT(firstDate,'%y-%m-%d %H:00:00') ,status ";
+                break;
+        }
+        //sql = " select trone_order_id , DATE_FORMAT(firstDate,'%y-%m-%d %H:00:00') type ,status,count(0) count from daily_log.tbl_api_order_201702 "
+        //    + "	where trone_order_id in(" + paycode + " ) " + idwhere + "  group by trone_order_id , DATE_FORMAT(firstDate,'%y-%m-%d %H:00:00') ,status ";
+
+        sql = string.Format(sql, paycode, idwhere, date);
+
+
         using (var dt = dBase.GetDataTable(sql))
         {
             WriteData(dt);
@@ -96,12 +142,14 @@ public class getApiData : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.My
                 max = k;
         }
 
+
+
         if (min > 0 && max != int.MaxValue)
-            return string.Format(" id between {0} and {1}", maxIds[min], maxIds[max]);
+            return string.Format("api.id between {0} and {1}", maxIds[min], maxIds[max]);
         if (min > 0)
-            return "id >" + maxIds[min];
+            return "api.id >" + maxIds[min];
         if (max > 0)
-            return "id<" + maxIds[max];
+            return "api.id<" + maxIds[max];
 
         return string.Empty;
 
@@ -158,6 +206,8 @@ public class getApiData : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.My
         {
             foreach (DataRow r in dt.Rows)
             {
+                if (r.IsNull(0))
+                    continue;
                 int day = int.Parse((string)r[0]);
                 if (day == today)
                     continue;
