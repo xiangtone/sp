@@ -25,7 +25,10 @@ namespace n8wan.Public.Logical
                 return false;
             tbl_sp_trone_apiItem m = tbl_sp_trone_apiItem.GetRowByTroneId(dBase, Trone.id);
             if (m == null)
+            {
+                WriteTrackLog(string.Format("troneId:{0} 非API 通道", Trone.id));
                 return false;
+            }
             _apiMatchAPI = m;
             return true;
         }
@@ -78,7 +81,11 @@ namespace n8wan.Public.Logical
                 if (string.IsNullOrEmpty(mr.imsi) && !string.IsNullOrEmpty(_apiOrder.imsi))
                     mr.imsi = _apiOrder.imsi;
                 if (mr.province_id == 32 && (!string.IsNullOrEmpty(mr.mobile) || !string.IsNullOrEmpty(mr.imsi)))
-                    BaseSPCallback.FillAreaInfo(dBase, mr);
+                {
+                    var city = BaseSPCallback.FillAreaInfo(dBase, mr);
+                    mr.city_id = city.id;
+                    mr.province_id = city.province_id;
+                }
             }
             //if (!LoadCPAPI())
             //    return false;
@@ -86,17 +93,46 @@ namespace n8wan.Public.Logical
             var ret = base.DoPush();
             if (!ret)
                 return false;
-            if (mr == null)
-                return true;
+
             _apiOrder.IgnoreEquals = true;
 
+            var aStatus = apiStatus + (PushObject.syn_flag == 0 ? 10000 : 20000);
+
+            bool isRecord = false;
+            Shotgun.Database.IBaseDataPerformance db3 = null;
+            if (PushObject.trone_id == 3242)
+            {
+                Shotgun.Library.SimpleLogRecord.WriteLog("api_push",
+                        string.Format("linkid:{0} troneId:{1} status:{2} =>{3},api_order_id:{4},mr order_id:{5}",
+                        PushObject.GetValue(EPushField.LinkID), PushObject.trone_id, _apiOrder.status, aStatus, _apiOrder.id, mr == null ? 0 : mr.api_order_id));
+
+                db3 = (Shotgun.Database.IBaseDataPerformance)dBase;
+                isRecord = db3.EnableRecord;
+                db3.EnableRecord = true;
+
+            }
             //扣量和非扣量标识
-            _apiOrder.status = apiStatus + (mr.syn_flag == 0 ? 10000 : 20000);
+            _apiOrder.status = aStatus;// apiStatus + (PushObject.syn_flag == 0 ? 10000 : 20000);
             try
             {
                 _apiOrder.SaveToDatabase(dBase);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Shotgun.Library.SimpleLogRecord.WriteLog("api_push",
+                    string.Format("linkid{0} 更新api.status 出错：{1}", PushObject.GetValue(EPushField.LinkID), ex.ToString()));
+            }
+            finally
+            {
+                if (db3 != null)
+                {
+                    Shotgun.Library.SimpleLogRecord.WriteLog("api_push",
+                            string.Format("linkid:{0} sql:{1}",
+                                PushObject.GetValue(EPushField.LinkID), db3.PerformanceReport()));
+                    if (!isRecord)
+                        db3.EnableRecord = false;
+                }
+            }
             return true;
         }
 

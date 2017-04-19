@@ -6,7 +6,7 @@ using System.Text;
 namespace LightDataModel
 {
     /// <summary>
-    /// tbl_api_order_201603数据模型
+    /// tbl_api_order_201704数据模型
     /// </summary>
     public partial class tbl_api_orderItem : Shotgun.Model.Logical.DynamicDataItem
     {
@@ -46,6 +46,18 @@ namespace LightDataModel
 		/// </summary>
 			public const string mobile="mobile";
 /// <summary>
+		/// MAC
+		/// </summary>
+			public const string mac="mac";
+/// <summary>
+		/// 伪手机码
+		/// </summary>
+			public const string fake_mobile="fake_mobile";
+/// <summary>
+		/// 城市ID
+		/// </summary>
+			public const string city="city";
+/// <summary>
 		/// 区域码
 		/// </summary>
 			public const string lac="lac";
@@ -53,6 +65,14 @@ namespace LightDataModel
 		/// 基站编号
 		/// </summary>
 			public const string cid="cid";
+/// <summary>
+		/// ICCID
+		/// </summary>
+			public const string iccid="iccid";
+/// <summary>
+		/// 浏览器代理
+		/// </summary>
+			public const string user_agent="user_agent";
 /// <summary>
 		/// CP透参
 		/// </summary>
@@ -139,6 +159,18 @@ namespace LightDataModel
 		/// </summary>
         private string _mobile;
 /// <summary>
+		/// MAC
+		/// </summary>
+        private string _mac;
+/// <summary>
+		/// 伪手机码
+		/// </summary>
+        private string _fake_mobile;
+/// <summary>
+		/// 城市ID
+		/// </summary>
+        private int _city;
+/// <summary>
 		/// 区域码
 		/// </summary>
         private int _lac;
@@ -146,6 +178,14 @@ namespace LightDataModel
 		/// 基站编号
 		/// </summary>
         private int _cid;
+/// <summary>
+		/// ICCID
+		/// </summary>
+        private string _iccid;
+/// <summary>
+		/// 浏览器代理
+		/// </summary>
+        private string _user_agent;
 /// <summary>
 		/// CP透参
 		/// </summary>
@@ -324,6 +364,60 @@ namespace LightDataModel
 				this._mobile = value; }
 		}
 /// <summary>
+		/// MAC
+		/// </summary>
+        public string mac{
+            get { return this._mac; }
+            set { 
+				#if false && true
+				RemoveNullFlag(Fields.mac);
+				#elif !false
+			    if (value == null)
+                    SetNullFlag(Fields.mac);
+                else
+                    RemoveNullFlag(Fields.mac);
+				#endif
+
+				SetFieldHasUpdate(Fields.mac, this._mac, value); 
+				this._mac = value; }
+		}
+/// <summary>
+		/// 伪手机码
+		/// </summary>
+        public string fake_mobile{
+            get { return this._fake_mobile; }
+            set { 
+				#if false && true
+				RemoveNullFlag(Fields.fake_mobile);
+				#elif !false
+			    if (value == null)
+                    SetNullFlag(Fields.fake_mobile);
+                else
+                    RemoveNullFlag(Fields.fake_mobile);
+				#endif
+
+				SetFieldHasUpdate(Fields.fake_mobile, this._fake_mobile, value); 
+				this._fake_mobile = value; }
+		}
+/// <summary>
+		/// 城市ID
+		/// </summary>
+        public int city{
+            get { return this._city; }
+            set { 
+				#if true && true
+				RemoveNullFlag(Fields.city);
+				#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.city);
+                else
+                    RemoveNullFlag(Fields.city);
+				#endif
+
+				SetFieldHasUpdate(Fields.city, this._city, value); 
+				this._city = value; }
+		}
+/// <summary>
 		/// 区域码
 		/// </summary>
         public int lac{
@@ -358,6 +452,42 @@ namespace LightDataModel
 
 				SetFieldHasUpdate(Fields.cid, this._cid, value); 
 				this._cid = value; }
+		}
+/// <summary>
+		/// ICCID
+		/// </summary>
+        public string iccid{
+            get { return this._iccid; }
+            set { 
+				#if false && true
+				RemoveNullFlag(Fields.iccid);
+				#elif !false
+			    if (value == null)
+                    SetNullFlag(Fields.iccid);
+                else
+                    RemoveNullFlag(Fields.iccid);
+				#endif
+
+				SetFieldHasUpdate(Fields.iccid, this._iccid, value); 
+				this._iccid = value; }
+		}
+/// <summary>
+		/// 浏览器代理
+		/// </summary>
+        public string user_agent{
+            get { return this._user_agent; }
+            set { 
+				#if false && true
+				RemoveNullFlag(Fields.user_agent);
+				#elif !false
+			    if (value == null)
+                    SetNullFlag(Fields.user_agent);
+                else
+                    RemoveNullFlag(Fields.user_agent);
+				#endif
+
+				SetFieldHasUpdate(Fields.user_agent, this._user_agent, value); 
+				this._user_agent = value; }
 		}
 /// <summary>
 		/// CP透参
@@ -664,8 +794,13 @@ namespace LightDataModel
 ,"imsi"
 ,"imei"
 ,"mobile"
+,"mac"
+,"fake_mobile"
+,"city"
 ,"lac"
 ,"cid"
+,"iccid"
+,"user_agent"
 ,"ExtrData"
 ,"sdkversion"
 ,"packagename"
@@ -697,12 +832,27 @@ public bool IsimeiNull(){ return IsNull(Fields.imei);}
 public bool IsmobileNull(){ return IsNull(Fields.mobile);}
 
 		public void SetmobileNull(){ SetNull(Fields.mobile);}
+public bool IsmacNull(){ return IsNull(Fields.mac);}
+
+		public void SetmacNull(){ SetNull(Fields.mac);}
+public bool Isfake_mobileNull(){ return IsNull(Fields.fake_mobile);}
+
+		public void Setfake_mobileNull(){ SetNull(Fields.fake_mobile);}
+public bool IscityNull(){ return IsNull(Fields.city);}
+
+		public void SetcityNull(){ SetNull(Fields.city);}
 public bool IslacNull(){ return IsNull(Fields.lac);}
 
 		public void SetlacNull(){ SetNull(Fields.lac);}
 public bool IscidNull(){ return IsNull(Fields.cid);}
 
 		public void SetcidNull(){ SetNull(Fields.cid);}
+public bool IsiccidNull(){ return IsNull(Fields.iccid);}
+
+		public void SeticcidNull(){ SetNull(Fields.iccid);}
+public bool Isuser_agentNull(){ return IsNull(Fields.user_agent);}
+
+		public void Setuser_agentNull(){ SetNull(Fields.user_agent);}
 public bool IsExtrDataNull(){ return IsNull(Fields.ExtrData);}
 
 		public void SetExtrDataNull(){ SetNull(Fields.ExtrData);}

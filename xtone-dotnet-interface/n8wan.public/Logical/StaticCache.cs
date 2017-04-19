@@ -28,7 +28,7 @@ namespace n8wan.Public.Logical
         {
             SyncRoot = this;
         }
-        
+
         public static void ClearAllCache()
         {
             if (_allCache == null)
@@ -189,13 +189,14 @@ namespace n8wan.Public.Logical
 
         void LoadData(object s)
         {
-            int maxId = 0;
-            var cData = _data;//防止在其它地方被重置为null
+            //int maxId = 0;
+            //var cData = _data;//防止在其它地方被重置为null
 
-            if (cData == null)
-                _data = cData = new Dictionary<IDX, T>();
-            else if (cData.Count > 0)
-                maxId = cData.Values.Max(e => (int)e[_idField]);
+            //if (cData == null)
+            //    _data = cData = new Dictionary<IDX, T>();
+            //else if (cData.Count > 0)
+            //    maxId = cData.Values.Max(e => (int)e[_idField]);
+            var cData = new Dictionary<IDX, T>();
 
 #if DEBUG
             var stw = new System.Diagnostics.Stopwatch();
@@ -203,8 +204,8 @@ namespace n8wan.Public.Logical
 #endif
 
             var q = new Shotgun.Model.List.LightDataQueries<T>(_tabName, _idField, null, new T().Schema);
-            if (maxId > 0)
-                q.Filter.AndFilters.Add(_idField, maxId, Shotgun.Model.Filter.EM_DataFiler_Operator.More);
+            //if (maxId > 0)
+            //    q.Filter.AndFilters.Add(_idField, maxId, Shotgun.Model.Filter.EM_DataFiler_Operator.More);
             q.SortKey.Add(_idField, Shotgun.Model.Filter.EM_SortKeyWord.asc);
             q.PageSize = 1000;
             q.dBase = CreateDBase();
@@ -213,7 +214,7 @@ namespace n8wan.Public.Logical
             base.Add(this);
             try
             {
-                #if DEBUG
+#if DEBUG
                 Console.WriteLine("pointA :{0:#,###}", stw.Elapsed.TotalMilliseconds);
                 stw.Restart();
 #endif
@@ -240,12 +241,14 @@ namespace n8wan.Public.Logical
                     items.ForEach(e => cData[(IDX)e[_indexField]] = e);
 #if DEBUG
                     Console.WriteLine("pointD :{0:#,###}", stw.Elapsed.TotalMilliseconds);
-#DEBUG                
+#endif
                 }
-
-                _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
-                this._expired = DateTime.Now.Add(this.Expired);
-                this._satus = Static_Cache_Staus.AllLoad;
+                lock (SyncRoot)
+                {
+                    _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
+                    this._expired = DateTime.Now.Add(this.Expired);
+                    this._satus = Static_Cache_Staus.AllLoad;
+                }
 
 
             }
@@ -294,10 +297,10 @@ namespace n8wan.Public.Logical
                     //Shotgun.Library.ErrLogRecorder.
                 }
 #if !DEBUG
-                    catch (Exception ex)
-                    {
-                        WriteLog(ex.Message);
-                    }
+                catch (Exception ex)
+                {
+                    WriteLog(ex.Message);
+                }
 #endif
                 finally
                 {
@@ -347,8 +350,10 @@ namespace n8wan.Public.Logical
             var tData = CheckExpired();
             if (tData == null)
                 return null;
-
-            return tData.Values.FirstOrDefault(func);
+            lock (base.SyncRoot)
+            {
+                return tData.Values.FirstOrDefault(func);
+            }
 
 
         }
@@ -440,7 +445,7 @@ namespace n8wan.Public.Logical
 #if !DEBUG
             catch (Exception ex)
             {
-                WriteLog("过期回调出错："+ex.ToString());
+                WriteLog("过期回调出错：" + ex.ToString());
             }
 #endif
             finally { }

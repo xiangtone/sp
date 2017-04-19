@@ -39,6 +39,9 @@ namespace n8wan.Public.Logical
             else
                 pushUrl += "?";
             _nonApiDate = DateTime.Today;
+            _nonApiDay = new Dictionary<int, SpTroneCountInfo>();
+            _nonApiMonth = new Dictionary<int, SpTroneCountInfo>();
+
 
         }
         public static void UpdateDayLimit(Shotgun.Database.IBaseDataClass2 dBase, int spTroneId, int cpId, decimal amount)

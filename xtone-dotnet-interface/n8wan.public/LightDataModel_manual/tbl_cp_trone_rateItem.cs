@@ -25,6 +25,8 @@ namespace LightDataModel
             m = q.GetRowByFilters();
             if (m != null)
                 _cache.InsertItem(m);
+            else
+                _cache.InsertItem(m = new tbl_cp_trone_rateItem() { cp_id = cpId, sp_trone_id = spTroneId });
             return m;
 
         }

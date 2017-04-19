@@ -16,21 +16,20 @@ namespace n8wan.Public.Logical
         {
             if (Trone == null)
                 return false;
-            //var l = LightDataModel.tbl_trone_orderItem.GetQueries(dBase);
-            //l.Filter.AndFilters.Add(LightDataModel.tbl_trone_orderItem.Fields.trone_id, Trone.id);
-            //l.Filter.AndFilters.Add(LightDataModel.tbl_trone_orderItem.Fields.disable, 0);
-            //l.PageSize = int.MaxValue;
-            //_allCfg = l.GetDataList();
+
             _allCfg = tbl_trone_orderItem.QueryByTroneIdWithCache(dBase, Trone.id);
 
             if (_allCfg == null || _allCfg.Count() == 0)
             {
+                WriteTrackLog("LoadCPAPI._allCfg.count()=0 or null");
+                WriteTrackLog(tbl_trone_orderItem.GetCacheInfo());
                 var m = CreateDefaultTrone();
                 var t = new List<tbl_trone_orderItem>();
                 t.Add(m);
                 _allCfg = t;
             }
-            //base.SetConfig(_allCfg[0]);
+            else
+                WriteTrackLog("_allCfg.count=" + _allCfg.Count().ToString());
             return SetSuccess();
         }
 
@@ -66,13 +65,17 @@ namespace n8wan.Public.Logical
                 else
                 {
                     base.WriteLog(-3, string.Format("配置有冲突! cfgId:{0} linkid:{1}", m.id.ToString(), PushObject.GetValue(EPushField.LinkID)));
+                    WriteTrackLog(string.Format("配置有冲突! cfgId:{0} linkid:{1}", m.id.ToString(), PushObject.GetValue(EPushField.LinkID)));
                     continue;
                 }
                 //isRecord = true;
                 matchCount++;
             }
             if (matchCount > 1)
+            {
+                SetErrorMesage(string.Format("匹配到{0}个CP业务", matchCount));
                 return false;//匹配到多个渠道
+            }
 
             if (tOrder != null)
             {//匹配到一个渠道
@@ -82,11 +85,15 @@ namespace n8wan.Public.Logical
             }
 
             if (PushObject.cp_id == 34)
+            {
+                WriteTrackLog("CP_id=34???");
                 return true;
+            }
             if (defCfg == null)
                 defCfg = CreateDefaultTrone();
             base.SetConfig(defCfg);
             base.DoPush();
+            WriteTrackLog("未匹配CP");
             return true;
 
         }
@@ -98,7 +105,10 @@ namespace n8wan.Public.Logical
             {
                 var ret = tbl_trone_orderItem.GetCacheUnkowOrder(Trone.id);
                 if (ret != null)
+                {
+                    WriteTrackLog("CreateDefaultTrone，其它线程已经创建");
                     return ret;
+                }
 
                 ret = new tbl_trone_orderItem();
                 ret.cp_id = 34; //未知CP的ID
@@ -111,6 +121,7 @@ namespace n8wan.Public.Logical
                 ret.push_url_id = 47; //未知CP推送URL
                 ret.trone_id = Trone.id;
                 ret.SaveToDatabase(dBase);
+                WriteTrackLog("CreateDefaultTrone，创建成功");
                 return ret;
             }
         }
