@@ -5,6 +5,7 @@ import java.util.List;
 public class PayCodeExportModel
 {
 	private int spTroneId;
+	private int spId;
 	private String spTroneName;
 	private String upDataTypeName;
 	private String privinces;
@@ -67,5 +68,13 @@ public class PayCodeExportModel
 	public void setChildList(List<PayCodeExportChildModel> childList)
 	{
 		this.childList = childList;
+	}
+	public int getSpId()
+	{
+		return spId;
+	}
+	public void setSpId(int spId)
+	{
+		this.spId = spId;
 	}
 }

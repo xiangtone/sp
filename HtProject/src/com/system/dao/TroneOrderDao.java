@@ -435,7 +435,7 @@ public class TroneOrderDao
 	@SuppressWarnings("unchecked")
 	public List<PayCodeExportModel> loadPayCodeExportModelListByCpSpTroneId(int cpId,int spTroneId,int status)
 	{
-		String  sql = "SELECT d.id sp_trone_id,d.name sp_trone_name,e.name up_data_type_name,d.provinces,";
+		String  sql = "SELECT d.id sp_trone_id,d.name sp_trone_name,e.name up_data_type_name,d.provinces,d.sp_id,";
 		sql += " a.id pay_code,c.price,c.orders,c.trone_num,d.ramark remark";
 		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order a";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b ON a.cp_id = b.id ";
@@ -496,6 +496,7 @@ public class TroneOrderDao
 						model.setUpDataTypeName(StringUtil.getString(rs.getString("up_data_type_name"), ""));
 						model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 						model.setChildList(new ArrayList<PayCodeExportChildModel>());
+						model.setSpId(rs.getInt("sp_id"));
 						list.add(model);
 					}
 						

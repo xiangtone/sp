@@ -1546,13 +1546,15 @@ public class MrDao
 				break;
 				
 			case 18: //真的是CP业务
-				queryParams = "  CONCAT(d.short_name,'-',h.name,'-',e.short_name) ";
+				queryParams = "  CONCAT(1000 + d.id,'-',h.name,'-',e.short_name) ";
 				joinId = " b.cp_jiesuanlv_id ";
 				break;
 				
 			default:
 					break;
 		}
+		
+		//(tbl_trone_order b )(tbl_trone c )(tbl_sp d )(tbl_cp e )(tbl_province f )(tbl_city g )(tbl_sp_trone h )(tbl_user j )(tbl_user k )(tbl_product_2 l )(tbl_product_1 m )(tbl_operator n )
 		
 		String[] result = {queryParams,joinId};
 		return result;

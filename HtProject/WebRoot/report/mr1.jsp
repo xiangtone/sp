@@ -90,14 +90,14 @@
 
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
-	List<TroneModel> troneList = new TroneServer().loadTroneList();
+	List<TroneModel> troneList = new ArrayList<TroneModel>(); //new TroneServer().loadTroneList();
 	//List<TroneOrderModel> troneOrderList = new TroneOrderServer().loadTroneOrderList();
 
 	List<TroneOrderModel> troneOrderList = new ArrayList();
 
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<CityModel> cityList = new CityServer().loadCityList();
-	List<SpTroneModel> spTroneList = new ArrayList<SpTroneModel>(); //new SpTroneServer().loadSpTroneList();
+	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
 
 	List<MrReportModel> list = (List<MrReportModel>) map.get("list");
 	

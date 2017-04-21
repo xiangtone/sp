@@ -142,12 +142,12 @@
 						<td>SP全称</td>
 						<td>SP简称</td>
 						<td>SP业务名称</td>
-						<td>SP数据量</td>
+						<!-- <td>SP数据量</td>-->
 						<td>SP金额</td>
 						<td>SP结算比例</td>
 						<td>CP全称</td>
 						<td>CP简称</td>
-						<td>CP数据量</td>
+						<!-- <td>CP数据量</td> -->
 						<td>CP金额</td>
 						<td>CP结算比例</td>
 					</tr>
@@ -162,9 +162,8 @@
 							out.println("<td rowspan=\"" + spTroneModel.spTroneRowSpan + "\">" + spTroneModel.spTroneName + "</td>");
 							for(FinancialSpCpDataShowModel.SpTroneModel.CpModelData cpModelData : spTroneModel.list)
 							{
-								out.println("<td>" + cpModelData.dataRows + "</td><td>" + cpModelData.amount + "</td><td>"+ 
-										spTroneModel.spJieSuanLv +"</td><td>" + cpModelData.cpFullName + "</td><td>" + cpModelData.cpShortName + "</td><td>"+
-										cpModelData.showDataRows+"</td><td>"+ cpModelData.showAmount +"</td><td>" + cpModelData.cpJieSuanLv + "</td></tr>");
+								out.println("<td>" + cpModelData.amount + "</td><td>"+ 
+										spTroneModel.spJieSuanLv +"</td><td>" + cpModelData.cpFullName + "</td><td>" + cpModelData.cpShortName + "</td><td>"+ cpModelData.showAmount +"</td><td>" + cpModelData.cpJieSuanLv + "</td></tr>");
 							}
 						}
 					}

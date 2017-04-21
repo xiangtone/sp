@@ -238,7 +238,7 @@
 				<tr <%= model.getDisable() == 1 ? stopStyle : "" %>>
 					<td><%= rowNum++ %></td>
 					<td><%= model.getId() + 100000 %></td>
-					<td><%= model.getSpTroneName() %></td>
+					<td><%= (model.getSpId() + 1000) + "-" + model.getSpTroneName() %></td>
 					<td><%= model.getPrice() %></td>
 					<td><%= model.getTroneOrder() %></td>
 					<td><%= model.getTroneNum() %></td>
