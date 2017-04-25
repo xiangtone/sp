@@ -34,6 +34,7 @@
 	Map<String,String> params = new HashMap<String,String>();
 	
 	params.put("keyword", keyWord);
+	params.put("daoliang", daoLiang + "");
 	
 	String pageData = PageUtil.initPageQuery("sptrone.jsp", params, rowCount, pageIndex);
 	
