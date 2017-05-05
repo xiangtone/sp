@@ -15,7 +15,7 @@
 <%
 	int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
 
-	String[] operaNames = {"联通","电信","移动"};
+	String[] operaNames = {"联通","电信","移动","虚拟","未知"};
 
 	if(cpId>0)
 	{

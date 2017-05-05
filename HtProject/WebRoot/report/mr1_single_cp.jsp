@@ -83,7 +83,7 @@
 
 	List<ProvinceModel> provinceList = new ProvinceServer().loadProvince();
 	List<CityModel> cityList = new CityServer().loadCityList();
-	//List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
+	List<SpTroneModel> spTroneList = new SpTroneServer().loadSpTroneList();
 
 	List<MrReportModel> list = (List<MrReportModel>) map.get("list");
 
@@ -209,6 +209,12 @@ function arrayReverse(arr) {
 	function onCpDataSelect(joData)
 	{
 		$("#sel_cp").val(joData.id);
+		
+		if(joData.id==-1)
+			$("#input_cp").val("");
+		else
+			$("#input_cp").val(joData.text);
+		
 		troneOrderChange();
 	}
 
@@ -248,6 +254,26 @@ function arrayReverse(arr) {
 	<%for (TroneOrderModel troneOrder : troneOrderList) {%>
 	troneOrderList.push(new joTroneOrder(<%=troneOrder.getId()%>,<%=troneOrder.getCpId()%>,'<%=troneOrder.getCpShortName() + "-" + troneOrder.getOrderTroneName()%>'));<%}%>
 	
+	var spTroneArray = new Array();
+	<%
+	for(SpTroneModel spTroneModel : spTroneList)
+	{
+		%>
+	spTroneArray.push(new joBaseObject(<%= spTroneModel.getId() %>,<%=spTroneModel.getSpId() %>,'<%= spTroneModel.getSpTroneName() %>'));	
+		<%
+	}
+	%>
+	
+	var npSpTroneArray = new Array();
+	
+	<%
+	for(SpTroneModel spTroneModel : spTroneList)
+	{
+		%>
+		npSpTroneArray.push(new joSelOption(<%= spTroneModel.getId() %>,<%=spTroneModel.getSpId() %>,'<%= spTroneModel.getSpTroneName() %>'));	
+		<%
+	}
+	%>
 	
 	$(function()
 	{
@@ -305,7 +331,9 @@ function arrayReverse(arr) {
 		}
 	}
 
-	function troneOrderChange() {
+	function troneOrderChange() 
+	{
+		/*
 		var cpId = $("#sel_cp").val();
 		$("#sel_trone_order").empty();
 		$("#sel_trone_order").append("<option value='-1'>全部</option>");
@@ -317,6 +345,32 @@ function arrayReverse(arr) {
 								+ "</option>");
 			}
 		}
+		*/
+		var cpId = $("#sel_cp").val();
+		getAjaxValue("../ajaction.jsp?type=5&cp_id=" + cpId,cpSpTroneChange);
+	}
+	
+	function cpSpTroneChange(data)
+	{
+		if(isNullOrEmpty(data))
+			return;
+		
+		var spTroneList = data.split(",");
+		
+		$("#sel_sp_trone").empty(); 
+		$("#sel_sp_trone").append("<option value='-1'>全部</option>");
+		for(var i=0; i<spTroneList.length; i++)
+		{
+			for(var j=0; j<spTroneArray.length; j++)
+			{
+				if(spTroneArray[j].id==spTroneList[i])
+				{
+					$("#sel_sp_trone").append("<option value='" + spTroneArray[j].id + "'>" + spTroneArray[j].name + "</option>");
+				}
+			}
+		}
+		<% if(spTroneId>0){ %> $("#sel_sp_trone").val(<%= spTroneId %>); <% } %>
+		
 	}
 
 	function provinceChange() {
@@ -371,27 +425,24 @@ function arrayReverse(arr) {
 					<br />
 					<br />
 					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP"
-							style="width: 110px;"
-							onclick="namePicker(this,cpList,onCpDataSelect)">
+					<dd class="dd03_me">
+						<input  type="text" id="input_cp" onclick="namePicker(this,cpList,onCpDataSelect)" style="width: 100px;" readonly="readonly" >
+						<select name="cp_id" id="sel_cp" title="选择CP" style="display: none;">
 							<option value="-1">全部</option>
 							<%
-								for (CpModel cp : cpList) {
-							%>
-							<option value="<%=cp.getId()%>"><%=cp.getShortName()%></option>
-							<%
-								}
+							for(CpModel cp : cpList)
+							{
+								%>
+							<option value="<%= cp.getId() %>"><%= cp.getShortName() %></option>	
+								<%
+							}
 							%>
 						</select>
 					</dd>
-					<!--  
-					<dd>
-						<dd class="dd01_me">业务</dd>
+					<dd class="dd01_me">CP业务</dd>
 						<dd class="dd04_me">
-						<select name="trone_order" id="sel_trone_order" title="请选择业务" style="width: 110px;"></select>
+						<select name="sp_trone" id="sel_sp_trone" ></select>
 					</dd>
-					-->
 					<!-- 暂时先隐藏 -->
 					<!--  
 					<dd>
@@ -412,6 +463,7 @@ function arrayReverse(arr) {
 						</select>
 					</dd>
 					-->
+					<!--
 					<dd class="dd01_me">运营商</dd>
 					<dd class="dd04_me">
 						<select name="operator" id="sel_operator" style="width: 100px;">
@@ -422,6 +474,7 @@ function arrayReverse(arr) {
 							<option value="5">第三方支付</option>
 						</select>
 					</dd>
+					-->
 					<dd class="dd01_me">CP商务</dd>
 					<dd class="dd04_me">
 						<select name="cp_commerce_user" id="sel_cp_commerce_user"

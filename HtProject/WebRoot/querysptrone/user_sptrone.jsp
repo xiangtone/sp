@@ -21,6 +21,23 @@
 	pageEncoding="UTF-8"%>
 <%
 
+	boolean isUpdateStatus = StringUtil.getInteger(request.getParameter("udpate_status"), -1) == 1 ? true : false;
+	
+	if(isUpdateStatus)
+	{
+		int id = StringUtil.getInteger(request.getParameter("id"), -1);
+		int status = StringUtil.getInteger(request.getParameter("status"), -1);
+		
+		if(id<0)
+			return;
+		
+		new SpTroneServer().updateSpTroneStatus(id, status);
+		
+		out.print(id + "," + status + ",OK");
+		
+		return;
+	}
+
 	boolean isUpdatePro = StringUtil.getInteger(request.getParameter("update_pro"), -1) == 1 ? true : false;
 
 	if(isUpdatePro)
@@ -360,6 +377,35 @@ function importProvince()
 		});
 	}
 	
+	//ID,status,OK 第一个是ID 第二个执行后的状态 第三个是状态 OK是成功其它为否
+	function onStatusChangeSuc(data)
+	{
+		console.log("data:" + data);
+		var result = data.split(",");
+		
+		if(result.length==3)
+		{
+			if(result[2]=="OK")
+			{
+				document.getElementById("hid_status_" + result[0]).value = result[1];
+				$("#td_status_" + result[0]).html(result[1]==1 ? "开启":"关闭");
+				$("#tr_row_" + result[0]).attr("class",(result[1]==1 ? "":"StopStyle"));
+			}
+		}
+	}
+	
+	function changeSpTroneStatus(spTroneId)
+	{
+		var status = document.getElementById("hid_status_" + spTroneId).value;
+		
+		if(status==0)
+			status=1
+		else
+			status=0;
+		
+		getAjaxValue("user_sptrone.jsp?udpate_status=1&id=" + spTroneId + "&status=" + status,onStatusChangeSuc);
+	}
+	
 </script>
 
 
@@ -445,9 +491,10 @@ function importProvince()
 					for (SpTroneModel model : list)
 					{
 				%>
-				<tr <%= model.getStatus()==0 ? stopStyle : "" %>>
+				<tr <%= model.getStatus()==0 ? stopStyle : "" %> id="tr_row_<%= model.getId() %>">
 					<td><%=(pageIndex - 1) * Constant.PAGE_SIZE + rowNum++%>
 						<input type="hidden" id="hid_<%= model.getId() %>" value="<%= model.getJieSuanLv() %>" />
+						<input type="hidden" id="hid_status_<%= model.getId() %>" value="<%= model.getStatus() %>" />
 					</td>
 					<td><%=model.getSpName()%></td>
 					<td><%=model.getServoceCodeName() %></td>
@@ -461,7 +508,7 @@ function importProvince()
 						<input type="hidden" id="hidden_pro_id_<%= model.getId() %>" value="<%= model.getProvinces() %>" />
 						<span id="span_pro_id_<%= model.getId() %>"><%= model.getProvinceList() %></span> 
 						</td>
-					<td><%= model.getStatus()==1 ? "开启" : "关闭" %></td>
+					<td id="td_status_<%= model.getId() %>" ondblclick="changeSpTroneStatus(<%= model.getId() %>)" ><%= model.getStatus()==1 ? "开启" : "关闭" %></td>
 				</tr>
 				<%
 					}

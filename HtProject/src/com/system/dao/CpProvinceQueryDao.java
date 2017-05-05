@@ -23,7 +23,7 @@ public class CpProvinceQueryDao
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 d ON c.product_id = d.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 e ON d.product_1_id = e.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator f ON e.operator_id = f.id";
-		sql += " WHERE c.status = 1 AND b.status = 1 AND a.disable = 0 AND a.cp_id = " + cpId;
+		sql += " WHERE c.status = 1 AND b.status = 1 AND a.disable = 0 AND f.id >0 AND a.cp_id = " + cpId;
 		sql += " GROUP BY f.id,b.price,c.id ORDER BY f.id desc,b.price ASC";
 		
 		return (Map<Integer,Map<Float,List<Integer>>>)new JdbcControl().query(sql, new QueryCallBack()

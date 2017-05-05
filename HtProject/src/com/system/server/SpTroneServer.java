@@ -142,4 +142,9 @@ public class SpTroneServer
 		new SpTroneDao().updateSpTroneProvince(id, pros);
 	}
 	
+	public void updateSpTroneStatus(int id,int status)
+	{
+		new SpTroneDao().updateSpTroneStatus(id, status);
+	}
+	
 }	

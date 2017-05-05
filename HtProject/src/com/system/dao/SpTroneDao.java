@@ -746,4 +746,10 @@ public class SpTroneDao
 		new JdbcControl().execute(sql);
 	}
 	
+	public void updateSpTroneStatus(int id,int status)
+	{
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone SET status = '" + status + "' WHERE id = " + id;
+		new JdbcControl().execute(sql);
+	}
+	
 }

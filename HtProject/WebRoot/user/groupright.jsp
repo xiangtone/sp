@@ -118,9 +118,9 @@
 									{
 										rowCount++;
 					%>
-										<label><input type="checkbox" name="menu2id" id="menuid_<%= menu2Model.getId() %>" value="<%= menu2Model.getId() %>"  /><%= menu2Model.getName() %></label>
+										<span style="display:inline-block;width: 120px;text-align: left;"><label><input type="checkbox" name="menu2id" id="menuid_<%= menu2Model.getId() %>" value="<%= menu2Model.getId() %>"  /><%= menu2Model.getName() %></label></span>
 					<%
-										if(rowCount%10==0)
+										if(rowCount%7==0)
 											out.print("</dd><dd class=\"dd00\"></dd><dd class=\"ddtxt03\"></dd><dd style=\"background: transparent;\" class=\"dd01_me\">&nbsp;&nbsp;</dd><dd class=\"ddtxt02\">");
 									}
 								}
