@@ -1,6 +1,7 @@
 package com.system.server;
 
 import com.system.cache.BlackConfigCache;
+import com.system.cache.CacheConfigMgr;
 import com.system.cache.CpDataCache;
 import com.system.cache.DayMonthLimitCache;
 import com.system.cache.LocateCache;
@@ -115,12 +116,15 @@ public class RequestServerV1
 					
 					boolean isLocateMatch = false;
 					
-					for(String province : strProvinces)
+					if(provinceModel!=null)
 					{
-						if(Integer.valueOf(province)==provinceModel.getId())
+						for(String province : strProvinces)
 						{
-							isLocateMatch = true;
-							break;
+							if(Integer.valueOf(province)==provinceModel.getId())
+							{
+								isLocateMatch = true;
+								break;
+							}
 						}
 					}
 					
@@ -465,6 +469,10 @@ public class RequestServerV1
 	
 	public static void main(String[] args)
 	{
-		
+		CacheConfigMgr.init();
+		ApiOrderModel model = new ApiOrderModel();
+		model.setTroneOrderId(2551);
+		model.setMobile("17331610839");
+		new RequestServerV1().handlCpQuery(model);
 	}
 }

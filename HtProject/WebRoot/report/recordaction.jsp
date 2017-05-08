@@ -102,6 +102,7 @@
 		
 		out.print(false);
 	}
+	//检查是否有
 	//SJ数据增加前检查一下是否存在数据，分两步检查，一是检查 daily_log.tbl_sj_ori_data 同一个 trone_order_id 在同一个月份有没有数据，
 	//第二步是检查SUMMER表里面有没有指定的数据
 	else if(type==5)
@@ -145,8 +146,11 @@
 		int cpDataRows = StringUtil.getInteger(request.getParameter("show_data_rows"), -1);
 		float spAmount = StringUtil.getFloat(request.getParameter("amount"), 0);
 		float cpAmount =  StringUtil.getFloat(request.getParameter("show_amount"), 0);
+		float price = StringUtil.getFloat(request.getParameter("price"), 0);
+		int saveLocate = StringUtil.getInteger(request.getParameter("save_locate"), 1);
 		
-		if(year<=0 || month<= 0 || spDataRows<=0 || cpDataRows<=0 || spAmount<=0 || cpAmount<0)
+		
+		if(year<=0 || month<= 0 || spDataRows<=0 || cpDataRows<=0 || spAmount<=0 || cpAmount<0 || price<=0 || troneId<=0 || troneOrderId<=0)
 		{
 			out.print(false);
 			return;
@@ -163,14 +167,40 @@
 		recordModel.setCpDataRows(cpDataRows);
 		recordModel.setSpAmount(spAmount);
 		recordModel.setCpAmount(cpAmount);
+		recordModel.setSaveLocate(saveLocate);
+		recordModel.setPrice(price);
+		recordModel.setTroneId(troneId);
 		
+		SjMrSummerRecordServer server = new SjMrSummerRecordServer(); 
+		server.addSjMrSummerRecord(recordModel);
 		
-		
-		
-		
-		
-		
-		
-		
+		//这里还要执行数据分析
+		server.addSjMrSummer(recordModel);
+		out.print(true);
 	}
+	//删除指定的大数据
+	else if(type==7)
+	{
+		int delId = StringUtil.getInteger(request.getParameter("delid"), -1);
+		
+		
+		if(delId<=0)
+		{
+			response.sendRedirect("mrsjrecord.jsp?query=" + StringUtil.getString(request.getParameter("query"), ""));
+			return;
+		}
+		
+		SjMrSummerRecordServer server = new SjMrSummerRecordServer();
+		
+		SjMrSummerRecordModel recordModel = server.getSjMrSummerRecord(delId);
+		
+		if(recordModel!=null)
+		{
+			server.delSjMrSummerRecord(recordModel.getId());
+			server.delSjMrSummer(recordModel);
+		}
+		
+		response.sendRedirect("mrsjrecord.jsp?query=" + StringUtil.getString(request.getParameter("query"), ""));
+	}
+	
 %>

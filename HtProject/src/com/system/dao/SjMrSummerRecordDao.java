@@ -44,10 +44,9 @@ public class SjMrSummerRecordDao
 			sql += " and a.save_locate =" + params.getSaveLocate();
 		}
 		
-		
 		sql += " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + "," + Constant.PAGE_SIZE;
 		
-		String queryReplaceString = "a.id,e.id sp_id,e.full_name sp_name,f.id cp_id,f.full_name cp_name,d.id sp_trone_id,d.name sp_trone_name,c.price,a.year,a.month,a.sp_data_rows,a.sp_amount,a.cp_data_rows,a.cp_amount,a.save_locate";
+		String queryReplaceString = "a.id,e.id sp_id,b.id trone_order_id,c.id trone_id,e.full_name sp_name,f.id cp_id,f.full_name cp_name,d.id sp_trone_id,d.name sp_trone_name,c.price,a.year,a.month,a.sp_data_rows,a.sp_amount,a.cp_data_rows,a.cp_amount,a.save_locate";
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -91,6 +90,8 @@ public class SjMrSummerRecordDao
 					model.setCpDataRows(rs.getInt("cp_data_rows"));
 					model.setCpAmount(rs.getFloat("cp_amount"));
 					model.setSaveLocate(rs.getInt("save_locate"));
+					model.setTroneOrderId(rs.getInt("trone_order_id"));
+					model.setTroneId(rs.getInt("trone_id"));
 					
 					list.add(model);
 				}
@@ -121,7 +122,7 @@ public class SjMrSummerRecordDao
 	
 	public SjMrSummerRecordModel getSjMrSummerRecord(int id)
 	{
-		String sql = " SELECT a.id,e.id sp_id,e.full_name sp_name,f.id cp_id,f.full_name cp_name,d.id sp_trone_id,d.name sp_trone_name,c.price,a.year,a.month,a.sp_data_rows,a.sp_amount,a.cp_data_rows,a.cp_amount,a.save_locate ";
+		String sql = " SELECT a.id,e.id sp_id,b.id trone_order_id,c.id trone_id,e.full_name sp_name,f.id cp_id,f.full_name cp_name,d.id sp_trone_id,d.name sp_trone_name,c.price,a.year,a.month,a.sp_data_rows,a.sp_amount,a.cp_data_rows,a.cp_amount,a.save_locate ";
 		
 		sql += " FROM " + com.system.constant.Constant.DB_DAILY_LOG + ".tbl_sj_ori_data a";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.trone_order_id = b.id";
@@ -129,7 +130,7 @@ public class SjMrSummerRecordDao
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone d ON c.sp_trone_id = d.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp e ON d.sp_id = e.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp f ON b.cp_id = f.id";
-		sql += " WHERE id = " + id;
+		sql += " WHERE a.id = " + id;
 		
 		return (SjMrSummerRecordModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -156,6 +157,8 @@ public class SjMrSummerRecordDao
 					model.setCpDataRows(rs.getInt("cp_data_rows"));
 					model.setCpAmount(rs.getFloat("cp_amount"));
 					model.setSaveLocate(rs.getInt("save_locate"));
+					model.setTroneOrderId(rs.getInt("trone_order_id"));
+					model.setTroneId(rs.getInt("trone_id"));
 					
 					return model;
 				}
@@ -234,6 +237,30 @@ public class SjMrSummerRecordDao
 			return true;
 		
 		return false;
+	}
+	
+	public boolean delMrSummerData(String startDate,String endDate,int troneOrderId)
+	{
+		String sql1 = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_LOG + ".tbl_mr_summer WHERE trone_order_id = " + troneOrderId + " AND mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		String sql2 = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_LOG + ".tbl_cp_mr_summer WHERE trone_order_id = " + troneOrderId + " AND mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		
+		JdbcControl control = new JdbcControl();
+		control.execute(sql1);
+		control.execute(sql2);
+		
+		return true;
+	}
+	
+	public boolean delSjMrSummerData(String startDate,String endDate,int troneOrderId)
+	{
+		String sql1 = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_LOG + ".tbl_mr_summer_2 WHERE trone_order_id = " + troneOrderId + " AND mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		String sql2 = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_LOG + ".tbl_cp_mr_summer_2 WHERE trone_order_id = " + troneOrderId + " AND mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "'";
+		
+		JdbcControl control = new JdbcControl();
+		control.execute(sql1);
+		control.execute(sql2);
+		
+		return true;
 	}
 	
 }

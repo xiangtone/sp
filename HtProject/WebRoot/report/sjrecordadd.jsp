@@ -53,6 +53,7 @@
 	var showDataRows = 0;
 	var amount = 0;
 	var showAmount = 0;
+	var saveLocate = 1;
 	
 	function spChange()
 	{
@@ -200,8 +201,8 @@
 	
 	function submitRecordData()
 	{
-		var params = "sp_id=" + spId + "&cp_id=" + cpId + "&trone_id=" + troneId + "&trone_order_id=" + troneOrderId 
-			+ "&data_rows=" + dataRows + "&show_data_rows=" + showDataRows + "&amount=" + amount + "&show_amount=" + showAmount;
+		var params = "sp_id=" + spId + "&cp_id=" + cpId + "&trone_id=" + troneId + "&trone_order_id=" + troneOrderId + "&price=" + price + "&year=" + year + "&month=" + month
+			+ "&data_rows=" + dataRows + "&show_data_rows=" + showDataRows + "&amount=" + amount + "&show_amount=" + showAmount + "&save_locate=" + saveLocate;
 		getAjaxValue("recordaction.jsp?type=6&" + params,onFinishRecordData);
 	}
 	
@@ -261,6 +262,7 @@
 		showAmount = $("#input_show_amount").val();
 		year = $("#sel_year").val();
 		month = $("#sel_month").val();
+		saveLocate = $('input:radio[name="save_locate"]:checked').val();
 		
 		var intDataRows = parseInt(dataRows);
 		
@@ -421,11 +423,11 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">存储位置</dd>
 					<dd class="dd03_me" style="background: none">
-						<input type="radio" name="trone_type" style="width: 35px;float:left" value="0" checked="checked">
+						<input type="radio" name="save_locate" style="width: 35px;float:left" value="1" checked="checked">
 						<label style="font-size: 14px;float:left">大数据</label>
-						<input type="radio" name="trone_type" style="width: 35px;float:left" value="1"  >
+						<input type="radio" name="save_locate" style="width: 35px;float:left" value="2"  >
 						<label style="font-size: 14px;float:left">商务</label>
-						<input type="radio" name="trone_type" style="width: 35px;float:left" value="2" >
+						<input type="radio" name="save_locate" style="width: 35px;float:left" value="3" >
 						<label style="font-size: 14px;float:left">两者</label>
 					</dd>
 

@@ -44,7 +44,6 @@
 	model.setCommerceUserId(commerceUserId);
 	model.setStatus(status);
 	
-	
 	if(id>0)
 	{
 		new CpServer().updateCp(model);

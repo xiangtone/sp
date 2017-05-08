@@ -161,11 +161,11 @@
 		}
 	}
 	
-	function delConfirm(mrSummerId,cpMrSummerId)
+	function delRecordData(delId)
 	{
-		if(confirm("确定删除吗？"))
+		if(confirm("确定删除这一条数据吗？"))
 		{
-			window.location.href="recordaction.jsp?type=2&mrsummerid="+ mrSummerId +"&cpmrsummerid=" + cpMrSummerId + "&<%= query %>";
+			window.location.href="recordaction.jsp?type=7&delid="+ delId + "&query=<%= query %>";
 		}
 	}
 	
@@ -217,7 +217,7 @@
 			<thead>
 				<tr>
 					<td>序号</td>
-					<td>业务(SP-业务-价格-CP)</td>
+					<td>业务(SP-业务-价格-CP-TroneOrderId)</td>
 					<td>月份</td>
 					<td>SP数据条数</td>
 					<td>SP金额</td>
@@ -235,7 +235,7 @@
 						%>
 				<tr>
 					<td><%= index++ %></td>
-					<td><%= model.getSpName() + "-" + model.getSpTroneName() + "-" + model.getPrice() + "-" + model.getCpName() %></td>
+					<td><%= model.getSpName() + "-" + model.getSpTroneName() + "-" + model.getPrice() + "-" + model.getCpName() + "-" + model.getTroneOrderId() %></td>
 					<td><%= model.getYear() + "-" + String.format("%02d",model.getMonth()) %></td>
 					<td><%= model.getSpDataRows()  %></td>
 					<td><%= model.getSpAmount() %></td>
@@ -243,8 +243,7 @@
 					<td><%= model.getCpAmount() %></td>
 					<td><%= saveLocate[model.getSaveLocate()] %></td>
 					<td>
-						<a href="#" >修改</a>&nbsp;&nbsp;
-						<a href="#" onclick="#">删除</a>
+						<a href="#" onclick="delRecordData(<%= model.getId() %>)">删除</a>
 					</td>
 				</tr>
 						<%

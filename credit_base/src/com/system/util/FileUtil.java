@@ -10,6 +10,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.system.cache.CacheConfigMgr;
+
 public class FileUtil
 {
 	public static ArrayList<String> readFileToList(String filePath,String chartSet)
@@ -116,22 +118,6 @@ public class FileUtil
 	
 	public static void main(String[] args)
 	{
-		List<String> list = new ArrayList<String>();
-		
-		list.add("你好吗，顶你个肺");
-		
-		list.add("数据报表->浩天数据->当日数据");
-		list.add("//这里采用GBK编码，而不用环境编码格式，因为环境默认编码不等于操作系统编码");
-		list.add("StringBuffer sb = new StringBuffer(); ");
-		list.add("while((length = isr.read(buffer, 0, 1024) ) != -1)");
-		list.add("通过路径获取文件的内容，这个方法因为用到了字符串作为载体，为了正确读取文件（不乱码");
-		list.add("将要写入到文件中的字节数据");
-		
-		//System.out.println(saveDataToFile(list, "F:/Test/", "tbl_mr_2015121417.txt"));
-		
-		for(String s : readFileToList("F:/Test/tbl_mr_2015121417.txt", "UTF-8"))
-		{
-			System.out.println(s);
-		}
+		CacheConfigMgr.init();
 	}
 }
