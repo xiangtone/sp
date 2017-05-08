@@ -178,6 +178,7 @@
 	
 	function startSubmitData()
 	{
+		//提交数据之前先检查是否有数据存在，如果有，不好意思，不干了
 		getAjaxValue("recordaction.jsp?type=5&year=" + year + "&month=" + month + "&trone_order_id=" + troneOrderId,onCheckExistDataResult);
 	}
 	
@@ -200,9 +201,8 @@
 	function submitRecordData()
 	{
 		var params = "sp_id=" + spId + "&cp_id=" + cpId + "&trone_id=" + troneId + "&trone_order_id=" + troneOrderId 
-			+ "&fee_date=" + feeDate + "&data_rows=" + dataRows + "&show_data_rows=" + showDataRows 
-			+ "&amount=" + amount + "&show_amount=" + showAmount;
-		getAjaxValue("recordaction.jsp?type=3&" + params,onFinishRecordData);
+			+ "&data_rows=" + dataRows + "&show_data_rows=" + showDataRows + "&amount=" + amount + "&show_amount=" + showAmount;
+		getAjaxValue("recordaction.jsp?type=6&" + params,onFinishRecordData);
 	}
 	
 	function onFinishRecordData(data)

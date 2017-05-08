@@ -1,3 +1,4 @@
+<%@page import="com.system.model.SjMrSummerRecordModel"%>
 <%@page import="com.system.server.SjMrSummerRecordServer"%>
 <%@page import="com.system.server.analy.MrSummerRecordServer"%>
 <%@page import="com.system.model.analy.MrSummerRecordModel"%>
@@ -130,8 +131,46 @@
 		
 		out.print(false);
 	}
+	//ADD SJ SP DATA RECORD
 	else if(type==6)
 	{
+		int spId = StringUtil.getInteger(request.getParameter("sp_id"), -1);
+		int cpId = StringUtil.getInteger(request.getParameter("cp_id"), -1);
+		int spTroneId = StringUtil.getInteger(request.getParameter("sp_trone_id"), -1);
+		int troneId = StringUtil.getInteger(request.getParameter("trone_id"), -1);
+		int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order_id"), -1);
+		int year = StringUtil.getInteger(request.getParameter("year"), 0);
+		int month = StringUtil.getInteger(request.getParameter("month"), 0);
+		int spDataRows = StringUtil.getInteger(request.getParameter("data_rows"), 0);
+		int cpDataRows = StringUtil.getInteger(request.getParameter("show_data_rows"), -1);
+		float spAmount = StringUtil.getFloat(request.getParameter("amount"), 0);
+		float cpAmount =  StringUtil.getFloat(request.getParameter("show_amount"), 0);
+		
+		if(year<=0 || month<= 0 || spDataRows<=0 || cpDataRows<=0 || spAmount<=0 || cpAmount<0)
+		{
+			out.print(false);
+			return;
+		}
+		
+		SjMrSummerRecordModel recordModel = new SjMrSummerRecordModel();
+		recordModel.setSpTroneId(spTroneId);
+		recordModel.setSpId(spId);
+		recordModel.setCpId(cpId);
+		recordModel.setTroneOrderId(troneOrderId);
+		recordModel.setYear(year);
+		recordModel.setMonth(month);
+		recordModel.setSpDataRows(spDataRows);
+		recordModel.setCpDataRows(cpDataRows);
+		recordModel.setSpAmount(spAmount);
+		recordModel.setCpAmount(cpAmount);
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 %>
