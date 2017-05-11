@@ -111,7 +111,6 @@
 	{
 		var spTroneId =  $("#sel_sp_trone").val();
 		getAjaxValue("../ajaction.jsp?type=3&sp_trone_id=" + spTroneId,onSpTroneChange);
-		//sss
 	}
 	
 	function onSpTroneChange(data)
@@ -159,22 +158,54 @@
 		//CP业务的变化
 		$("#sel_trone_order").change(troneOrderChange);
 		//输入的数据条数发生变化
-		$("#input_data_rows").change(dataRowChange);
+		$("#input_amount").change(dataRowChange);
 		//CP数据条数发生变化
-		$("#input_show_data_rows").change(showDataRowChange);
+		$("#input_show_amount").change(showDataRowChange);
 	});
 	
 	function dataRowChange()
 	{
-		var dataRows = $("#input_data_rows").val();
-		$("#input_show_data_rows").val(Math.floor(dataRows*(100-holdPercent)/100));
-		$("#input_amount").val(dataRows*price);
-		$("#input_show_amount").val($("#input_show_data_rows").val()*price);
+		$("#lab_sp_amount_msg").css("display","none");
+		
+		var spAmount = $("#input_amount").val();
+		
+		if(spAmount%price!=0)
+		{
+			$("#input_data_rows").val(0);
+			$("#input_show_data_rows").val(0);
+			$("#input_show_amount").val(0);
+			$("#lab_sp_amount_msg").css("display","block");
+			return;
+		}
+		
+		var spDataRows = spAmount/price;
+		var cpAmount = Math.floor(spAmount*(100-holdPercent)/100);
+		var cpDataRows = cpAmount/price;
+		
+		$("#input_data_rows").val(spDataRows);
+		$("#input_show_data_rows").val(cpDataRows);
+		$("#input_amount").val(spAmount);
+		$("#input_show_amount").val(cpAmount);
 	}
 	
 	function showDataRowChange()
 	{
-		$("#input_show_amount").val($("#input_show_data_rows").val()*price);
+		$("#lab_cp_amount_msg").css("display","none");
+		
+		var cpAmount = $("#input_show_amount").val();
+		
+		if(cpAmount%price!=0)
+		{
+			$("#lab_cp_amount_msg").css("display","block");
+			$("#input_show_data_rows").val(0);
+			return;
+		}
+		
+		var cpDataRows = cpAmount/price;
+		
+		$("#input_show_data_rows").val(cpDataRows);
+		$("#input_show_amount").val(cpAmount);
+		
 	}
 	
 	function startSubmitData()
@@ -185,7 +216,6 @@
 	
 	function onCheckExistDataResult(data)
 	{
-		console.log("onCheckExistDataResult:" + data);
 		data = $.trim(data);
 		if(data=="true")
 		{
@@ -358,7 +388,7 @@
 					<dd class="dd01_me">SP名称</dd>
 					<dd class="dd03_me">
 						<input type="hidden" name="sp_id" id="hid_sp_id" value="-1">
-						<input id="input_sp_id" style="width:200px;" onclick="namePicker(this,spList,onDataSpSelect)" />
+						<input id="input_sp_id" style="width:200px;" readonly="readonly" onclick="namePicker(this,spList,onDataSpSelect)" />
 					</dd>
 					
 					<br />
@@ -385,27 +415,19 @@
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">SP数据量</dd>
-					<dd class="dd03_me">
-						<input type="text" name="data_rows"  id="input_data_rows" value="0" style="width: 200px">
-					</dd>
-					
-					<br />
-					<br />
-					<br />
-					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">SP金额</dd>
 					<dd class="dd03_me">
-						<input type="text" name="amount"  id="input_amount" readonly="readonly" value="0" style="width: 200px">
+						<input type="text" name="amount"  id="input_amount"  value="0" style="width: 200px">
+						<label id="lab_sp_amount_msg" style="color: red;display: none">金额必须是价格的倍数</label>
 					</dd>
 					
 					<br />
 					<br />
 					<br />
 					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">CP数据量</dd>
+					<dd class="dd01_me">SP数据量</dd>
 					<dd class="dd03_me">
-						<input type="text" name="show_data_rows"  id="input_show_data_rows" value="0" style="width: 200px">
+						<input type="text" name="data_rows"  id="input_data_rows" readonly="readonly" value="0" style="width: 200px">
 					</dd>
 					
 					<br />
@@ -414,7 +436,17 @@
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">CP金额</dd>
 					<dd class="dd03_me">
-						<input type="text" name="show_amount"  id="input_show_amount" readonly="readonly" value="0" style="width: 200px">
+						<input type="text" name="show_amount"  id="input_show_amount"  value="0" style="width: 200px">
+						<label id="lab_cp_amount_msg" style="color: red;display: none">金额必须是价格的倍数</label>
+					</dd>
+					
+					<br />
+					<br />
+					<br />
+					<dd class="dd00_me"></dd>
+					<dd class="dd01_me">CP数据量</dd>
+					<dd class="dd03_me">
+						<input type="text" name="show_data_rows"  id="input_show_data_rows" readonly="readonly" value="0" style="width: 200px">
 					</dd>
 					
 					<br />
@@ -440,7 +472,7 @@
 						<input type="button" value="提 交" onclick="subForm()">
 					</dd>
 					<dd class="ddbtn" style="margin-left: 32px; margin-top: 10px">
-						<input type="button" value="返 回" onclick="history.go(-1)">
+						<input type="button" value="返 回" onclick="window.location.href='mrsjrecord.jsp'">
 					</dd>
 			</dl>
 		</div>

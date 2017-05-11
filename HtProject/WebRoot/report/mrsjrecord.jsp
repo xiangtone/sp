@@ -35,7 +35,7 @@
 	String query = request.getQueryString();
 
 	String startMonth = StringUtil
-			.getString(request.getParameter("start_month"), "2016-01");
+			.getString(request.getParameter("start_month"), "2015-01");
 	String endMonth = StringUtil
 			.getString(request.getParameter("end_month"), StringUtil.getMonthFormat2(new Date()));
 	
@@ -217,7 +217,11 @@
 			<thead>
 				<tr>
 					<td>序号</td>
-					<td>业务(SP-业务-价格-CP-TroneOrderId)</td>
+					<td>SP</td>
+					<td>业务</td>
+					<td>价格</td>
+					<td>CP</td>
+					<td>TroneOrderId</td>
 					<td>月份</td>
 					<td>SP数据条数</td>
 					<td>SP金额</td>
@@ -235,7 +239,11 @@
 						%>
 				<tr>
 					<td><%= index++ %></td>
-					<td><%= model.getSpName() + "-" + model.getSpTroneName() + "-" + model.getPrice() + "-" + model.getCpName() + "-" + model.getTroneOrderId() %></td>
+					<td><%= model.getSpName() %></td>
+					<td><%= model.getSpTroneName() %></td>
+					<td><%= model.getPrice() %></td>
+					<td><%= model.getCpName() %></td>
+					<td><%= model.getTroneOrderId() %></td>
 					<td><%= model.getYear() + "-" + String.format("%02d",model.getMonth()) %></td>
 					<td><%= model.getSpDataRows()  %></td>
 					<td><%= model.getSpAmount() %></td>
@@ -252,7 +260,7 @@
 			</tbody>
 			<tbody>
 				<tr>
-					<td colspan="11" class="tfooter" style="text-align: center;"><%= pageData %></td>
+					<td colspan="18" class="tfooter" style="text-align: center;"><%= pageData %></td>
 				</tr>
 			</tbody>
 		</table>
