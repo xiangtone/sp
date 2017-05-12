@@ -44,7 +44,7 @@ public class SjMrSummerRecordDao
 			sql += " and a.save_locate =" + params.getSaveLocate();
 		}
 		
-		sql += " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + "," + Constant.PAGE_SIZE;
+		String  sqlLimit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + "," + Constant.PAGE_SIZE;
 		
 		String queryReplaceString = "a.id,e.id sp_id,b.id trone_order_id,c.id trone_id,e.full_name sp_name,f.id cp_id,f.full_name cp_name,d.id sp_trone_id,d.name sp_trone_name,c.price,a.year,a.month,a.sp_data_rows,a.sp_amount,a.cp_data_rows,a.cp_amount,a.save_locate";
 		
@@ -64,7 +64,7 @@ public class SjMrSummerRecordDao
 			}
 		}));
 		
-		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, queryReplaceString), new QueryCallBack()
+		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, queryReplaceString) + sqlLimit, new QueryCallBack()
 		{
 			@Override
 			public Object onCallBack(ResultSet rs) throws SQLException

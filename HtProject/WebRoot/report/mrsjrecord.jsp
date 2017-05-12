@@ -260,7 +260,7 @@
 			</tbody>
 			<tbody>
 				<tr>
-					<td colspan="18" class="tfooter" style="text-align: center;"><%= pageData %></td>
+					<td colspan="28" class="tfooter" style="text-align: center;"><%= pageData %></td>
 				</tr>
 			</tbody>
 		</table>
