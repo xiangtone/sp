@@ -85,5 +85,14 @@ namespace Shotgun.Database
 
         string GetPageTSql(Shotgun.Model.List.IDBSQLHelper list);
 
+        /// <summary>
+        ///释放数据连接，当有事务未处理时，则无需要先处理。否则无法释放连接
+        ///需要长时间等待非数据操作时，需要调用此方法释放当前占用的数据库连
+        ///否则在并发访问时，可能会出现无法连接数据的情况
+        ///相当于Depose()
+        /// </summary>
+        bool ReleseConnection();
+
+
     }
 }

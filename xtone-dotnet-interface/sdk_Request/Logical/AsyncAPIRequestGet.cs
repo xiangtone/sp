@@ -268,7 +268,8 @@ namespace sdk_Request.Logical
             }
             finally
             {
-                db.Dispose();
+                if (db is IDisposable)
+                    ((IDisposable)db).Dispose();
             }
 
             IsAsync = false;

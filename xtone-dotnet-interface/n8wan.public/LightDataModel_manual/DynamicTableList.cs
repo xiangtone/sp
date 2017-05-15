@@ -67,5 +67,19 @@ namespace Shotgun.Model.List
             }
             return dt;
         }
+        public override T GetRowByFilters()
+        {
+            var m = base.GetRowByFilters();
+            if (m != null)
+                m.SetTableName(this);
+            return m;
+        }
+        public override T GetRowById(int id)
+        {
+            var m = base.GetRowById(id);
+            if (m != null)
+                m.SetTableName(this);
+            return m;
+        }
     }
 }

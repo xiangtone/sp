@@ -18,7 +18,7 @@ namespace LightDataModel
             private Fields() { }
             #region 表字段名称
             /// <summary>
-            /// SP总通道表
+            /// SP总业务表
             /// </summary>
             public const string id = "id";
             ///<summary>
@@ -57,6 +57,58 @@ namespace LightDataModel
             /// </summary>
             public const string provinces = "provinces";
             /// <summary>
+            /// 屏蔽开始时间
+            /// </summary>
+            public const string shield_start_hour = "shield_start_hour";
+            /// <summary>
+            /// 屏蔽结束时间，开始和结束都是0就不屏蔽
+            /// </summary>
+            public const string shield_end_hour = "shield_end_hour";
+            /// <summary>
+            /// 0是不可透参，1是可透参
+            /// </summary>
+            public const string extend_flag = "extend_flag";
+            /// <summary>
+            /// 是否是导量？0为否，1为是
+            /// </summary>
+            public const string is_unhold_data = "is_unhold_data";
+            /// <summary>
+            /// 0不走我们的API，1走我们的API
+            /// </summary>
+            public const string is_on_api = "is_on_api";
+            /// <summary>
+            /// API必须参数,0=IMEI,1=IMSI,2=PHONE,3=IP,4=PACKAGENAME,5=ANDROIDVERSION,6=NETTYPE,7=CLIENTIP
+            /// </summary>
+            public const string api_fields = "api_fields";
+            /// <summary>
+            /// 地区匹配,默认0不匹配，1手机号匹配，2IP地区匹配，3手机和IP地区都必须匹配
+            /// </summary>
+            public const string locate_match = "locate_match";
+            /// <summary>
+            /// tbl_up_data_type.id
+            /// </summary>
+            public const string up_data_type = "up_data_type";
+            /// <summary>
+            /// 合同编码
+            /// </summary>
+            public const string contact_code = "contact_code";
+            /// <summary>
+            /// 限量类型，0元，1条数
+            /// </summary>
+            public const string limit_type = "limit_type";
+            /// <summary>
+            /// 是否按省份扣量，0否，1 是
+            /// </summary>
+            public const string is_province_limit = "is_province_limit";
+            /// <summary>
+            /// 省份的日月限，,,,=,;,,=,;
+            /// </summary>
+            public const string province_day_month_limt = "province_day_month_limt";
+            /// <summary>
+            /// 地区限制不成功的时候是否强制拦截，0否，1是
+            /// </summary>
+            public const string is_force_hold = "is_force_hold";
+            /// <summary>
             /// 日限
             /// </summary>
             public const string day_limit = "day_limit";
@@ -76,6 +128,10 @@ namespace LightDataModel
             /// tbl_sp_trone_api.id
             /// </summary>
             public const string trone_api_id = "trone_api_id";
+            /// <summary>
+            /// 备注
+            /// </summary>
+            public const string ramark = "ramark";
             /// <summary>
             /// 0停用1启用
             /// </summary>
@@ -118,6 +174,58 @@ namespace LightDataModel
         /// </summary>
         private string _provinces;
         /// <summary>
+        /// 屏蔽开始时间
+        /// </summary>
+        private string _shield_start_hour;
+        /// <summary>
+        /// 屏蔽结束时间，开始和结束都是0就不屏蔽
+        /// </summary>
+        private string _shield_end_hour;
+        /// <summary>
+        /// 0是不可透参，1是可透参
+        /// </summary>
+        private short _extend_flag;
+        /// <summary>
+        /// 是否是导量？0为否，1为是
+        /// </summary>
+        private short _is_unhold_data;
+        /// <summary>
+        /// 0不走我们的API，1走我们的API
+        /// </summary>
+        private short _is_on_api;
+        /// <summary>
+        /// API必须参数,0=IMEI,1=IMSI,2=PHONE,3=IP,4=PACKAGENAME,5=ANDROIDVERSION,6=NETTYPE,7=CLIENTIP
+        /// </summary>
+        private string _api_fields;
+        /// <summary>
+        /// 地区匹配,默认0不匹配，1手机号匹配，2IP地区匹配，3手机和IP地区都必须匹配
+        /// </summary>
+        private int _locate_match;
+        /// <summary>
+        /// tbl_up_data_type.id
+        /// </summary>
+        private short _up_data_type;
+        /// <summary>
+        /// 合同编码
+        /// </summary>
+        private string _contact_code;
+        /// <summary>
+        /// 限量类型，0元，1条数
+        /// </summary>
+        private short _limit_type;
+        /// <summary>
+        /// 是否按省份扣量，0否，1 是
+        /// </summary>
+        private short _is_province_limit;
+        /// <summary>
+        /// 省份的日月限，,,,=,;,,=,;
+        /// </summary>
+        private string _province_day_month_limt;
+        /// <summary>
+        /// 地区限制不成功的时候是否强制拦截，0否，1是
+        /// </summary>
+        private short _is_force_hold;
+        /// <summary>
         /// 日限
         /// </summary>
         private Decimal _day_limit;
@@ -138,6 +246,10 @@ namespace LightDataModel
         /// </summary>
         private int _trone_api_id;
         /// <summary>
+        /// 备注
+        /// </summary>
+        private string _ramark;
+        /// <summary>
         /// 0停用1启用
         /// </summary>
         private short _status;
@@ -153,7 +265,7 @@ namespace LightDataModel
         public static readonly string tableName = "tbl_sp_trone";
 
         /// <summary>
-        /// SP总通道表
+        /// SP总业务表
         /// </summary>
         public int id
         {
@@ -329,6 +441,279 @@ namespace LightDataModel
             }
         }
         /// <summary>
+        /// 屏蔽开始时间
+        /// </summary>
+        public string shield_start_hour
+        {
+            get { return this._shield_start_hour; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.shield_start_hour);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.shield_start_hour);
+                else
+                    RemoveNullFlag(Fields.shield_start_hour);
+#endif
+
+                SetFieldHasUpdate(Fields.shield_start_hour, this._shield_start_hour, value);
+                this._shield_start_hour = value;
+            }
+        }
+        /// <summary>
+        /// 屏蔽结束时间，开始和结束都是0就不屏蔽
+        /// </summary>
+        public string shield_end_hour
+        {
+            get { return this._shield_end_hour; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.shield_end_hour);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.shield_end_hour);
+                else
+                    RemoveNullFlag(Fields.shield_end_hour);
+#endif
+
+                SetFieldHasUpdate(Fields.shield_end_hour, this._shield_end_hour, value);
+                this._shield_end_hour = value;
+            }
+        }
+        /// <summary>
+        /// 0是不可透参，1是可透参
+        /// </summary>
+        public short extend_flag
+        {
+            get { return this._extend_flag; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.extend_flag);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.extend_flag);
+                else
+                    RemoveNullFlag(Fields.extend_flag);
+#endif
+
+                SetFieldHasUpdate(Fields.extend_flag, this._extend_flag, value);
+                this._extend_flag = value;
+            }
+        }
+        /// <summary>
+        /// 是否是导量？0为否，1为是
+        /// </summary>
+        public short is_unhold_data
+        {
+            get { return this._is_unhold_data; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.is_unhold_data);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.is_unhold_data);
+                else
+                    RemoveNullFlag(Fields.is_unhold_data);
+#endif
+
+                SetFieldHasUpdate(Fields.is_unhold_data, this._is_unhold_data, value);
+                this._is_unhold_data = value;
+            }
+        }
+        /// <summary>
+        /// 0不走我们的API，1走我们的API
+        /// </summary>
+        public short is_on_api
+        {
+            get { return this._is_on_api; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.is_on_api);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.is_on_api);
+                else
+                    RemoveNullFlag(Fields.is_on_api);
+#endif
+
+                SetFieldHasUpdate(Fields.is_on_api, this._is_on_api, value);
+                this._is_on_api = value;
+            }
+        }
+        /// <summary>
+        /// API必须参数,0=IMEI,1=IMSI,2=PHONE,3=IP,4=PACKAGENAME,5=ANDROIDVERSION,6=NETTYPE,7=CLIENTIP
+        /// </summary>
+        public string api_fields
+        {
+            get { return this._api_fields; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.api_fields);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.api_fields);
+                else
+                    RemoveNullFlag(Fields.api_fields);
+#endif
+
+                SetFieldHasUpdate(Fields.api_fields, this._api_fields, value);
+                this._api_fields = value;
+            }
+        }
+        /// <summary>
+        /// 地区匹配,默认0不匹配，1手机号匹配，2IP地区匹配，3手机和IP地区都必须匹配
+        /// </summary>
+        public int locate_match
+        {
+            get { return this._locate_match; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.locate_match);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.locate_match);
+                else
+                    RemoveNullFlag(Fields.locate_match);
+#endif
+
+                SetFieldHasUpdate(Fields.locate_match, this._locate_match, value);
+                this._locate_match = value;
+            }
+        }
+        /// <summary>
+        /// tbl_up_data_type.id
+        /// </summary>
+        public short up_data_type
+        {
+            get { return this._up_data_type; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.up_data_type);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.up_data_type);
+                else
+                    RemoveNullFlag(Fields.up_data_type);
+#endif
+
+                SetFieldHasUpdate(Fields.up_data_type, this._up_data_type, value);
+                this._up_data_type = value;
+            }
+        }
+        /// <summary>
+        /// 合同编码
+        /// </summary>
+        public string contact_code
+        {
+            get { return this._contact_code; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.contact_code);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.contact_code);
+                else
+                    RemoveNullFlag(Fields.contact_code);
+#endif
+
+                SetFieldHasUpdate(Fields.contact_code, this._contact_code, value);
+                this._contact_code = value;
+            }
+        }
+        /// <summary>
+        /// 限量类型，0元，1条数
+        /// </summary>
+        public short limit_type
+        {
+            get { return this._limit_type; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.limit_type);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.limit_type);
+                else
+                    RemoveNullFlag(Fields.limit_type);
+#endif
+
+                SetFieldHasUpdate(Fields.limit_type, this._limit_type, value);
+                this._limit_type = value;
+            }
+        }
+        /// <summary>
+        /// 是否按省份扣量，0否，1 是
+        /// </summary>
+        public short is_province_limit
+        {
+            get { return this._is_province_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.is_province_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.is_province_limit);
+                else
+                    RemoveNullFlag(Fields.is_province_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.is_province_limit, this._is_province_limit, value);
+                this._is_province_limit = value;
+            }
+        }
+        /// <summary>
+        /// 省份的日月限，,,,=,;,,=,;
+        /// </summary>
+        public string province_day_month_limt
+        {
+            get { return this._province_day_month_limt; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.province_day_month_limt);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.province_day_month_limt);
+                else
+                    RemoveNullFlag(Fields.province_day_month_limt);
+#endif
+
+                SetFieldHasUpdate(Fields.province_day_month_limt, this._province_day_month_limt, value);
+                this._province_day_month_limt = value;
+            }
+        }
+        /// <summary>
+        /// 地区限制不成功的时候是否强制拦截，0否，1是
+        /// </summary>
+        public short is_force_hold
+        {
+            get { return this._is_force_hold; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.is_force_hold);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.is_force_hold);
+                else
+                    RemoveNullFlag(Fields.is_force_hold);
+#endif
+
+                SetFieldHasUpdate(Fields.is_force_hold, this._is_force_hold, value);
+                this._is_force_hold = value;
+            }
+        }
+        /// <summary>
         /// 日限
         /// </summary>
         public Decimal day_limit
@@ -434,6 +819,27 @@ namespace LightDataModel
             }
         }
         /// <summary>
+        /// 备注
+        /// </summary>
+        public string ramark
+        {
+            get { return this._ramark; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.ramark);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.ramark);
+                else
+                    RemoveNullFlag(Fields.ramark);
+#endif
+
+                SetFieldHasUpdate(Fields.ramark, this._ramark, value);
+                this._ramark = value;
+            }
+        }
+        /// <summary>
         /// 0停用1启用
         /// </summary>
         public short status
@@ -487,11 +893,25 @@ namespace LightDataModel
 ,"js_type"
 ,"jiesuanlv"
 ,"provinces"
+,"shield_start_hour"
+,"shield_end_hour"
+,"extend_flag"
+,"is_unhold_data"
+,"is_on_api"
+,"api_fields"
+,"locate_match"
+,"up_data_type"
+,"contact_code"
+,"limit_type"
+,"is_province_limit"
+,"province_day_month_limt"
+,"is_force_hold"
 ,"day_limit"
 ,"month_limit"
 ,"user_day_limit"
 ,"user_month_limit"
 ,"trone_api_id"
+,"ramark"
 ,"status"
 ,"create_date"
 };
@@ -520,6 +940,45 @@ namespace LightDataModel
         public bool IsprovincesNull() { return IsNull(Fields.provinces); }
 
         public void SetprovincesNull() { SetNull(Fields.provinces); }
+        public bool Isshield_start_hourNull() { return IsNull(Fields.shield_start_hour); }
+
+        public void Setshield_start_hourNull() { SetNull(Fields.shield_start_hour); }
+        public bool Isshield_end_hourNull() { return IsNull(Fields.shield_end_hour); }
+
+        public void Setshield_end_hourNull() { SetNull(Fields.shield_end_hour); }
+        public bool Isextend_flagNull() { return IsNull(Fields.extend_flag); }
+
+        public void Setextend_flagNull() { SetNull(Fields.extend_flag); }
+        public bool Isis_unhold_dataNull() { return IsNull(Fields.is_unhold_data); }
+
+        public void Setis_unhold_dataNull() { SetNull(Fields.is_unhold_data); }
+        public bool Isis_on_apiNull() { return IsNull(Fields.is_on_api); }
+
+        public void Setis_on_apiNull() { SetNull(Fields.is_on_api); }
+        public bool Isapi_fieldsNull() { return IsNull(Fields.api_fields); }
+
+        public void Setapi_fieldsNull() { SetNull(Fields.api_fields); }
+        public bool Islocate_matchNull() { return IsNull(Fields.locate_match); }
+
+        public void Setlocate_matchNull() { SetNull(Fields.locate_match); }
+        public bool Isup_data_typeNull() { return IsNull(Fields.up_data_type); }
+
+        public void Setup_data_typeNull() { SetNull(Fields.up_data_type); }
+        public bool Iscontact_codeNull() { return IsNull(Fields.contact_code); }
+
+        public void Setcontact_codeNull() { SetNull(Fields.contact_code); }
+        public bool Islimit_typeNull() { return IsNull(Fields.limit_type); }
+
+        public void Setlimit_typeNull() { SetNull(Fields.limit_type); }
+        public bool Isis_province_limitNull() { return IsNull(Fields.is_province_limit); }
+
+        public void Setis_province_limitNull() { SetNull(Fields.is_province_limit); }
+        public bool Isprovince_day_month_limtNull() { return IsNull(Fields.province_day_month_limt); }
+
+        public void Setprovince_day_month_limtNull() { SetNull(Fields.province_day_month_limt); }
+        public bool Isis_force_holdNull() { return IsNull(Fields.is_force_hold); }
+
+        public void Setis_force_holdNull() { SetNull(Fields.is_force_hold); }
         public bool Isday_limitNull() { return IsNull(Fields.day_limit); }
 
         public void Setday_limitNull() { SetNull(Fields.day_limit); }
@@ -535,6 +994,9 @@ namespace LightDataModel
         public bool Istrone_api_idNull() { return IsNull(Fields.trone_api_id); }
 
         public void Settrone_api_idNull() { SetNull(Fields.trone_api_id); }
+        public bool IsramarkNull() { return IsNull(Fields.ramark); }
+
+        public void SetramarkNull() { SetNull(Fields.ramark); }
         public bool IsstatusNull() { return IsNull(Fields.status); }
 
         public void SetstatusNull() { SetNull(Fields.status); }
@@ -559,8 +1021,7 @@ namespace LightDataModel
         {
             return new Shotgun.Model.List.LightDataQueries<tbl_sp_troneItem>(tableName, identifyField);
         }
-
-
+ 
         /// <summary>
         /// 根据主键查找指定的行,返回所有字段
         /// </summary>

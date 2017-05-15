@@ -73,7 +73,7 @@ namespace Shotgun.Model.Logical
         /// </summary>
         /// <param name="err"></param>
         /// <returns>false only</returns>
-        protected bool SetErrorMesage(string err)
+        protected virtual bool SetErrorMesage(string err)
         {
             _msg = err;
             _isSuccess = false;
@@ -84,7 +84,7 @@ namespace Shotgun.Model.Logical
         /// 设置状态为成功，并设置错误信息为“成功”
         /// </summary>
         /// <returns>true only</returns>
-        protected bool SetSuccess()
+        protected virtual bool SetSuccess()
         {
             _msg = "成功";
             _isSuccess = true;

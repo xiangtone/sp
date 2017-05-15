@@ -110,7 +110,7 @@ namespace n8wan.Public.Logical
     /// <typeparam name="IDX"></typeparam>
     public class StaticCache<T, IDX> : StaticCache where T : Shotgun.Model.Logical.LightDataModel, new()
     {
-        Dictionary<IDX, T> _data;
+        protected Dictionary<IDX, T> _data;
 
         /// <summary>
         /// 数据加载状态
@@ -271,22 +271,29 @@ namespace n8wan.Public.Logical
         /// <summary>
         /// 检查数据是否过期，如果过期激发重新加载，并丢弃过期数据
         /// </summary>
-        private Dictionary<IDX, T> CheckExpired()
+        protected virtual Dictionary<IDX, T> CheckExpired()
         {
-
-            bool isExp = _data == null || DateTime.Now > _expired;
+            var data = _data;
+            bool isExp = data == null || DateTime.Now > _expired;
             if (!isExp)
-                return _data;
+                return data;
 
 
             if (_clearing)
                 return null;
-            lock (this)
+            lock (base.SyncRoot)
             {
                 if (_clearing)
                     return null;
                 _clearing = true;//正式进入清除状态
+                if (IsManualLoad)
+                {
+                    ClearCache();
+                    _clearing = false;
+                    return null;
+                }
             }
+
 
             ThreadPool.QueueUserWorkItem(e =>
             {
@@ -318,6 +325,14 @@ namespace n8wan.Public.Logical
             var tData = CheckExpired();
             if (tData == null)
                 return null;
+            if (iFull && IsManualLoad)
+            {
+#if DEBUG
+                throw new NotSupportedException("手动模式，不支持数据全加载结果集");
+#else
+                return null;
+#endif
+            }
             if (iFull && _satus != Static_Cache_Staus.AllLoad)
                 return null;
             return tData.Values;
@@ -368,7 +383,7 @@ namespace n8wan.Public.Logical
         /// 注意Fields要全部读取的，否则在二次取出使用时可能出现问题
         /// </summary>
         /// <param name="data"></param>
-        public void InsertItem(T data)
+        public virtual void InsertItem(T data)
         {
             if (data == null)
                 return;
@@ -429,18 +444,19 @@ namespace n8wan.Public.Logical
                 base.Remove(this);
             }
             if (_expData != null)
-                OnExpired(_expData);
+                OnExpired(_expData.Values);
             WriteLog(false, 0, 0);
         }
 
-        private void OnExpired(Dictionary<IDX, T> _expData)
+
+        protected void OnExpired(IEnumerable<T> data)
         {
-            if (_onExpired == null || _expData == null)
+            if (_onExpired == null || data == null)
                 return;
 
             try
             {
-                _onExpired(_expData.Values);
+                _onExpired(data);
             }
 #if !DEBUG
             catch (Exception ex)
@@ -450,6 +466,8 @@ namespace n8wan.Public.Logical
 #endif
             finally { }
         }
+
+
 
         /// <summary>
         /// 缓存销毁通知，可用于保存数据
@@ -463,7 +481,7 @@ namespace n8wan.Public.Logical
         /// <summary>
         /// 是否以手动方式加载代码（不会自动执行LoadData）
         /// </summary>
-        public bool IsManualLoad { get; set; }
+        public virtual bool IsManualLoad { get; set; }
 
         /// <summary>
         /// 检查数据是否过期，不会激发重新加载操作

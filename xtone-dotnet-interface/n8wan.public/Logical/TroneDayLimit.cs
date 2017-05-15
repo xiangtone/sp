@@ -86,7 +86,7 @@ namespace n8wan.Public.Logical
             catch { }
         }
 
-
+        /*
         private static void UpdateNoNApiDayLimit(Shotgun.Database.IBaseDataClass2 dBase, tbl_sp_troneItem spTrone, decimal amount)
         {
             if (_nonApiDate.Date != DateTime.Today)
@@ -138,5 +138,7 @@ namespace n8wan.Public.Logical
             info.Sum += amount;
             return isnew;
         }
+         */
+
     }
 }

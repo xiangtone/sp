@@ -432,8 +432,8 @@ namespace sdk_Request.Logical
                 sb.AppendFormat("{0}={1}&", System.Web.HttpUtility.UrlEncode(kv.Key, enc), System.Web.HttpUtility.UrlEncode(kv.Value, enc));
             }
             sb.Length--;
-            url += sb.ToString();
-            return GetHTML(url, timeout, encode);
+
+            return GetHTML(sb.ToString(), timeout, encode);
         }
 
 

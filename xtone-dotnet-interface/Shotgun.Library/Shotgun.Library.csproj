@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\ConfigDBClass.cs" />
     <Compile Include="Database\IDBDriver.cs" />
     <Compile Include="Database\DefaultBaseDataSpecial.cs" />
     <Compile Include="Database\IBaseDataPerformance.cs" />

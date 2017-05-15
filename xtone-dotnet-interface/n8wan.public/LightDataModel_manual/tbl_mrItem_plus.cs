@@ -129,7 +129,7 @@ namespace LightDataModel
             throw new NotImplementedException();
         }
 
-        LightDataModel.tbl_cp_mrItem ICPPushModel.SetPushed(Shotgun.Database.IBaseDataClass2 dBase, tbl_trone_orderItem tCfg)
+        tbl_cp_mrItem ICPPushModel.SetPushed(Shotgun.Database.IBaseDataClass2 dBase, tbl_trone_orderItem tCfg)
         {
             this.syn_flag = 1;
             this.trone_order_id = tCfg.id;

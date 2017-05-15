@@ -115,21 +115,8 @@ namespace n8wan.Public.Logical
                 try
                 {
                     PushObject.SetHidden(dBase, _config);
-                    //if (holdCfg.hold_start > holdCfg.push_count //未达到起扣数
-                    //    || (holdCfg.hold_amount != 0 && holdCfg.hold_amount > holdCfg.amount)) //未达到最大同步金额
-                    //{
                     dBase.SaveData(_cp_push_url);
                     dBase.SaveData(_config);
-                    //#if TDEBUG
-                    //                        WriteLog(-5, string.Format("updated,hold_start:{0},push_count:{1},hold_amount{2},amount:{3}",
-                    //                            holdCfg.hold_start, holdCfg.push_count, holdCfg.hold_amount, holdCfg.amount));
-                    //                    }
-                    //                    else
-                    //                    {
-                    //                        WriteLog(-5, "no update!");
-                    //#endif
-                    //                    }
-
                 }
                 catch (System.Data.Common.DbException ex)
                 {
@@ -155,14 +142,6 @@ namespace n8wan.Public.Logical
                 {
                     dBase.SaveData(_cp_push_url);
                     dBase.SaveData(_config);
-#if TDEBUG
-                    WriteLog(-5, string.Format("updated,hold_start:{0},push_count:{1},hold_amount{2},amount:{3}",
-                        holdCfg.hold_start, holdCfg.push_count, holdCfg.hold_amount, holdCfg.amount));
-                }
-                else
-                {
-                    WriteLog(-5, "no update!");
-#endif
                 }
                 var daily = cpmr.CopyToDailyCpMr(null);
                 try
@@ -308,6 +287,7 @@ namespace n8wan.Public.Logical
             ptrs.Add("price", (_trone.price * 100).ToString("0"));
             ptrs.Add("cpparam", PushObject.GetValue(Logical.EPushField.cpParam));
             ptrs.Add("provinceId", PushObject.GetValue(EPushField.province));
+            ptrs.Add("paycode", _config.id.ToString("100000"));
 
             ptrs.Add("virtualMobile", GetVirtualMobile());
 

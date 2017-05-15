@@ -45,7 +45,7 @@ namespace LightDataModel
         /// <param name="prvCfg">为空时，直接反回默认扣量</param>
         /// <param name="ProvinceId">当前传入省份信息</param>
         /// <returns></returns>
-        public static IHold_DataItem LoadProvinceData(LightDataModel.tbl_trone_orderItem defCfg, LightDataModel.tbl_cp_trone_rateItem prvCfg, int ProvinceId)
+        public static IHold_DataItem LoadProvinceData(tbl_trone_orderItem defCfg, tbl_cp_trone_rateItem prvCfg, int ProvinceId)
         {
             if (prvCfg == null || string.IsNullOrEmpty(prvCfg.province_hold_rate))
                 return defCfg;

@@ -36,7 +36,7 @@ namespace LightDataModel
         }
 
         /// <summary>
-        /// 根据 apiId和端口号查找所有通道 (缓存15分钟)
+        /// 根据 sp_api_url_id 和端口号查找所有通道 (缓存15分钟)
         /// </summary>
         /// <param name="apiId"></param>
         /// <param name="port"></param>
@@ -95,6 +95,44 @@ namespace LightDataModel
                 return "匹配成功";
             return string.Format("未知状态({0})", errTroneId.ToString());
         }
+
+        /// <summary>
+        /// 根据sp业务id 查找sp通道 (缓存)
+        /// </summary>
+        /// <param name="dBase">缓存未建议立时，使用数据库进行查询</param>
+        /// <param name="spTroneId"></param>
+        /// <returns></returns>
+        public static IEnumerable<tbl_troneItem> GetTroneIdsBySptroneId(Shotgun.Database.IBaseDataClass2 dBase, int spTroneId)
+        {
+            IEnumerable<tbl_troneItem> cmds;
+            var tTrones = cache.GetCacheData(true);
+            if (tTrones != null)
+            {
+                lock (cache.SyncRoot)
+                {
+                    cmds = from t in tTrones where t.sp_trone_id == spTroneId select t;
+                    if (cmds != null)
+                        return cmds.ToArray();
+                    return null;
+                }
+            }
+            var csl = GetQueries(dBase);
+            csl.Filter.AndFilters.Add(Fields.sp_trone_id, spTroneId);
+            csl.PageSize = int.MaxValue;
+
+            cmds = csl.GetDataList();
+            if (cmds != null)
+            {
+                foreach (var cmd in cmds)
+                {
+                    cache.InsertItem(cmd);
+                }
+            }
+            return cmds;
+        }
+
+
+
 
     }
 }

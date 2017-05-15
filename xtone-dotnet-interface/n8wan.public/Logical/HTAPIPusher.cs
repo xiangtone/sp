@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace n8wan.Public.Logical
 {
@@ -39,16 +40,18 @@ namespace n8wan.Public.Logical
 
             if (_apiMatchAPI == null)
                 return false;
-
+            bool isNew;
             if (PushObject.cp_id > 0 && PushObject.cp_id != 34)
             {//已经关联的订单
                 var apiID = PushObject.GetValue(EPushField.ApiOrderId);
                 _apiOrder = LoadApiOrder(apiID);
                 WriteTrackLog(string.Format("已经关联订单, api id={0}", apiID));
+                isNew = false;
             }
             else
             {//未匹配的新订单
                 _apiOrder = LoadApiOrder();
+                isNew = true;
             }
 
             if (_apiOrder == null)
@@ -87,30 +90,19 @@ namespace n8wan.Public.Logical
                     mr.province_id = city.province_id;
                 }
             }
-            //if (!LoadCPAPI())
-            //    return false;
+
 
             var ret = base.DoPush();
             if (!ret)
                 return false;
 
+            if (isNew)
+                UpdateTroneLimit();
+
             _apiOrder.IgnoreEquals = true;
 
             var aStatus = apiStatus + (PushObject.syn_flag == 0 ? 10000 : 20000);
 
-            bool isRecord = false;
-            Shotgun.Database.IBaseDataPerformance db3 = null;
-            if (PushObject.trone_id == 3242)
-            {
-                Shotgun.Library.SimpleLogRecord.WriteLog("api_push",
-                        string.Format("linkid:{0} troneId:{1} status:{2} =>{3},api_order_id:{4},mr order_id:{5}",
-                        PushObject.GetValue(EPushField.LinkID), PushObject.trone_id, _apiOrder.status, aStatus, _apiOrder.id, mr == null ? 0 : mr.api_order_id));
-
-                db3 = (Shotgun.Database.IBaseDataPerformance)dBase;
-                isRecord = db3.EnableRecord;
-                db3.EnableRecord = true;
-
-            }
             //扣量和非扣量标识
             _apiOrder.status = aStatus;// apiStatus + (PushObject.syn_flag == 0 ? 10000 : 20000);
             try
@@ -124,16 +116,43 @@ namespace n8wan.Public.Logical
             }
             finally
             {
-                if (db3 != null)
-                {
-                    Shotgun.Library.SimpleLogRecord.WriteLog("api_push",
-                            string.Format("linkid:{0} sql:{1}",
-                                PushObject.GetValue(EPushField.LinkID), db3.PerformanceReport()));
-                    if (!isRecord)
-                        db3.EnableRecord = false;
-                }
+
             }
             return true;
+        }
+
+        /// <summary>
+        /// 用于更新api通道的计费信息
+        /// </summary>
+        private void UpdateTroneLimit()
+        {
+            var targetUrl = System.Configuration.ConfigurationManager.AppSettings["apiTroneLimit"];
+            if (string.IsNullOrEmpty(targetUrl))
+                return;
+
+            var mr = this.PushObject as tbl_mrItem;
+            if (mr == null || mr.sp_trone_id == 0)
+                return;
+
+            tbl_sp_troneItem spTrone = tbl_sp_troneItem.GetRowById(dBase, mr.sp_trone_id);
+            if (spTrone == null)
+                return;
+
+            var customId = spTrone.GetCustomId(_apiOrder.mobile, _apiOrder.imsi);
+
+            var sql = string.Format("insert daily_log.tbl_custom_fee_count(custom_id, trone_id, fee_date, count,city_id) "
+                + "values('{0}',{1},'{2:yyyy-MM-dd}',1,{3}) on duplicate key update count=count+1;",
+                        dBase.SqlEncode(customId), this._apiOrder.trone_id, this._apiOrder.FirstDate, this._apiOrder.city);
+            try
+            {
+                dBase.ExecuteNonQuery(sql);
+            }
+            catch (System.Data.DataException)
+            {
+            }
+            var data = string.Format("troneId={0}&mrDate={1:yyyy-MM-dd}&city_id={2}&customId={3}&sptroneId={4}",
+                    _apiOrder.trone_id, _apiOrder.FirstDate, _apiOrder.city, customId, spTrone.id);
+            Shotgun.Library.AsyncRemoteRequest.RequestOnly(targetUrl, ASCIIEncoding.Default.GetBytes(data));
         }
 
         /// <summary>
@@ -214,7 +233,14 @@ namespace n8wan.Public.Logical
             ptrs.Add("price", (Trone.price * 100).ToString("0"));
             ptrs.Add("cpparam", _apiOrder.ExtrData);
             ptrs.Add("provinceId", PushObject.GetValue(EPushField.province));
-            ptrs.Add("paycode", _apiOrder.trone_order_id.ToString("100000"));
+            if (_apiOrder.cp_pool_id == 0)
+                ptrs.Add("paycode", _apiOrder.trone_order_id.ToString("100000"));
+            else
+            {//代码池同步，强制转换同步的paycode,msg,port
+                ptrs.Add("paycode", _apiOrder.cp_pool_id.ToString("P00000"));
+                ptrs["msg"] = ptrs["paycode"];
+                ptrs["port"] = ptrs["price"];
+            }
             ptrs.Add("ordernum", string.Format("{0:yyyyMM}{1}", _apiOrder.FirstDate, _apiOrder.id));
             ptrs.Add("virtualMobile", base.GetVirtualMobile());
 

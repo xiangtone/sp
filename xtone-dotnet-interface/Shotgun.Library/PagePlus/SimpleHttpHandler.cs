@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shotgun.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,18 @@ using System.Web;
 
 namespace Shotgun.PagePlus
 {
-    public abstract class SimpleHttpHandler<DB> : IHttpHandler where DB : Shotgun.Database.IBaseDataClass2, new()
+    public abstract class SimpleHttpHandler : IHttpHandler
     {
+        IBaseDataClass2 _db;
+
         /// <summary>
         /// 创建数据库连接实例
         /// </summary>
         /// <returns></returns>
-        protected virtual DB CreateDBase()
+        protected virtual IBaseDataClass2 CreateDBase()
         {
-            return new DB();
+            return Shotgun.Database.ConfigDBClass.CreateDBConnector();
         }
-
-        DB _db;
 
         public Shotgun.Database.IBaseDataClass2 dBase
         {
@@ -73,8 +74,17 @@ namespace Shotgun.PagePlus
         }
 
         #endregion
+
     }
-    public abstract class SimpleHttpHandlerMsSQL : SimpleHttpHandler<Shotgun.Database.MsSqlDBClass>
+
+
+    public abstract class SimpleHttpHandler<DB> : SimpleHttpHandler where DB : Shotgun.Database.IBaseDataClass2, new()
     {
+        protected override IBaseDataClass2 CreateDBase()
+        {
+            return new DB();
+        }
     }
+
+
 }

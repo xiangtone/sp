@@ -20,6 +20,30 @@ namespace LightDataModel
             get { return FIX_TABLE_NAME; }
         }
 
+        /// <summary>
+        /// 根据情况，强行截断部分超长字段值
+        /// </summary>
+        public void TruncationVarChar()
+        {
+            TruncationFunc(ref _extra_param, 200);
+            TruncationFunc(ref _ExtrData, 32);
+            TruncationFunc(ref _extra_param, 200);
+            TruncationFunc(ref _user_agent, 100);
+            TruncationFunc(ref _packagename, 50);
+            TruncationFunc(ref _sp_exField, 512);
+            TruncationFunc(ref _port, 32);
+            TruncationFunc(ref _msg, 200);
+        }
+        void TruncationFunc(ref string value, int maxLen)
+        {
+            if (value == null)
+                return;
+            if (value.Length <= maxLen)
+                return;
+            value = value.Substring(0, maxLen - 5) + "...";
+        }
+
+
         #region 静态方法
         /// <summary>
         /// 创建一个新的查询器

@@ -94,5 +94,14 @@ namespace Shotgun.Database
         {
             return GetPageTSql(list);
         }
+
+        public bool ReleseConnection()
+        {
+            if (IsTransaction)
+                return false;
+            OnDisposing();
+            return true;
+        }
+
     }
 }
