@@ -459,7 +459,7 @@ public class TroneOrderDao
 			sql += " AND c.status = " + status + " and  a.disable = " +  (status==0 ? 1 : 0) ;
 		}
 		
-		sql += " ORDER BY d.id,a.id ASC";
+		sql += " ORDER BY a.id desc";
 		
 		
 		return (List<PayCodeExportModel>)new JdbcControl().query(sql, new QueryCallBack()

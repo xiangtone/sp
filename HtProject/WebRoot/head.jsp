@@ -17,7 +17,7 @@
 	
 	String logoImg = ConfigManager.getConfigData("SYSTEM_LOGO", "logo.png");
 	
-	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台ss");
+	String sysTitle = ConfigManager.getConfigData("SYSTEM_TITLE","运营管理平台");
 	
 	String sysUser = ConfigManager.getConfigData("SYSTEM_USER","SZHT");
 	
