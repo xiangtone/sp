@@ -40,11 +40,12 @@
 		$("#sel_sp").val("<%= spId %>");
 		$("#sel_cp").val("<%= cpId %>");
 	});
-
-	function subForm() 
+	
+	function showDetail(troneOrderId)
 	{
-		document.getElementById("exportform").submit();
+		window.open("data_list_detail.jsp?start_date=<%= startDate %>&end_date=<%= endDate %>&trone_order_id=" + troneOrderId);
 	}
+
 </script>
 <body style="padding-top: 40px">
 	<div class="main_content">
@@ -110,9 +111,10 @@
 						<td>上游数据量(元)</td>
 						<td>上游金额(条)</td>
 						<td>渠道名称</td>
+						<td>渠道价格(元)</td>
 						<td>渠道数据量(条)</td>
 						<td>渠道金额(元)</td>
-						<td>渠道价格(元)</td>
+						<td>操作</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -135,9 +137,10 @@
 									out.print("<td>" + troneOrderModel.dataRows + "</td>");
 									out.print("<td>" + StringUtil.getDecimalFormat(troneOrderModel.dataAmount) + "</td>");
 									out.print("<td>" + troneOrderModel.cpName + "</td>");
+									out.print("<td>" + troneOrderModel.cpPrice + "</td>");
 									out.print("<td>" + troneOrderModel.showDataRows + "</td>");
 									out.print("<td>" + StringUtil.getDecimalFormat(troneOrderModel.showDataAmount) + "</td>");
-									out.print("<td>" + troneOrderModel.cpPrice + "</td>");
+									out.print("<td><a style='cursor:pointer;' onclick='showDetail(" + troneOrderModel.troneOrderId + ")'>详细</a></td>");
 									out.print("</tr>\r\n");
 									out.print("<tr>");
 								}

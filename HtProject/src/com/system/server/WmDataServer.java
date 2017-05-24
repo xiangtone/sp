@@ -23,6 +23,11 @@ public class WmDataServer
 		return new WmDataDao().loadWmCpDataDetail(userId, troneId, startDate, endDate);
 	}
 	
+	public List<WmDataModel> loadWmDataDetail(int troneOrderId,String startDate,String endDate)
+	{
+		return new WmDataDao().loadWmDataDetail(troneOrderId, startDate, endDate);
+	}
+	
 	public static void main(String[] args)
 	{
 		List<WmDataShowModel> list = new WmDataServer().loadWmData("2016-12-01", "2017-05-01", -1, -1, "");

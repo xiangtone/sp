@@ -384,7 +384,7 @@ public class TroneOrderDao
 					sql += " and d.id = " + spTroneId;
 				}
 				
-				sql += " order by b.short_name asc";
+				sql += " order by a.id desc";
 		
 		return (List<TroneOrderModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{

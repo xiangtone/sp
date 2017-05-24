@@ -85,7 +85,7 @@ public class WmDataDao
 					spDataRows = rs.getInt("sp_data_rows");
 					spDataAmount = rs.getFloat("sp_data_amount");
 					cpDataRows = rs.getInt("cp_data_rows");
-					cpDataAmount = rs.getInt("cp_data_amount");
+					cpDataAmount = rs.getFloat("cp_data_amount");
 					cpId = rs.getInt("cp_id");
 					cpName = StringUtil.getString(rs.getString("cp_name"), "");
 					cpPrice = rs.getFloat("cp_price");
@@ -257,6 +257,56 @@ public class WmDataDao
 					model.setCpDataAmount(rs.getFloat("cp_data_amount"));
 					model.setTroneId(rs.getInt("trone_id"));
 					model.setMrDate(rs.getString("mr_date"));
+					
+					list.add(model);
+				}
+				
+				return list;
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<WmDataModel> loadWmDataDetail(int troneOrderId,String startDate,String endDate)
+	{
+		String sql = "SELECT f.full_name sp_name,d.full_name cp_name,c.price sp_price,c.id trone_id,c.trone_name,b.price cp_price,a.data_rows sp_data_rows,a.data_amount sp_data_amount,a.show_data_rows cp_data_rows,a.show_data_amount cp_data_amount,a.mr_date ";
+		sql += " FROM " + Constant.DB_DAILY_LOG + ".tbl_wm_summer a";
+		sql += " LEFT JOIN " + Constant.DB_DAILY_CONFIG + ".tbl_wm_trone_order b    ON a.trone_order_id = b.id";
+		sql += " LEFT JOIN " + Constant.DB_DAILY_CONFIG + ".tbl_wm_trone c    ON b.trone_id = c.id";
+		sql += " LEFT JOIN " + Constant.DB_DAILY_CONFIG + ".tbl_wm_cp d    ON b.cp_id = d.id";
+		sql += " LEFT JOIN " + Constant.DB_DAILY_CONFIG + ".tbl_wm_sp_trone e   ON c.sp_trone_id = e.id";
+		sql += " LEFT JOIN " + Constant.DB_DAILY_CONFIG + ".tbl_wm_sp f    ON e.sp_id = f.id";
+		sql += " WHERE 1=1 ";
+		sql += " AND a.trone_order_id = " + troneOrderId;
+		sql += " AND a.mr_date >= '" + startDate + "'";
+		sql += " AND a.mr_date <= '" + endDate + "'";
+		
+		sql += " ORDER BY c.trone_name,a.mr_date asc";
+		
+		sql += " limit 1000";
+		
+		return (List<WmDataModel>)new JdbcControl().query(sql, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<WmDataModel> list = new ArrayList<WmDataModel>();
+				
+				while(rs.next())
+				{
+					WmDataModel model = new WmDataModel();
+					
+					model.setTroneName(StringUtil.getString(rs.getString("trone_name"), ""));
+					model.setCpPrice(rs.getFloat("cp_price"));
+					model.setCpDataRows(rs.getInt("cp_data_rows"));
+					model.setCpDataAmount(rs.getFloat("cp_data_amount"));
+					model.setTroneId(rs.getInt("trone_id"));
+					model.setMrDate(rs.getString("mr_date"));
+					model.setSpPrice(rs.getFloat("sp_price"));
+					model.setSpName(StringUtil.getString(rs.getString("sp_name"), ""));
+					model.setCpName(StringUtil.getString(rs.getString("cp_name"), ""));
+					model.setSpDataRows(rs.getInt("sp_data_rows"));
+					model.setSpDataAmount(rs.getFloat("sp_data_amount"));
 					
 					list.add(model);
 				}
