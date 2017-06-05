@@ -669,8 +669,10 @@ public class TroneOrderDao
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON a.`trone_id` = b.`id`";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON c.`sp_id` = d.`id`";
-		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_user` f ON f.`id` = d.`commerce_user_id`";
-		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` e ON a.`cp_id` = e.`id` WHERE 1=1 and e.id <> 34";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` e ON a.`cp_id` = e.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_user` f ON f.`id` = e.`commerce_user_id`";
+				
+		sql += " WHERE 1=1 and e.id <> 34";
 		
 		String wheres = "";
 		

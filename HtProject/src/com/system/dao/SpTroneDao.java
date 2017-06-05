@@ -214,6 +214,115 @@ public class SpTroneDao
 		return map;
 	}
 	
+	public Map<String, Object> loadOriSpTroneList(int userId,int pageIndex,String keyWord,int isDaoLiang)
+	{
+		String query = " a.*,b.short_name,b.commerce_user_id,h.`name_cn`,d.id trone_api_id,d.name trone_api_name,e.nick_name commerce_name,"
+				+ "CONCAT(h.`name_cn`,'-',g.`name`,'-',f.`name`) service_name ";
+		
+		String sql = "SELECT " + Constant.CONSTANT_REPLACE_STRING;
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` b ON a.`sp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_api d on a.trone_api_id = d.id";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user e on b.commerce_user_id = e.id";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 f on a.product_id = f.id";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 g on f.product_1_id = g.id";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator h on g.operator_id = h.id";
+		sql += " where 1=1 and b.commerce_user_id = " + userId;
+		
+		
+		String[] troneTypes = {"实时","隔天","IVR","第三方支付"};
+		
+		int queryTroneType = -1;
+		
+		for(int i=0; i<troneTypes.length; i++)
+		{
+			if(troneTypes[i].equalsIgnoreCase(keyWord.trim()))
+			{
+				queryTroneType = i;
+			}
+		}
+		
+		if(isDaoLiang>=0)
+		{
+			sql += " and a.is_unhold_data = " + isDaoLiang;
+		}
+		else if(queryTroneType>=0)
+		{
+			 sql += " and a.trone_type = " + queryTroneType;
+		}
+		else
+		{
+			if(!StringUtil.isNullOrEmpty(keyWord))
+			{
+				sql += " and (a.name like '%" + keyWord + "%' or e.nick_name like '%" + keyWord + "%' or b.short_name like '%" 
+						+ keyWord + "%' or b.full_name like '%" + keyWord + "%' or h.name_cn like '%" 
+						+ keyWord + "%' or h.name_en like '%" + keyWord + "%' or d.name like '%" + keyWord + "%' or e.name like '%" + keyWord + "%'"
+								+ " or CONCAT(h.`name_cn`,'-',g.`name`,'-',f.`name`) like '%" + keyWord + "%' )";
+			}
+		}
+		
+		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
+		
+		//String orders = " order by  convert(b.short_name using gbk),convert(a.name using gbk) asc ";
+		
+		String orders = " order by  a.id desc ";
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("rows",new JdbcControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"), new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+					return rs.getInt(1);
+				
+				return 0;
+			}
+		}));
+		
+		map.put("list",new JdbcControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, query) + orders + limit, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpTroneModel> list = new ArrayList<SpTroneModel>();
+				
+				while(rs.next())
+				{
+					SpTroneModel model = new SpTroneModel();
+					
+					model.setId(rs.getInt("id"));
+					model.setSpId(rs.getInt("sp_id"));
+					model.setSpName(StringUtil.getString(rs.getString("short_name"), ""));
+					model.setSpTroneName(StringUtil.getString(rs.getString("name"), ""));
+					model.setOperator(rs.getInt("operator"));
+					model.setJieSuanLv(rs.getFloat("jiesuanlv"));
+					model.setOperatorName(StringUtil.getString(rs.getString("name_cn"), ""));
+					model.setTroneType(rs.getInt("trone_type"));
+					model.setStatus(rs.getInt("status"));
+					model.setTroneApiId(rs.getInt("trone_api_id"));
+					model.setCommerceUserName(StringUtil.getString(rs.getString("commerce_name"),""));
+					model.setTroneApiName(StringUtil.getString(rs.getString("trone_api_name"), ""));
+					model.setDayLimit(rs.getFloat("day_limit"));
+					model.setMonthLimit(rs.getFloat("month_limit"));
+					model.setUserDayLimit(rs.getFloat("user_day_limit"));
+					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
+					model.setJsTypes(rs.getInt("js_type"));
+					model.setServoceCodeName(StringUtil.getString(rs.getString("service_name"), ""));
+					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
+					model.setIsForceHold(rs.getInt("is_force_hold"));
+					list.add(model);
+				}
+				
+				return list;
+			}
+		}));
+		
+		return map;
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public List<SpTroneModel> loadSpTroneList()

@@ -402,4 +402,68 @@ public class SpDao
 		
 		return map;
 	}
+	
+	public Map<String, Object> loadSp(int userId,int pageIndex,int status,String keyWord)
+	{
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where 1=1 and a.commerce_user_id = " + userId;
+		if(status>=0){
+			sql+=" and a.status="+status;
+		}
+		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
+		
+		if(!StringUtil.isNullOrEmpty(keyWord))
+		{
+			sql += " AND (full_name LIKE '%" + keyWord + "%' or short_name LIKE '%"+ keyWord +"%' or b.nick_name like '%" + keyWord + "%' or a.id = '" + keyWord + "' )";
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		sql += " order by a.id desc ";
+		JdbcControl control = new JdbcControl();
+		map.put("rows",control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"), new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+					return rs.getInt(1);
+				
+				return 0;
+			}
+		}));
+		
+		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " * ") + limit, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<SpModel> list = new ArrayList<SpModel>();
+				while(rs.next())
+				{
+					SpModel model = new SpModel();
+					
+					model.setId(rs.getInt("id"));
+					
+					model.setShortName(StringUtil.getString(rs.getString("short_name"), ""));
+					model.setFullName(StringUtil.getString(rs.getString("full_name"), ""));
+					model.setContactPerson(StringUtil.getString(rs.getString("contract_person"), ""));
+					model.setQq(StringUtil.getString(rs.getString("qq"), ""));
+					model.setPhone(StringUtil.getString(rs.getString("phone"), ""));
+					model.setMail(StringUtil.getString(rs.getString("mail"), ""));
+					model.setAddress(StringUtil.getString(rs.getString("address"), ""));
+					model.setContractStartDate(StringUtil.getString(rs.getString("contract_start_date"), ""));
+					model.setContractEndDate(StringUtil.getString(rs.getString("contract_end_date"), ""));
+					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					model.setCommerceUserName(StringUtil.getString(rs.getString("nick_name"), ""));
+					//添加状态
+					model.setStatus(rs.getInt("status"));
+					
+					list.add(model);
+				}
+				return list;
+			}
+		}));
+		
+		return map;
+	}
 }

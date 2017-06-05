@@ -31,6 +31,11 @@ public class TroneServer
 		return new TroneDao().loadTrone(pageIndex, keyWord);
 	}
 	
+	public Map<String, Object> loadTrone(int userId,int pageIndex,String keyWord)
+	{
+		return new TroneDao().loadTrone(userId,pageIndex, keyWord);
+	}
+	
 	public List<TroneModel> loadSpTrone()
 	{
 		return new TroneDao().loadSpTrone();

@@ -40,6 +40,12 @@ public class SpServer
 	{
 		return new SpDao().loadSp(pageIndex,status, keyWord);
 	}
+	
+	public Map<String, Object> loadSp(int userId,int pageIndex,int status,String keyWord)
+	{
+		return new SpDao().loadSp(userId,pageIndex,status, keyWord);
+	}
+	
 	public Map<String, Object> loadSp(int pageIndex,String keyWord,int userId)
 	{
 		return new SpDao().loadSp(pageIndex, keyWord,userId);

@@ -263,6 +263,79 @@ public class TroneDao
 		return map;
 	}
 	
+	public Map<String, Object> loadTrone(int userId,int pageIndex,String keyWord)
+	{
+		String query = " a.*,c.commerce_user_id,c.`short_name`,b.`name` sp_trone_name ";
+		
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` b ON a.`sp_trone_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp c ON b.`sp_id` = c.`id` where 1=1 and c.commerce_user_id = " + userId;
+		
+		String wheres = "";
+		
+		if(!StringUtil.isNullOrEmpty(keyWord))
+		{
+			wheres += " and (c.short_name like '%" + keyWord + "%' or c.full_name like '%" + keyWord 
+					+ "%' or b.name like '%" + keyWord + "%' or a.trone_num like '%" + keyWord 
+					+ "%' or a.orders like '%" + keyWord + "%' or a.trone_name like '%" + keyWord 
+					+ "%')";
+		}
+		
+		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		JdbcControl control = new JdbcControl();
+		map.put("rows",control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)") + wheres,new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				if(rs.next())
+					return rs.getInt(1);
+				
+				return 0;
+			}
+		}));
+		
+		map.put("list", control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING, query) + wheres + " order by a.id desc " + limit, new QueryCallBack()
+		{
+			@Override
+			public Object onCallBack(ResultSet rs) throws SQLException
+			{
+				List<TroneModel> list = new ArrayList<TroneModel>();
+				while(rs.next())
+				{
+					TroneModel model = new TroneModel();
+					
+					model.setId(rs.getInt("id"));
+					model.setSpId(rs.getInt("sp_id"));
+					model.setSpApiUrlId(rs.getInt("sp_api_url_id"));
+					model.setSpShortName(StringUtil
+							.getString(rs.getString("short_name"), ""));
+					model.setTroneName(StringUtil
+							.getString(rs.getString("trone_name"), ""));
+					model.setTroneNum(StringUtil.getString(rs.getString("trone_num"), ""));
+					model.setOrders(StringUtil
+							.getString(rs.getString("orders"), ""));
+					model.setCurrencyId(rs.getInt("currency_id"));
+					model.setPrice(rs.getFloat("price"));
+					model.setDynamic(rs.getInt("is_dynamic"));
+					model.setStatus(rs.getInt("status"));
+					model.setSpTroneName(StringUtil.getString(rs.getString("sp_trone_name"), ""));
+					model.setSpTroneId(rs.getInt("sp_trone_id"));
+					model.setMatchPrice(rs.getInt("match_price"));
+					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+					list.add(model);
+				}
+				return list;
+			}
+		}));
+		
+		return map;
+	}
+	
 	public TroneModel getTroneById(int id)
 	{
 		String sql = "select  a.*,b.commerce_user_id,b.`short_name`,c.`name` sp_trone_name ";

@@ -638,4 +638,90 @@ public class CpDao
 
 		return map;
 	}
+	
+	public Map<String, Object> loadCp(int userId,int pageIndex,int status,String keyWord)
+	{
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1 and a.commerce_user_id = " + userId;
+		if(status>=0){
+			sql+=" and a.status="+status;
+		}
+		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
+				+ Constant.PAGE_SIZE;
+
+		if (!StringUtil.isNullOrEmpty(keyWord))
+		{
+			sql += " AND (a.full_name LIKE '%"+keyWord+"%' or a.short_name like '%" 
+					+ keyWord + "%' or a.id = '"+ keyWord +"' or c.nick_name like '%" 
+					+ keyWord + "%' or b.nick_name like '%" + keyWord + "%' or a.id = '" 
+					+ keyWord + "') ";
+		}
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		sql += " order by convert(a.short_name using gbk) asc ";
+
+		JdbcControl control = new JdbcControl();
+		map.put("rows", control.query(
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"),
+				new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						if (rs.next())
+							return rs.getInt(1);
+
+						return 0;
+					}
+				}));
+
+		map.put("list",
+				control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING,
+						" a.*,b.name,b.nick_name,c.nick_name commerce_user_name ")
+				+ limit, new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						List<CpModel> list = new ArrayList<CpModel>();
+						while (rs.next())
+						{
+							CpModel model = new CpModel();
+
+							model.setId(rs.getInt("id"));
+
+							model.setShortName(StringUtil
+									.getString(rs.getString("short_name"), ""));
+							model.setFullName(StringUtil
+									.getString(rs.getString("full_name"), ""));
+							model.setContactPerson(StringUtil.getString(
+									rs.getString("contract_person"), ""));
+							model.setQq(StringUtil.getString(rs.getString("qq"),
+									""));
+							model.setPhone(StringUtil
+									.getString(rs.getString("phone"), ""));
+							model.setMail(StringUtil
+									.getString(rs.getString("mail"), ""));
+							model.setAddress(StringUtil
+									.getString(rs.getString("address"), ""));
+							model.setContractStartDate(StringUtil.getString(
+									rs.getString("contract_start_date"), ""));
+							model.setContractEndDate(StringUtil.getString(
+									rs.getString("contract_end_date"), ""));
+							model.setUserName(StringUtil
+									.getString(rs.getString("nick_name"), ""));
+							model.setCommerceUserName(StringUtil.getString(
+									rs.getString("commerce_user_name"), ""));
+							model.setCommerceUserId(rs.getInt("commerce_user_id"));
+							
+							model.setStatus(rs.getInt("status"));
+							list.add(model);
+						}
+						return list;
+					}
+				}));
+
+		return map;
+	}
 }

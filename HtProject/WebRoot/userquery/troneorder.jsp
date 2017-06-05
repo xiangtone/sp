@@ -1,3 +1,4 @@
+<%@page import="com.system.model.UserModel"%>
 <%@page import="com.system.util.Base64UTF"%>
 <%@page import="com.system.server.CpServer"%>
 <%@page import="com.system.model.CpModel"%>
@@ -18,6 +19,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+
+	int userId = ((UserModel)session.getAttribute("user")).getId();
+
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
 
 	String query = Base64UTF.encode(request.getQueryString());
@@ -32,7 +36,7 @@
 	
 	String	keyWord = StringUtil.getString(request.getParameter("keyword"), "");
 
-	Map<String, Object> map =  new TroneOrderServer().loadTroneOrder(spId, spTroneId, cpId,status,pageIndex,keyWord);
+	Map<String, Object> map =  new TroneOrderServer().loadTroneOrder(userId,spId, spTroneId, cpId,status,pageIndex,keyWord);
 		
 	List<TroneOrderModel> list = (List<TroneOrderModel>)map.get("list");
 	
@@ -156,9 +160,6 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<dl>
-				<dd class="ddbtn" ><a href="troneorderadd.jsp">增  加</a></dd>
-			</dl>
 			<form action="troneorder.jsp"  method="get" style="margin-top: 10px">
 				<dl>
 					<dd class="dd01_me">CP</dd>
@@ -175,6 +176,7 @@
 							%>
 						</select>
 					</dd>
+					<!--
 					<dd class="dd01_me">SP</dd>
 					<dd class="dd04_me">
 						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
@@ -193,6 +195,7 @@
 					<dd class="dd04_me">
 						<select name="sp_trone_id" id="sel_sp_trone_id" ></select>
 					</dd>
+					-->
 					<dd class="dd01_me">状态</dd>
 					<dd class="dd04_me">
 						<select name="trone_status" id="sel_trone_status" >
@@ -216,7 +219,7 @@
 				<tr>
 					<td>序号</td>
 					<td>CP</td>
-					<td>SP名称</td>
+					<td>SPID</td>
 					<td>SP业务名称</td>
 					<td>通道名称</td>
 					<td>价格</td>
@@ -241,7 +244,7 @@
 				<tr <%= model.getDisable() == 1 ? stopStyle : "" %>>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
 					<td><%=model.getCpShortName()%></td>
-					<td><%=model.getSpShortName() %></td>
+					<td><%=model.getSpId() + 1000 %></td>
 					<td><%=model.getSpTroneName()%></td>
 					<td><%=model.getTroneName() %></td>
 					<td><%= model.getPrice() %></td>
@@ -254,7 +257,6 @@
 					<td><%=model.getDynamic()==1 ? "是" : "否" %></td>
 					<td><%=model.getDisable() ==0 ? "是" : "否" %></td>
 					<td>
-						<a href="troneorderedit.jsp?query=<%= query %>&id=<%= model.getId() %>" >修改</a>
 						<a href="troneordersync.jsp?id=<%= model.getId() %>" target="_blank">模拟</a>
 					</td>
 				</tr>
@@ -264,7 +266,7 @@
 				
 			<tbody>
 				<tr>
-					<td colspan="20" class="tfooter" style="text-align: center;"><%= pageData %></td>
+					<td colspan="23" class="tfooter" style="text-align: center;"><%= pageData %></td>
 				</tr>
 			</tbody>
 		</table>

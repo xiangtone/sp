@@ -1,3 +1,4 @@
+<%@page import="com.system.server.CommRightServer"%>
 <%@page import="com.system.server.UserServer"%>
 <%@page import="com.system.util.ConfigManager"%>
 <%@page import="com.system.model.UserModel"%>
@@ -30,6 +31,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+	int userId = ((UserModel)session.getAttribute("user")).getId();
+	String userName=((UserModel)session.getAttribute("user")).getNickName();
 	
 	String date = StringUtil.getString(request.getParameter("date"), StringUtil.getDefaultDate());
 	int sortType = StringUtil.getInteger(request.getParameter("sort_type"), 10);
@@ -41,19 +44,61 @@
 	int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order"), -1);
 	int provinceId = StringUtil.getInteger(request.getParameter("province"), -1);
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
-	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), userId);
 	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
 	
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
+	
+	boolean isFirstLoad = StringUtil.getInteger(request.getParameter("isfirstload"), -1) == -1 ? true : false;
+	
+	//查询SP权限，0表示SP商务
+	String userRightList = new CommRightServer().getRightListByUserId(userId, 0);
+	
+	String[] rightStrs = null;
+	
+	if(userRightList == null || "".equals(userRightList))
+	{
+		userRightList = userId + "";
+	}
+	else
+	{
+		rightStrs = userRightList.split(",");
+	}
+	
+	//把用户列表再次展示出来
+	if(rightStrs!=null)
+	{
+		List<UserModel> tmpUserList = new ArrayList<UserModel>();
+		
+		for(String sId : rightStrs)
+		{
+			for(UserModel tmpModel : userList)
+			{
+				if(sId.equalsIgnoreCase(tmpModel.getId() + ""))
+				{
+					tmpUserList.add(tmpModel);
+					break;
+				}
+			}
+		}
+		
+		userList = tmpUserList;
+	}
+	
+	//如果是公司或是商务就不是全部
+	if(spCommerceUserId>0 || isFirstLoad)
+	{
+		userRightList = spCommerceUserId + "";
+	}
 
-	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId,spCommerceUserId+"",cpCommerceUserId+"",sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId, userRightList ,cpCommerceUserId+"",sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
-	List<TroneModel> troneList = new TroneServer().loadTroneList();
+	List<TroneModel> troneList = new ArrayList<TroneModel>(); //new TroneServer().loadTroneList();
 	//List<TroneOrderModel> troneOrderList = new TroneOrderServer().loadTroneOrderList();
 	
 	List<TroneOrderModel> troneOrderList = new ArrayList();
@@ -69,7 +114,8 @@
 	double amount = (Double)map.get("amount");
 	double showAmount = (Double)map.get("showamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","小时","SP商务","CP商务"};
+	String[] titles = {"日期", "周数", "月份", "SP", "CP", "通道", "CP通道", "省份", "城市", "SP业务", "时间", "SP商务", "CP商务",
+			"运营商", "数据类型", "第一业务线", "第二业务线","CP业务"};
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -190,13 +236,24 @@ function arrayReverse(arr) {
 	
 	function onSpDataSelect(joData)
 	{
+		if(joData.id==-1)
+			$("#input_sp").val("");
+		else
+			$("#input_sp").val(joData.text);
+		
 		$("#sel_sp").val(joData.id);
 		troneChange();
 	}
 	
 	function onCpDataSelect(joData)
 	{
+		if(joData.id==-1)
+			$("#input_cp").val("");
+		else
+			$("#input_cp").val(joData.text);
+		
 		$("#sel_cp").val(joData.id);
+		troneOrderChange();
 	}
 
 	function joCity(id,provinceId,name)
@@ -270,6 +327,14 @@ function arrayReverse(arr) {
 		
 		//SP的二级联动
 		$("#sel_sp").val(<%= spId %>);
+		<%
+		if(spId>0)
+		{
+			%>
+		$("#input_sp").val($("#sel_sp").find("option:selected").text());
+			<%
+		}
+		%>
 		$("#sel_sp").change(troneChange);
 		troneChange();
 		$("#sel_sp_trone").val(<%= spTroneId %>);
@@ -277,6 +342,16 @@ function arrayReverse(arr) {
 		
 		//CP的二级联动
 		$("#sel_cp").val(<%= cpId %>);	
+		
+		<%
+		if(cpId>0)
+		{
+			%>
+		$("#input_cp").val($("#sel_cp").find("option:selected").text());
+			<%
+		}
+		%>
+		
 		$("#sel_cp").change(troneOrderChange);
 		troneOrderChange();
 		$("#sel_trone_order").val(<%= troneOrderId %>);
@@ -347,17 +422,17 @@ function arrayReverse(arr) {
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="mr_daily_sp.jsp"  method="get">
+			<form action="sp_person_mr2.jsp"  method="get">
+				<input type="hidden" name="isfirstload" value="1" />
 				<dl>
-					<!--
 					<dd class="dd01_me" onclick="openDetailData('aaa')">开始日期</dd>
 					<dd class="dd03_me">
 						<input name="date"  type="text" value="<%=date%>" 
 							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
-					-->
 					<dd class="dd01_me">SP</dd>
-					<dd class="dd04_me">
-						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
+					<dd class="dd03_me">
+						<input  type="text" id="input_sp" onclick="namePicker(this,spList,onSpDataSelect)" style="width: 100px;" readonly="readonly" >
+						<select name="sp_id" id="sel_sp" title="选择SP" style="display: none">
 							<option value="-1">全部</option>
 							<%
 							for(SpModel sp : spList)
@@ -371,7 +446,7 @@ function arrayReverse(arr) {
 					</dd>
 					<dd class="dd01_me">SP业务</dd>
 						<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" onclick="namePicker(this,npSpTroneArray,npSpTroneChange)"></select>
+						<select name="sp_trone" id="sel_sp_trone" ></select>
 					</dd>
 					<dd class="dd01_me">SP通道</dd>
 						<dd class="dd04_me">
@@ -381,8 +456,9 @@ function arrayReverse(arr) {
 				<br /><br /><br />
 				<dl>
 					<dd class="dd01_me">CP</dd>
-					<dd class="dd04_me">
-						<select name="cp_id" id="sel_cp" title="选择CP" onclick="namePicker(this,cpList,onCpDataSelect)">
+					<dd class="dd03_me">
+						<input  type="text" id="input_cp" onclick="namePicker(this,cpList,onCpDataSelect)" style="width: 100px;" readonly="readonly" >
+						<select name="cp_id" id="sel_cp" title="选择CP" style="display: none;">
 							<option value="-1">全部</option>
 							<%
 							for(CpModel cp : cpList)
@@ -426,15 +502,16 @@ function arrayReverse(arr) {
 						</select>
 					</dd>
 					-->
+					<!--
 					<dd class="dd01_me">SP商务</dd>
 						<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
 							<option value="-1">全部</option>
 							<%
-							for(UserModel commerceUser : userList)
+							for(UserModel tmpUser : userList)
 							{
 								%>
-							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
+							<option value="<%= tmpUser.getId() %>"><%= tmpUser.getNickName() %></option>	
 								<%
 							}
 							%>
@@ -454,6 +531,7 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
+					-->
 					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式">
@@ -462,7 +540,8 @@ function arrayReverse(arr) {
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
 							<option value="5">CP</option>
-							<option value="7">CP业务</option>
+							<option value="18">CP业务</option>
+							<option value="7">CP通道</option>
 							<!-- 暂时先隐藏 -->
 							<!--
 							<option value="2">周数</option>
@@ -479,7 +558,6 @@ function arrayReverse(arr) {
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" />
 					</dd>
-					<dd class="dd01_me"><a style="color:blue;" href="mr_lr_daily.jsp?<%= request.getQueryString() %>">查看利润</a></dd>
 				</dl>
 			</form>
 		</div>

@@ -35,6 +35,12 @@ public class CpServer {
 		return new CpDao().loadCp(pageIndex,status, keyWord);
 	//	return new CpDao().loadCp(pageIndex, keyWord);
 	}
+	
+	public Map<String, Object> loadCp(int userId,int pageIndex, int status, String keyWord) {
+		return new CpDao().loadCp(userId,pageIndex,status, keyWord);
+	//	return new CpDao().loadCp(pageIndex, keyWord);
+	}
+	
 	public CpModel loadCpById(int id) {
 		return new CpDao().loadCpById(id);
 	}
