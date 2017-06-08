@@ -365,7 +365,7 @@
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="sp_person_mr1_lr.jsp"  method="get" style="margin-top: 10px">
+			<form action="sp_wx_person_mr1_lr.jsp"  method="get" style="margin-top: 10px">
 				<input type="hidden" name="isfirstload" value="1" />
 				<dl>
 					<dd class="dd01_me">开始日期</dd>

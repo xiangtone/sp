@@ -358,6 +358,7 @@ function arrayReverse(arr) {
 			}
 		}
 		*/
+		$("#sel_sp_trone").empty(); 
 		var cpId = $("#sel_cp").val();
 		getAjaxValue("../ajaction.jsp?type=5&cp_id=" + cpId,cpSpTroneChange);
 	}

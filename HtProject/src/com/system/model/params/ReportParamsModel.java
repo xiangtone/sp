@@ -18,6 +18,7 @@ public class ReportParamsModel
 	private int cityId;
 	private int jsType;
 	private int showType;
+	private boolean onlyShowSync;
 	
 	public String getStartDate()
 	{
@@ -146,6 +147,14 @@ public class ReportParamsModel
 	public void setCityId(int cityId)
 	{
 		this.cityId = cityId;
+	}
+	public boolean isOnlyShowSync()
+	{
+		return onlyShowSync;
+	}
+	public void setOnlyShowSync(boolean onlyShowSync)
+	{
+		this.onlyShowSync = onlyShowSync;
 	}
 	
 	

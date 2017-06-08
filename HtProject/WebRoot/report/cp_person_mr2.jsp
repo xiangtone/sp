@@ -32,6 +32,9 @@
 	pageEncoding="UTF-8"%>
 <%
 	int userId = ((UserModel)session.getAttribute("user")).getId();
+
+	userId = 523;
+	
 	String userName=((UserModel)session.getAttribute("user")).getNickName();
 	
 	String date = StringUtil.getString(request.getParameter("date"), StringUtil.getDefaultDate());
@@ -44,18 +47,18 @@
 	int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order"), -1);
 	int provinceId = StringUtil.getInteger(request.getParameter("province"), -1);
 	int cityId = StringUtil.getInteger(request.getParameter("city"), -1);
-	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), userId);
-	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
+	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
+	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), userId);
 	
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
-	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
+	List<UserModel> spCommerceUserList  = new UserServer().loadUserByGroupId(spCommerceId);
 	int cpCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("CP_COMMERCE_GROUP_ID"),-1);
-	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
+	List<UserModel> userList = new UserServer().loadUserByGroupId(cpCommerceId);
 	
 	boolean isFirstLoad = StringUtil.getInteger(request.getParameter("isfirstload"), -1) == -1 ? true : false;
 	
-	//查询SP权限，0表示SP商务
-	String userRightList = new CommRightServer().getRightListByUserId(userId, 0);
+	//查询CP权限，1表示CP商务
+	String userRightList = new CommRightServer().getRightListByUserId(userId, 1);
 	
 	String[] rightStrs = null;
 	
@@ -87,14 +90,19 @@
 		
 		userList = tmpUserList;
 	}
+	else
+	{
+		userList.clear();
+		userList.add((UserModel)session.getAttribute("user"));
+	}
 	
 	//如果是公司或是商务就不是全部
-	if(spCommerceUserId>0 || isFirstLoad)
+	if(cpCommerceUserId>0 || isFirstLoad)
 	{
-		userRightList = spCommerceUserId + "";
+		userRightList = cpCommerceUserId + "";
 	}
 
-	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId, userRightList ,cpCommerceUserId+"",sortType);
+	Map<String, Object> map =  new MrServer().getMrTodayData(date,spId, spTroneId,troneId, cpId, troneOrderId, provinceId, cityId, spCommerceUserId + "", userRightList,sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -253,6 +261,7 @@ function arrayReverse(arr) {
 			$("#input_cp").val(joData.text);
 		
 		$("#sel_cp").val(joData.id);
+		
 		troneOrderChange();
 	}
 
@@ -392,6 +401,7 @@ function arrayReverse(arr) {
 	
 	function troneOrderChange()
 	{
+		/*
 		var cpId = $("#sel_cp").val();
 		$("#sel_trone_order").empty(); 
 		$("#sel_trone_order").append("<option value='-1'>全部</option>");
@@ -402,6 +412,33 @@ function arrayReverse(arr) {
 				$("#sel_trone_order").append("<option value='" + troneOrderList[i].id + "'>" + troneOrderList[i].troneOrderName + "</option>");
 			}
 		}
+		*/
+		$("#sel_sp_trone").empty(); 
+		var cpId = $("#sel_cp").val();
+		getAjaxValue("../ajaction.jsp?type=5&cp_id=" + cpId,cpSpTroneChange);
+	}
+	
+	function cpSpTroneChange(data)
+	{
+		if(isNullOrEmpty(data))
+			return;
+		
+		var spTroneList = data.split(",");
+		
+		$("#sel_sp_trone").empty(); 
+		$("#sel_sp_trone").append("<option value='-1'>全部</option>");
+		for(var i=0; i<spTroneList.length; i++)
+		{
+			for(var j=0; j<spTroneArray.length; j++)
+			{
+				if(spTroneArray[j].id==spTroneList[i])
+				{
+					$("#sel_sp_trone").append("<option value='" + spTroneArray[j].id + "'>" + spTroneArray[j].name + "</option>");
+				}
+			}
+		}
+		<% if(spTroneId>0){ %> $("#sel_sp_trone").val(<%= spTroneId %>); <% } %>
+		
 	}
 	
 	function provinceChange()
@@ -422,17 +459,17 @@ function arrayReverse(arr) {
 <body>
 	<div class="main_content">
 		<div class="content" >
-			<form action="sp_wx_person_mr2.jsp"  method="get">
+			<form action="cp_person_mr2.jsp"  method="get">
 				<input type="hidden" name="isfirstload" value="1" />
 				<dl>
 					<dd class="dd01_me" onclick="openDetailData('aaa')">开始日期</dd>
 					<dd class="dd03_me">
 						<input name="date"  type="text" value="<%=date%>" 
 							onclick="WdatePicker({isShowClear:false,readOnly:true})" style="width: 100px;">
+					<!--
 					<dd class="dd01_me">SP</dd>
-					<dd class="dd03_me">
-						<input  type="text" id="input_sp" onclick="namePicker(this,spList,onSpDataSelect)" style="width: 100px;" readonly="readonly" >
-						<select name="sp_id" id="sel_sp" title="选择SP" style="display: none">
+					<dd class="dd04_me">
+						<select name="sp_id" id="sel_sp" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
 							<option value="-1">全部</option>
 							<%
 							for(SpModel sp : spList)
@@ -444,17 +481,12 @@ function arrayReverse(arr) {
 							%>
 						</select>
 					</dd>
-					<dd class="dd01_me">SP业务</dd>
-						<dd class="dd04_me">
-						<select name="sp_trone" id="sel_sp_trone" ></select>
-					</dd>
+					
 					<dd class="dd01_me">SP通道</dd>
 						<dd class="dd04_me">
 						<select name="trone" id="sel_trone" title="请选择通道"></select>
 					</dd>
-				</dl>
-				<br /><br /><br />
-				<dl>
+					-->
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd03_me">
 						<input  type="text" id="input_cp" onclick="namePicker(this,cpList,onCpDataSelect)" style="width: 100px;" readonly="readonly" >
@@ -469,6 +501,10 @@ function arrayReverse(arr) {
 							}
 							%>
 						</select>
+					</dd>
+					<dd class="dd01_me">CP业务</dd>
+						<dd class="dd04_me">
+						<select name="sp_trone" id="sel_sp_trone" ></select>
 					</dd>
 					<!--
 					<dd>
@@ -502,27 +538,13 @@ function arrayReverse(arr) {
 						</select>
 					</dd>
 					-->
-					<!--
+					<!--  
 					<dd class="dd01_me">SP商务</dd>
 						<dd class="dd04_me">
 						<select name="commerce_user" id="sel_commerce_user" style="width: 100px;">
 							<option value="-1">全部</option>
 							<%
-							for(UserModel tmpUser : userList)
-							{
-								%>
-							<option value="<%= tmpUser.getId() %>"><%= tmpUser.getNickName() %></option>	
-								<%
-							}
-							%>
-						</select>
-					</dd>
-					<dd class="dd01_me">CP商务</dd>
-						<dd class="dd04_me">
-						<select name="cp_commerce_user" id="sel_cp_commerce_user" style="width: 100px;">
-							<option value="-1">全部</option>
-							<%
-							for(UserModel commerceUser : cpCommerceUserList)
+							for(UserModel commerceUser : userList)
 							{
 								%>
 							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
@@ -532,13 +554,30 @@ function arrayReverse(arr) {
 						</select>
 					</dd>
 					-->
+					<dd class="dd01_me">CP商务</dd>
+						<dd class="dd04_me">
+						<select name="cp_commerce_user" id="sel_cp_commerce_user" style="width: 100px;">
+							<option value="-1">全部</option>
+							<%
+							for(UserModel commerceUser : userList)
+							{
+								%>
+							<option value="<%= commerceUser.getId() %>"><%= commerceUser.getNickName() %></option>
+								<%
+							}
+							%>
+						</select>
+					</dd>
+					
 					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>
 					<dd class="dd04_me">
 						<select name="sort_type" id="sel_sort_type" title="展示方式">
 							<option value="11">小时</option>
+							<!--  
 							<option value="4">SP</option>
 							<option value="10">SP业务</option>
 							<option value="6">SP通道</option>
+							-->
 							<option value="5">CP</option>
 							<option value="18">CP业务</option>
 							<option value="7">CP通道</option>
@@ -549,10 +588,10 @@ function arrayReverse(arr) {
 							-->
 							<option value="8">省份</option>
 							<option value="9">城市</option>
-							<!--
+							<!--  
 							<option value="12">SP商务</option>
-							<option value="13">CP商务</option>
 							-->
+							<option value="13">CP商务</option>
 						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
@@ -566,13 +605,8 @@ function arrayReverse(arr) {
 				<tr>
 					<td>序号</td>
 					<td onclick="TableSorter('table_id',1,'date')"><%= titles[sortType-1] %></td>
-					<td onclick="TableSorter('table_id',2,'float')">数据量(条)</td>
-					<td onclick="TableSorter('table_id',3,'float')">失败量(条)</td>
-					<td onclick="TableSorter('table_id',4,'float')">推送量(条)</td>
-					<td onclick="TableSorter('table_id',5,'float')">金额(元)</td>
-					<td onclick="TableSorter('table_id',6,'float')">失败金额(元 )</td>
-					<td onclick="TableSorter('table_id',7,'float')">推送金额(元)</td>
-					<td onclick="TableSorter('table_id',8,'String')">失败率</td>
+					<td onclick="TableSorter('table_id',2,'float')">推送量(条)</td>
+					<td onclick="TableSorter('table_id',3,'float')">推送金额(元)</td>
 				</tr>
 			</thead>
 			<tbody>		
@@ -583,15 +617,10 @@ function arrayReverse(arr) {
 						%>
 				<tr>
 					<td><%= index++ %></td>
-					<td><a href="detail.jsp?date=<%= date %>&sp_id=<%= spId %>&cp_id=<%= cpId %>&sp_trone_id=<%= spTroneId %>&trone_id=<%= troneId %>&show_type=<%= sortType %>&joinid=<%= model.getJoinId() %>&title=<%= StringUtil.encodeUrl(model.getTitle1(),"UTF-8") %>" 
+					<td><a href="cpdetail.jsp?date=<%= date %>&sp_id=<%= spId %>&cp_id=<%= cpId %>&sp_trone_id=<%= spTroneId %>&trone_id=<%= troneId %>&show_type=<%= sortType %>&joinid=<%= model.getJoinId() %>&title=<%= StringUtil.encodeUrl(model.getTitle1(),"UTF-8") %>" 
 					target="_blank"><%= model.getTitle1() %></a></td>
-					<td><%= model.getDataRows() %></td>
-					<td><%= model.getDataRows() - model.getShowDataRows()  %></td>
 					<td><%= model.getShowDataRows() %></td>
-					<td><%= StringUtil.getDecimalFormat(model.getAmount()) %></td>
-					<td><%= StringUtil.getDecimalFormat(model.getAmount() - model.getShowAmount()) %></td>
 					<td><%= StringUtil.getDecimalFormat(model.getShowAmount()) %></td>
-					<td><%= StringUtil.getPercent(model.getDataRows() - model.getShowDataRows(), model.getDataRows()) %></td>
 				</tr>
 						<%
 					}
@@ -600,13 +629,8 @@ function arrayReverse(arr) {
 				<tr>
 					<td></td>
 					<td></td>
-					<td>总数据量(条)：<%= dataRows %></td>
-					<td>总失败量(条)：<%= dataRows - showDataRows  %> </td>
 					<td>总推送量(条)：<%= showDataRows %></td>
-					<td>总金额(元)：<%= StringUtil.getDecimalFormat(amount) %></td>
-					<td>总失败金额(元 )：<%= StringUtil.getDecimalFormat(amount - showAmount) %></td>
 					<td>总推送金额(元)：<%= StringUtil.getDecimalFormat(showAmount) %></td>
-					<td>总失败率：<%= StringUtil.getPercent(dataRows - showDataRows, dataRows) %></td>
 				</tr>
 			</tbody>
 		</table>

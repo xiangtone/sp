@@ -27,6 +27,19 @@
 	{
 		splitorBand = "style=\"background-image: url('head_data/splitor_sjhd.png'); background-size:contain;\"";
 	}
+	else if("SZWX".equalsIgnoreCase(sysUser))
+	{
+		int[] userIds = {18,19,20};
+		
+		for(int id : userIds)
+		{
+			if(id==user.getId())
+			{
+				logoImg = "";
+				break;
+			}
+		}
+	}
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

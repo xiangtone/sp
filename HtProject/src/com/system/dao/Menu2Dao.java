@@ -21,7 +21,7 @@ public class Menu2Dao
 	public List<Menu2Model> loadMenu2List()
 	{
 		String sql = "select a.id menu2Id,a.name menu2Name,b.id menu1Id,b.name menu1Name,"
-				+ "c.id menuHeadId,c.name menuHeadName,a.url,a.action_url from tbl_menu_2 a left join tbl_menu_1 b "
+				+ "c.id menuHeadId,c.name menuHeadName,a.url,a.action_url,a.remark from tbl_menu_2 a left join tbl_menu_1 b "
 				+ "on a.menu_1_id = b.id left join tbl_menu_head c on b.head_id = c.id "
 				+ "order by c.sort,b.sort,a.sort asc";
 		
@@ -48,6 +48,7 @@ public class Menu2Dao
 					model.setMenuHeadName(StringUtil.getString(rs.getString("menuHeadName"), "MenuHeadName"));
 					
 					model.setActionUrl(StringUtil.getString(rs.getString("action_url"), ""));
+					model.setRemark(StringUtil.getString(rs.getString("remark"), ""));
 					
 					list.add(model);
 				}

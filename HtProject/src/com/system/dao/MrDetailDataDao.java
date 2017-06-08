@@ -221,6 +221,10 @@ public class MrDetailDataDao
 		{
 			sql += " AND f.commerce_user_id = " + params.getCpCommerceUserId();
 		}
+		if(params.isOnlyShowSync())
+		{
+			sql += "AND a.syn_flag = 1";
+		}
 		
 		
 		//sortType 1:天  2:周  3：月  4：SP 5：CP 6：TRONE 7:TRONE_ORDER 8:PROVINCE 9:CITY 10:SP业务,11 小时 
@@ -365,4 +369,9 @@ public class MrDetailDataDao
 		});
 	}
 	
+	public static void main(String[] args)
+	{
+		ReportParamsModel model = new ReportParamsModel();
+		System.out.println(model.isOnlyShowSync());
+	}
 }	
