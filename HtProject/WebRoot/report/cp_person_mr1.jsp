@@ -34,8 +34,6 @@
 <%
 	int userId = ((UserModel)session.getAttribute("user")).getId();
 
-	userId = 523;
-
 	String userName=((UserModel)session.getAttribute("user")).getNickName();
 	String defaultStartDate = StringUtil.getMonthHeadDate();
 	String defaultEndDate = StringUtil.getMonthEndDate();

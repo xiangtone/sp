@@ -33,8 +33,6 @@
 <%
 	int userId = ((UserModel)session.getAttribute("user")).getId();
 
-	userId = 523;
-	
 	String userName=((UserModel)session.getAttribute("user")).getNickName();
 	
 	String date = StringUtil.getString(request.getParameter("date"), StringUtil.getDefaultDate());
