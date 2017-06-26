@@ -12,12 +12,10 @@ using System.Threading.Tasks;
 
 namespace n8wan.codepool.Model
 {
-    /// <summary>
-    /// 响应结果
-    /// </summary>
-    [DataContract]
-    public class PoolResultModel
+    public class PoolResultModel : IResultResponseModel
     {
+        private JToken _action;
+
         [JsonProperty("status")]
         public ErrorCode Status { get; set; }
 
@@ -28,19 +26,29 @@ namespace n8wan.codepool.Model
         public string OrderNum { get; set; }
 
         [JsonProperty("jsonResult", NullValueHandling = NullValueHandling.Ignore)]
-        public JToken Action { get; set; }
+        public JToken Action
+        {
+            get { return _action; }
+            set
+            {
+                _action = value;
+                if (value == null)
+                    return;
+
+                var des = value["description"];
+                if (des != null)
+                {
+                    this.Description = des.Value<string>();
+                    des.Parent.Remove();
+                }
+            }
+        }
 
 
         public override string ToString()
         {
             Newtonsoft.Json.JsonSerializerSettings jss = null;
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.None, jss);
-            //using (var stm = new MemoryStream())
-            //{
-            //    var dc = new DataContractJsonSerializer(this.GetType());
-            //    dc.WriteObject(stm, this);
-            //    return ASCIIEncoding.UTF8.GetString(stm.ToArray());
-            //}
         }
     }
 }

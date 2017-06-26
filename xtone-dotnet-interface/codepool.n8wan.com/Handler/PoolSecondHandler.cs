@@ -32,11 +32,12 @@ namespace n8wan.codepool.Handler
 
         private void WriteResult()
         {
-            var prm = new n8wan.codepool.Model.PoolResultModel();
+            var prm = ResultModelManager.CreateModel();
             prm.Status = poolCore.ECode;
             prm.Description = poolCore.ErrorMesage;
             prm.OrderNum = poolCore.OrderNum;
-            prm.Action = poolCore.spResult;
+            if (poolCore.spResult != null)
+                prm.Action = poolCore.spResult;
             poolCore.SaveOrder();
             Response.Clear();
             var jstr = prm.ToString();

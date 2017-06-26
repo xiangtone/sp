@@ -37,7 +37,7 @@ namespace LightDataModel
             /// </summary>
             public const string match_keyword = "match_keyword";
             /// <summary>
-            /// API必须参数,1=IMEI,2=IMSI,3=PHONE,4=IP,5=PACKAGENAME,6=ANDROIDVERSION,7=NETTYPE,8=CLIENTIP
+            /// API必须参数,0=IMEI,1=IMSI,2=PHONE,3=IP,4=PACKAGENAME,5=ANDROIDVERSION,6=NETTYPE,7=CLIENTIP
             /// </summary>
             public const string api_fields = "api_fields";
             /// <summary>
@@ -46,6 +46,34 @@ namespace LightDataModel
             public const string locate_match = "locate_match";
 
             public const string create_date = "create_date";
+            /// <summary>
+            /// 用户日限
+            /// </summary>
+            public const string user_day_limit = "user_day_limit";
+            /// <summary>
+            /// 用户月限
+            /// </summary>
+            public const string user_month_limit = "user_month_limit";
+            /// <summary>
+            /// 日限
+            /// </summary>
+            public const string day_limit = "day_limit";
+            /// <summary>
+            /// 月限
+            /// </summary>
+            public const string month_limit = "month_limit";
+            /// <summary>
+            /// 当前日额
+            /// </summary>
+            public const string cur_day_limit = "cur_day_limit";
+            /// <summary>
+            /// 当前月额
+            /// </summary>
+            public const string cur_month_limit = "cur_month_limit";
+            /// <summary>
+            /// 可配置参数名，多个参数名以英文逗号分隔
+            /// </summary>
+            public const string config_fields = "config_fields";
 
             #endregion
 
@@ -64,7 +92,7 @@ namespace LightDataModel
         /// </summary>
         private string _match_keyword;
         /// <summary>
-        /// API必须参数,1=IMEI,2=IMSI,3=PHONE,4=IP,5=PACKAGENAME,6=ANDROIDVERSION,7=NETTYPE,8=CLIENTIP
+        /// API必须参数,0=IMEI,1=IMSI,2=PHONE,3=IP,4=PACKAGENAME,5=ANDROIDVERSION,6=NETTYPE,7=CLIENTIP
         /// </summary>
         private string _api_fields;
         /// <summary>
@@ -73,6 +101,34 @@ namespace LightDataModel
         private int _locate_match;
 
         private DateTime _create_date;
+        /// <summary>
+        /// 用户日限
+        /// </summary>
+        private Decimal _user_day_limit;
+        /// <summary>
+        /// 用户月限
+        /// </summary>
+        private Decimal _user_month_limit;
+        /// <summary>
+        /// 日限
+        /// </summary>
+        private Decimal _day_limit;
+        /// <summary>
+        /// 月限
+        /// </summary>
+        private Decimal _month_limit;
+        /// <summary>
+        /// 当前日额
+        /// </summary>
+        private Decimal _cur_day_limit;
+        /// <summary>
+        /// 当前月额
+        /// </summary>
+        private Decimal _cur_month_limit;
+        /// <summary>
+        /// 可配置参数名，多个参数名以英文逗号分隔
+        /// </summary>
+        private string _config_fields;
 
         #endregion
 
@@ -154,7 +210,7 @@ namespace LightDataModel
             }
         }
         /// <summary>
-        /// API必须参数,1=IMEI,2=IMSI,3=PHONE,4=IP,5=PACKAGENAME,6=ANDROIDVERSION,7=NETTYPE,8=CLIENTIP
+        /// API必须参数,0=IMEI,1=IMSI,2=PHONE,3=IP,4=PACKAGENAME,5=ANDROIDVERSION,6=NETTYPE,7=CLIENTIP
         /// </summary>
         public string api_fields
         {
@@ -214,6 +270,153 @@ namespace LightDataModel
                 this._create_date = value;
             }
         }
+        /// <summary>
+        /// 用户日限
+        /// </summary>
+        public Decimal user_day_limit
+        {
+            get { return this._user_day_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.user_day_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.user_day_limit);
+                else
+                    RemoveNullFlag(Fields.user_day_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.user_day_limit, this._user_day_limit, value);
+                this._user_day_limit = value;
+            }
+        }
+        /// <summary>
+        /// 用户月限
+        /// </summary>
+        public Decimal user_month_limit
+        {
+            get { return this._user_month_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.user_month_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.user_month_limit);
+                else
+                    RemoveNullFlag(Fields.user_month_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.user_month_limit, this._user_month_limit, value);
+                this._user_month_limit = value;
+            }
+        }
+        /// <summary>
+        /// 日限
+        /// </summary>
+        public Decimal day_limit
+        {
+            get { return this._day_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.day_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.day_limit);
+                else
+                    RemoveNullFlag(Fields.day_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.day_limit, this._day_limit, value);
+                this._day_limit = value;
+            }
+        }
+        /// <summary>
+        /// 月限
+        /// </summary>
+        public Decimal month_limit
+        {
+            get { return this._month_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.month_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.month_limit);
+                else
+                    RemoveNullFlag(Fields.month_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.month_limit, this._month_limit, value);
+                this._month_limit = value;
+            }
+        }
+        /// <summary>
+        /// 当前日额
+        /// </summary>
+        public Decimal cur_day_limit
+        {
+            get { return this._cur_day_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.cur_day_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.cur_day_limit);
+                else
+                    RemoveNullFlag(Fields.cur_day_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.cur_day_limit, this._cur_day_limit, value);
+                this._cur_day_limit = value;
+            }
+        }
+        /// <summary>
+        /// 当前月额
+        /// </summary>
+        public Decimal cur_month_limit
+        {
+            get { return this._cur_month_limit; }
+            set
+            {
+#if true && true
+                RemoveNullFlag(Fields.cur_month_limit);
+#elif !true
+			    if (value == null)
+                    SetNullFlag(Fields.cur_month_limit);
+                else
+                    RemoveNullFlag(Fields.cur_month_limit);
+#endif
+
+                SetFieldHasUpdate(Fields.cur_month_limit, this._cur_month_limit, value);
+                this._cur_month_limit = value;
+            }
+        }
+        /// <summary>
+        /// 可配置参数名，多个参数名以英文逗号分隔
+        /// </summary>
+        public string config_fields
+        {
+            get { return this._config_fields; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.config_fields);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.config_fields);
+                else
+                    RemoveNullFlag(Fields.config_fields);
+#endif
+
+                SetFieldHasUpdate(Fields.config_fields, this._config_fields, value);
+                this._config_fields = value;
+            }
+        }
 
         #endregion
         #region 空值相关方法
@@ -225,6 +428,13 @@ namespace LightDataModel
 ,"match_keyword"
 ,"api_fields"
 ,"locate_match"
+,"user_day_limit"
+,"user_month_limit"
+,"day_limit"
+,"month_limit"
+,"cur_day_limit"
+,"cur_month_limit"
+,"config_fields"
 };
         }
         public bool IsnameNull() { return IsNull(Fields.name); }
@@ -242,6 +452,27 @@ namespace LightDataModel
         public bool Islocate_matchNull() { return IsNull(Fields.locate_match); }
 
         public void Setlocate_matchNull() { SetNull(Fields.locate_match); }
+        public bool Isuser_day_limitNull() { return IsNull(Fields.user_day_limit); }
+
+        public void Setuser_day_limitNull() { SetNull(Fields.user_day_limit); }
+        public bool Isuser_month_limitNull() { return IsNull(Fields.user_month_limit); }
+
+        public void Setuser_month_limitNull() { SetNull(Fields.user_month_limit); }
+        public bool Isday_limitNull() { return IsNull(Fields.day_limit); }
+
+        public void Setday_limitNull() { SetNull(Fields.day_limit); }
+        public bool Ismonth_limitNull() { return IsNull(Fields.month_limit); }
+
+        public void Setmonth_limitNull() { SetNull(Fields.month_limit); }
+        public bool Iscur_day_limitNull() { return IsNull(Fields.cur_day_limit); }
+
+        public void Setcur_day_limitNull() { SetNull(Fields.cur_day_limit); }
+        public bool Iscur_month_limitNull() { return IsNull(Fields.cur_month_limit); }
+
+        public void Setcur_month_limitNull() { SetNull(Fields.cur_month_limit); }
+        public bool Isconfig_fieldsNull() { return IsNull(Fields.config_fields); }
+
+        public void Setconfig_fieldsNull() { SetNull(Fields.config_fields); }
 
         #endregion
         #region 静态方法
@@ -287,6 +518,5 @@ namespace LightDataModel
         }
 
         #endregion
-
     }
 }

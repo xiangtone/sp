@@ -17,8 +17,8 @@ public class detail : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySqlD
         dstTable = Request["name"];
 
         var stw = new System.Diagnostics.Stopwatch();
-        LightDataModel.tbl_cp_push_urlItem.GetRowByIdWithCache(dBase, 47);
-
+        //LightDataModel.tbl_cp_push_urlItem.GetRowByIdWithCache(dBase, 47);
+        //n8wan.codepool.Dao.CustomFee.QueryLimit(dBase, 1, null);
 
         stw.Start();
 
@@ -62,9 +62,16 @@ public class detail : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySqlD
         stm.WriteLine("table name:{0}({1})", value, cType.FullName);
 
         var expdate = cType.GetField("_expired", BindingFlags.NonPublic | BindingFlags.Instance);
-        value = expdate.GetValue(cache);
-        var ts = ((DateTime)value - DateTime.Now);
-        stm.WriteLine("Expired on :{0}({1})", value, ts);
+        if (expdate != null)
+        {
+            value = expdate.GetValue(cache);
+            var ts = ((DateTime)value - DateTime.Now);
+            stm.WriteLine("Expired on :{0}({1})", value, ts);
+        }
+        else
+        {
+            stm.WriteLine("Expired Data :unkonw!");
+        }
 
         var getCacheMethod = cType.GetMethod("GetCacheData");
         if (getCacheMethod == null)
@@ -109,20 +116,26 @@ public class detail : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySqlD
         var types = mType.Assembly.GetTypes();
 
         var fType = types.FirstOrDefault(e => e.FullName == fieldsName);
-        if (fType == null)
+        MemberInfo[] fields = null;
+
+        if (fType != null)
+        {
+            fields = fType.GetFields(BindingFlags.Static | BindingFlags.Public);
+        }
+        else
         {
             stm.WriteLine("InnerClass not Found:{0}", fieldsName);
-            return;
+            fields = mType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.DeclaredOnly);
         }
 
 
-        var fields = fType.GetFields(BindingFlags.Static | BindingFlags.Public);
+
 
         List<PropertyInfo> pros = new List<PropertyInfo>();
 
         foreach (var f in fields)
         {
-            if (f.Name == "PrimaryKey")
+            if (f.Name == "PrimaryKey" || f.Name == "IdentifyField" || f.Name == "TableName")
                 continue;
             var p = mType.GetProperty(f.Name);
             if (p == null)

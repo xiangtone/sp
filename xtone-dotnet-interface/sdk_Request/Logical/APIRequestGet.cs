@@ -510,7 +510,7 @@ namespace sdk_Request.Logical
         /// <param name="encode">可为空，默认为utf8</param>
         /// <param name="Heads">HTTP报文头，可为空</param>
         /// <returns></returns>
-        internal protected virtual string DownloadHTML(string url, string postdata, int timeout, string encode, IDictionary<string, string> Heads)
+        protected virtual string DownloadHTML(string url, string postdata, int timeout, string encode, IDictionary<string, string> Heads)
         {
             Stopwatch st = new Stopwatch();
             st.Start();
@@ -549,6 +549,8 @@ namespace sdk_Request.Logical
             catch (Exception ex)
             {
                 WriteLog(ex.Message);
+                if (ex is WebException)
+                    return html = OnWebException(url, postdata, (WebException)ex);
                 return null;
             }
             finally
@@ -563,5 +565,10 @@ namespace sdk_Request.Logical
         #endregion
 
         public CookieContainer Cookies { get; set; }
+
+        protected virtual string OnWebException(string srcUrl, string postdata, WebException ex)
+        {
+            return null;
+        }
     }
 }

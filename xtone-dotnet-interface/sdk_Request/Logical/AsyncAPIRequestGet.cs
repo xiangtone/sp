@@ -299,7 +299,7 @@ namespace sdk_Request.Logical
             base.FlushLog();
         }
 
-        protected internal override string DownloadHTML(string url, string postdata, int timeout, string encode, IDictionary<string, string> Heads)
+        protected override string DownloadHTML(string url, string postdata, int timeout, string encode, IDictionary<string, string> Heads)
         {
             return base.DownloadHTML(url, postdata, 60 * 1000, encode, Heads);
         }

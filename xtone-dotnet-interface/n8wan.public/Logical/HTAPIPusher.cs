@@ -221,39 +221,52 @@ namespace n8wan.Public.Logical
                 return;
             }
 
+            var ptr = new n8wan.Public.Model.CPDataPushModel();
+            ptr.Mobile = PushObject.GetValue(Logical.EPushField.Mobile);
+            ptr.Servicecode = PushObject.GetValue(Logical.EPushField.ServiceCode);
+            ptr.Linkid = PushObject.GetValue(EPushField.LinkID);
+            ptr.Msg = PushObject.GetValue(EPushField.Msg);
+            ptr.Port = PushObject.GetValue(EPushField.port);
+            ptr.Price = decimal.ToInt32(Trone.price * 100);
+            ptr.Cpparam = _apiOrder.ExtrData;
+            //ptr.ProvinceId = int.Parse(PushObject.GetValue(EPushField.province));
+            ptr.PayCode = _apiOrder.trone_order_id;
+            ptr.PoolId = _apiOrder.cp_pool_id;
+            ptr.OrderNum = string.Format("{0:yyyyMM}{1}", _apiOrder.FirstDate, _apiOrder.id);
+            ptr.VirtualMobile = base.GetVirtualMobile();
+            ptr.Url = API_PushUrl;
+            asyncSendData(ptr.ToString(), null);
 
-            var ptrs = new Dictionary<string, string>();
-            ptrs.Add("mobile", PushObject.GetValue(Logical.EPushField.Mobile));
-            ptrs.Add("servicecode", PushObject.GetValue(Logical.EPushField.ServiceCode));
-            ptrs.Add("linkid", PushObject.GetValue(Logical.EPushField.LinkID));
-            ptrs.Add("msg", PushObject.GetValue(Logical.EPushField.Msg));
-            //ptrs.Add("status", PushObject.GetValue(Logical.EPushField.Status));
-            ptrs.Add("port", PushObject.GetValue(Logical.EPushField.port));
+            //var ptrs = new Dictionary<string, string>();
+            //ptrs.Add("mobile", PushObject.GetValue(Logical.EPushField.Mobile));
+            //ptrs.Add("servicecode", PushObject.GetValue(Logical.EPushField.ServiceCode));
+            //ptrs.Add("linkid", PushObject.GetValue(Logical.EPushField.LinkID));
+            //ptrs.Add("msg", PushObject.GetValue(Logical.EPushField.Msg));
+            ////ptrs.Add("status", PushObject.GetValue(Logical.EPushField.Status));
+            //ptrs.Add("port", PushObject.GetValue(Logical.EPushField.port));
 
-            ptrs.Add("price", (Trone.price * 100).ToString("0"));
-            ptrs.Add("cpparam", _apiOrder.ExtrData);
-            ptrs.Add("provinceId", PushObject.GetValue(EPushField.province));
-            if (_apiOrder.cp_pool_id == 0)
-                ptrs.Add("paycode", _apiOrder.trone_order_id.ToString("100000"));
-            else
-            {//代码池同步，强制转换同步的paycode,msg,port
-                ptrs.Add("paycode", _apiOrder.cp_pool_id.ToString("P00000"));
-                ptrs["msg"] = ptrs["paycode"];
-                ptrs["port"] = ptrs["price"];
-            }
-            ptrs.Add("ordernum", string.Format("{0:yyyyMM}{1}", _apiOrder.FirstDate, _apiOrder.id));
-            ptrs.Add("virtualMobile", base.GetVirtualMobile());
+            //ptrs.Add("price", (Trone.price * 100).ToString("0"));
+            //ptrs.Add("cpparam", _apiOrder.ExtrData);
+            //ptrs.Add("provinceId", PushObject.GetValue(EPushField.province));
+            //if (_apiOrder.cp_pool_id == 0)
+            //    ptrs.Add("paycode", _apiOrder.trone_order_id.ToString("100000"));
+            //else
+            //{//代码池同步，强制转换同步的paycode,msg,port
+            //    ptrs.Add("paycode", "P" + _apiOrder.cp_pool_id.ToString("00000"));
+            //    ptrs["msg"] = ptrs["paycode"];
+            //    ptrs["port"] = ptrs["price"];
+            //}
+            //ptrs.Add("ordernum", string.Format("{0:yyyyMM}{1}", _apiOrder.FirstDate, _apiOrder.id));
+            //ptrs.Add("virtualMobile", base.GetVirtualMobile());
 
-            string qs = UrlEncode(ptrs);
+            //string qs = UrlEncode(ptrs);
+            //string url;
+            //if (API_PushUrl.Contains('?'))
+            //    url = API_PushUrl + "&" + qs;
+            //else
+            //    url = API_PushUrl + "?" + qs;
 
-
-            string url;
-            if (API_PushUrl.Contains('?'))
-                url = API_PushUrl + "&" + qs;
-            else
-                url = API_PushUrl + "?" + qs;
-
-            asyncSendData(url, null);
+            //asyncSendData(url, null);
 
         }
 

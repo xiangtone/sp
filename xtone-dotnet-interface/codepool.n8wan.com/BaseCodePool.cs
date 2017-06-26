@@ -110,10 +110,10 @@ namespace n8wan.codepool
             if (_apiRequestModel.status != rlt.Request.status)
                 _orderInfo.status = rlt.Request.status;
 
-            if (_apiRequestModel.extraParams == rlt.Request.extraParams)
+            if (_apiRequestModel.extraParams != rlt.Request.extraParams)
                 _orderInfo.sp_linkid = rlt.Request.spLinkId;
 
-            if (_apiRequestModel.apiExdata == rlt.Request.apiExdata)
+            if (_apiRequestModel.apiExdata != rlt.Request.apiExdata)
                 _orderInfo.api_exdata = rlt.Request.apiExdata;
 
 

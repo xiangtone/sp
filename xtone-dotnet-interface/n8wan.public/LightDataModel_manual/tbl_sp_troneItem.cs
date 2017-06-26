@@ -37,7 +37,7 @@ namespace LightDataModel
             return m;
         }
 
-        public static IEnumerable<tbl_sp_troneItem> GetRowsById(Shotgun.Database.IBaseDataClass2 dBase, IEnumerable<int> ids)
+        public static ICollection<tbl_sp_troneItem> GetRowsById(Shotgun.Database.IBaseDataClass2 dBase, IEnumerable<int> ids)
         {
             if (ids.Count() == 1)
             {
@@ -52,7 +52,7 @@ namespace LightDataModel
             {
                 lock (_cache.SyncRoot)
                 {
-                    return from item in data where ids.Contains(item.id) select item;
+                    return (from item in data where ids.Contains(item.id) select item).ToArray();
                 }
             }
 

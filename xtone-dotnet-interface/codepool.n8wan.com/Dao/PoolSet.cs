@@ -1,4 +1,5 @@
-﻿using NoSqlModel;
+﻿using LightDataModel;
+using NoSqlModel;
 using Shotgun.Database;
 using System;
 using System.Collections.Generic;
@@ -144,6 +145,35 @@ namespace n8wan.codepool.Dao
                 cache.InsertItem(m);
 
             return m;
+        }
+
+
+        public static List<PoolSetInfoModel> QueryPoolSetInfoById(Shotgun.Database.IBaseDataClass2 dBase, int poolId)
+        {
+            var sql = "select tno.id paycode, tno.trone_id,trn.trone_name,trn.price,trn.sp_trone_id,strn.name,cps.cp_pool_id,strn.sp_id,strn.provinces,"
+                + " (strn.status=1 and trn.status=1 and tno.Disable=0 and cps.status=1 ) status ,priority,cps.id cp_pool_set_id from tbl_trone_order tno "
+                + " left join tbl_trone trn on trn.id= tno.trone_id"
+                + " left join tbl_sp_trone strn on strn.id= trn.sp_trone_id "
+                + " left join tbl_cp_pool_set cps  on tno.id= cps.trone_order_id"
+                + " where cp_pool_id=" + poolId.ToString() + " order by cp_pool_id desc ,status desc , paycode desc";
+
+            var q = new Shotgun.Model.List.LightDataQueries<NoSqlModel.PoolSetInfoModel>("-");
+            q.dBase = dBase;
+            return q.GetDataListBySql(sql);
+
+        }
+
+
+
+        public static List<tbl_sp_troneItem> QuerySptroneByPoolid(Shotgun.Database.IBaseDataClass2 dBase, int poolId)
+        {
+            var sql = "select stn.* from  tbl_cp_pool_set cps "
+                    + " left join tbl_trone_order tno on cps.trone_order_id = tno.id"
+                    + " left join tbl_trone tn on tno.trone_id= tn.id"
+                    + " left join tbl_sp_trone stn on tn.sp_trone_id =stn.id"
+                    + " where cps.status=1 and stn.status=1 and tn.status=1 and tno.disable=0 and cps.cp_pool_id=" + poolId.ToString();
+            var q = LightDataModel.tbl_sp_troneItem.GetQueries(dBase);
+            return q.GetDataListBySql(sql);
         }
 
     }

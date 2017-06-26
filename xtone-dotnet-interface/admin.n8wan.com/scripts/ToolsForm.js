@@ -14,14 +14,21 @@ ToolsFrm.prototype._onShowHide = function (frm, isHide) {
 
 }
 
-ToolsFrm.prototype._onblur = function () {
-    if (this._lastTick != null) {
-        var ts = (new Date()) - this._lastTick;
-        if (ts < 20)
+ToolsFrm.prototype._onblur = function (iFocus) {
+    if (!iFocus) {
+        if (document.activeElement == this.button)
             return;
+        if (this._lastTick != null) {
+            var ts = (new Date()) - this._lastTick;
+            if (ts < 100)
+                return;
+        }
     }
     var frm = this._frms["#"];
     if (frm == null)
+        return;
+
+    if (!iFocus && document.activeElement == this._frms["#"])
         return;
     frm.style.top = (-10 - frm.clientHeight) + "px";
     this._frms["#"] = null;
@@ -39,7 +46,7 @@ ToolsFrm.prototype._CreateFrame = function (e) {
 }
 ToolsFrm.prototype.Init = function () {//初始化
     var me = this;
-    var fun = function () { me._onblur(); }
+    var fun = function () { me._onblur(false); }
     function OnEvent(d) {
         if (typeof d.attachEvent != "undefined")
             d.attachEvent("onclick", fun);
@@ -59,24 +66,24 @@ ToolsFrm.prototype.Init = function () {//初始化
         win = win.parent;
     }
 }
-
+ToolsFrm.prototype.Hide = function (e) { this._onblur(false); }
 ToolsFrm.prototype.ShowHide = function (e) {//显示隐藏
     this._lastTick = null;
     if (e == null || typeof e == "undefined") {
-        this._onblur();
+        this._onblur(true);
         return;
     }
 
     if (this._frms["#"] != null) {
         if (this._frms["#"] == this._frms[e.id]) {
-            this._onblur();
+            this._onblur(true);
             return;
         } else {
-            this._onblur();
+            this._onblur(true);
         }
     }
 
-
+    this._lastTick = new Date();
     var frm = this._frms[e.id];
     if (frm == null)
         frm = this._CreateFrame(e.id);
@@ -97,10 +104,9 @@ ToolsFrm.prototype.ShowHide = function (e) {//显示隐藏
     this._onShowHide(frm, false);
 
 
-    this._lastTick = new Date();
+
 
 }
-
 function ShowHideObject(win, isHide) {
     var doc = null;
     try {

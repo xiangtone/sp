@@ -24,15 +24,18 @@ namespace n8wan.codepool.Dao
         /// <summary>
         /// 计算用户的日月限信息
         /// </summary>
+        /// <param name="customId">为空时，表示整个通道</param>
         /// <returns>始终不为空</returns>
         public static CustomLimitInfo QueryLimit(Shotgun.Database.IBaseDataClass2 dBase, int spTroneId, string customId)
         {
+            if (string.IsNullOrEmpty(customId))
+                customId = null;//保证一致信息，string.empty => null
             var data = cache.GetCacheData(false);
-            List<CustomFeeModel> cfm = null;
+            IEnumerable<CustomFeeModel> cfm = null;
             if (data != null)
             {
                 lock (cache.SyncRoot)
-                    cfm = data.Where(e => e.SpToneId == spTroneId && customId.Equals(e.CustomId, StringComparison.OrdinalIgnoreCase)).ToList();
+                    cfm = data.Where(e => e.SpToneId == spTroneId && customId == e.CustomId).ToList();
             }
             if (cfm == null || cfm.Count() == 0)
                 cfm = LoadFromDBase(dBase, spTroneId, customId);
@@ -52,23 +55,36 @@ namespace n8wan.codepool.Dao
                 }
             }
             cli.MonthAmount += cli.DayAmount;
-            cli.MonthCount += cli.MonthCount;
+            cli.MonthCount += cli.DayCount;
             return cli;
 
         }
 
 
-        static List<CustomFeeModel> LoadFromDBase(Shotgun.Database.IBaseDataClass2 dBase, int spTroneId, string customId)
+        static IEnumerable<CustomFeeModel> LoadFromDBase(Shotgun.Database.IBaseDataClass2 dBase, int spTroneId, string customId)
         {
             var trones = LightDataModel.tbl_troneItem.GetTroneIdsBySptroneId(dBase, spTroneId);
 
             if (trones.Count() == 0)
-                return null;
+                return new CustomFeeModel[] { };
+            string sql;
 
-            var sql = string.Format("SELECT trone_id,fee_date , count  FROM daily_log.tbl_custom_fee_count "
-                       + " where custom_id='{0}' and trone_id in({1})"
-                       + " group by trone_id, fee_date",
-                       dBase.SqlEncode(customId), string.Join(",", trones.Select(e => e.id)));
+            if (string.IsNullOrEmpty(customId))
+            {//整个通道信息
+                sql = string.Format("SELECT trone_id,fee_date= current_Date() isToday , sum(count)  FROM daily_log.tbl_custom_fee_count "
+                         + " where trone_id in({0}) "
+                         + " group by trone_id,isToday",
+                          string.Join(",", trones.Select(e => e.id)), DateTime.Today);
+            }
+            else
+            {//用户计费信息
+                sql = string.Format("SELECT trone_id,fee_date= current_Date() isToday , sum(count)  FROM daily_log.tbl_custom_fee_count "
+                         + " where trone_id in({0}) and custom_id='{1}'"
+                         + " group by trone_id,isToday",
+                          string.Join(",", trones.Select(e => e.id)), dBase.SqlEncode(customId));
+
+            }
+
 
             var cmd = dBase.Command();
             cmd.CommandText = sql;
@@ -84,9 +100,9 @@ namespace n8wan.codepool.Dao
                     m.CustomId = customId;
                     m.SpToneId = spTroneId;
                     m.TroneId = dr.GetInt32(0);
-                    m.Date = dr.GetDateTime(1);
+                    m.Date = dr.GetBoolean(1) ? DateTime.Today : DateTime.Today.AddDays(-1);
                     m.Count = dr.GetInt32(2);
-                    m.Fee = decimal.ToInt32(100 * trones.Single(e => e.id == m.TroneId).price);
+                    m.Fee = decimal.ToInt32(100 * trones.First(e => e.id == m.TroneId).price);
                     rlt.Add(m);
                     cache.InsertItem(m);
                 }
@@ -113,13 +129,26 @@ namespace n8wan.codepool.Dao
             return rlt;
         }
 
-
         public static void UpdateLimit(Shotgun.Database.IBaseDataClass2 dBase, int troneId, string customId, DateTime mrDate)
+        {
+            UpdateUserLimit(dBase, troneId, customId, mrDate);
+            UpdateMonthLimit(dBase, troneId, mrDate);
+        }
+        /// <summary>
+        /// 更新用户每日计费信息
+        /// </summary>
+        /// <param name="dBase"></param>
+        /// <param name="troneId"></param>
+        /// <param name="customId"></param>
+        /// <param name="mrDate"></param>
+        private static void UpdateUserLimit(Shotgun.Database.IBaseDataClass2 dBase, int troneId, string customId, DateTime mrDate)
         {
             var key = CustomFeeModel.GetIdKey(customId, troneId, mrDate);
             var m = cache.GetDataByIdx(key);
             if (m != null)
-            {
+            {//找到用户计费缓存数据
+                Shotgun.Library.SimpleLogRecord.WriteLog("api_userlimit_update",
+                        string.Format("customid:{0},troneId:{1},Count:{2} +1", customId, troneId, m.Count));
                 lock (m)
                     m.Count++;
                 return;
@@ -128,14 +157,17 @@ namespace n8wan.codepool.Dao
             var spTrone = LightDataModel.tbl_sp_troneItem.GetRowById(dBase, trone.sp_trone_id);
             var data = cache.GetCacheData(false);
             bool iFound = false;
-            lock (cache.SyncRoot)
+            if (data != null)
             {
-                foreach (var item in data)
+                lock (cache.SyncRoot)
                 {
-                    if (item.SpToneId == spTrone.id)
+                    foreach (var item in data)
                     {
-                        iFound = true;
-                        break;
+                        if (item.SpToneId == spTrone.id && item.Id == key)
+                        {
+                            iFound = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -148,12 +180,32 @@ namespace n8wan.codepool.Dao
                 m.Count = 1;
                 m.Fee = decimal.ToInt32(trone.price * 100);
                 cache.InsertItem(m);
+                Shotgun.Library.SimpleLogRecord.WriteLog("api_userlimit_update",
+                    string.Format("customid:{0},troneId:{1}, found other trone!", customId, troneId));
                 return;
+            }
+            else
+            {
+                Shotgun.Library.SimpleLogRecord.WriteLog("api_userlimit_update",
+                    string.Format("customid:{0},troneId:{1},not found!", customId, troneId));
             }
             //无缓存数据时，无需任何处理
             //因为在通道计算时，无缓存数据时，会主动从数据库读取最新信息
             //LoadFromDBase(dBase, spTrone.id, customId);
 
         }
+
+        /// <summary>
+        /// 更新通道每日计费信息
+        /// </summary>
+        /// <param name="dBase"></param>
+        /// <param name="troneId"></param>
+        /// <param name="customId"></param>
+        /// <param name="mrDate"></param>
+        private static void UpdateMonthLimit(Shotgun.Database.IBaseDataClass2 dBase, int troneId, DateTime mrDate)
+        {
+            UpdateUserLimit(dBase, troneId, null, mrDate);
+        }
+
     }
 }

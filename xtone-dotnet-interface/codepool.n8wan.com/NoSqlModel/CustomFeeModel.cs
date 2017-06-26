@@ -14,6 +14,8 @@ namespace NoSqlModel
     {
         string _idStr;
 
+ 
+
         #region 基类方法实现
         int ITimeCacheItem.ItemExpire { get; set; }
         public override string IdentifyField

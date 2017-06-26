@@ -25,11 +25,9 @@ namespace LightDataModel
             public const string PrimaryKey = "id";
 
             /// <summary>
-            /// 通道ID
+            /// 业务通道ID
             /// </summary>
             public const string trone_id = "trone_id";
-
-            public const string price = "price";
             /// <summary>
             /// SP对接的计费点
             /// </summary>
@@ -40,17 +38,19 @@ namespace LightDataModel
             public const string channelid = "channelid";
 
             public const string create_date = "create_date";
+            /// <summary>
+            /// 扩展的配置信息,通常以json格式存储
+            /// </summary>
+            public const string extr_config = "extr_config";
 
             #endregion
 
         }
         #region 表字段变量定义
         /// <summary>
-        /// 通道ID
+        /// 业务通道ID
         /// </summary>
         private int _trone_id;
-
-        private int _price;
         /// <summary>
         /// SP对接的计费点
         /// </summary>
@@ -61,6 +61,10 @@ namespace LightDataModel
         private string _channelid;
 
         private DateTime _create_date;
+        /// <summary>
+        /// 扩展的配置信息,通常以json格式存储
+        /// </summary>
+        private string _extr_config;
 
         #endregion
 
@@ -79,7 +83,7 @@ namespace LightDataModel
 
         #region 表字段值存取
         /// <summary>
-        /// 通道ID
+        /// 业务通道ID
         /// </summary>
         public int trone_id
         {
@@ -97,25 +101,6 @@ namespace LightDataModel
 
                 SetFieldHasUpdate(Fields.trone_id, this._trone_id, value);
                 this._trone_id = value;
-            }
-        }
-
-        public int price
-        {
-            get { return this._price; }
-            set
-            {
-#if true && true
-                RemoveNullFlag(Fields.price);
-#elif !true
-			    if (value == null)
-                    SetNullFlag(Fields.price);
-                else
-                    RemoveNullFlag(Fields.price);
-#endif
-
-                SetFieldHasUpdate(Fields.price, this._price, value);
-                this._price = value;
             }
         }
         /// <summary>
@@ -196,6 +181,27 @@ namespace LightDataModel
                 this._create_date = value;
             }
         }
+        /// <summary>
+        /// 扩展的配置信息,通常以json格式存储
+        /// </summary>
+        public string extr_config
+        {
+            get { return this._extr_config; }
+            set
+            {
+#if false && true
+				RemoveNullFlag(Fields.extr_config);
+#elif !false
+                if (value == null)
+                    SetNullFlag(Fields.extr_config);
+                else
+                    RemoveNullFlag(Fields.extr_config);
+#endif
+
+                SetFieldHasUpdate(Fields.extr_config, this._extr_config, value);
+                this._extr_config = value;
+            }
+        }
 
         #endregion
         #region 空值相关方法
@@ -203,18 +209,15 @@ namespace LightDataModel
         {
             return new string[]{null
 			,"trone_id"
-,"price"
 ,"paycode"
 ,"appid"
 ,"channelid"
+,"extr_config"
 };
         }
         public bool Istrone_idNull() { return IsNull(Fields.trone_id); }
 
         public void Settrone_idNull() { SetNull(Fields.trone_id); }
-        public bool IspriceNull() { return IsNull(Fields.price); }
-
-        public void SetpriceNull() { SetNull(Fields.price); }
         public bool IspaycodeNull() { return IsNull(Fields.paycode); }
 
         public void SetpaycodeNull() { SetNull(Fields.paycode); }
@@ -224,6 +227,9 @@ namespace LightDataModel
         public bool IschannelidNull() { return IsNull(Fields.channelid); }
 
         public void SetchannelidNull() { SetNull(Fields.channelid); }
+        public bool Isextr_configNull() { return IsNull(Fields.extr_config); }
+
+        public void Setextr_configNull() { SetNull(Fields.extr_config); }
 
         #endregion
         #region 静态方法

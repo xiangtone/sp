@@ -17,7 +17,7 @@ namespace n8wan.codepool
         private LightDataModel.tbl_cityItem _city;
         private LightDataModel.tbl_cp_poolItem _poolInfo;
         private List<NoSqlModel.PoolSetModel> _poolSet;
-        private IEnumerable<tbl_sp_troneItem> _spTrones;
+        private tbl_sp_troneItem[] _spTrones;
 
         static StaticCacheTimeline<NoSqlModel.CustomLastTroneModel, long> customLastTroneCache;
         static CodePool()
@@ -90,13 +90,20 @@ namespace n8wan.codepool
             _orderInfo.user_agent = request["useragent"];
             _orderInfo.iccid = request["iccid"];
             _orderInfo.packagename = request["package"];
-            _orderInfo.mobile = request["phone"];
+            _orderInfo.mobile = request["phone"] ?? request["mobile"];
             _orderInfo.ExtrData = request["cpparams"];
 
             _orderInfo.ip = request.UserHostAddress;
-
-            if (string.IsNullOrEmpty(_orderInfo.imsi) && string.IsNullOrEmpty(_orderInfo.mobile))
-                return SetErrorMesage(codepool.ErrorCode.Parameter_Miss, "imsi 或 phone 不能为空");
+            if (string.IsNullOrEmpty(_orderInfo.mobile))
+            {
+                if (string.IsNullOrEmpty(_orderInfo.imsi))
+                    return SetErrorMesage(codepool.ErrorCode.Parameter_Miss, "imsi 或 phone 不能为空");
+            }
+            else if (_orderInfo.mobile.Length != 11)
+            {
+                return SetErrorMesage(ErrorCode.Invalid_Parameter, "手机号码长度错误");
+            }
+           
             InitUserExtrInfo();
             return SetSuccess();
         }
@@ -162,15 +169,17 @@ namespace n8wan.codepool
             if (_poolSet == null || _poolSet.Count == 0)
                 return SetErrorMesage(codepool.ErrorCode.Paycode_Error, "未配置计费通道");
 
-            var ids = _poolSet.Where(e => e.status == 1).Select(e => e.sp_trone_id).Distinct();
-            if (ids.Count() == 0)
+            var ids = _poolSet.Where(e => e.status == 1).Select(e => e.sp_trone_id).Distinct().ToArray();
+            if (ids.Length == 0)
                 return SetErrorMesage(ErrorCode.Paycode_Error, "此计费代码已经停止");
             var spTrones = LightDataModel.tbl_sp_troneItem.GetRowsById(dBase, ids);
-            var seconds = (int)(DateTime.Now - DateTime.Today).TotalSeconds;
-            bool HasTone = false, isUserDayLimied = false, isUserMonthLimied = false, hasProvince = false, IsOpenTime = false;
-            var sptn1st = spTrones.FirstOrDefault();
-            if (sptn1st == null)
+            if (spTrones.Count == 0)
                 return SetErrorMesage(codepool.ErrorCode.Paycode_Error, "无可用业务");
+
+            var sptn1st = spTrones.FirstOrDefault();
+            if (spTrones.Count == 1)//对单通道的池，特殊优化
+                _orderInfo.api_id = sptn1st.trone_api_id;
+
 
             if (sptn1st.up_data_type == 2 || sptn1st.up_data_type == 3)
             {//联网验证码 ，联网验证码（手机回复）
@@ -181,30 +190,41 @@ namespace n8wan.codepool
                 return SetErrorMesage(ErrorCode.Invalid_Parameter, "imsi 参数不能为空");
             int stCount = spTrones.Count();
 
+            var seconds = (int)(DateTime.Now - DateTime.Today).TotalSeconds;
+            bool HasTone = false, isUserDayLimited = false, isUserMonthLimited = false, hasProvince = false, IsOpenTime = false;
+            bool isSpTroneMonthLimited = false, isSpTroneDayLimited = false;
+
             _spTrones = spTrones.Where(e =>
-                {
-                    if (e.status == 0)
-                        return false;
-                    HasTone = true;
-                    if (stCount > 1 || e.is_force_hold == 1)
-                    {//存在多个sp通道时（池模式） 或是 指定了强制匹配省份
-                        if (!e.ProvinceId.Contains(_city.province_id)) //省份过滤
-                            return false;
-                    }
-                    hasProvince = true;
-                    if (!e.IsOpenTime(seconds))//屏蔽时间处理
-                        return false;
-                    IsOpenTime = true;
-                    switch (IsCustomLimited(e))//用户日月限
-                    {
-                        case 2: isUserMonthLimied = true; return false;
-                        case 1: isUserDayLimied = true; return false;
+                  {
+                      //System.Diagnostics.Debug.WriteLine("Sp Trone check id={0}", e.id);
+                      if (e.status == 0)
+                          return false;
+                      HasTone = true;
+                      if (stCount > 1 || e.is_force_hold == 1)
+                      {//存在多个sp通道时（池模式） 或是 指定了强制匹配省份
+                          if (!e.ProvinceId.Contains(_city.province_id)) //省份过滤
+                              return false;
+                      }
+                      hasProvince = true;
+                      if (!e.IsOpenTime(seconds))//屏蔽时间处理
+                          return false;
+                      IsOpenTime = true;
 
-                    }
-                    return true;
-                });//省份匹配的业务
+                      switch (IsSpTroneLimited(e))//通道日月限
+                      {
+                          case 2: isSpTroneMonthLimited = true; return false;
+                          case 1: isSpTroneDayLimited = true; return false;
+                      }
 
-            if (_spTrones.Count() == 0)
+                      switch (IsCustomLimited(e))//用户日月限
+                      {
+                          case 2: isUserMonthLimited = true; return false;
+                          case 1: isUserDayLimited = true; return false;
+                      }
+                      return true;
+                  }).ToArray();//省份匹配的业务
+
+            if (_spTrones.Length == 0)
             {
                 if (!HasTone)
                     return SetErrorMesage(ErrorCode.No_Trone_Config, "无可用通道信息");
@@ -212,9 +232,15 @@ namespace n8wan.codepool
                     return SetErrorMesage(ErrorCode.AREA_CLOSE, "屏蔽省份");
                 if (!IsOpenTime)
                     return SetErrorMesage(ErrorCode.Time_Close, "屏蔽时间");
-                if (isUserDayLimied)
+
+                if (isSpTroneMonthLimited)
+                    return SetErrorMesage(ErrorCode.SP_TRONE_MONTH_OVER_LIMIT, "通道月限");
+                if (isSpTroneDayLimited)
+                    return SetErrorMesage(ErrorCode.SP_TRONE_DAY_OVER_LIMIT, "通道日限");
+
+                if (isUserDayLimited)
                     return SetErrorMesage(ErrorCode.SP_TRONE_USER_DAY_OVER_LIMIT, "用户日限");
-                if (isUserMonthLimied)
+                if (isUserMonthLimited)
                     return SetErrorMesage(ErrorCode.SP_TRONE_USER_MONTH_OVER_LIMIT, "用户月限");
 
                 return SetErrorMesage(ErrorCode.No_Trone_Config, "无通道(省份/时间/用户)");
@@ -228,7 +254,7 @@ namespace n8wan.codepool
         /// </summary>
         /// <param name="spTrone"></param>
         /// <returns>1:日限，2:月限</returns>
-        int IsCustomLimited(LightDataModel.tbl_sp_troneItem spTrone)
+        int IsCustomLimited(tbl_sp_troneItem spTrone)
         {
             int day = 0, month = 0;
             bool isCount = spTrone.limit_type == 1;
@@ -239,6 +265,10 @@ namespace n8wan.codepool
 
             if (day == 0 && month == 0)
                 return 0;//不限量
+            if (month == 0)
+                month = int.MaxValue;
+            else if (day == 0)
+                day = int.MaxValue;
             var customId = _orderInfo.imsi;
             if (spTrone.up_data_type == 2 || spTrone.up_data_type == 3)
             {//联网验证码 ，联网验证码（手机回复）
@@ -261,6 +291,38 @@ namespace n8wan.codepool
             return (cli.MonthAmount + _poolInfo.fee) > month ? 2 : 0;
         }
 
+        int IsSpTroneLimited(tbl_sp_troneItem spTrone)
+        {
+            int day = 0, month = 0;
+            bool isCount = spTrone.limit_type == 1;
+
+
+            day = decimal.ToInt32(spTrone.day_limit * (isCount ? 1 : 100));
+            month = decimal.ToInt32(spTrone.month_limit * (isCount ? 1 : 100));
+
+            if (day == 0 && month == 0)
+                return 0;//不限量
+            if (month == 0)
+                month = int.MaxValue;
+            else if (day == 0)
+                day = int.MaxValue;
+
+
+            var cli = Dao.CustomFee.QueryLimit(dBase, spTrone.id, null);//此处应该正确选选择用户标识
+
+            //以下假设此次计费成功，是否会超限
+            if (isCount)
+            {
+                if (cli.DayCount >= day)
+                    return 1;
+                return cli.MonthCount >= month ? 2 : 0;
+            }
+
+            if ((cli.DayAmount + _poolInfo.fee) > day)
+                return 1;
+            return (cli.MonthAmount + _poolInfo.fee) > month ? 2 : 0;
+
+        }
 
         /// <summary>
         /// 根据固定的优先级，选取通道信息
@@ -268,14 +330,14 @@ namespace n8wan.codepool
         /// <returns></returns>
         public PoolSetModel GetPSModelByPriority()
         {
-            var ids = _spTrones.Select(e => e.id);
+            var ids = _spTrones.Select(e => e.id).ToArray();
             int pv = 0;
             var trones = _poolSet.Where(e =>
             {
                 if (e.status == 1 && ids.Contains(e.sp_trone_id))
                 { pv += e.priority; return true; }
                 return false;
-            }).OrderBy(e => e.id);
+            }).OrderBy(e => e.id).ToArray();
 
             if (trones.Count() == 0)//正常情况不能为0
             {
@@ -290,12 +352,12 @@ namespace n8wan.codepool
             else if (!string.IsNullOrEmpty(_orderInfo.mobile))
                 seed = _orderInfo.mobile.Substring(_orderInfo.mobile.Length - 8);
 
-            if (string.IsNullOrEmpty(seed))
+            if (!string.IsNullOrEmpty(seed))
             {
                 if (!int.TryParse(seed, out rkey))
                     rkey = -1;
             }
-            if (rkey < -1)
+            if (rkey <= -1)
                 rkey = (int)((DateTime.Now.Ticks >> 16) & 0x7FFFFFFF);
 
             rkey %= pv;
@@ -314,7 +376,6 @@ namespace n8wan.codepool
 
             return def;
         }
-
 
 
     }

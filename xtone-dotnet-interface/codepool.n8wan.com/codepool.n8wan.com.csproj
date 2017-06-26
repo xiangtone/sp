@@ -57,9 +57,13 @@
     <Compile Include="Handler\PoolSecondHandler.cs" />
     <Compile Include="Handler\Sms2WebHandler.cs" />
     <Compile Include="Handler\UpdateUserLimitHandler.cs" />
+    <Compile Include="IResultResponseModel.cs" />
     <Compile Include="Model\APIModel.cs" />
     <Compile Include="Model\ApiResultModel.cs" />
+    <Compile Include="Model\HtPoolResultModel.cs" />
     <Compile Include="Model\PoolResultModel.cs" />
+    <Compile Include="NoSqlModel\PoolSetInfoModel.cs" />
+    <Compile Include="ResultModelManager.cs" />
     <Compile Include="NoSqlModel\CustomLastTroneModel.cs" />
     <Compile Include="NoSqlModel\PoolSetModel.cs" />
     <Compile Include="NoSqlModel\CustomLimitInfo.cs" />

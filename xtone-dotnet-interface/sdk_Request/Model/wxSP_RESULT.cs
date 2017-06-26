@@ -30,6 +30,11 @@ namespace sdk_Request.Model
 
     public class wxSMS : sdk_Request.Model.SP_RESULT
     {
+        public wxSMS()
+        {
+            this.type = WX_SMS_TYPE.Text;
+            this.type2 = WX_SMS_TYPE.Text;
+        }
         [DataMember]
         public string port { get; set; }
         [DataMember]

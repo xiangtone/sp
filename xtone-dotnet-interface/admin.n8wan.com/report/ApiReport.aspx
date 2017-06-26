@@ -379,7 +379,7 @@
                 switch (k) {
                     case "1011": s1011 += v; break; //一次成功
                     case "1013": s1013 += v; break;//二次成功
-                    case "1009": s1xxx += v; break;//省份错误
+                        //case "1009": s1xxx += v; break;//省份错误
                     default:
                         var t = parseInt(k);
                         if (t < 2000) {
@@ -400,9 +400,10 @@
                                 t %= 10000;
                                 if (t == 1011)
                                     s1011 += v;
-                                else if (t == 1013) {
+                                else if (t == 1013)
                                     s1013 += v;
-                                }
+                                else if (t > 2000)
+                                    s1013 += v;
                             }
                         }
                 }
