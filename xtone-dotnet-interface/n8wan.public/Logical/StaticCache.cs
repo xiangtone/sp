@@ -19,6 +19,16 @@ namespace n8wan.Public.Logical
 
         static Timer timerChecker = null;
 
+        /// <summary>
+        /// 用于提供线程同步
+        /// </summary>
+        public readonly object SyncRoot;
+
+        public StaticCache()
+        {
+            SyncRoot = this;
+        }
+
         public static void ClearAllCache()
         {
             if (_allCache == null)
@@ -126,6 +136,7 @@ namespace n8wan.Public.Logical
         /// </summary>
         private bool _clearing;
 
+
         public StaticCache()
             : this(null)
         {
@@ -159,7 +170,7 @@ namespace n8wan.Public.Logical
         /// <summary>
         /// 加载数据到缓存
         /// </summary>
-        /// <param name="isThreadPool">是否在当前线程上加载</param>
+        /// <param name="isSync">是否在当前线程上加载</param>
         private void LoadFreshData(bool isSync)
         {
             if (_satus != Static_Cache_Staus.Idel || IsManualLoad)
@@ -178,18 +189,23 @@ namespace n8wan.Public.Logical
 
         void LoadData(object s)
         {
-            int maxId = 0;
-            var cData = _data;//防止在其它地方补重置为null
+            //int maxId = 0;
+            //var cData = _data;//防止在其它地方被重置为null
 
-            if (cData == null)
-                _data = cData = new Dictionary<IDX, T>();
-            else if (cData.Count > 0)
-                maxId = cData.Values.Max(e => (int)e[_idField]);
+            //if (cData == null)
+            //    _data = cData = new Dictionary<IDX, T>();
+            //else if (cData.Count > 0)
+            //    maxId = cData.Values.Max(e => (int)e[_idField]);
+            var cData = new Dictionary<IDX, T>();
 
+#if DEBUG
+            var stw = new System.Diagnostics.Stopwatch();
+            stw.Start();
+#endif
 
             var q = new Shotgun.Model.List.LightDataQueries<T>(_tabName, _idField, null, new T().Schema);
-            if (maxId > 0)
-                q.Filter.AndFilters.Add(_idField, maxId, Shotgun.Model.Filter.EM_DataFiler_Operator.More);
+            //if (maxId > 0)
+            //    q.Filter.AndFilters.Add(_idField, maxId, Shotgun.Model.Filter.EM_DataFiler_Operator.More);
             q.SortKey.Add(_idField, Shotgun.Model.Filter.EM_SortKeyWord.asc);
             q.PageSize = 1000;
             q.dBase = CreateDBase();
@@ -198,19 +214,42 @@ namespace n8wan.Public.Logical
             base.Add(this);
             try
             {
+#if DEBUG
+                Console.WriteLine("pointA :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+                stw.Restart();
+#endif
                 var RowCount = q.TotalCount;
+#if DEBUG
+                Console.WriteLine("pointB :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+#endif
                 var PageCount = RowCount / q.PageSize + (RowCount % q.PageSize == 0 ? 0 : 1);
                 for (var i = 1; i <= PageCount; i++)
                 {
                     q.CurrentPage = i;
+#if DEBUG
+                    stw.Restart();
+#endif
                     var items = q.GetDataList();
+#if DEBUG
+                    Console.WriteLine("pointC :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+#endif
                     if (items == null)
                         break;
+#if DEBUG
+                    stw.Restart();
+#endif
                     items.ForEach(e => cData[(IDX)e[_indexField]] = e);
+#if DEBUG
+                    Console.WriteLine("pointD :{0:#,###}", stw.Elapsed.TotalMilliseconds);
+#endif
                 }
-                this._expired = DateTime.Now.Add(this.Expired);
-                this._satus = Static_Cache_Staus.AllLoad;
-                _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
+                lock (SyncRoot)
+                {
+                    _data = cData;//_data可能在加载数据时，被设置为null，此处进行还原
+                    this._expired = DateTime.Now.Add(this.Expired);
+                    this._satus = Static_Cache_Staus.AllLoad;
+                }
+
 
             }
             catch (Exception ex)
@@ -246,7 +285,7 @@ namespace n8wan.Public.Logical
             {
                 if (_clearing)
                     return null;
-                _clearing = true;
+                _clearing = true;//正式进入清除状态
             }
 
             ThreadPool.QueueUserWorkItem(e =>
@@ -258,10 +297,10 @@ namespace n8wan.Public.Logical
                     //Shotgun.Library.ErrLogRecorder.
                 }
 #if !DEBUG
-                    catch (Exception ex)
-                    {
-                        WriteLog(ex.Message);
-                    }
+                catch (Exception ex)
+                {
+                    WriteLog(ex.Message);
+                }
 #endif
                 finally
                 {
@@ -311,14 +350,11 @@ namespace n8wan.Public.Logical
             var tData = CheckExpired();
             if (tData == null)
                 return null;
-            try
+            lock (base.SyncRoot)
             {
-                return tData.Values.First(func);
+                return tData.Values.FirstOrDefault(func);
             }
-            catch
-            {
-                return null;
-            }
+
 
         }
 
@@ -353,8 +389,17 @@ namespace n8wan.Public.Logical
                     return;
             }
             base.Add(this);
-
-            dt[(IDX)data[this._indexField]] = data;
+            try
+            {
+                lock (base.SyncRoot)
+                    dt[(IDX)data[this._indexField]] = data;
+            }
+            catch (Exception ex)
+            {
+                WriteLog(ex.ToString());
+                WriteLog("缓存记录数据：" + dt.Count);
+                return;
+            }
             WriteLog(true, 0, 1);
         }
 
@@ -375,12 +420,16 @@ namespace n8wan.Public.Logical
         /// </summary>
         public override void ClearCache()
         {
-            var _expData = _data;
-            _data = null;
+            Dictionary<IDX, T> _expData;
+            lock (this.SyncRoot)
+            {
+                _expData = _data;
+                _satus = Static_Cache_Staus.Idel;
+                _data = null;
+                base.Remove(this);
+            }
             if (_expData != null)
                 OnExpired(_expData);
-            _satus = Static_Cache_Staus.Idel;
-            base.Remove(this);
             WriteLog(false, 0, 0);
         }
 
@@ -396,7 +445,7 @@ namespace n8wan.Public.Logical
 #if !DEBUG
             catch (Exception ex)
             {
-                WriteLog("过期回调出错："+ex.ToString());
+                WriteLog("过期回调出错：" + ex.ToString());
             }
 #endif
             finally { }

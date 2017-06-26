@@ -52,8 +52,6 @@
 	int spCommerceUserId = StringUtil.getInteger(request.getParameter("commerce_user"), -1);
 	int cpCommerceUserId = StringUtil.getInteger(request.getParameter("cp_commerce_user"), -1);
 	
-	int isUnHoldData = StringUtil.getInteger(request.getParameter("is_unhold_data"), -1);
-	
 	int spCommerceId = StringUtil.getInteger(ConfigManager.getConfigData("SP_COMMERCE_GROUP_ID"),-1);
 	List<UserModel> userList = new UserServer().loadUserByGroupId(spCommerceId);
 	
@@ -61,7 +59,7 @@
 	List<UserModel> cpCommerceUserList = new UserServer().loadUserByGroupId(cpCommerceId);
 	
 
-	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId+"",cpCommerceUserId+"",isUnHoldData,sortType);
+	Map<String, Object> map =  new MrServer().getMrLrData(startDate,endDate, spId,spTroneId, troneId, cpId, troneOrderId, provinceId, cityId,operatorId,dataType,spCommerceUserId+"",cpCommerceUserId+"",sortType);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 	List<CpModel> cpList = new CpServer().loadCp();
@@ -83,7 +81,7 @@
 	double spAmount = (Double)map.get("spamount");
 	double cpAmount = (Double)map.get("cpamount");
 	
-	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","SP商务","CP商务","运营商", "数据类型", "第一业务线", "第二业务线"};
+	String[] titles = {"日期","周数","月份","SP","CP","通道","CP业务","省份","城市","SP业务","时间","SP商务","CP商务"};
 	
 	
 %>
@@ -238,8 +236,6 @@
 		$("#sel_commerce_user").val(<%= spCommerceUserId %>);
 		$("#sel_cp_commerce_user").val(<%= cpCommerceUserId %>);
 		
-		$("#sel_is_unhold_data").val(<%= isUnHoldData %>);
-		
 	});
 	
 	
@@ -361,14 +357,6 @@
 							<option value="2">IVR</option>
 						</select>
 					</dd>
-					<dd class="dd01_me">导量类型</dd>
-					<dd class="dd04_me">
-						<select name="is_unhold_data" id="sel_is_unhold_data" style="width: 100px;">
-							<option value="-1">全部</option>
-							<option value="1">导量</option>
-							<option value="0">非导量</option>
-						</select>
-					</dd>
 					<br /><br /><br />
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd03_me">
@@ -471,10 +459,6 @@
 							<!-- <option value="11">按小时</option> -->
 							<option value="12">SP商务</option>
 							<option value="13">CP商务</option>
-							<option value="14">运营商</option>
-							<option value="15">数据类型</option>
-							<option value="16">第一业务线</option>
-							<option value="17">第二业务线</option>
 							
 						</select>
 					</dd>

@@ -1,5 +1,3 @@
-<%@page import="com.system.server.JsTypeServer"%>
-<%@page import="com.system.model.JsTypeModel"%>
 <%@page import="com.system.server.UpDataTypeServer"%>
 <%@page import="com.system.model.UpDataTypeModel"%>
 <%@page import="com.system.util.ConfigManager"%>
@@ -27,7 +25,6 @@
 	List<List<ServiceCodeModel>> serviceCodeList = new ServiceCodeServer().loadServiceCode();
 	String jiuSuanName = ConfigManager.getConfigData("JIE_SUNA_NAME", "结算率");
 	List<UpDataTypeModel> upDatatypeList=new UpDataTypeServer().loadUpDataType();
-	List<JsTypeModel> jsTypeList = new JsTypeServer().loadJsType();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -342,14 +339,14 @@ $(function()
 					<dd class="dd04_me">
 						<select name="js_type" id="sel_js_type" title="结算类型" style="width: 200px" >
 							<option value="-1">请选择结算类型</option>
-							<%
-								for(JsTypeModel jsTypeModel : jsTypeList)
-								{
-									%>
-							<option value="<%= jsTypeModel.getJsType() %>"><%= jsTypeModel.getJsName() %></option>		
-									<%
-								}
-							%>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公N+1结</option>
+							<option value="7">对公N+2结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
 						</select>
 					</dd>
 
@@ -381,17 +378,6 @@ $(function()
 						<label style="font-size: 14px;float:left">第三方支付</label>
 					</dd>
 					
-					<br />
-					<br />
-					<br />
-					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">是否导量</dd>
-					<dd class="dd03_me">
-						<input type="radio" name="is_unhold_data" style="width: 35px;float:left" value="0" checked="checked" >
-						<label style="font-size: 14px;float:left">否</label>
-						<input type="radio" name="is_unhold_data" style="width: 35px;float:left" value="1" >
-						<label style="font-size: 14px;float:left">是</label>
-					</dd>
 				
 					
 					<br />

@@ -82,20 +82,19 @@
 		cpChange();
 	}
 
-	function joSpTrone(id,spId,troneName,isUnHoldData)
+	function joSpTrone(id,spId,troneName)
 	{
 		var obj = {};
 		obj.id = id;
 		obj.spId = spId;
 		obj.troneName = troneName;
-		obj.isUnHoldData = isUnHoldData;
 		return obj;
 	}
 	
 	var spTroneList = new Array();
 	<%for(SpTroneModel spTrone : spTroneList){
 		if(spTrone.getStatus()==1){
-	%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>',<%= spTrone.getIsUnHoldData() %>));<%}}%>
+	%>spTroneList.push(new joSpTrone(<%= spTrone.getId() %>,<%= spTrone.getSpId() %>,'<%= spTrone.getSpName() + "-" +spTrone.getSpTroneName() %>'));<%}}%>
 	
 	var cpPushUrlList = new Array();
 	<%
@@ -142,21 +141,6 @@
 		troneChange();
 		var spTroneId =  $("#sel_sp_trone").val();
 		getAjaxValue("../ajaction.jsp?type=1&sptroneid=" + spTroneId + "&arrname=troneArray",onSpTroneChange);
-		changeDaoLiangStatus(spTroneId);
-	}
-	
-	function changeDaoLiangStatus(spTroneId)
-	{
-		console.log("here is spTroneId:" + spTroneId);
-		for(var i=0; i<spTroneList.length; i++)
-		{
-			var spTrone = spTroneList[i];
-			if(spTrone.id == spTroneId)
-			{
-				setRadioCheck("is_unhold_data",spTrone.isUnHoldData);
-				break;
-			}
-		}
 	}
 	
 	var isFirstLoad = true;
@@ -261,7 +245,6 @@
 		setRadioCheck("dynamic",<%= model.getDynamic() %>);
 		setRadioCheck("status",<%= model.getDisable() %>);
 		setRadioCheck("hold_custom",<%= model.getIsHoldCustom() %>);
-		setRadioCheck("is_unhold_data",<%= model.getIsUnholdData() %>);
 		
 		//SP的二级联动
 		$("#sel_sp").change(spChange);
@@ -269,7 +252,6 @@
 		$("#sel_sp_trone").change(spTroneChange);
 		
 		$("#sel_trone").change(troneChange);
-		
 		
 		troneChange();
 		
@@ -456,18 +438,6 @@
 					<br />
 					<br />
 					 -->
-					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">是否导量</dd>
-					<dd class="dd03_me">
-						<input type="radio" name="is_unhold_data" id ="is_unhold_data_0" style="width: 35px;float:left" value="0" checked="checked" >
-						<label style="font-size: 14px;float:left">否</label>
-						<input type="radio" name="is_unhold_data" id="is_unhold_data_1" style="width: 35px;float:left" value="1" >
-						<label style="font-size: 14px;float:left">是</label>
-					</dd>
-					
-					<br />
-					<br />
-					<br />
 					<dd class="dd00_me"></dd>
 					<dd class="dd01_me">扣量方式</dd>
 					<dd class="dd03_me">

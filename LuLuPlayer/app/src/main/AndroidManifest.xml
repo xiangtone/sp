@@ -41,7 +41,7 @@
         <!-- 不要忘了配置 最好别写数字  -->
         <meta-data
             android:name="EP_CHANNEL"
-            android:value="llkb_40"/>
+            android:value="llkb_10"/>
         <meta-data
             android:name="EP_APPKEY"
             android:value="57d963881bc74500925d9b2afd728f79"/>
@@ -71,7 +71,7 @@
             android:name=".pay.view.PayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/MyDialogStyle" />
+            android:theme="@style/Dialog" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

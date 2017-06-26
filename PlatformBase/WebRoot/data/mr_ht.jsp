@@ -1,7 +1,3 @@
-<%@page import="com.system.server.CpServer"%>
-<%@page import="com.system.server.SpServer"%>
-<%@page import="com.system.model.CpModel"%>
-<%@page import="com.system.model.SpModel"%>
 <%@page import="com.system.model.BaseDataShowModel"%>
 <%@page import="com.system.server.BaseDataShowServer"%>
 <%@page import="com.system.server.UserServer"%>
@@ -34,9 +30,6 @@
 	int coId = 1;
 	
 	float amount = 0;
-	
-	List<SpModel> spList = new SpServer().loadSpData(coId);
-	List<CpModel> cpList = new CpServer().loadCpData(coId);
 
 	List<BaseDataShowModel> list =  new BaseDataShowServer().loadShowData(startDate, endDate,spId, cpId, coId,  showType);
 	//1 按日期，2按周，3按月，4按SP，5按CP，6按SP业务线，7按CP业务线，8按SP业务名称，
@@ -67,42 +60,6 @@
 	function resetForm()
 	{
 		$("#sel_showtype").val("<%= showType %>");
-		$("#sel_sp").val("<%= spId %>");
-		$("#sel_cp").val("<%= cpId %>");
-	}
-	
-	var spList = new Array();
-	
-	<%
-	for(SpModel spModel : spList)
-	{
-		%>
-		spList.push(new joSelOption(<%= spModel.getSpId() %>,1,'<%= spModel.getShortName() %>'));
-		
-		<%
-	}
-	%>
-	
-	function onSpDataSelect(joData)
-	{
-		$("#sel_sp").val(joData.id);
-	}
-	
-	
-	var cpList = new Array();
-	
-	<%
-	for(CpModel cpModel : cpList)
-	{
-		%>
-		cpList.push(new joSelOption(<%= cpModel.getCpId() %>,1,'<%= cpModel.getShortName() %>'));
-		<%
-	}
-	%>
-	
-	function onCpDataSelect(joData)
-	{
-		$("#sel_cp").val(joData.id);
 	}
 	
 </script>
@@ -125,28 +82,12 @@
 					<dd class="dd04_me">
 						<select name="sp_id" id="sel_sp" style="width: 110px;" title="选择SP" onclick="namePicker(this,spList,onSpDataSelect)">
 							<option value="-1">全部</option>
-							<%
-								for(SpModel sp : spList)
-								{
-									%>
-								<option value="<%= sp.getSpId() %>"><%= sp.getShortName() %></option>	
-									<%
-								}
-							%>
 						</select>
 					</dd>
 					<dd class="dd01_me">CP</dd>
 					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp" title="选择CP" style="width: 110px;" onclick="namePicker(this,cpList,onCpDataSelect)">
 							<option value="-1">全部</option>
-							<%
-								for(CpModel cp : cpList)
-								{
-									%>
-								<option value="<%= cp.getCpId() %>"><%= cp.getShortName() %></option>	
-									<%
-								}
-							%>
 						</select>
 					</dd>
 					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>

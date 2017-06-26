@@ -162,7 +162,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/btn_red"
                 android:gravity="center"
-                android:text=""
+                android:text="@string/my_cozuo_c"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -177,13 +177,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:text=""
+            android:text="@string/my_qq"
             android:textColor="@color/white"
             android:textSize="15sp" />
 

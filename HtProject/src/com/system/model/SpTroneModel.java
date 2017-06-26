@@ -37,12 +37,15 @@ public class SpTroneModel
 	//商务ID
 	private int commerceUserId;
 	
+<<<<<<< HEAD
 	//是否是导量数据，0为否，1为是
 	private int isUnHoldData;
 	
 	//当走API的时候，并且判断手机号的地区时，可以选择是否强制拒绝还是交由上游去处理
 	private int isForceHold;
 	
+=======
+>>>>>>> master
 	public int getTroneType()
 	{
 		return troneType;
@@ -251,6 +254,7 @@ public class SpTroneModel
 	public void setCommerceUserId(int commerceUserId) {
 		this.commerceUserId = commerceUserId;
 	}
+<<<<<<< HEAD
 	public int getIsUnHoldData()
 	{
 		return isUnHoldData;
@@ -275,6 +279,8 @@ public class SpTroneModel
 	{
 		this.provinceList = provinceList;
 	}
+=======
+>>>>>>> master
 	
 	
 }

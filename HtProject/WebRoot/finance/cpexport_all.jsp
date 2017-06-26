@@ -1,5 +1,3 @@
-<%@page import="com.system.server.JsTypeServer"%>
-<%@page import="com.system.model.JsTypeModel"%>
 <%@page import="com.system.vmodel.SpFinanceShowModel"%>
 <%@page import="com.system.server.CpServer"%>
 <%@page import="com.system.model.CpModel"%>
@@ -22,7 +20,7 @@
 	boolean isNotFirstLoad = StringUtil.getInteger(request.getParameter("load"), -1) == -1 ? false : true;
 	boolean isExport = StringUtil.getInteger(request.getParameter("export"), -1) == 1 ;
 	
-	List<JsTypeModel> jsTypeList = new JsTypeServer().loadJsType();
+	System.out.println("isExport:" + isExport + ";" + request.getQueryString());
 	
 	List<CpModel> cpList = new CpServer().loadCp();
 	String display = "";
@@ -74,8 +72,6 @@
 		if(isNotFirstLoad)
 			map = new SettleAccountServer().loadCpSettleAccountDataAll(startDate, endDate,cpId,dateType);
 	}
-	
-	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -130,34 +126,7 @@
 		window.location.href = "cpexport_all.jsp?export=1&datetype=" + jsType + "&cp_id=" + cpId + "&startdate=" + startDate + "&enddate=" + endDate;
 	}
 	
-	function resetCheckBox(data)
-	{
-		var objs = document.getElementsByName("chk_data");
-		for(i=0; i<objs.length; i++)
-		{
-			objs[i].checked = data;	
-		}
-	}	
 	
-	function exprortBatch()
-	{
-		var objs = document.getElementsByName("chk_data");
-		var ids = "";
-		for(i=0; i<objs.length; i++)
-		{
-			if(objs[i].checked==true)
-			{
-				ids += objs[i].id + ",";
-			}
-		}
-		var ids=ids.substring(0, ids.length-1);
-		if(ids==null||ids==""){
-			alert("请选择需要导出的账单！");
-			return;
-		}
-		window.location.href="util.jsp?base_js_type=<%=dateType%>&base_cp_ids=" + ids + "&base_startdate=<%=startDate%>&base_enddate=<%=endDate%>&exprort_zip=2";
-	
-	}
 </script>
 <body style="padding-top: 40px">
 	<div class="main_content">
@@ -194,14 +163,14 @@
 					<dd class="dd04_me">
 						<select name="datetype" id="sel_date_type" title="选择结算类型" style="width:100px">
 							<option value="-1">请选择</option>
-							<%
-								for(JsTypeModel jsTypeModel : jsTypeList)
-								{
-									%>
-							<option value="<%= jsTypeModel.getJsType() %>"><%= jsTypeModel.getJsName() %></option>		
-									<%
-								}
-							%>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公N+1结</option>
+							<option value="7">对公N+2结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
 						</select>
 					</dd>
 
@@ -209,9 +178,6 @@
 					<dd class="dd00_me"></dd>
 					<dd class="ddbtn" style="margin-left: 10px;" />
 					<input type="button" value="查  询" onclick="subForm()">
-					</dd>
-					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
-						<input class="btn_match" value="批量导出" type="button" onclick="exprortBatch()"  />
 					</dd>
 				</dl>
 			</form>
@@ -228,11 +194,10 @@
 						<td>结算率</td>
 						<td>合作方分成</td>
 						<td>操作</td>
-						<td>全选<input type="checkbox" onclick="resetCheckBox(this.checked)" /></td>
 					</tr>
 				</thead>
 				<tbody>
-					<% 
+					<%
 						if (map != null)
 						{
 							SpFinanceShowModel sfsModel = null;
@@ -257,7 +222,7 @@
 												+ StringUtil.getDecimalFormat(sfsModel.getAmount()
 														* sfsModel.getJiesuanlv())
 												+ "</td><td rowspan='" + tmpList.size()
-												+ "'><a href='javascript:;' onclick=exportCpBillData(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>导出</a></td><td rowspan='" + tmpList.size()+"'><input type='checkbox' id="+sfsModel.getSpId()+" name='chk_data'></td></tr>");
+												+ "'><a href='javascript:;' onclick=exportCpBillData(\'" + startDate + "','"+ endDate +"'," + sfsModel.getSpId() + "," + dateType + ")>导出</a></td></tr>");
 									}
 									else
 									{
@@ -272,7 +237,7 @@
 									}
 								}
 								out.println(
-										"<tr style='background-color: #E0EEEE;'><td colspan='6' >合计</td><td>"
+										"<tr style='background-color: #E0EEEE;'><td colspan='5' >合计</td><td>"
 												+ StringUtil.getDecimalFormat(totalAmount) + "</td><td></td></tr>");
 							}
 						}

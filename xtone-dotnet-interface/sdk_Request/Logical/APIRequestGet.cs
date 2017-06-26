@@ -25,7 +25,7 @@ namespace sdk_Request.Logical
         private LightDataModel.tbl_trone_paycodeItem _paymodel;
         private StringBuilder _sbLog;
 
-        private int Step = 0;
+        internal protected int Step = 0;
 
         /// <summary>
         ///写日志的文件锁对像
@@ -48,12 +48,13 @@ namespace sdk_Request.Logical
             Func<Model.SP_RESULT> func = null;
             if (step == null || step != "2")
             {
+                Step = 1;
                 func = GetSpCmd;
             }
             else
             {
-                func = GetSpCmdStep2;
                 Step = 2;
+                func = GetSpCmdStep2;
             }
 
             try
@@ -212,9 +213,10 @@ namespace sdk_Request.Logical
                     cid = 123,
                     imei = "866568022922909",
                     imsi = "460023192787105",
-                    //price = 1000,
+                    iccid = "898600161315F1003574",
                     lac = 456,
                     mobile = "13570830935",
+                    id = 0x40000000 | (int)((DateTime.Now.Ticks / 100000) & 0x7FffFFFF)
                 };
                 return true;
             }
@@ -278,15 +280,30 @@ namespace sdk_Request.Logical
         }
         public bool SetError(string Msg)
         {
-            SetError(API_ERROR.INNER_ERROR, Msg);
+            SetError(API_ERROR.GET_CMD_FAIL, Msg);
             return false;
         }
+
+        public bool SetError(JToken jtk)
+        {
+            SetError(API_ERROR.GET_CMD_FAIL, jtk);
+            return false;
+        }
+
         protected bool SetError(API_ERROR Error, string msg)
         {
             _errCode = Error;
             _errMsg = msg;
             return false;
         }
+
+        protected bool SetError(API_ERROR Error, JToken jtk)
+        {
+            if (jtk == null)
+                return SetError(Error, null);
+            return SetError(Error, jtk.ToString());
+        }
+        internal protected API_ERROR GetError() { return _errCode; }
 
         private void WriteError()
         {
@@ -307,7 +324,7 @@ namespace sdk_Request.Logical
         /// <summary>
         /// 写入日志文件
         /// </summary>
-        private void FlushLog()
+        internal protected virtual void FlushLog()
         {
             if (_sbLog == null || _sbLog.Length == 0)
                 return;
@@ -315,13 +332,19 @@ namespace sdk_Request.Logical
             var fi = new FileInfo(Request.MapPath(FileName));
             if (!fi.Directory.Exists)
                 fi.Directory.Create();
+
             _sbLog.AppendLine();
             lock (logLocker)
             {
-                using (var stm = new StreamWriter(fi.FullName, true))
+                StreamWriter stm = null;
+                try
                 {
+                    stm = new StreamWriter(fi.FullName, true);
                     stm.WriteLine(_sbLog.ToString());
                 }
+                catch { }
+                finally { if (stm != null) stm.Dispose(); }
+
             }
             _sbLog.Clear();
         }
@@ -376,7 +399,7 @@ namespace sdk_Request.Logical
         /// <returns></returns>
         protected string GetHTML(string url, int timeout, string encode)
         {
-            return DownloadHTML(url, null, timeout, encode, null);
+            return DownloadHTML(url, null, timeout, encode, (IDictionary<string, string>)null);
         }
 
         /// <summary>
@@ -388,7 +411,48 @@ namespace sdk_Request.Logical
         /// <returns></returns>
         protected string GetHTML(string url)
         {
-            return DownloadHTML(url, null, 0, null, null);
+            return DownloadHTML(url, null, 0, null, (IDictionary<string, string>)null);
+        }
+
+        protected string GetHTML(string url, IEnumerable<KeyValuePair<string, string>> keyValues, int timeout, string encode)
+        {
+            Encoding enc = null;
+            if (string.IsNullOrEmpty(encode))
+                enc = System.Text.ASCIIEncoding.UTF8;
+            else
+                enc = System.Text.ASCIIEncoding.GetEncoding(encode);
+            var sb = new StringBuilder(url);
+            if (url.Contains("?"))
+                sb.Append("&");
+            else
+                sb.Append("?");
+
+            foreach (var kv in keyValues)
+            {
+                sb.AppendFormat("{0}={1}&", System.Web.HttpUtility.UrlEncode(kv.Key, enc), System.Web.HttpUtility.UrlEncode(kv.Value, enc));
+            }
+            sb.Length--;
+            url += sb.ToString();
+            return GetHTML(url, timeout, encode);
+        }
+
+
+
+        protected string PostHTML(string url, IEnumerable<KeyValuePair<string, string>> keyValues, int timeout, string encode)
+        {
+            Encoding enc = null;
+            if (string.IsNullOrEmpty(encode))
+                enc = System.Text.ASCIIEncoding.UTF8;
+            else
+                enc = System.Text.ASCIIEncoding.GetEncoding(encode);
+            var sb = new StringBuilder();
+
+            foreach (var kv in keyValues)
+            {
+                sb.AppendFormat("{0}={1}&", System.Web.HttpUtility.UrlEncode(kv.Key, enc), System.Web.HttpUtility.UrlEncode(kv.Value, enc));
+            }
+            sb.Length--;
+            return PostHTML(url, sb.ToString(), timeout, encode);
         }
 
         /// <summary>
@@ -428,6 +492,26 @@ namespace sdk_Request.Logical
         /// <returns></returns>
         protected string DownloadHTML(string url, string postdata, int timeout, string encode, string contentType)
         {
+            Dictionary<string, string> heads = null;
+            if (!string.IsNullOrEmpty(contentType))
+            {
+                heads = new Dictionary<string, string>();
+                heads.Add("Content-Type", contentType);
+            }
+            return DownloadHTML(url, postdata, timeout, encode, heads);
+        }
+
+        /// <summary>
+        /// 下载远程代码,带日志
+        /// </summary>
+        /// <param name="url">目标网址</param>
+        /// <param name="postdata">传送的字符串，传入null时，将采用GET方法访问url</param>
+        /// <param name="timeout">超时时间,单位为毫秒,默认3000毫秒</param>
+        /// <param name="encode">可为空，默认为utf8</param>
+        /// <param name="Heads">HTTP报文头，可为空</param>
+        /// <returns></returns>
+        internal protected virtual string DownloadHTML(string url, string postdata, int timeout, string encode, IDictionary<string, string> Heads)
+        {
             Stopwatch st = new Stopwatch();
             st.Start();
             string html = null;
@@ -436,7 +520,30 @@ namespace sdk_Request.Logical
                 WriteLog(url);
                 if (!String.IsNullOrEmpty(postdata))
                     WriteLog(postdata);
-                html = n8wan.Public.Library.DownloadHTML(url, postdata, timeout, encode, contentType, this.Cookies);
+                html = n8wan.Public.Library.DownloadHTML(url, postdata, encode, e =>
+                {
+                    if (timeout > 0)
+                    {
+                        if (timeout < 100)
+                            e.Timeout = timeout * 1000;
+                        else
+                            e.Timeout = timeout;
+                    }
+                    if (Cookies != null)
+                        e.CookieContainer = Cookies;
+                    if (Heads != null)
+                    {
+                        foreach (var head in Heads)
+                        {
+                            switch (head.Key.ToLower())
+                            {
+                                case "content-type": e.ContentType = head.Value; break;
+                                case "content-length": break;
+                                default: e.Headers[head.Key] = head.Value; break;
+                            }
+                        }
+                    }
+                });
                 return html;
             }
             catch (Exception ex)
@@ -451,6 +558,8 @@ namespace sdk_Request.Logical
             }
 
         }
+
+
         #endregion
 
         public CookieContainer Cookies { get; set; }

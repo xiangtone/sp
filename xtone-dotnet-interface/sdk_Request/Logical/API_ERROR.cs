@@ -101,9 +101,5 @@ namespace sdk_Request.Logical
         /// 用户话费不足（SP结果查转换）
         /// </summary>
         NOT_ENOUGH_MONEY = 1028
-
-
-
-
     }
 }

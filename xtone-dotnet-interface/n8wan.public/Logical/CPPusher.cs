@@ -35,6 +35,7 @@ namespace n8wan.Public.Logical
         static Random rnd;
         object sync = new object();
 
+        public E_CP_SYNC_MODE PushFlag { get; set; }
 
         /// <summary>
         /// 根据TroneId，CPID 加载CP同步API配置
@@ -189,6 +190,11 @@ namespace n8wan.Public.Logical
         /// <returns></returns>
         protected bool IsCycHidden()
         {
+            if (PushFlag == E_CP_SYNC_MODE.ForceHide)
+                return true;
+            else if (PushFlag == E_CP_SYNC_MODE.ForcePush)
+                return false;
+
             if (_cp_push_url.cp_id == 34)
                 return true;//未知CP的，直接隐藏
             if (!_cp_push_url.is_realtime)
@@ -502,7 +508,8 @@ namespace n8wan.Public.Logical
         {
             if (TrackLog == null)
                 return;
-            TrackLog.AppendLine(msg);
+            TrackLog.AppendFormat("{0:hh:MM:ss}{1}", DateTime.Now, msg);
+            TrackLog.AppendLine();
         }
 
         public StringBuilder TrackLog { get; set; }

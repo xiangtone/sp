@@ -19,8 +19,12 @@ public class CpDao
 	@SuppressWarnings("unchecked")
 	public List<CpModel> loadCp()
 	{
+<<<<<<< HEAD
 		//增加状态字段过滤
 		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp where status=1 order by convert(short_name using gbk) asc";
+=======
+		String sql = "select * from daily_config.tbl_cp order by convert(short_name using gbk) asc";
+>>>>>>> master
 
 		return (List<CpModel>) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -53,7 +57,6 @@ public class CpDao
 					model.setContractEndDate(StringUtil
 							.getString(rs.getString("contract_end_date"), ""));
 					model.setMail(rs.getString("mail"));
-					model.setStatus(rs.getInt("status"));
 					list.add(model);
 				}
 
@@ -290,7 +293,7 @@ public class CpDao
 							rs.getString("contract_start_date"), ""));
 					model.setContractEndDate(StringUtil
 							.getString(rs.getString("contract_end_date"), ""));
-					model.setStatus(rs.getInt("status"));
+
 					return model;
 				}
 
@@ -364,13 +367,17 @@ public class CpDao
 
 	public boolean addCp(CpModel model)
 	{
+<<<<<<< HEAD
 		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id,status) "
+=======
+		String sql = "insert into daily_config.tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id) "
+>>>>>>> master
 				+ "value('" + model.getFullName() + "','" + model.getShortName()
 				+ "','" + model.getContactPerson() + "','" + model.getQq()
 				+ "','" + model.getMail() + "','" + model.getPhone() + "','"
 				+ model.getAddress() + "','" + model.getContractStartDate()
 				+ "','" + model.getContractEndDate() + "',"
-				+ model.getCommerceUserId() + ","+model.getStatus()+")";
+				+ model.getCommerceUserId() + ")";
 		return new JdbcControl().execute(sql);
 	}
 
@@ -384,7 +391,7 @@ public class CpDao
 				+ "',address='" + model.getAddress() + "',contract_start_date='"
 				+ model.getContractStartDate() + "',contract_end_date='"
 				+ model.getContractEndDate() + "',commerce_user_id="
-				+ model.getCommerceUserId() + ",status="+model.getStatus()+" where id =" + model.getId();
+				+ model.getCommerceUserId() + " where id =" + model.getId();
 		return new JdbcControl().execute(sql);
 	}
 
@@ -546,6 +553,7 @@ public class CpDao
 
 		return map;
 	}
+<<<<<<< HEAD
 	/**
 	 * 增加状态字段
 	 * @param pageIndex
@@ -724,4 +732,6 @@ public class CpDao
 
 		return map;
 	}
+=======
+>>>>>>> master
 }

@@ -15,9 +15,8 @@
 <%
 	int pageIndex = StringUtil.getInteger(request.getParameter("pageindex"), 1);
 	String keyWord = StringUtil.getString(request.getParameter("keyword"), "");
-	int spStatus=StringUtil.getInteger(request.getParameter("status"), -1);
 
-	Map<String, Object> map =  new SpServer().loadSp(pageIndex,spStatus,keyWord);
+	Map<String, Object> map =  new SpServer().loadSp(pageIndex, keyWord);
 		
 	List<SpModel> list = (List<SpModel>)map.get("list");
 	
@@ -48,11 +47,7 @@
 			window.location.href = "troneaction.jsp?did=" + id;	
 		}
 	}
-	$(function()
-			{
-				$("#status").val(<%= spStatus %>);
-			
-			});
+	
 </script>
 
 <body>
@@ -64,15 +59,6 @@
 					<dd class="dd01_me" style="margin-left:-35px;">关键字</dd>
 					<dd class="dd03_me">
 						<input name="keyword" id="input_keyword" value="<%= keyWord %>" type="text" style="width: 150px">
-					</dd>
-					
-					<dd class="dd01_me">状态</dd>
-						<dd class="dd04_me">
-						<select name="status" id="status" style="width: 100px;">
-							<option value="-1">全部</option>
-							<option value="1">正常</option>
-							<option value="0">关闭</option>
-						</select>
 					</dd>
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查 询" type="submit" >
@@ -100,11 +86,10 @@
 			<tbody>
 				<%
 					int rowNum = 1;
-					String stopStyle = "class=\"StopStyle\"";
 					for (SpModel model : list)
 					{
 				%>
-				<tr <%= model.getStatus() == 0 ? stopStyle : "" %>>
+				<tr>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
 					<td><%= model.getId() + 1000 %></td>
 					<td><%=model.getFullName()%></td>

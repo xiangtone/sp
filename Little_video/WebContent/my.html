@@ -1,0 +1,175 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>会员中心</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" type="text/css" href="./css/frozen.css" />
+    <link rel="stylesheet" type="text/css" href="./css/common_av.css" />
+
+    <script type="text/javascript" src="./scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="./scripts/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./scripts/public.js"></script>
+    <script type="text/javascript" src="./scripts/touchsilder.js"></script>
+    <style type="text/css">
+        .open_vip { background-color: lightcyan; }
+        .ui-border li i em { font-size: 0.75rem; }
+        .aboutpic li { margin-top: 0.6rem; }
+            .aboutpic li i img { width: 2.5rem; height: 2.5rem; }
+
+
+        .dialog { top: 100px; position: fixed; border: #ccc solid 1px; background-color: rgba(194, 214, 255, 0.80); border-radius: 8px; display: none; }
+            .dialog .txt { font-size: 1.5em; line-height: 2em; margin: 10px; text-align: center; color: #222; }
+            .dialog .bts { text-align: right; }
+                .dialog .bts a { display: inline-block; line-height: 2em; font-size: 1.2em; padding: 0 10px; }
+                .dialog .bts .close { color: #ccc; }
+    </style>
+
+    <script type="text/javascript">
+
+        var levelInfo = null;
+        var videos = [];
+        var silder = null;
+
+        function page_onload() {
+            var uid = getUid();
+            var data = { "imei": uid, "channel": location.host };
+            $.ajax({
+                "type": "POST",
+                "url": "http://127.0.0.1:8080/little_video_server/AppInit",
+                "data": JSON.stringify(data),
+                "success": OnInit,
+                "dataType": "json"
+            });
+        }
+
+        function OnInit(e) {
+            levelInfo = e;
+            var myLevelId = e.level;
+            $("#uid").text(levelInfo.name);
+            for (var i = 0; i < e.levels.length; i++) {
+                if (e.levels[i].levelId == myLevelId) {
+                    $("#header>h1").text(e.levels[i].remark);
+                    break;
+                }
+            }
+
+            var ems = $(".ui-panel>ul>li>i>em");
+
+            $(ems[0]).text($("#header>h1").text());
+
+            switch (levelInfo.level) {
+                case 0: $(ems[1]).text("可看体验区视频"); break;
+                case 1: $(ems[1]).text("可看黄金区视频"); break;
+                case 2: $(ems[1]).text("可看全部视频"); break;
+            }
+            $(ems[2]).text($("#header>h1").text());
+
+        }
+        function show_pass(sender) {
+            $("#pass").text(levelInfo.password);
+            sender.style.display = "none";
+        }
+        function show_qq(sender, e) {
+            if (levelInfo.level == 0) {
+                $(".dialog").css("display", "block");
+                $(".dialog>div>a").click(function () { $(".dialog").css("display", ""); });
+                return;
+            }
+            $("#qq").text(e.qq);
+            sender.style.display = "none";
+        }
+    </script>
+
+</head>
+<body>
+    <header id="header" class="ui-header ui-header-positive ui-border-b">
+        <h1>{{nowleve}}</h1>
+    </header>
+
+    <section class="ui-panel">
+        <ul class="ui-list ui-border-tb">
+            <li class="ui-border-t">
+                <div class="ui-avatar">
+                    <span style="background-image:url(./images/about_face.jpg)"></span>
+                </div>
+                <div class="ui-list-info" style="padding-left: 20px">
+                    <h4 class="ui-nowrap" style="letter-spacing: 1px;">账号: <i id="uid"></i></h4>
+                    <h4 class="ui-nowrap" style="letter-spacing: 1px;">密码: <span id="pass">******</span> <a onclick="show_pass(this)">点击显示</a></h4>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+
+    <section class="ui-panel" style="background-color: white;">
+
+        <ul class="ui-tiled ui-border" style="height: 80px">
+            <li>
+                <div>头衔</div>
+                <i><em>{{nowleve}}</em></i>
+            </li>
+            <li>
+                <div>特权</div>
+                <i><em>{{tequan}}</em></i>
+            </li>
+            <li>
+                <div>操作</div>
+                <i><em class="open_vip" onclick="pay()">{{operate}}</em></i>
+            </li>
+        </ul>
+
+    </section>
+
+    <section class="ui-panel" style="background-color: white">
+        <h3 style="text-align: center;line-height: 40px!important;"><span>会员特权</span></h3>
+        <ul class="ui-tiled ui-border-t aboutpic">
+            <li><i class="ui-icon-zy"><img src="./images/about_zy.png"></i>海量片库</li>
+            <li><i class="ui-icon-tp"><img src="./images/about_tp.png"></i>海量图库</li>
+            <li><i class="ui-icon-hd"><img src="./images/about_hd.png"></i>高清专享</li>
+            <li><i class="ui-icon-kf"><img src="./images/about_kf.png"></i>美女客服</li>
+        </ul>
+    </section>
+
+    <section class="ui-panel" style="background-color: white">
+        <div class="ui-whitespace" style="padding-left: 10px;padding-top: 10px">
+            <p class="ui-txt-justify">客服qq:<i id="qq">*******</i><a onclick="show_qq(this, {'qq':'123456'})">显示</a></p>
+            <p class="ui-txt-justify">工作时间:09:00-18:00</p>
+            <p class="ui-txt-justify">注:会员可享受语音视频服务哦</p>
+            <p class="ui-txt-justify">ps:加客服时请备注上您的账号+遇到的问题</p>
+        </div>
+    </section>
+
+    <div class="u-layer-ath" style="display: none">
+        <div class="ath_addhome_area"></div>
+        <div class="ath_close_area" data-role="button"></div>
+    </div>
+
+
+
+    <footer id="footer" class="ui-footer ui-footer-stable ui-border-t">
+        <ul class="ui-tiled ui-border-t">
+            <li onclick="level_onclick(this, null);" data-level="0"><i class="ui-icon-emo"></i>体验区</li>
+            <li onclick="level_onclick(this, null);" data-level="1"><i class="ui-icon-wallet"></i>黄金区</li>
+            <li onclick="level_onclick(this, null);" data-level="2"><i class="ui-icon-dressup"></i>钻石区</li>
+            <li id="m_my"><i class="ui-icon-personal"></i>我的</li>
+        </ul>
+    </footer>
+
+    <div class="dialog">
+        <div class="txt">
+            开会员会后可以显示客户QQ
+        </div>
+        <div class="bts">
+            <a onclick="alert('xx');" >立即开通</a>
+            <a class="close">稍候再说</a>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        page_onload();
+    </script>
+</body>
+</html>

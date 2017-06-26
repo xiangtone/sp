@@ -175,14 +175,15 @@ namespace n8wan.Public.Logical
                 }
             }
             trone = LightDataModel.tbl_troneItem.GetRowById(dBase, m.trone_id);
+            var sb = new StringBuilder(250);
 
             var apiPush = new n8wan.Public.Logical.HTAPIPusher()
             {
                 dBase = dBase,
                 Trone = trone,
                 LogFile = logFile,
-                IsSyncPush = true
-
+                IsSyncPush = true,
+                TrackLog = sb
             };
             if (apiPush.LoadCPAPI())
             {
@@ -198,12 +199,20 @@ namespace n8wan.Public.Logical
             cp.Trone = trone;
             cp.LogFile = logFile;
             cp.IsSyncPush = true;
+            cp.TrackLog = sb;
+
 
             if (!cp.LoadCPAPI())
-                return true;
+            {
+                SetErrorMesage(sb.ToString());
+                return false;
+            }
 
             cp.PushObject = m;
-            return cp.DoPush();
+            if (cp.DoPush())
+                return true;
+            SetErrorMesage(sb.ToString());
+            return false;
 
         }
 

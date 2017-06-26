@@ -173,6 +173,25 @@ namespace n8wan.Public
         /// <returns></returns>
         public static string DownloadHTML(string url, string postdata, int timeout, string encode, string ContentType, System.Net.CookieContainer cookies)
         {
+            return DownloadHTML(url, postdata, encode, e =>
+            {
+                if (timeout > 0)
+                {
+                    if (timeout < 30)//小于30ms视为设置错误
+                        timeout *= 1000;
+                    else if (timeout > 90 * 1000)//大于90秒，限定为90秒
+                        throw new ArgumentOutOfRangeException("此方法不设置超时时间大于90秒");
+                    e.Timeout = timeout;
+                }
+
+                if (string.IsNullOrEmpty(ContentType))
+                    e.ContentType = ContentType;
+                if (cookies != null)
+                    e.CookieContainer = cookies;
+            });
+        }
+        public static string DownloadHTML(string url, string postdata, string encode, Action<System.Net.HttpWebRequest> OnRequestInit)
+        {
 
             Encoding ec = null;
             if (string.IsNullOrEmpty(encode))
@@ -183,20 +202,19 @@ namespace n8wan.Public
             System.Net.HttpWebRequest web = null;
             Stream stm = null;
             web = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
-
-            web.Timeout = timeout < 1 ? 2888 : timeout;
-            //web.AllowAutoRedirect = false;
             web.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
             web.ServicePoint.UseNagleAlgorithm = false;
-            web.CookieContainer = cookies;
+            web.Timeout = 2888;
+            web.ServicePoint.Expect100Continue = false;
+            if (OnRequestInit != null)
+            {
+                OnRequestInit(web);
+            }
+
+            //web.AllowAutoRedirect = false;
             if (postdata != null)
             {
-                web.ServicePoint.Expect100Continue = false;
                 web.Method = System.Net.WebRequestMethods.Http.Post;
-
-                if (!string.IsNullOrEmpty(ContentType))
-                    web.ContentType = ContentType;
-
                 var bin = ec.GetBytes(postdata);
                 using (stm = web.GetRequestStream())
                 {

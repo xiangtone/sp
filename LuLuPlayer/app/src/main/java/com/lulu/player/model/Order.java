@@ -28,9 +28,6 @@ public class Order {
     @SerializedName("price")
     private int price;
 
-    @SerializedName("sdkId")
-    private int sdkId;
-
     @SerializedName("status")
     private int status;
 
@@ -90,14 +87,6 @@ public class Order {
         this.status = status;
     }
 
-    public int getSdkId() {
-        return sdkId;
-    }
-
-    public void setSdkId(int sdkId) {
-        this.sdkId = sdkId;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -107,7 +96,6 @@ public class Order {
                 ", orderId='" + orderId + '\'' +
                 ", payDate=" + payDate +
                 ", price=" + price +
-                ", sdkId=" + sdkId +
                 ", status=" + status +
                 '}';
     }

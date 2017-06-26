@@ -40,8 +40,6 @@ public class AccessFilter implements Filter
 			return;
 		}
 		
-		UserModel curUser = null;
-		
 		if(requestUrl.contains(".jsp"))
 		{
 			requestUrl = requestUrl.replace(contextpath, "");
@@ -72,22 +70,14 @@ public class AccessFilter implements Filter
 				return;
 			}
 			
-			curUser = (UserModel)obj;
-			
-			if(!RightServer.hadRight(curUser, requestUrl.substring(1)))
+			if(!RightServer.hadRight((UserModel)obj, requestUrl.substring(1)))
 			{
 				response.sendRedirect(contextpath + "/syspage/accessdeny.html");
 				return;
 			}
 		}
 		
-		if(curUser!=null)
-			RightConfigCacheMgr.threadPolls.put(Thread.currentThread().getId(), curUser.getId());
-		
 		chain.doFilter(servletRequest, servletResponse);
-		
-		if(curUser!=null)
-			RightConfigCacheMgr.threadPolls.remove(Thread.currentThread().getId());
 		
 	}
 

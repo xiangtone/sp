@@ -51,11 +51,6 @@
 	String cpbillingIds=StringUtil.getString(request.getParameter("cpbilling_ids"), "");
 	int exportZip=StringUtil.getInteger(request.getParameter("exprort_zip"), -1);
 
-	//CP账单基础数据导出
-	String baseCpIds=StringUtil.getString(request.getParameter("base_cp_ids"), "");
-	int dateType=StringUtil.getInteger(request.getParameter("base_js_type"), -1);
-	String baseStartDate=StringUtil.getString(request.getParameter("base_startdate"), "");
-	String baseEndDate=StringUtil.getString(request.getParameter("base_enddate"), "");
 	if(type==0){
 	SpBillingModel billingModel=new SpBillingServer().getSpBillingModel(id);
 	String data=billingModel.getBillingDate()+"#"+billingModel.getApplyKaipiaoDate()+"#"+billingModel.getKaipiaoDate()+"#"+billingModel.getPayTime();
@@ -173,17 +168,8 @@
 	if(exportZip==1){
 		response.setContentType("application/octet-stream;charset=utf-8");
 		String defultDate=StringUtil.getDefaultDate();
-		int billingStatus=StringUtil.getInteger(request.getParameter("billingStatus"), -1);
-		String fileName="";
-		if(billingStatus==1){
-			fileName = "运营账单导出汇总.zip";
-		}else if(billingStatus==2){
-			fileName = "CP结算账单导出汇总.zip";
-		}else if(billingStatus==3){
-			fileName = "财务账单导出汇总.zip";
-		}else{
-			fileName = "CP账单导出汇总.zip";
-		}
+		String fileName = "运营账单导出汇总.zip";
+		
 		if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
 		{
 			fileName = URLEncoder.encode(fileName, "UTF-8");
@@ -205,33 +191,4 @@
 		
 		return;
 	}
-	//CP账单基础数据批量导出
-	if(exportZip==2){
-		response.setContentType("application/octet-stream;charset=utf-8");
-		String defultDate=StringUtil.getDefaultDate();
-		String fileName = "CP账单基础数据.zip";
-		
-		if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) 
-		{
-			fileName = URLEncoder.encode(fileName, "UTF-8");
-		} 
-		else 
-		{
-			fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
-		}
-
-		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-
-		SettleAccountServer accountServer = new SettleAccountServer();
-		accountServer.exportSettleAccountBaseBatchZip(2, baseCpIds, baseStartDate, baseEndDate, dateType, response.getOutputStream());
-
-		
-		out.clear();
-		
-		out = pageContext.pushBody();
-		
-		return;
-		
-	}
-	
 %>

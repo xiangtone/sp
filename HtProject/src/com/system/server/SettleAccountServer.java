@@ -16,7 +16,6 @@ import com.system.dao.SettleAcountDao;
 import com.system.excel.ExcelManager;
 import com.system.excel.ZipUtil;
 import com.system.model.CpBillingModel;
-import com.system.model.CpModel;
 import com.system.model.SettleAccountModel;
 import com.system.util.ConfigManager;
 import com.system.vmodel.SpFinanceShowModel;
@@ -164,10 +163,6 @@ public class SettleAccountServer
 			case 7:
 				dateTypeValue = "对公N+2结";
 				break;
-			case 8:
-				dateTypeValue = "对公N+3结";
-				break;
-				
 			default:
 				break;
 		}
@@ -443,60 +438,5 @@ public class SettleAccountServer
 			}
 		return dateTypeValue;
 	}
-		
-		/**
-		 * CP账单基础数据
-		 * 导出excel zip文件
-		 * @param channelType
-		 * @param dateType
-		 * @param channelName
-		 * @param startDate
-		 * @param endDate
-		 * @param list
-		 * @param os
-		 * @throws IOException 
-		 */
-		//channelType 1 SP 2 CP
-			public void exportSettleAccountBaseBatchZip(int channelType,String cpId,String startDate,String endDate,int dateType,OutputStream os) throws IOException 
-			{
-				String[] ids=cpId.split(",");
-				//excel 保存路径
-				String excelPath=ConfigManager.getConfigData("EXCEL_ZIP");
-				List<CpModel> cpList=new CpServer().loadCp();
-				//生成excel文件
-				for(String id : ids){
-					SettleAccountServer accountServer = new SettleAccountServer();
-					List<SettleAccountModel> list = accountServer.loadCpSettleAccountList(Integer.parseInt(id), startDate, endDate,dateType);
-					String cpName = "";
-					CpModel cp=	new CpServer().loadCpById(Integer.parseInt(id));
-					if(cp!=null){
-						cpName=cp.getShortName();
-					}
-					
-					
-					String dateTypeValue = getValueByType(dateType);
-					String fileName=cpName + "(" + startDate + "_" + endDate + ").xls";
-					String date = getDateFormat(startDate,endDate);
-					
-					String filePath = ConfigManager.getConfigData("EXCEL_DEMO") + (channelType==1 ? "SpDemo.xls" : "CpDemo.xls");
-					//创建excel文件夹
-					ZipUtil.createFile(excelPath);
-					//创建excel文件
-					new ExcelManager().writeSettleAccountToExcelZip(dateTypeValue, date, cpName, list, filePath,excelPath,fileName);
-				}
-				String time=Calendar.getInstance().getTimeInMillis()+"";  
-				//创建zip文件			
-				ZipUtil.craeteZipPath(excelPath, time+"ZipDemo");
-//				删除excel文件
-				File file=new File(excelPath);
-				ZipUtil.deleteExcelPath(file);
-//				重新创建文件夹
-				file.mkdirs();
-				//写入流
-				zipToOutstream(excelPath+time+"ZipDemo.zip",os);
-		
-				ZipUtil.deleteExcelPath(new File(excelPath+time+"ZipDemo.zip"));
-
-			}
 	 
 }

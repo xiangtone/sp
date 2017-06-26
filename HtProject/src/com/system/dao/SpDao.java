@@ -18,8 +18,12 @@ public class SpDao
 	@SuppressWarnings("unchecked")
 	public List<SpModel> loadSp()
 	{
+<<<<<<< HEAD
 		//增加状态字段过滤
 		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp where status=1 order by convert(short_name using gbk) asc";
+=======
+		String sql = "select * from daily_config.tbl_sp order by convert(short_name using gbk) asc";
+>>>>>>> master
 		return (List<SpModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -41,7 +45,7 @@ public class SpDao
 					model.setAddress(StringUtil.getString(rs.getString("address"), ""));
 					model.setContractStartDate(StringUtil.getString(rs.getString("contract_start_date"), ""));
 					model.setContractEndDate(StringUtil.getString(rs.getString("contract_end_date"), ""));
-					model.setStatus(rs.getInt("status"));
+					
 					list.add(model);
 				}
 				
@@ -333,6 +337,7 @@ public class SpDao
 		int count=(Integer) map.get("rows");
 		return count;
 	}
+<<<<<<< HEAD
 	/**
 	 * 增加SP状态查询
 	 * @param pageIndex
@@ -466,4 +471,6 @@ public class SpDao
 		
 		return map;
 	}
+=======
+>>>>>>> master
 }

@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace sdk_Request.Model
 {
     [DataContract]
-    public class APIRquestModel
+
+    public class APIRquestModel : ICloneable
     {
         /// <summary>
         /// API平台，传递给SP使用的透传参数 (如果后台配置API匹配模式为透传参数时。此处存储的值和传递给SP的内容是一致)
@@ -140,6 +141,19 @@ namespace sdk_Request.Model
         /// </summary>
         [DataMember]
         public string userAgent;
+
+        public object Clone()
+        {
+            var t = this.GetType();
+            var fields = t.GetFields();
+            var ret = new APIRquestModel();
+            foreach (var f in fields)
+            {
+                var val = f.GetValue(this);
+                f.SetValue(ret, val);
+            }
+            return ret;
+        }
     }
 
 

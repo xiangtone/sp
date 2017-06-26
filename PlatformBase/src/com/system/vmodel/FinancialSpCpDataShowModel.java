@@ -20,8 +20,6 @@ public class FinancialSpCpDataShowModel
 		public String spTroneName;
 		public double spJieSuanLv;
 		public int spTroneRowSpan = 1;
-		public double spTroneAmount;
-		
 		
 		public List<CpModelData> list = new ArrayList<FinancialSpCpDataShowModel.SpTroneModel.CpModelData>();
 		

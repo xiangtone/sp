@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
+import android.widget.GridView;
 
 import com.lulu.player.R;
 import com.lulu.player.adapter.GridViewAdapter;
@@ -20,7 +20,6 @@ import com.lulu.player.pay.view.PayActivity;
 import com.lulu.player.utils.ACache;
 import com.lulu.player.utils.JsonDecode;
 import com.lulu.player.video.VideoActivity;
-import com.lulu.player.view.ScrollGridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +33,7 @@ import butterknife.Bind;
 public class GoldFragment extends MvpFragment<GoldPresenter> implements GoldView {
 
     @Bind(R.id.gold_gridView)
-    ScrollGridView goldGV;
-
-    @Bind(R.id.header_gold)
-    TextView header;
+    GridView goldGV;
 
     private GridViewAdapter goldAdapter;
 
@@ -75,7 +71,7 @@ public class GoldFragment extends MvpFragment<GoldPresenter> implements GoldView
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (cache.getAsString(Constants.LEVEL).equals("1") || cache.getAsString(Constants.LEVEL).equals("2")) {
+                if (cache.getAsString(Constants.LEVEL).equals("1")||cache.getAsString(Constants.LEVEL).equals("2")) {
                     Intent intent = new Intent(getActivity(), VideoActivity.class);
                     intent.putExtra(Constants.VIDEO_URL, goldVideos.get(position).getVideoUrl());
                     startActivityForResult(intent, Constants.REQUEST_CODE);
@@ -93,7 +89,7 @@ public class GoldFragment extends MvpFragment<GoldPresenter> implements GoldView
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constants.RESULT_OK) {
-            if (cache.getAsString(Constants.LEVEL).equals("1")) {
+            if (cache.getAsString(Constants.LEVEL).equals("1")){
                 Intent intent = new Intent(getActivity(), PayActivity.class);
                 startActivity(intent);
             }
@@ -130,20 +126,8 @@ public class GoldFragment extends MvpFragment<GoldPresenter> implements GoldView
 
     @Override
     public void onResume() {
-        header.setFocusable(true);
-        header.setFocusableInTouchMode(true);
-        header.requestFocus();
         super.onResume();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

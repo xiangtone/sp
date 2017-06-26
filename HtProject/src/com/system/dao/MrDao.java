@@ -166,7 +166,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrAnalyData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int isUnHoldData,int sortType)
+			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -205,11 +205,6 @@ public class MrDao
 		if(!(StringUtil.isNullOrEmpty(cpCommerceUserId)||"-1".equals(cpCommerceUserId)))
 			query += " and e.commerce_user_id in (" + cpCommerceUserId+")";
 		
-		if(isUnHoldData>=0)
-		{
-			query+= " and h.is_unhold_data = " + isUnHoldData + " and b.is_unhold_data = " + isUnHoldData;
-		}
-		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
 		String joinId = result[1];
@@ -234,6 +229,7 @@ public class MrDao
 		sql += " left join(";
 		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) cc,sum(a.amount) dd ";
 		sql += " from daily_log.tbl_cp_mr_summer a ";
+<<<<<<< HEAD
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b on a.trone_order_id = b.id";
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on b.trone_id = c.id";
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone h on c.sp_trone_id = h.id ";
@@ -246,6 +242,20 @@ public class MrDao
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 l on h.product_id = l.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 m on l.product_1_id = m.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator n on m.operator_id = n.id";
+=======
+		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
+		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+		sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+		sql += " left join daily_config.tbl_cp e on a.cp_id = e.id";
+		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+		sql += " LEFT JOIN daily_config.tbl_product_2 l on h.product_id = l.id";
+		sql += " LEFT JOIN daily_config.tbl_product_1 m on l.product_1_id = m.id";
+		sql += " LEFT JOIN daily_config.tbl_operator n on m.operator_id = n.id";
+>>>>>>> master
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";
@@ -437,7 +447,7 @@ public class MrDao
 	
 	public Map<String, Object> getMrAnalyLrData(String startDate, String endDate,
 			int spId,  int spTroneId,int troneId, int cpId, int troneOrderId, int provinceId,
-			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int isUnHoldData,int sortType)
+			int cityId,int operatorId,int dataType, String spCommerceUserId,String cpCommerceUserId,int sortType)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -483,12 +493,6 @@ public class MrDao
 //		if(cpCommerceUserId>0)
 //			query += " and e.commerce_user_id = " + cpCommerceUserId;
 		
-		
-		if(isUnHoldData>=0)
-		{
-			query+= " and h.is_unhold_data = " + isUnHoldData + " and b.is_unhold_data = " + isUnHoldData;
-		}
-		
 		String[] result = getSortType(sortType);
 		String queryParams = result[0];
 		String joinId = result[1];
@@ -496,6 +500,7 @@ public class MrDao
 		String sql = "select a.show_title,aa,bb,cc,dd,sp_money,cp_money from (";
 		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) aa,sum(a.amount) bb,sum(a.amount*h.jiesuanlv) sp_money";
 		sql += " from (SELECT * FROM daily_log.tbl_mr_summer WHERE  mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "') a";
+<<<<<<< HEAD
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b on a.trone_order_id = b.id ";
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on b.trone_id = c.id";
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp d on c.sp_id = d.id";
@@ -511,11 +516,23 @@ public class MrDao
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 m on l.product_1_id = m.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator n on m.operator_id = n.id";	
 		
+=======
+		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id ";
+		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+		sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+		sql += " left join daily_config.tbl_cp e on b.cp_id = e.id ";
+		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+>>>>>>> master
 		sql += " where 1=1 " + query;
 		sql += " group by join_id order by show_title asc )a";
 		sql += " left join(";
 		sql += " select  " + joinId + " join_id," + queryParams + " show_title,sum(a.data_rows) cc,sum(a.amount) dd,sum(a.amount*i.rate) cp_money";
 		sql += " from (SELECT * FROM daily_log.tbl_cp_mr_summer WHERE  mr_date >= '" + startDate + "' AND mr_date <= '" + endDate + "') a ";
+<<<<<<< HEAD
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b on a.trone_order_id = b.id";
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on b.trone_id = c.id";
 		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp d on c.sp_id = d.id";
@@ -532,6 +549,19 @@ public class MrDao
 		
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user j ON d.commerce_user_id = j.id";
 		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user k ON e.commerce_user_id = k.id";
+=======
+		sql += " left join daily_config.tbl_trone_order b on a.trone_order_id = b.id";
+		sql += " left join daily_config.tbl_trone c on b.trone_id = c.id";
+		sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
+		sql += " left join daily_config.tbl_cp e on a.cp_id = e.id";
+		sql += " left join daily_config.tbl_province f on a.province_id = f.id";
+		sql += " left join daily_config.tbl_city g on a.city_id = g.id";
+		sql += " left join daily_config.tbl_sp_trone h on c.sp_trone_id = h.id ";
+		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate i ON b.cp_jiesuanlv_id = i.`id`";
+		//sql	+= " LEFT JOIN daily_config.tbl_cp_trone_rate i ON e.id = i.cp_id AND h.id = i.sp_trone_id";
+		sql += " LEFT JOIN daily_config.tbl_user j ON d.commerce_user_id = j.id";
+		sql += " LEFT JOIN daily_config.tbl_user k ON e.commerce_user_id = k.id";
+>>>>>>> master
 		sql += " where 1=1 " + query;
 		sql += " group by join_id order by show_title asc";
 		sql += " )b on a.join_id = b.join_id;";

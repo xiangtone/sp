@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.system.dao.SysUserActionDao;
-
 
 public class JdbcControl 
 {
@@ -98,7 +96,6 @@ public class JdbcControl
 		finally
 		{
 			free(null,stmt,conn);
-			new SysUserActionDao().recordUserAction(sql);
 		}
 		
 		return false;
@@ -185,8 +182,6 @@ public class JdbcControl
 			sql = String.format(sql, objs);
 			
 			logger.debug(sql);
-			
-			new SysUserActionDao().recordUserAction(sql);
 		}
 		catch(Exception ex)
 		{
@@ -216,7 +211,7 @@ public class JdbcControl
 		}
 	}
 	
-	public void free(ResultSet rs,Statement stmt,Connection conn)
+	public static void free(ResultSet rs,Statement stmt,Connection conn)
 	{
 		try{ if(rs!=null)rs.close(); }catch(Exception ex){}
 		try{ if(stmt!=null)stmt.close(); }catch(Exception ex){}

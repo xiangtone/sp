@@ -1,0 +1,48 @@
+.chooseType { background: #fff; padding: 5px; }
+.typePos { position: absolute; left: 0.5rem; top: 0.2rem; margin-left: 10px; font-size: 0.4rem; }
+.price { position: absolute; right: 0; top: 0.6rem; color: #f00; font-size: 0.76875rem; height: auto; }
+.vipText { color: #FF6600; height: 1.6rem; line-height: 1.6rem; background: #f5f5f5; text-align: center; font-size: 0.5rem; }
+.black { color: #000; font-style: normal; font-weight: bold; font-size: 0.78125rem; }
+.yellow { color: #f60; font-style: normal; font-weight: bold; font-size: 0.78125rem; }
+.pink { color: #f0f; font-style: normal; font-weight: bold; font-size: 0.78125rem; }
+.typeGray { font-size: 0.4rem; color: #666; position: absolute; left: 1.3rem; width: 8.6875rem; text-align: left; top: 1.0rem; height: auto; }
+input[type=radio].grayRadio { border: none; vertical-align: middle; width: 1.0rem; height: 1.0rem; border-radius: 50%; }
+    input[type=radio].grayRadio:focus, input[type=radio].grayRadio:hover { outline: 0; }
+.typeList { height: 2.4rem; }
+    .typeList:last-child { border: none; }
+    .typeList .type { font-size: 0.35rem; color: #000; }
+.popupPic img { width: 100%; vertical-align: middle; height: auto; }
+
+@media (orientation: landscape) {
+
+    .vipText { padding-top: 0.3rem; color: #FF6600; height: 1.5rem; line-height: 1.5rem; background: #f5f5f5; text-align: center; font-size: 0.6rem; }
+    .popupPic { display: none; }
+    .typeList { height: 2rem; }
+    .priceMargin { right: 0.8rem; font-size: 0.7rem !important; }
+    .payTypecenter { width: 80%; margin: 0 auto; margin-bottom: 0.3rem; }
+    .typePos input { width: 0.7rem !important; height: 0.7rem !important; margin-bottom: 0.3rem; }
+    .typePos i { font-size: 0.7rem !important; }
+    .typeGraytwo { left: 23% !important; }
+    .typeGrayone { left: 25% !important; }
+    .typePos span { font-size: 0.6rem !important; top: 1rem !important; }
+    .payTypea { width: 40%; }
+    .dialogwidth { width: 45% !important; }
+    .dialogicon { top: -0.3rem !important; }
+}
+
+.relative { position: relative; }
+.type input { margin-right: 0.2rem; }
+.payType { background: #f5f5f5; padding: 5px; text-align: center; }
+    .payType img { width: 100%; height: auto; }
+    .payType p { margin-bottom: 0.1rem; }
+        .payType p:last-child { margin-bottom: 0; }
+.layermchild { height: auto; border-radius: 30px; overflow: hidden; }
+.layermcont { padding: 0; }
+.priceMargin { right: 0.8rem; font-size: 0.9rem; }
+.dialogwidth { width: 78%; }
+.payTypecenter { width: 80%; margin: 0 auto; margin-top: 0.3rem !important; }
+.typePos input { width: 0.8rem; height: 0.8rem; margin-bottom: 0.3rem; }
+.typePos i { font-size: 0.8rem; }
+.typePos span { font-size: 0.6rem; left: 26%; top: 1.2rem; }
+.typeGraytwo { left: 25%; }
+.dialogicon { position: absolute; top: -0.3rem !important; right: 0.3rem; }

@@ -1,5 +1,3 @@
-<%@page import="com.system.model.JsTypeModel"%>
-<%@page import="com.system.server.JsTypeServer"%>
 <%@page import="com.system.model.UserModel"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.system.vmodel.SpFinanceShowModel"%>
@@ -67,7 +65,6 @@
 	}else{
 		map = new SettleAccountServer().loadSpSettleAccountData(startDate, endDate,spId,dateType,userId,rightType);
 	}
-	List<JsTypeModel> jsTypeList = new JsTypeServer().loadJsType();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -168,14 +165,14 @@
 					<dd class="dd04_me">
 						<select name="datetype" id="sel_date_type" title="选择结算类型" style="width:100px">
 							<option value="-1">请选择</option>
-							<%
-								for(JsTypeModel jsTypeModel : jsTypeList)
-								{
-									%>
-							<option value="<%= jsTypeModel.getJsType() %>"><%= jsTypeModel.getJsName() %></option>		
-									<%
-								}
-							%>
+							<option value="0">对公周结</option>
+							<option value="1">对公双周结</option>
+							<option value="2">对公N+1结</option>
+							<option value="7">对公N+2结</option>
+							<option value="3">对私周结</option>
+							<option value="4">对私双周结</option>
+							<option value="5">对私月结</option>
+							<option value="6">见帐单结</option>
 						</select>
 					</dd>
 

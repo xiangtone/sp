@@ -18,7 +18,7 @@ import com.system.util.StringUtil;
 
 public class UserDao
 {
-	public Map<String, Object> loadUserData(String startDate,String endDate,String keyWord, int pageIndex , int appType)
+	public Map<String, Object> loadUserData(String startDate,String endDate,String appKey,String channelKey, int pageIndex , int appType)
 	{
 		String sqlCount = " count(*) ";
 		String query = " a.*,b.appname,b.app_type ";
@@ -28,8 +28,11 @@ public class UserDao
 		
 		sql += " and active_date >= '" + startDate + "' and active_date <= '" + endDate + "' ";
 		
-		if(!StringUtil.isNullOrEmpty(keyWord))
-			sql += " and ( a.appkey like '%" + keyWord + "%' or b.appname like '%" + keyWord + "%' or a.channelkey like '%" + keyWord + "%')";
+		if(!StringUtil.isNullOrEmpty(appKey))
+			sql += " and a.appkey like '%" + appKey + "%' ";
+		
+		if(!StringUtil.isNullOrEmpty(channelKey))
+			sql += " and a.channelkey like '%" + channelKey + "%' ";
 		
 		if(appType>0)
 			sql += " and b.app_type="+appType+" ";

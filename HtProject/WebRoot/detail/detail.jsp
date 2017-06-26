@@ -39,7 +39,7 @@
 		
 		System.out.println("data:" + data);
 		
-		if(keys.length<=1000)
+		if(keys.length<=100)
 			list = new MrDetailServer().loadDetailDataByPhoneMsg(data, month,chkType);
 		
 		System.out.println(unMatchKeys);

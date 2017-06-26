@@ -75,22 +75,24 @@ namespace n8wan.Public.Logical
         /// <returns></returns>
         public static string GetVirtualPhone(string defPhone, int proviceId, int cityId)
         {
-
+            string vrPhone = defPhone;
             if (string.IsNullOrEmpty(defPhone) || defPhone.Length != 11 || !defPhone.StartsWith("1"))
-                defPhone = "12300000000";
+                vrPhone = "12300000000";
 
             if (proviceId == 32 || proviceId == 0)
-                return defPhone;//省份未知，城市未知
+                return vrPhone;//省份未知，城市未知
 
             if (cityId == 416 || cityId == 0)
             {//城市未知
                 if (Instance.provice.ContainsKey(proviceId))
                     return Instance.provice[proviceId].ToString() + "0000";
-                return defPhone;
+                return vrPhone;
             }
+            if (vrPhone.Equals(defPhone))
+                return defPhone;
             if (Instance.city.ContainsKey(cityId))
                 return Instance.city[cityId].ToString() + "8888";
-            return defPhone;
+            return vrPhone;
         }
     }
 }

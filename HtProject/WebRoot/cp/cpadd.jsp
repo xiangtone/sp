@@ -131,17 +131,6 @@
 							%>
 						</select>
 					</dd>
-					<br />
-					<br />
-					<br />
-					<dd class="dd00_me"></dd>
-					<dd class="dd01_me">状态</dd>
-					<dd class="dd03_me">
-						<input type="radio" name="status" style="width: 35px;float:left" value="1" checked="checked" >
-						<label style="font-size: 14px;float:left">开启</label>
-						<input type="radio" name="status" style="width: 35px;float:left" value="0" >
-						<label style="font-size: 14px;float:left">锁定</label>
-					</dd>
 					
 					<br />
 					<br />

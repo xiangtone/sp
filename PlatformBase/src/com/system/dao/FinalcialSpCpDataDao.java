@@ -118,8 +118,6 @@ public class FinalcialSpCpDataDao
 						cpModelData.amount = amount;
 						cpModelData.showAmount = showAmount;
 						
-						spTroneModel.spTroneAmount += cpModelData.amount;
-						
 						spTroneModel.list.add(cpModelData);
 						
 						list.add(model);
@@ -155,8 +153,6 @@ public class FinalcialSpCpDataDao
 							cpModelData.amount = amount;
 							cpModelData.showAmount = showAmount;
 							
-							spTroneModel.spTroneAmount += cpModelData.amount;
-							
 							spTroneModel.list.add(cpModelData);
 						}
 						else
@@ -171,8 +167,6 @@ public class FinalcialSpCpDataDao
 							cpModelData.showDataRows = showDataRows;
 							cpModelData.amount = amount;
 							cpModelData.showAmount = showAmount;
-							
-							spTroneModel.spTroneAmount += cpModelData.amount;
 							
 							spTroneModel.list.add(cpModelData);
 							

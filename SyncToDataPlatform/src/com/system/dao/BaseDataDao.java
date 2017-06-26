@@ -12,7 +12,6 @@ import com.system.database.IJdbcControl;
 import com.system.database.JdbcControl;
 import com.system.database.QueryCallBack;
 import com.system.database.TlJdbcControl;
-import com.system.database.XyJdbcControl;
 import com.system.database.YdJdbcControl;
 import com.system.model.CpModel;
 import com.system.model.CpSpTroneModel;
@@ -598,11 +597,7 @@ public class BaseDataDao
 				
 			case 3:
 				control = new YdJdbcControl();
-				break;	
-				
-			case 4:
-				control = new XyJdbcControl();
-				break;
+				break;			
 				
 			default:
 				break;

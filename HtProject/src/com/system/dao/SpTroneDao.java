@@ -92,8 +92,11 @@ public class SpTroneDao
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
 					model.setJsTypes(rs.getInt("js_type"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+<<<<<<< HEAD
 					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
 					model.setIsForceHold(rs.getInt("is_force_hold"));
+=======
+>>>>>>> master
 					
 					list.add(model);
 				}
@@ -202,6 +205,7 @@ public class SpTroneDao
 					model.setJsTypes(rs.getInt("js_type"));
 					model.setServoceCodeName(StringUtil.getString(rs.getString("service_name"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+<<<<<<< HEAD
 					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
 					model.setIsForceHold(rs.getInt("is_force_hold"));
 					list.add(model);
@@ -313,6 +317,8 @@ public class SpTroneDao
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
 					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
 					model.setIsForceHold(rs.getInt("is_force_hold"));
+=======
+>>>>>>> master
 					list.add(model);
 				}
 				
@@ -362,8 +368,11 @@ public class SpTroneDao
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
 					model.setJsTypes(rs.getInt("js_type"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+<<<<<<< HEAD
 					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
 					model.setIsForceHold(rs.getInt("is_force_hold"));
+=======
+>>>>>>> master
 					
 					list.add(model);
 				}
@@ -411,9 +420,12 @@ public class SpTroneDao
 					model.setUserMonthLimit(rs.getFloat("user_month_limit"));
 					model.setJsTypes(rs.getInt("js_type"));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+<<<<<<< HEAD
 					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
 					model.setIsForceHold(rs.getInt("is_force_hold"));
 					
+=======
+>>>>>>> master
 					list.add(model);
 				}
 				
@@ -550,10 +562,13 @@ public class SpTroneDao
 					model.setUpDataType(rs.getInt("up_data_type"));
 					model.setUpDataName(StringUtil.getString(rs.getString("up_data_type_name"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+<<<<<<< HEAD
 					
 					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
 					model.setIsForceHold(rs.getInt("is_force_hold"));
 					
+=======
+>>>>>>> master
 					return model;
 				}
 				
@@ -564,6 +579,7 @@ public class SpTroneDao
 	
 	public boolean addSpTrone(SpTroneModel model)
 	{
+<<<<<<< HEAD
 		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,"
 				+ "day_limit,month_limit,user_day_limit,user_month_limit,product_id,js_type,is_on_api,shield_start_hour,shield_end_hour,"
 				+ "ramark,up_data_type,limit_type,is_unhold_data,is_force_hold) values("
@@ -573,6 +589,13 @@ public class SpTroneDao
 				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() 
 				+ ","+model.getApiStatus()+",'"+model.getShieldStart()+"','"+model.getShieldEnd()+"','"+SqlUtil.sqlEncode(model.getRemark())+"',"+model.getUpDataType()
 				+","+model.getLimiteType()+"," + model.getIsUnHoldData() + ","+ model.getIsForceHold() +")";
+=======
+		String sql = "insert into daily_config.tbl_sp_trone(sp_id,name,operator,jiesuanlv,provinces,create_date,trone_type,trone_api_id,status,day_limit,month_limit,user_day_limit,user_month_limit,product_id,js_type,is_on_api,shield_start_hour,shield_end_hour,ramark,up_data_type,limit_type) values("
+				+ model.getSpId() + ",'" + model.getSpTroneName() + "',"
+				+ model.getOperator() + "," + model.getJieSuanLv() + ",'"
+				+ model.getProvinces() + "',now()," + model.getTroneType() + ","+ model.getTroneApiId() +","+ model.getStatus() +"," + model.getDayLimit() + "," 
+				+ model.getMonthLimit() + "," + model.getUserDayLimit()  + "," +  model.getUserMonthLimit() + "," + model.getServiceCodeId() + "," + model.getJsTypes() + ","+model.getApiStatus()+",'"+model.getShieldStart()+"','"+model.getShieldEnd()+"','"+SqlUtil.sqlEncode(model.getRemark())+"',"+model.getUpDataType()+","+model.getLimiteType()+" )";
+>>>>>>> master
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -585,8 +608,12 @@ public class SpTroneDao
 				+ "',trone_type = " + model.getTroneType() + ",trone_api_id = " 
 				+ model.getTroneApiId() + ",status = " + model.getStatus() + ",day_limit=" + model.getDayLimit() + ",month_limit=" + model.getMonthLimit() + ",user_day_limit=" 
 				+ model.getUserDayLimit() + ",user_month_limit=" + model.getUserMonthLimit() + ", product_id = " + model.getServiceCodeId() + ",js_type = " + model.getJsTypes() + ",is_on_api="+model.getApiStatus()+""
+<<<<<<< HEAD
 				+ ",shield_start_hour='"+model.getShieldStart()+"',shield_end_hour='"+model.getShieldEnd()+"',ramark='"+SqlUtil.sqlEncode(model.getRemark())
 				+"',up_data_type="+model.getUpDataType()+",limit_type="+model.getLimiteType()+",is_unhold_data = "+ model.getIsUnHoldData() +", is_force_hold =" + model.getIsForceHold() + " where id =" + model.getId();
+=======
+				+ ",shield_start_hour='"+model.getShieldStart()+"',shield_end_hour='"+model.getShieldEnd()+"',ramark='"+SqlUtil.sqlEncode(model.getRemark())+"',up_data_type="+model.getUpDataType()+",limit_type="+model.getLimiteType()+" where id =" + model.getId();
+>>>>>>> master
 		
 		return new JdbcControl().execute(sql);
 	}
@@ -716,11 +743,14 @@ public class SpTroneDao
 					model.setJsTypes(rs.getInt("js_type"));
 					model.setServoceCodeName(StringUtil.getString(rs.getString("service_name"), ""));
 					model.setCommerceUserId(rs.getInt("commerce_user_id"));
+<<<<<<< HEAD
 					
 					model.setIsUnHoldData(rs.getInt("is_unhold_data"));
 					
 					model.setIsForceHold(rs.getInt("is_force_hold"));
 					
+=======
+>>>>>>> master
 					list.add(model);
 				}
 				

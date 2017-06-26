@@ -42,6 +42,10 @@ website.publishproj
     </AssemblyAttributes>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\codepool.n8wan.com\codepool.n8wan.com.csproj">
+      <Project>{923FEF5A-52E0-481C-8AE0-9F8345DFDF6C}</Project>
+      <Name>codepool.n8wan.com</Name>
+    </ProjectReference>
     <ProjectReference Include="..\n8wan.public\n8wan.Public.csproj">
       <Project>{638EE824-4BD3-4EC8-9C9D-129437F20187}</Project>
       <Name>n8wan.Public</Name>

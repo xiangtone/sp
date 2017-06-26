@@ -44,6 +44,10 @@ namespace n8wan.Public.Logical
         /// SP传入IP未被确认（非正常SP数据同步）
         /// </summary>
         const int C_TM_SERVER_IP_ERROR = -5;
+        /// <summary>
+        /// 多条SP通道
+        /// </summary>
+        const int C_TM_MULTI_TRONE = -6;
 
         /// <summary>
         /// url映射数据库字段(sql,url)
@@ -65,6 +69,11 @@ namespace n8wan.Public.Logical
         /// 保存正在处理的linkid，防止SP快速同步时，出重复数据
         /// </summary>
         static List<string> _linkidProcing = new List<string>();
+
+        /// <summary>
+        /// 设置当前接收的同步数据是否同步渠道
+        /// </summary>
+        protected E_CP_SYNC_MODE SyncFlag { get; set; }
 
         protected virtual bool OnInit() { return true; }
 
@@ -96,7 +105,7 @@ namespace n8wan.Public.Logical
 #if DB_LOG_RECORD
                 RecordRequest();
 #endif
-
+                SyncFlag = E_CP_SYNC_MODE.Auto;
                 if (!OnInit())
                 {
                     WriteError("init fail/invalid data!");
@@ -200,6 +209,7 @@ namespace n8wan.Public.Logical
             _linkId = null;
             _MoItem = null;
             _MrItem = null;
+            SyncFlag = E_CP_SYNC_MODE.Auto;
         }
 
         /// <summary>
@@ -495,21 +505,21 @@ namespace n8wan.Public.Logical
 
         protected virtual void FillAreaInfo(LightDataModel.tbl_mrItem m)
         {
-            FillAreaInfo(dBase, m);
+            var city = FillAreaInfo(dBase, m);
+            m.city_id = city.id;
+            m.province_id = city.province_id;
         }
 
         /// <summary>
         /// 填充手机号归属地信息
         /// </summary>
         /// <param name="m"></param>
-        public static void FillAreaInfo(IBaseDataClass2 dBase, LightDataModel.tbl_mrItem m)
+        public static LightDataModel.tbl_cityItem FillAreaInfo(IBaseDataClass2 dBase, Logical.ISMS_DataItem m)
         {
             var num = m.mobile;
-            m.city_id = 416;
-            m.province_id = 32;
 
             if (string.IsNullOrEmpty(num) && string.IsNullOrEmpty(m.imsi))
-                return;
+                return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
 
             if (num == null)
                 num = string.Empty;
@@ -521,7 +531,7 @@ namespace n8wan.Public.Logical
             {
                 num = m.imsi;
                 if (string.IsNullOrEmpty(num) || num.Length != 15)
-                    return;
+                    return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
             } //else 长为15
 
             if (spNum == 0)
@@ -530,21 +540,20 @@ namespace n8wan.Public.Logical
                 {
                     var t = Public.Library.GetPhoneByImsi(num);
                     if (string.IsNullOrEmpty(t) || t.Length != 7)
-                        return;
+                        return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
                     spNum = int.Parse(t);
                 }
                 else
-                    return;
+                    return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
             }
 
 
 
             var cityInfo = LightDataModel.tbl_phone_locateItem.GetRowByMobile(dBase, spNum);
             if (cityInfo == null)
-                return;
-            m.city_id = cityInfo.id;
-            m.province_id = cityInfo.province_id;
-            //m.province_id=
+                return new LightDataModel.tbl_cityItem() { id = 416, province_id = 32 };
+
+            return cityInfo;
         }
 
         private void DoPush(LightDataModel.tbl_troneItem trone)
@@ -552,13 +561,26 @@ namespace n8wan.Public.Logical
             //throw new NotImplementedException();
             if (!_MrItem.IsMatch || trone == null)
                 return;
-            var logFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today));
 
+            var syncFlag = SyncFlag;
+            if (syncFlag == E_CP_SYNC_MODE.Auto)
+            {
+                if (_MrItem.linkid.IndexOf("test", StringComparison.OrdinalIgnoreCase) != -1)
+                    syncFlag = E_CP_SYNC_MODE.ForceHide;
+                else if (_MrItem.linkid.IndexOf("ceshi", StringComparison.OrdinalIgnoreCase) != -1)
+                    syncFlag = E_CP_SYNC_MODE.ForceHide;
+            }
+
+
+            var logFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today));
+            var sb = new StringBuilder(250);
             var apiPush = new HTAPIPusher()
             {
                 dBase = dBase,
                 Trone = trone,
-                LogFile = logFile
+                LogFile = logFile,
+                PushFlag = syncFlag,
+                TrackLog = sb
             };
 
             if (apiPush.LoadCPAPI())
@@ -572,7 +594,7 @@ namespace n8wan.Public.Logical
 #if !DEBUG
                 catch (Exception ex)
                 {
-                    Shotgun.Library.SimpleLogRecord.WriteLog(Request.MapPath("~/log/api_push_error.log"), ex.ToString());
+                    Shotgun.Library.SimpleLogRecord.WriteLog("api_push_error", ex.ToString());
                 }
 #endif
                 finally
@@ -584,16 +606,34 @@ namespace n8wan.Public.Logical
             var cp = new AutoMapPush();
             cp.dBase = dBase;
             cp.Trone = trone;
+            cp.PushFlag = syncFlag;
+            cp.TrackLog = sb;
             //cp.UnionUserId = -1;
             cp.LogFile = logFile;
 
             if (!cp.LoadCPAPI())
+            {
+                WriteTrackLog(sb);
                 return;
+            }
 
             cp.PushObject = _MrItem;
-            cp.DoPush();
+            if (cp.DoPush() && _MrItem.cp_id != 34)
+                return;
+            if (!cp.IsSuccess)
+                sb.AppendLine(cp.ErrorMesage);
+            WriteTrackLog(sb);
 
         }
+
+
+        void WriteTrackLog(StringBuilder sb)
+        {
+            if (sb == null || sb.Length == 0)
+                return;
+            Shotgun.Library.SimpleLogRecord.WriteLog("no_match_cp", sb.ToString());
+        }
+
 
         int GetFee(string field)
         {
@@ -704,7 +744,13 @@ namespace n8wan.Public.Logical
             if (_MrItem.status == null)
                 return string.Format("\"{0}\" null", U2DMap["status"]);
 
-            var rx = Library.GetRegex(api.MrStatus);
+            var rexp = api.MrStatus;
+            if (!rexp.StartsWith("^"))
+                rexp = "^" + rexp;
+            if (!rexp.EndsWith("$"))
+                rexp += "$";
+
+            var rx = new Regex(rexp, RegexOptions.IgnoreCase);// Library.GetRegex(api.MrStatus);
             if (!rx.IsMatch(_MrItem.status))
                 return string.Format("\"{0}\" \"{1}\" unaccpated", U2DMap["status"], _MrItem.status);
 
@@ -869,20 +915,23 @@ namespace n8wan.Public.Logical
 
             m.trone_id = C_TM_NOT_Order;
             LightDataModel.tbl_troneItem trone = null;
+            int iCount = 0;
             foreach (var cmd in cmds)
             {
                 var cMsg = cmd.orders;
                 if (string.IsNullOrEmpty(cMsg) && string.IsNullOrEmpty(mMsg))
                 {
                     trone = cmd;
-                    break;
+                    iCount++;
+                    continue;
                 }
                 if (cmd.match_price)
                 {//无规则指令，直接匹配价格
                     if (cmd.price == (m.price / 100m))
                     {
                         trone = cmd;
-                        break;
+                        iCount++;
+                        continue;
                     }
                 }
                 else if (cmd.is_dynamic)
@@ -891,7 +940,8 @@ namespace n8wan.Public.Logical
                     if (rx.IsMatch(mMsg))
                     {
                         trone = cmd;
-                        break;
+                        iCount++;
+                        continue;
                     }
                 }
                 else
@@ -899,13 +949,20 @@ namespace n8wan.Public.Logical
                     if (mMsg.Equals(cMsg, StringComparison.OrdinalIgnoreCase))
                     {
                         trone = cmd;
-                        break;
+                        iCount++;
+                        continue;
                     }
                 }
             }
-
-            if (trone == null)
+            if (iCount == 0)
                 return null;
+
+            if (iCount > 1)
+            {
+                m.trone_id = C_TM_MULTI_TRONE;
+                return null;
+            }
+
             if (m.price > 0)
             {//SP价格校验 防止配置错
                 if (trone.price != (m.price / 100m))
@@ -948,7 +1005,7 @@ namespace n8wan.Public.Logical
         //}
 
 
-        private Logical.ISMS_DataItem LoadItem()
+        protected virtual Logical.ISMS_DataItem LoadItem()
         {
             var linkId = GetLinkId();
             if (string.IsNullOrEmpty(linkId))
@@ -995,7 +1052,7 @@ namespace n8wan.Public.Logical
             return _linkId;
         }
 
-        protected LightDataModel.tbl_moItem GetMOItemByLinkId(string linkId)
+        protected virtual LightDataModel.tbl_moItem GetMOItemByLinkId(string linkId)
         {
             if (string.IsNullOrEmpty(api.MoCheck))
                 return null;//仅MR模式
@@ -1011,15 +1068,18 @@ namespace n8wan.Public.Logical
                 q.TableDate = today.AddMonths(i);
                 if (q.TableDate.Year <= 2015 && q.TableDate.Month < 9)
                     continue;
-
-                var m = q.GetRowByFilters();
-                if (m != null)
-                    return m;
+                try
+                {
+                    var m = q.GetRowByFilters();
+                    if (m != null)
+                        return m;
+                }
+                catch { return null; }
             }
             return null;
         }
 
-        protected LightDataModel.tbl_mrItem GetMRItemByLinkId(string linkId)
+        protected virtual LightDataModel.tbl_mrItem GetMRItemByLinkId(string linkId)
         {
             var q = LightDataModel.tbl_mrItem.GetQueries(dBase);
             q.Filter.AndFilters.Add(LightDataModel.tbl_mrItem.Fields.sp_api_url_id, this.api.id);
@@ -1031,10 +1091,16 @@ namespace n8wan.Public.Logical
                 q.TableDate = today.AddMonths(i);
                 if (q.TableDate.Year <= 2015 && q.TableDate.Month < 9)
                     continue;
-
-                var m = q.GetRowByFilters();
-                if (m != null)
-                    return m;
+                try
+                {
+                    var m = q.GetRowByFilters();
+                    if (m != null)
+                        return m;
+                }
+                catch
+                {
+                    return null;
+                }
             }
 
             return null;

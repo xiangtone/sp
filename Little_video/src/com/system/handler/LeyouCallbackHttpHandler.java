@@ -16,6 +16,12 @@ public class LeyouCallbackHttpHandler extends baseCallbackFilter
 		String orderId, order3th;
 		order3th = request.getParameter("payid");
 		orderId = request.getParameter("orderid");
+		if (!"0".equals(request.getParameter("status")))
+		{// 尚未支付成功
+			write(response, "{\"rescode\":0}");
+			return;
+		}
+
 		price = StringUtil.getInteger(request.getParameter("amount"), -1);
 		if (price == -1)
 		{

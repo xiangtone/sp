@@ -313,7 +313,7 @@
 			alert("请选择需要导出的账单！");
 			return;
 		}
-		window.location.href="util.jsp?cpbilling_ids=" + ids + "&exprort_zip=1&billingStatus=1";
+		window.location.href="util.jsp?cpbilling_ids=" + ids + "&exprort_zip=1";
 	
 	}
 	function resetCheckBox(data)

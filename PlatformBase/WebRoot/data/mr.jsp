@@ -84,7 +84,6 @@
 							<option value="1">浩天</option>
 							<option value="2">通联</option>
 							<option value="3">游动</option>
-							<option value="4">讯宇</option>
 						</select>
 					</dd>
 					<dd class="dd01_me" style="font-weight: bold;font-size: 14px">展示方式</dd>

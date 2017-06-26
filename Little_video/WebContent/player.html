@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>视频播放</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" type="text/css" href="./css/frozen.css" />
+    <link rel="stylesheet" type="text/css" href="./css/common_av.css" />
+    <script type="text/javascript" src="./scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="./scripts/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./scripts/public.js"></script>
+    <script type="text/javascript" src="./scripts/touchsilder.js"></script>
+    <script type="text/javascript" src="./scripts/shotgun.base64.js"></script>
+    <style type="text/css">
+        body { background-color: #000; }
+        header { position: fixed; }
+        video { width: 100%; margin: 0px; padding: 0; }
+        #vList ul { margin: 0 5px; padding: 0; }
+        #vList li { width: 33.33%; float: left; text-align: center; }
+            #vList li div { padding-left: 5px; margin: 0; }
+            #vList li:first-child div { padding-left: 0px; overflow: hidden; }
+            #vList li img { width: 100%; margin: 0; padding: 0; height: 190px; }
+        .vList { color: #eee; }
+            .vList h1 { padding: 0 0 0 5px; border-bottom: 4px solid #666; margin: 0 0 5px 0; }
+        .vipTips { border: #0094ff 1px solid; border-radius: 8px; background-color: #b6ff00; color: #ff6a00; text-align: center; line-height: 1.8em; margin: 10px auto; width: 90%; }
+        .dialog { top: 100px; position: fixed; border: #ccc solid 1px; background-color: rgba(194, 214, 255, 0.80); border-radius: 8px; display: none; left: 32px; }
+            .dialog .txt { font-size: 1.5em; line-height: 2em; margin: 10px; text-align: center; color: #222; }
+            .dialog .bts { text-align: right; }
+                .dialog .bts a { display: inline-block; line-height: 2em; font-size: 1.2em; padding: 0 10px; }
+                .dialog .bts .close { color: #ccc; }
+    </style>
+    <script type="text/javascript">
+        var myLevelId = 0;
+
+        function initPlay() {
+            var rx = /(\?|&)v=(.+?)(&|$)/
+            var qs = rx.exec(location.search);
+            if (qs == null)
+                return;
+
+            var v = document.createElement("video");
+            v.controls = true;
+            v.autoplay = true;
+            v.autobuffer = true;
+
+            v.src = Base64.decode(qs[2]);
+            document.body.insertBefore(v, document.body.firstChild);
+        }
+
+
+        function page_onload() {
+            var uid = getUid();
+            var data = { "imei": uid, "channel": location.host };
+            $.ajax({
+                "type": "POST",
+                "url": "http://lv.n8wan.com/AppInit",
+                "data": JSON.stringify(data),
+                "success": OnInit,
+                "dataType": "json"
+            });
+            initPlay();
+
+        }
+        function OnInit(e) {
+            myLevelId = e.level;
+            if (myLevelId == 0)
+                InitList(myLevelId + (Math.random() * 10 > 5 ? 2 : 1));
+            else
+                InitList(myLevelId);
+        }
+
+        function InitList(levelId) {
+            var lis = $("#footer>ul>li");
+            for (var i = 0; i < lis.length; i++) {
+                var val = $(lis[i]).data("level");
+                if (val == levelId.toString()) {
+                    lis[i].className = "active";
+                    break;
+                }
+            }
+
+            $.ajax({
+                "type": "POST",
+                "url": "http://lv.n8wan.com/VideoList",
+                "data": "{\"levelId\":" + levelId + "}",
+                "success": OnList,
+                "dataType": "json"
+            });
+        }
+
+        function OnList(e) {
+            $("#vList").html(getListHtml(e.videos, e.levelId));
+        }
+
+        function getListHtml(list, levelId) {
+
+            var rnd = [];
+            while (rnd.length < 3) {
+                var t = parseInt(Math.random() * list.length);
+                if (rnd.indexOf(t) >= 0)
+                    continue;
+                rnd.push(t);
+            }
+
+            html = "<ul>";
+
+            for (var i = 0; i < rnd.length; i++) {
+                var item = list[rnd[i]];
+
+                html += "<li onclick=\"play_item(this,{'video':'" + Base64.encode(item.url)
+                    + "','level':" + levelId + "})\" ><div><img src='" + item.imgs + "' data-level='" + levelId + "' alt='" + item.name + "' /></div>";
+                html += "<span>" + item.name + "</span></li>";
+            }
+            html += "</ul>";
+            return html;
+        }
+
+        function play_item(sender, e) {
+            if (e.level <= myLevelId)
+                open("player.html?v=" + e.video, "_self");
+            else {
+                $(".dialog").css("display", "block");
+                $(".dialog>div>a").click(function () { $(".dialog").css("display", ""); })
+            }
+
+        }
+
+    </script>
+</head>
+<body onload="page_onload()">
+    <header class="ui-header ui-header-positive ui-border-b">
+        <i class="ui-icon-return" onclick="location.href = 'default.html';"></i><h1>视频播放</h1>
+    </header>
+
+    <div class="vipTips">
+        开通会员，观看海量视频资源
+    </div>
+    <div class="vList">
+        <h1>猜你喜欢</h1>
+        <div id="vList"></div>
+    </div>
+
+    <div class="dialog">
+        <div class="txt">
+            会员视频，开通后才能观看！
+        </div>
+        <div class="bts">
+            <a href="#">立即开通</a>
+            <a class="close">稍候再说</a>
+        </div>
+    </div>
+</body>
+</html>

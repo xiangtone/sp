@@ -1,9 +1,7 @@
 package com.system.cache;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -45,8 +43,12 @@ public class RightConfigCacheMgr
 	//用户权限
 	public static List<UserRightModel> userRightCache = new ArrayList<UserRightModel>();
 	
-	//线程使用者的USERID KEY:线程ID VALUE：用户的USER ID
-	public static Map<Long, Integer> threadPolls = new HashMap<Long, Integer>();
+	static
+	{
+		refreshAllCache();
+	}
+	
+	public static void init(){}
 	
 	public static void refreshAllCache()
 	{

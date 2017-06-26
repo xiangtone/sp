@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Logical\APIRequestGet.cs" />
     <Compile Include="Logical\API_ERROR.cs" />
+    <Compile Include="Logical\AsyncAPIRequestGet.cs" />
     <Compile Include="Logical\E_SMS_TYPE.cs" />
     <Compile Include="Logical\VirtualIP.cs" />
     <Compile Include="Model\APIRquestModel.cs" />

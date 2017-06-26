@@ -494,34 +494,6 @@
   		var dateArray=date.split("-");
   		return dateArray;
 	}
-	<!--批量导出-->
-	function exprortBatch()
-	{
-		var objs = document.getElementsByName("chk_data");
-		var ids = "";
-		for(i=0; i<objs.length; i++)
-		{
-			if(objs[i].checked==true)
-			{
-				ids += objs[i].id + ",";
-			}
-		}
-		var ids=ids.substring(0, ids.length-1);
-		if(ids==null||ids==""){
-			alert("请选择需要导出的账单！");
-			return;
-		}
-		window.location.href="util.jsp?cpbilling_ids=" + ids + "&exprort_zip=1&billingStatus=2";
-	
-	}
-	function resetCheckBox(data)
-	{
-		var objs = document.getElementsByName("chk_data");
-		for(i=0; i<objs.length; i++)
-		{
-			objs[i].checked = data;	
-		}
-	}
 </script>
 <style type="text/css">
 .ui-button-icon-only .ui-icon{left:0}
@@ -591,9 +563,6 @@
 					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 						<input class="btn_match" name="search" value="查     询" type="submit" />
 					</dd>
-					<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
-						<input class="btn_match" value="批量导出" type="button" onclick="exprortBatch()"  />
-					</dd>
 				</dl>
 			</form>
 		</div>
@@ -618,7 +587,6 @@
 					<td>创建时间</td>
 					<td>状态</td>
 					<td>操作</td>
-					<td>全选<input type="checkbox" onclick="resetCheckBox(this.checked)" /></td>
 				</tr>
 			</thead>
 			<tbody>
@@ -648,7 +616,6 @@
 						<%= btnStrings[model.getStatus()].replaceAll("helloisthereany", "" + model.getId()) %>
 						<a href="cpbilling.jsp?type=1&cpbillingid=<%= model.getId() %>">导出</a>
 					</td>
-					<td><input type="checkbox" id="<%= model.getId() %>" name="chk_data"></td>
 				</tr>
 				<%
 					}

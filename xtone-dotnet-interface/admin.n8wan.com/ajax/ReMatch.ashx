@@ -6,6 +6,7 @@ using LightDataModel;
 
 public class ReMatch : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySqlDBClass>
 {
+    System.Text.StringBuilder sb = new System.Text.StringBuilder();
     public override void BeginProcess()
     {
         Ajax = new Shotgun.Library.simpleAjaxResponser();
@@ -48,7 +49,7 @@ public class ReMatch : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySql
             }
         }
 
-
+        Ajax.message = sb.ToString();
 
         Ajax.state = Shotgun.Library.emAjaxResponseState.ok;
     }
@@ -61,7 +62,8 @@ public class ReMatch : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySql
         {
             dBase = dBase,
             Trone = trone,
-            LogFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today))
+            LogFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today)),
+            TrackLog = sb
         };
         if (apiPush.LoadCPAPI())
         {
@@ -76,6 +78,7 @@ public class ReMatch : Shotgun.PagePlus.SimpleHttpHandler<Shotgun.Database.MySql
         var cp = new n8wan.Public.Logical.AutoMapPush();
         cp.dBase = dBase;
         cp.Trone = trone;
+        cp.TrackLog = sb;
         //cp.UnionUserId = -1;
         cp.LogFile = Server.MapPath(string.Format("~/PushLog/{0:yyyyMMdd}.log", DateTime.Today));
 
