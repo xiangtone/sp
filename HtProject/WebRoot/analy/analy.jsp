@@ -21,7 +21,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
@@ -73,7 +73,7 @@
 				<div style="clear: both;"></div>
 			</form>
 			
-			<form action="analy.jsp" method="post" id="formid2"
+			<form style="display:none" action="analy.jsp" method="post" id="formid2"
 				style="border: 1px solid #ccc; padding-bottom: 32px; width: 60%; margin-left: 10px;margin-top: 10px;">
 				<input type="hidden" value="2" name="analy" />
 				<h1

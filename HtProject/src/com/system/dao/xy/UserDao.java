@@ -24,7 +24,7 @@ public class UserDao
 		String query = " a.*,b.appname,b.app_type ";
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xy_user_summer a left join daily_config.tbl_xy_app b on a.appkey = b.appkey where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xy_user_summer a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app b on a.appkey = b.appkey where 1=1 ";
 		
 		sql += " and active_date >= '" + startDate + "' and active_date <= '" + endDate + "' ";
 		
@@ -107,7 +107,7 @@ public class UserDao
 	{
 		String query = " b.appname,b.appkey,b.app_type,a.channelkey,count(*) data_rows  ";
 		
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xy_user_" + tableName + " a left join daily_config.tbl_xy_app b on a.appkey = b.appkey where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xy_user_" + tableName + " a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app b on a.appkey = b.appkey where 1=1 ";
 		
 		sql += " and addTime >= '" + satrtDate + " 00:00:00' and addTime <= '" + satrtDate + " 23:59:59' ";
 		
@@ -152,8 +152,8 @@ public class UserDao
 	public  Map<String, Object> loadQdUserData(String startDate,String endDate,int userId,int pageIndex)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xy_user_summer a "
-				+ "left join daily_config.tbl_xy_app b on a.appkey = b.appkey "
-				+ "left join daily_config.tbl_xy_channel c on a.channelkey = c.channel "
+				+ "left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app b on a.appkey = b.appkey "
+				+ "left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel c on a.channelkey = c.channel "
 				+ "where 1=1 and status = 1 and c.userid = " + userId + " and a.active_date >= '" + startDate + "' "
 				+ "and a.active_date <= '" + endDate + "' order by a.active_date,c.channel asc";
 		 
@@ -232,7 +232,7 @@ public class UserDao
 		//当增加了实时同步的渠道后，就不能删除立即同步的数据
 		//return new JdbcGameControl().execute("DELETE FROM game_log.`tbl_xy_user_summer` WHERE active_date >= '" + startDate + "' AND active_date <= '" + endDate + "'");
 		
-		String sql = "DELETE  game_log.a from game_log.`tbl_xy_user_summer` a, daily_config.tbl_xy_channel b ";
+		String sql = "DELETE  game_log.a from game_log.`tbl_xy_user_summer` a, " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel b ";
 		sql += " WHERE a.active_date >= '" + startDate + "' AND a.active_date <= '" + endDate + "'";
 		sql += " and a.channelkey = b.channel and b.syn_type = 1";
 		
@@ -244,7 +244,7 @@ public class UserDao
 		String sql  = " INSERT INTO game_log.`tbl_xy_user_summer`(active_date,appkey,channelkey,data_rows) "
 				+ " SELECT DATE_FORMAT(addTime,'%Y-%m-%d') active_date,appkey,channelkey,COUNT(*) data_rows "
 				+ " FROM game_log.`tbl_xy_user_" + tableName + "` a "
-				+ " left join daily_config.tbl_xy_channel b on a.channelkey = b.channel where b.syn_type = 1 and addTime >= '" + startDate + " 00:00:00' AND addTime <= '" + endDate + " 23:59:59' "
+				+ " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel b on a.channelkey = b.channel where b.syn_type = 1 and addTime >= '" + startDate + " 00:00:00' AND addTime <= '" + endDate + " 23:59:59' "
 				+ " GROUP BY active_date,appkey,channelkey ORDER BY active_date,appkey,channelkey ";
 		
 		return new JdbcGameControl().execute(sql);
@@ -252,7 +252,7 @@ public class UserDao
 	
 	public boolean updateQdShowData(String startDate,String endDate)
 	{
-		String sql = " UPDATE game_log.`tbl_xy_user_summer` a,daily_config.`tbl_xy_channel` b "
+		String sql = " UPDATE game_log.`tbl_xy_user_summer` a," + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_channel` b "
 				+ " SET show_data_rows = a.`data_rows`*(100-b.`hold_percent`)/100  "
 				+ " WHERE show_data_rows = 0  AND a.`channelkey` = b.`channel`"
 				+ " AND active_date >= '" + startDate + "' "
@@ -275,7 +275,7 @@ public class UserDao
 	{
 		String sql = " select appkey,channelkey,count(*) data_rows,count(*)*((100-b.hold_percent)/100) show_data_rows";
 		sql += " from game_log.tbl_xy_user_" + tableName + " a";
-		sql += " left join daily_config.tbl_xy_channel b";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel b";
 		sql += " on a.channelkey = b.channel";
 		sql += " where b.syn_type = 2";
 		sql += " and a.addTime >= '" + startDate + " " + hour + ":00:00' and a.addTime <= '" + startDate + " " + hour + ":59:59'";

@@ -21,7 +21,9 @@
 
 	String query = Base64UTF.encode(request.getQueryString());
 	
-	Map<String, Object> map = new SpTroneServer().loadSpTroneList(pageIndex,keyWord);
+	int daoLiang = StringUtil.getInteger(request.getParameter("daoliang"), -1);
+	
+	Map<String, Object> map = new SpTroneServer().loadSpTroneList2(pageIndex,keyWord,daoLiang);
 	
 	List<SpModel> spList = new SpServer().loadSp();
 
@@ -32,6 +34,7 @@
 	Map<String,String> params = new HashMap<String,String>();
 	
 	params.put("keyword", keyWord);
+	params.put("daoliang", daoLiang + "");
 	
 	String pageData = PageUtil.initPageQuery("sptrone.jsp", params, rowCount, pageIndex);
 	
@@ -47,13 +50,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script><link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript">
 
@@ -82,7 +85,7 @@
 	
 	$(function()
 	{
-		
+		$("#sel_daoliang").val("<%= daoLiang  %>");
 	});
 	
 	
@@ -150,11 +153,19 @@
 					<a href="sptroneadd.jsp">增 加</a>
 				</dd>
 				<form action="sptrone.jsp" method="get" id="formid">
-						<dl>					
+					<dl>					
 						<dd class="dd01_me">关键字</dd>
 						<dd class="dd03_me">
 							<input name="keyword" id="input_keyword" value="<%= keyWord %>"
 								type="text" style="width: 150px">
+						</dd>
+						<dd class="dd01_me">导量类型</dd>
+						<dd class="dd04_me">
+							<select name="daoliang" id="sel_daoliang">
+								<option value="-1">全部</option>
+								<option value="0">非导量</option>
+								<option value="1">导量</option>
+							</select>
 						</dd>
 						<dd class="ddbtn" style="margin-left: 10px; margin-top: 0px;">
 							<input class="btn_match" name="search" value="查 询" type="submit">
@@ -174,10 +185,9 @@
 					<td>数据类型</td>
 					<td>结算类型</td>
 					<td><%= jiuSuanName %></td>
+					<td>是否导量</td>
 					<td>日限</td>
 					<td>月限</td>
-					<td>用户日限</td>
-					<td>用户月限</td>
 					<td>状态</td>
 					<td>操作</td>
 				</tr>
@@ -202,10 +212,9 @@
 					<td ondblclick="editShowData('<%= model.getId() %>')">
 						<span id="span_<%= model.getId() %>"><%= model.getJieSuanLv() %></span>
 					</td>
+					<td><%= model.getIsUnHoldData()==0 ? "否" : "是" %></td>
 					<td><%= model.getDayLimit() %></td>
 					<td><%= model.getMonthLimit() %></td>
-					<td><%= model.getUserDayLimit() %></td>
-					<td><%= model.getUserMonthLimit() %></td>
 					<td><%= model.getStatus()==1 ? "开启" : "关闭" %></td>
 					<td><a href="sptroneedit.jsp?query=<%= query %>&id=<%= model.getId() %>">修改</a></td>
 				</tr>

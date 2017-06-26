@@ -19,7 +19,7 @@ public class AdAppDao {
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
-				+ " FROM daily_config.`tbl_ad_app` ORDER BY id ASC ";
+				+ " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` ORDER BY id ASC ";
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -64,7 +64,7 @@ public class AdAppDao {
 		//String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
-				+ " FROM daily_config.`tbl_ad_app` ORDER BY id ASC ";
+				+ " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` ORDER BY id ASC ";
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -109,7 +109,7 @@ public class AdAppDao {
 		//String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
-				+ " FROM daily_config.`tbl_ad_app` ORDER BY id ASC ";
+				+ " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` ORDER BY id ASC ";
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -154,8 +154,8 @@ public class AdAppDao {
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING
-				+ " FROM daily_config.`tbl_ad_app` a "
-				+ " LEFT JOIN daily_config.`tbl_user` b ON a.`user_id` = b.id "
+				+ " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` a "
+				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_user` b ON a.`user_id` = b.id "
 				+ " WHERE 1=1 ";
 		
 		if(!StringUtil.isNullOrEmpty(appname))
@@ -211,7 +211,7 @@ public class AdAppDao {
 	
 	public Integer loadIdByName(String appname)
 	{
-		String sql = "SELECT id FROM daily_config.`tbl_ad_app` where appname='"+appname+"'";
+		String sql = "SELECT id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` where appname='"+appname+"'";
 		
 		return (Integer)new JdbcControl().query(sql,
 				new QueryCallBack() {
@@ -227,7 +227,7 @@ public class AdAppDao {
 	
 	public AdAppModel loadAppById(int id)
 	{
-		String sql = "SELECT * FROM daily_config.`tbl_ad_app` where id = "+id;
+		String sql = "SELECT * FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` where id = "+id;
 		
 		
 		return (AdAppModel)new JdbcControl().query(sql,
@@ -254,7 +254,7 @@ public class AdAppDao {
 	
 	public boolean updataApp(AdAppModel model)
 	{
-		String sql = "UPDATE daily_config.`tbl_ad_app` SET "
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` SET "
 				+ "appkey='"+model.getAppkey()+"',"
 				+ " appname='"+model.getAppname()+"',"
 			    + " hold_percent="+model.getHold_percent()+" WHERE id="+model.getId();
@@ -263,19 +263,19 @@ public class AdAppDao {
 	
 	public boolean updateAdAppAccount(int id,int userId)
 	{
-		String sql = "update daily_config.tbl_ad_app set user_id = " + userId + " where id = " + id;
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ad_app set user_id = " + userId + " where id = " + id;
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean deletApp(int id)
 	{
-		String sql = "DELETE FROM daily_config.`tbl_ad_app` WHERE id="+id;
+		String sql = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app` WHERE id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean addApp(AdAppModel model)
 	{
-		String sql = "insert into daily_config.`tbl_ad_app`("
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_ad_app`("
 				+ "appkey,appname,hold_percent,user_id) value("
 				+ "'"+model.getAppkey()+"','"+model.getAppname()+"',"+model.getHold_percent()+","+model.getUser_id()
 				+ ")";

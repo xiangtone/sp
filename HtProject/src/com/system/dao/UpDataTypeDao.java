@@ -14,7 +14,7 @@ import com.system.util.StringUtil;
 public class UpDataTypeDao {
 	@SuppressWarnings("unchecked")
 	public List<UpDataTypeModel> loadUpDataType(){
-		String sql = "SELECT * FROM daily_config.tbl_up_data_type order by id asc";
+		String sql = "SELECT * FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_up_data_type order by id asc";
 		return (List<UpDataTypeModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			

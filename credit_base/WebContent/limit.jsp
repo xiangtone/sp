@@ -13,6 +13,9 @@
 	int spTroneId = StringUtil.getInteger(request.getParameter("sptroneid"), -1);
 	int cpId = StringUtil.getInteger(request.getParameter("cpid"), -1);
 	Float money = StringUtil.getFloat(request.getParameter("money"), 0.0F);
+	int troneId = StringUtil.getInteger(request.getParameter("trone_id"), 0);
+	int troneOrderId = StringUtil.getInteger(request.getParameter("trone_order_id"), 0);
+	int provinceId = StringUtil.getInteger(request.getParameter("province_id"), 0);
 	String curDate = StringUtil.getDefaultDate();
 	String curMonth = StringUtil.getMonthFormat();
 	

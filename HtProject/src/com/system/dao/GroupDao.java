@@ -19,7 +19,7 @@ public class GroupDao
 	@SuppressWarnings("unchecked")
 	public List<GroupModel> loadAllGroup()
 	{
-		String sql = "select * from daily_config.tbl_group"+ " order by convert(name using gbk) asc ";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group"+ " order by convert(name using gbk) asc ";
 		
 		return (List<GroupModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -49,8 +49,8 @@ public class GroupDao
 	public List<GroupModel> loadRightGroupByUserId(int userId)
 	{
 		
-		String sql = " SELECT b.`group_list` FROM daily_config.`tbl_group_user` a";
-		sql += " LEFT JOIN daily_config.`tbl_group_group` b ON a.`group_id` = b.`group_id`";
+		String sql = " SELECT b.`group_list` FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_user` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_group` b ON a.`group_id` = b.`group_id`";
 		sql += " WHERE user_id = " + userId;
 		
 		JdbcControl control = new JdbcControl();
@@ -95,7 +95,7 @@ public class GroupDao
 		
 		groups = groups.substring(0,groups.length()-1);
 		
-		String sql2 = "select * from daily_config.tbl_group where id in ("+ groups +") order by convert(name using gbk) asc ";
+		String sql2 = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group where id in ("+ groups +") order by convert(name using gbk) asc ";
 		
 		return (List<GroupModel>)new JdbcControl().query(sql2, new QueryCallBack()
 		{
@@ -121,7 +121,7 @@ public class GroupDao
 	
 	public Map<String, Object> loadGroup(int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_group";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group";
 		Map<String, Object> map = new  HashMap<String, Object>();
 		map.put("rows", new JdbcControl().query(sql.replace(Constant.CONSTANT_REPLACE_STRING, " count(*) "), new QueryCallBack()
 		{
@@ -161,7 +161,7 @@ public class GroupDao
 	
 	public Map<String, Object> loadGroup(int pageIndex,String name)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_group WHERE 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group WHERE 1=1 ";
 		
 		if (!StringUtil.isNullOrEmpty(name)) {
 			sql += " AND name LIKE '%"+name+"%' ";
@@ -206,7 +206,7 @@ public class GroupDao
 	
 	public GroupModel loadGroupById(int id)
 	{
-		String sql = "select * from daily_config.tbl_group where id =" + id;
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group where id =" + id;
 		return (GroupModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -227,14 +227,14 @@ public class GroupDao
 	
 	public boolean updateGroup(GroupModel model)
 	{
-		String sql = "update daily_config.tbl_group set name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group set name = '" + model.getName() + "',remark = '" + model.getRemark() + "' where id =" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean addGroup(GroupModel model)
 	{
-		String sql = "insert into daily_config.tbl_group (name,remark) value('" + model.getName() + "','" + model.getRemark() + "')";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group (name,remark) value('" + model.getName() + "','" + model.getRemark() + "')";
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -242,7 +242,7 @@ public class GroupDao
 	@SuppressWarnings("unchecked")
 	public Map<Integer,Integer> loadUserByGroupId(int id)
 	{
-		String sql = "select user_id,group_id from daily_config.tbl_group_user where group_id =" + id;
+		String sql = "select user_id,group_id from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_user where group_id =" + id;
 		return (Map<Integer,Integer>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -265,7 +265,7 @@ public class GroupDao
 	@SuppressWarnings("unchecked")
 	public List<Integer> loadRightByGroupId(int id)
 	{
-		String sql = "SELECT menu_2_id FROM daily_config.`tbl_group_right` WHERE group_id = " + id;
+		String sql = "SELECT menu_2_id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_right` WHERE group_id = " + id;
 		return (List<Integer>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -283,13 +283,13 @@ public class GroupDao
 	
 	public void delGroupRightById(int id)
 	{
-		String sql = "delete from daily_config.tbl_group_right where group_id = " + id;
+		String sql = "delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_right where group_id = " + id;
 		new JdbcControl().execute(sql);
 	}
 	
 	public void addGroupRight(int groupId,List<Integer> list)
 	{
-		String sql = "insert into daily_config.tbl_group_right(group_id,menu_2_id) values ";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_right(group_id,menu_2_id) values ";
 		
 		String values = "";
 		
@@ -310,9 +310,9 @@ public class GroupDao
 	public List<UserModel> loadGroupUsersById(int id)
 	{
 		String sql = "SELECT a.id,a.group_id,a.user_id,b.name,b.remark,c.nick_name "
-				+ "	FROM daily_config.tbl_group_user a "
-				+ "	LEFT JOIN daily_config.tbl_group b ON a.group_id=b.id "
-				+ " LEFT JOIN daily_config.tbl_user c ON a.user_id=c.id where b.id="+id 
+				+ "	FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_user a "
+				+ "	LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group b ON a.group_id=b.id "
+				+ " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c ON a.user_id=c.id where b.id="+id 
 				+ " order by convert(c.nick_name using gbk) asc ";
 		
 		return (List<UserModel>)new JdbcControl().query(sql, new QueryCallBack()
@@ -337,13 +337,13 @@ public class GroupDao
 	}
 	public void delGroupUserById(int id)
 	{
-		String sql = "delete from daily_config.tbl_group_user where group_id = " + id;
+		String sql = "delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_user where group_id = " + id;
 		new JdbcControl().execute(sql);
 	}
 	
 	public void addGroupUser(int groupId,List<Integer> list)
 	{
-		String sql = "insert into daily_config.tbl_group_user(group_id,user_id) values ";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_group_user(group_id,user_id) values ";
 		
 		String values = "";
 		

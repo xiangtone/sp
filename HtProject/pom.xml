@@ -100,6 +100,18 @@
 			</activation>
 		</profile>
 		<profile>
+			<id>local</id>
+			<properties>
+				<runtime.env>config\local</runtime.env>
+				<final.name>HtProject</final.name>
+				<ftp.server.id>LocalSftpServer</ftp.server.id>
+				<ftp.to.url>sftp://192.168.1.11/data/server/tomcat_8_8/swap_dir/</ftp.to.url>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
 			<id>szht</id>
 			<properties>
 				<runtime.env>config\szht</runtime.env>
@@ -123,9 +135,30 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>jpwx</id>
+			<properties>
+				<runtime.env>config\jpwx</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>sjhd</id>
+			<properties>
+				<runtime.env>config\sjhd</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+		<profile>
 			<id>shkk</id>
 			<properties>
 				<runtime.env>config\shkk</runtime.env>
+				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>szld</id>
+			<properties>
+				<runtime.env>config\szld</runtime.env>
 				<final.name>HtProject</final.name>
 			</properties>
 		</profile>
@@ -141,6 +174,13 @@
 			<properties>
 				<runtime.env>config\andy</runtime.env>
 				<final.name>HtProject</final.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>htsj</id>
+			<properties>
+				<runtime.env>config\htsj</runtime.env>
+				<final.name>dis.n8wan.com</final.name>
 			</properties>
 		</profile>
 	</profiles>

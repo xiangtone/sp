@@ -47,13 +47,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script><link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript">
 
@@ -148,7 +148,7 @@
 			<dl>
 				<form action="sptrone.jsp" method="get" id="formid">
 						<dl>					
-						<dd class="dd01_me">关键字</dd>
+						<dd class="dd01_me" style="margin-left: -40px;">关键字</dd>
 						<dd class="dd03_me">
 							<input name="keyword" id="input_keyword" value="<%= keyWord %>"
 								type="text" style="width: 150px">
@@ -195,7 +195,7 @@
 					<td><%= model.getCommerceUserName() %></td>
 					<td><%= troneTypes[model.getTroneType()]%></td>
 					<td><%= jsTypes[model.getJsTypes()] %></td>
-					<td ondblclick="editShowData('<%= model.getId() %>')">
+					<td>
 						<span id="span_<%= model.getId() %>"><%= model.getJieSuanLv() %></span>
 					</td>
 					<td><%= model.getDayLimit() %></td>

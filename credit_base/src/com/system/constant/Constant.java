@@ -31,6 +31,7 @@ public class Constant
 	public static final int CP_SP_TRONE_SUC = 1011;//第一次数据取得成功
 	public static final int CP_VERIFY_CODE_ERROR = 1012;//第二次数据没取成功
 	public static final int CP_VERIFY_CODE_SUC = 1013;//第二次数据取得成功
+	public static final int CP_PHONE_LOCATE_FAIL = 1100; //用户手机号或是IMSI定位失败
 	
 	public static final String BASE_TRONE_URL = ConfigManager.getConfigData("BASE_TRONE_URL", "http://h1.n8wan.com:9191/API/jj%s.ashx");
 	

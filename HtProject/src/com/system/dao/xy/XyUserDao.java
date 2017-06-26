@@ -37,8 +37,8 @@ public class XyUserDao {
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1)+","+Constant.PAGE_SIZE; 
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING+" FROM "
 				+ "game_log.`tbl_xypay_summer` a "
-				+ "LEFT JOIN daily_config.tbl_xy_channel b ON a.`channelid` = b.channel "
-				+ "LEFT JOIN daily_config.tbl_xy_app c ON a.`appkey` = c.appkey "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel b ON a.`channelid` = b.channel "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app c ON a.`appkey` = c.appkey "
 				+ "WHERE 1=1";
 		sql+=" AND fee_date>='"+startDate+"' AND fee_date<='"+endDate+"' "; //用于拼接查询的计费时间的时间范围
 		if(!StringUtil.isNullOrEmpty(appKey)){ //用于拼接模糊查询语句，模糊查询应用KEY

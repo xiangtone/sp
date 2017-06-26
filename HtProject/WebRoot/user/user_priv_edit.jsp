@@ -26,7 +26,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
@@ -46,12 +46,6 @@
 		if(pwd!=newPwd2)
 		{
 			alert("新密码两次输入不一致！");
-			return;
-		}
-		
-		if(isNullOrEmpty(pwd))
-		{
-			alert("密码不能为空");
 			return;
 		}
 		
@@ -76,8 +70,8 @@
 		$("#input_mail").val("<%= model.getMail() %>");
 		$("#input_qq").val("<%= model.getQq() %>");
 		$("#input_phone").val("<%= model.getPhone() %>");
-		$("#input_new_pwd_1").val("<%= model.getPassword() %>");
-		$("#input_new_pwd_2").val("<%= model.getPassword() %>");
+		$("#input_new_pwd_1").val("<%= "" %>");
+		$("#input_new_pwd_2").val("<%= "" %>");
 		setRadioCheck("status",<%= model.getStatus() %>);
 	}
 </script>

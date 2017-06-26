@@ -24,7 +24,7 @@ public class ChannelDao {
 	{
 		String sqlcount = " count(*) ";
 		String sql = "select "+Constant.CONSTANT_REPLACE_STRING+"from "
-				+ "daily_config.tbl_xy_channel a LEFT JOIN daily_config.`tbl_xy_app` b ON a.`appid` = b.id"
+				+ "" + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` b ON a.`appid` = b.id"
 				+ " ORDER BY a.channel,b.appname ASC ";
 		
 		
@@ -80,7 +80,7 @@ public class ChannelDao {
 	{
 		String sqlcount = " count(*) ";
 		String sql = "select "+Constant.CONSTANT_REPLACE_STRING+"from "
-				+ "daily_config.tbl_xy_channel a LEFT JOIN daily_config.`tbl_xy_app` b ON a.`appid` = b.id left join daily_config.tbl_user c on a.userid = c.id "
+				+ "" + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` b ON a.`appid` = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.userid = c.id "
 				+ " WHERE 1=1 ";
 		
 		if(appid>0)
@@ -157,8 +157,8 @@ public class ChannelDao {
 	
 	public ChannelModel loadQdById(int id)
 	{
-		String sql = "SELECT * FROM daily_config.tbl_xy_channel a "
-				+ "LEFT JOIN daily_config.`tbl_xy_app` b ON a.`appid` = b.id WHERE a.`id`="+id;
+		String sql = "SELECT * FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel a "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` b ON a.`appid` = b.id WHERE a.`id`="+id;
 		
 		return (ChannelModel)new JdbcControl().query(sql, 
 				new QueryCallBack() {
@@ -187,7 +187,7 @@ public class ChannelDao {
 	public boolean updataChannel(ChannelModel model)
 	{
 		int id = new AppDao().loadIdByName(model.getAppname());
-		String sql = "UPDATE daily_config.tbl_xy_channel SET "
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel SET "
 				+ "appid="+id+","
 				+ "channel='"+model.getChannel()+"',"
 				+ "settle_type="+model.getSettleType()+","
@@ -202,7 +202,7 @@ public class ChannelDao {
 	{
 		int id = new AppDao().loadIdByName(model.getAppname());
 		
-		String sql = "insert into daily_config.tbl_xy_channel(appid,channel,hold_percent,syn_type,settle_type,remark) "
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel(appid,channel,hold_percent,syn_type,settle_type,remark) "
 				+ "value("+id+",'"+model.getChannel()+"',"+model.getHold_percent()+","
 				+ model.getSyn_type()+","+model.getSettleType()+",'"+model.getRemark()+"')";
 		return new JdbcControl().execute(sql);
@@ -210,13 +210,13 @@ public class ChannelDao {
 	
 	public boolean deletChannel(int id)
 	{
-		String sql = "DELETE FROM daily_config.tbl_xy_channel WHERE id="+id;
+		String sql = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel WHERE id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean updateChannelAccount(int channelId,int userId)
 	{
-		String sql = "update daily_config.tbl_xy_channel set userid = " + userId + "  where id = " + channelId;
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel set userid = " + userId + "  where id = " + channelId;
 		return new JdbcControl().execute(sql);
 	}
 	

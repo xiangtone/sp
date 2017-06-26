@@ -15,8 +15,8 @@ public class MrSummerDao
 	{
 		
 		String sql = "select mr_date,sp_id,b.id trone_id,cp_id,trone_order_id,mcc,province_id,"
-				+ "city_id,count(*) data_rows from daily_log.tbl_mr_"+ tableName +" a left join daily_config.tbl_trone b "
-				+ "on a.trone_id = b.id left join daily_config.tbl_trone_order c on c.trone_id = b.id "
+				+ "city_id,count(*) data_rows from daily_log.tbl_mr_"+ tableName +" a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone b "
+				+ "on a.trone_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order c on c.trone_id = b.id "
 				+ "where mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "' "
 				+ "group by mr_date,sp_id,b.id,cp_id,trone_order_id,mcc,province_id,city_id";
 		
@@ -71,7 +71,7 @@ public class MrSummerDao
 		String sql  = " insert into daily_log.tbl_mr_summer(mr_date,sp_id,trone_id,"
 				+ " cp_id,trone_order_id,mcc,province_id,city_id,data_rows,amount)"
 				+ " select mr_date,a.sp_id,trone_id,cp_id,trone_order_id,mcc,province_id,"
-				+ " city_id,count(*) data_rows,sum(b.price) from daily_log.tbl_mr_"+ tableName +" a left join daily_config.tbl_trone b "
+				+ " city_id,count(*) data_rows,sum(b.price) from daily_log.tbl_mr_"+ tableName +" a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone b "
 				+ " on a.trone_id = b.id "
 				+ " where mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "' AND a.trone_id>0 AND trone_order_id>0"
 				+ " group by mr_date,a.sp_id,b.id,cp_id,trone_order_id,mcc,province_id,city_id "

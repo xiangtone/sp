@@ -34,7 +34,7 @@ public class LvMrDao {
 			query+=" and mr.pay_type="+payType;
 		}
 		
-		String sql="SELECT mr.*,lc.id as lvid,lc.appkey as lvappkey,lc.hold_percent,lc.user_id,lc.create_date as lv_create_date FROM little_video_log.tbl_mr_"+tableName+" mr LEFT JOIN daily_config.tbl_lv_channel lc ON mr.channel=lc.channel "
+		String sql="SELECT mr.*,lc.id as lvid,lc.appkey as lvappkey,lc.hold_percent,lc.user_id,lc.create_date as lv_create_date FROM little_video_log.tbl_mr_"+tableName+" mr LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_lv_channel lc ON mr.channel=lc.channel "
 				+ "where 1=1 "
 				+ "and mr.status=1 "
 				+ "and mr.create_date>='"+date+" 00:00:00' and mr.create_date<='"+date+" 23:59:59' "
@@ -90,7 +90,7 @@ public class LvMrDao {
 		}
 		
 		String sql="SELECT SUM(mr.price) as day_total,DATE_FORMAT(mr.create_date,'%Y-%m-%d') AS day_date FROM little_video_log.tbl_mr_"+tableName+" mr "
-				+ "LEFT JOIN daily_config.tbl_lv_channel lc ON mr.channel=lc.channel "
+				+ "LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_lv_channel lc ON mr.channel=lc.channel "
 				+ "WHERE 1=1 AND mr.status=1 "
 				+ "AND lc.user_id="+userId;
 		sql+=query;

@@ -17,7 +17,7 @@ public class MrDao
 	@SuppressWarnings("unchecked")
 	public ArrayList<MrModel> loadMrData(int cpId,String tableName,String startDate,String endDate)
 	{
-		String sql = "select * from daily_log.tbl_mr_" + tableName + " a left join daily_config.tbl_trone_order b "
+		String sql = "select * from daily_log.tbl_mr_" + tableName + " a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b "
 					+ "on a.trone_order_id = b.id where b.cp_id = " + cpId + " and mr_date >= '" + startDate + "' and mr_date<= '" + endDate + "'";
 		
 		return (ArrayList<MrModel>)new JdbcControl().query(sql, new QueryCallBack() 

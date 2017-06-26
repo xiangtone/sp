@@ -18,7 +18,7 @@ public class SpTroneApiDao
 	@SuppressWarnings("unchecked")
 	public List<SpTroneApiModel> loadSpTroneApi()
 	{
-		String sql = "select * from daily_config.tbl_sp_trone_api";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_api";
 		
 		return (List<SpTroneApiModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -51,7 +51,7 @@ public class SpTroneApiDao
 	
 	public Map<String, Object> loadSpTroneApi(int pageIndex,String keyWord)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_sp_trone_api where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_api where 1=1 ";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -107,7 +107,7 @@ public class SpTroneApiDao
 	
 	public SpTroneApiModel getSpTroneApiById(int id)
 	{
-		String sql = "select * from daily_config.tbl_sp_trone_api where id = " + id;
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_api where id = " + id;
 		
 		return (SpTroneApiModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -135,7 +135,7 @@ public class SpTroneApiDao
 	
 	public boolean addSpTroneApiModel(SpTroneApiModel model)
 	{
-		String sql = "insert into daily_config.tbl_sp_trone_api(name,match_field,match_keyword,api_fields,"
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_api(name,match_field,match_keyword,api_fields,"
 				+ "locate_match) values(?,?,?,?,?)";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
@@ -151,7 +151,7 @@ public class SpTroneApiDao
 	
 	public boolean updateSpTroneApiModel(SpTroneApiModel model)
 	{
-		String sql = "update daily_config.tbl_sp_trone_api set name = ?,match_field = ?,match_keyword = ?,api_fields = ?,"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone_api set name = ?,match_field = ?,match_keyword = ?,api_fields = ?,"
 				+ "locate_match = ? where id = ?";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();

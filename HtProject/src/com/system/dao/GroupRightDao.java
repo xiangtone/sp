@@ -145,7 +145,7 @@ public class GroupRightDao {
 	}
 	
 	public boolean addGroupRight(GroupRightModel model){
-		String sql = "INSERT INTO `daily_config`.`tbl_group_group`(`group_id`,`group_list`,`remark`) "
+		String sql = "INSERT INTO `" + com.system.constant.Constant.DB_DAILY_CONFIG + "`.`tbl_group_group`(`group_id`,`group_list`,`remark`) "
 				+ "VALUE("+model.getGroupId()+",'"+model.getGroupList()+"','"+model.getRemark()+"')";
 		
 		return new JdbcControl().execute(sql);
@@ -168,7 +168,7 @@ public class GroupRightDao {
 	}
 	
 	public boolean updateGroup(GroupRightModel model){
-		String sql = "UPDATE daily_config.`tbl_group_group` SET "
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_group` SET "
 				+ "`group_id`="+model.getGroupId()+","
 				+ "`group_list`='"+model.getGroupList()+"',"
 				+ "`remark`='"+model.getRemark()+"' WHERE id="+model.getId();
@@ -176,7 +176,7 @@ public class GroupRightDao {
 	}
 	
 	public boolean deleteGroup(int id){
-		String sql = "DELETE FROM daily_config.`tbl_group_group` WHERE id="+id;
+		String sql = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_group` WHERE id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	

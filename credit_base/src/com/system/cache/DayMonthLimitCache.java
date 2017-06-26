@@ -14,6 +14,7 @@ public class DayMonthLimitCache
 	private static Map<String, Float> spTroneMonthLimit = new HashMap<String, Float>();
 	private static Map<String, Float> cpSpTroneDayLimit = new HashMap<String, Float>();
 	private static Map<String, Float> cpSpTroneMonthLimit = new HashMap<String, Float>();
+	private static Map<Integer,Float> troneProvinceDayLimit = new HashMap<Integer, Float>();
 	
 	public static void setSpTroneDayLimit(Map<String, Float> limit)
 	{
@@ -178,5 +179,12 @@ public class DayMonthLimitCache
 		sb.append("</tr></table>");
 		
 		return sb;
+	}
+	
+	public static void main(String[] args)
+	{
+		String ori = "ps12345789";
+		System.out.println(ori.substring(2, ori.length()));
+		System.out.println(ori.startsWith("ps"));
 	}
 }

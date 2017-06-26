@@ -4,6 +4,7 @@ encoding//config/andy/config.properties=UTF-8
 encoding//config/bjtl/config.properties=UTF-8
 encoding//config/bjxy/config.properties=UTF-8
 encoding//config/bjyd/config.properties=UTF-8
+encoding//config/jpwx/config.properties=UTF-8
 encoding//config/shhh/config.properties=UTF-8
 encoding//config/szht/config.properties=UTF-8
 encoding//src/com/system/vmodel/FinancialSpCpDataShowModel.java=UTF-8

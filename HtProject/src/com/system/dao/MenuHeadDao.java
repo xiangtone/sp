@@ -18,7 +18,7 @@ public class MenuHeadDao
 	@SuppressWarnings("unchecked")
 	public List<MenuHeadModel> loadMenuHeadList()
 	{
-		String sql = "select * from daily_config.`tbl_menu_head` order by sort,id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head` order by sort,id asc";
 		
 		return (List<MenuHeadModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -45,7 +45,7 @@ public class MenuHeadDao
 	public Map<String, Object> loadMenuHead(int pageIndex,String menuName,int sort)
 	{
 		String limit = " limit "+Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
-		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING+" from daily_config.`tbl_menu_head` WHERE 1=1 ";
+		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING+" from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head` WHERE 1=1 ";
 		
 		if(!StringUtil.isNullOrEmpty(menuName))
 		{
@@ -104,7 +104,7 @@ public class MenuHeadDao
 	
 	public boolean addMenuHead(MenuHeadModel model)
 	{
-		String sql = "INSERT INTO daily_config.`tbl_menu_head`(name,remark,sort) VALUE('"
+		String sql = "INSERT INTO " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head`(name,remark,sort) VALUE('"
 				+ model.getName()+"','"
 				+ model.getRemark()+"',"
 				+ model.getSort()+")";
@@ -114,7 +114,7 @@ public class MenuHeadDao
 	
 	public List<String> loadMenuName(int id)
 	{
-		String sql = "SELECT name FROM daily_config.`tbl_menu_head` WHERE 1=1";
+		String sql = "SELECT name FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head` WHERE 1=1";
 		
 		if(id>0)
 		{
@@ -142,7 +142,7 @@ public class MenuHeadDao
 	
 	public MenuHeadModel loadMenuById(int id)
 	{
-		String sql = "SELECT * FROM daily_config.`tbl_menu_head` WHERE id="+id;
+		String sql = "SELECT * FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head` WHERE id="+id;
 		
 		final MenuHeadModel model = new MenuHeadModel();
 		
@@ -169,14 +169,14 @@ public class MenuHeadDao
 	
 	public boolean deletMenu(int id)
 	{
-		String sql = "DELETE FROM daily_config.`tbl_menu_head` WHERE id="+id;
+		String sql = "DELETE FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head` WHERE id="+id;
 		
 		return new JdbcControl().execute(sql);
 	}
 	
 	public boolean updataMenu(MenuHeadModel model)
 	{
-		String sql = "UPDATE daily_config.`tbl_menu_head` SET "
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head` SET "
 				+ "name='"+model.getName()+"',"
 				+ "remark='"+model.getRemark()+"',"
 				+ "sort="+model.getSort()+" WHERE id="+model.getId();
@@ -186,7 +186,7 @@ public class MenuHeadDao
 	
 	public boolean updateMenu(int id,int sort)
 	{
-		String sql = "UPDATE daily_config.`tbl_menu_head` SET "
+		String sql = "UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_menu_head` SET "
 				+ "sort="+sort+" WHERE id="+id;
 		return new JdbcControl().execute(sql);
 	}

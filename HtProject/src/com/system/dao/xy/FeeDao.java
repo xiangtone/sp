@@ -48,7 +48,7 @@ public class FeeDao
 	
 	public boolean updateQdAmount(String startDate,String endDate)
 	{
-		String sql = " UPDATE game_log.`tbl_xy_fee_summer` a,daily_config.`tbl_xy_app` b "
+		String sql = " UPDATE game_log.`tbl_xy_fee_summer` a," + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_xy_app` b "
 				+ " SET show_amount = a.`amount`*(100-b.`hold_percent`)/100  "
 				+ " WHERE show_amount = 0  AND a.`appkey` = b.`appkey`"
 				+ " AND fee_date >= '" + startDate + "' "
@@ -72,8 +72,8 @@ public class FeeDao
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xypay_summer a";
-		sql += " left join daily_config.tbl_xy_app b on a.appkey = b.appkey  ";
-		sql += " left join daily_config.tbl_xy_channel d on a.channelid = d.channel ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app b on a.appkey = b.appkey  ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel d on a.channelid = d.channel ";
 		sql += " where 1=1 ";
 		sql += " and d.settle_type = 2 ";
 		sql += " and a.fee_date >= '" + startDate + "' ";
@@ -162,7 +162,7 @@ public class FeeDao
 		String query = " a.*,b.appname,b.app_type ";
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xy_fee_summer a left join daily_config.tbl_xy_app b on a.appkey = b.appkey where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from game_log.tbl_xy_fee_summer a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app b on a.appkey = b.appkey where 1=1 ";
 		
 		sql += " and fee_date >= '" + startDate + "' and fee_date <= '" + endDate + "' ";
 		
@@ -252,7 +252,7 @@ public class FeeDao
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
 		String sql = "select  " + Constant.CONSTANT_REPLACE_STRING
-				+ " from game_log.tbl_xy_fee_summer a left join daily_config.tbl_xy_app b on a.appkey = b.appkey ";
+				+ " from game_log.tbl_xy_fee_summer a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app b on a.appkey = b.appkey ";
 		
 		//董老板说把原来扣量后的激活数改为真实用户数 2015.10.30 16:21 更改者 	Andy.Chen (show_data_rows,data_rows) 
 		sql += " LEFT JOIN ( SELECT active_date,appkey,SUM(data_rows) data_rows FROM game_log.`tbl_xy_user_summer` WHERE 1=1 AND active_date >= '"
@@ -341,10 +341,10 @@ public class FeeDao
 		
 		String sql = "SELECT "+Constant.CONSTANT_REPLACE_STRING +" FROM game_log.tbl_xypay_summer a ";
 		
-		sql += " LEFT JOIN daily_config.tbl_xy_app b ON a.appkey = b.appkey ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_app b ON a.appkey = b.appkey ";
 		sql += " LEFT JOIN game_log.tbl_xy_user_summer c ON a.appkey = c.appkey";
 		sql += " AND a.channelid = c.channelkey AND a.fee_date = c.active_date ";
-		sql += " LEFT JOIN daily_config.tbl_xy_channel d ON c.channelkey = d.channel";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_xy_channel d ON c.channelkey = d.channel";
 		sql += " WHERE 1=1  AND d.settle_type = 2 AND a.`status` = 1 AND d.`userid` = " + userId;
 		sql += " AND a.fee_date >= '"+ startDate +"' AND a.fee_date <= '" + endDate + "'";
 		

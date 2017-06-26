@@ -60,13 +60,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script><link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 
 	var spList = new Array();
@@ -159,7 +159,7 @@
 			
 			<form action="troneorder.jsp"  method="get" style="margin-top: 10px">
 				<dl>
-					<dd class="dd01_me">CP</dd>
+					<dd class="dd01_me" style="margin-left: -16px;">CP</dd>
 					<dd class="dd04_me">
 						<select name="cp_id" id="sel_cp_id" onclick="namePicker(this,cpList,onCpDataSelect)">
 						<option value="-1">全部</option>

@@ -38,11 +38,11 @@
 	model.setType(type);
 	if(type==0){
 		model.setUserId(commSpUser);
-		model.setRightList(spRightList+","+commSpUser);
+		model.setRightList(spRightList);
 
 	}else{
 		model.setUserId(commCpUser);
-		model.setRightList(cpRightList+","+commCpUser);
+		model.setRightList(cpRightList);
 	}
 	model.setRemark(remark);
 	

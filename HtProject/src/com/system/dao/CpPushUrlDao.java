@@ -18,7 +18,7 @@ public class CpPushUrlDao
 	@SuppressWarnings("unchecked")
 	public List<CpPushUrlModel> loadcpPushUrl()
 	{
-		String sql = "select * from daily_config.tbl_cp_push_url";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_push_url";
 		return (List<CpPushUrlModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override
@@ -43,7 +43,7 @@ public class CpPushUrlDao
 	
 	public Map<String, Object> loadCpPushUrl(int cpId,int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_cp_push_url a left join daily_config.tbl_cp b on a.cp_id = b.id where 1=1 ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_push_url a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id where 1=1 ";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -104,7 +104,7 @@ public class CpPushUrlDao
 	
 	public CpPushUrlModel loadCpPushUrlModelById(int id)
 	{
-		String sql = "select a.*,b.short_name from daily_config.tbl_cp_push_url a left join daily_config.tbl_cp b on a.cp_id = b.id where a.id = " + id;
+		String sql = "select a.*,b.short_name from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_push_url a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp b on a.cp_id = b.id where a.id = " + id;
 		
 		return (CpPushUrlModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -136,7 +136,7 @@ public class CpPushUrlDao
 	
 	public boolean addCpPushUrl(CpPushUrlModel model)
 	{
-		String sql = "insert into daily_config.tbl_cp_push_url(name,ref_count,url,cp_id,hold_percent,hold_amount,hold_start) values('"+ model.getName() 
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_push_url(name,ref_count,url,cp_id,hold_percent,hold_amount,hold_start) values('"+ model.getName() 
 		+"',"+ model.getRefCount() +",'"+ model.getUrl() +"',"+ model.getCpId() +","+ model.getHoldPercent() +","+ model.getHoldAmount() +","+ model.getHoldStartCount() +")";
 		
 		return new JdbcControl().execute(sql);
@@ -144,7 +144,7 @@ public class CpPushUrlDao
 	
 	public boolean updateCpPushUrl(CpPushUrlModel model)
 	{
-		String sql = "update daily_config.tbl_cp_push_url set name = '"+ model.getName() +"',ref_count=" + model.getRefCount() + ",url='" + model.getUrl() + "',cp_id=" + model.getCpId() + ",hold_percent=" + model.getHoldPercent() + ",hold_amount=" + model.getHoldAmount() + ",hold_start=" + model.getHoldStartCount() + " where id=" + model.getId();
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_push_url set name = '"+ model.getName() +"',ref_count=" + model.getRefCount() + ",url='" + model.getUrl() + "',cp_id=" + model.getCpId() + ",hold_percent=" + model.getHoldPercent() + ",hold_amount=" + model.getHoldAmount() + ",hold_start=" + model.getHoldStartCount() + " where id=" + model.getId();
 		
 		return new JdbcControl().execute(sql);
 	}

@@ -17,6 +17,8 @@ public class SpTroneModel
 	private float monthLimit;
 	private float userDayLimit;
 	private float userMonthLimit;
+	//增加了是否强制拦截，当开启了地区验证的时候，若是匹配不上地区，是否强制拦截，不再请求上游 Add By Andy 2017.03.21
+	private boolean isForceHold;
 	
 	public int getTroneType()
 	{
@@ -137,5 +139,13 @@ public class SpTroneModel
 	public void setUserMonthLimit(float userMonthLimit)
 	{
 		this.userMonthLimit = userMonthLimit;
+	}
+	public boolean isForceHold()
+	{
+		return isForceHold;
+	}
+	public void setForceHold(boolean isForceHold)
+	{
+		this.isForceHold = isForceHold;
 	}
 }

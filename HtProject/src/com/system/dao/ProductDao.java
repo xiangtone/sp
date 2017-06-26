@@ -24,7 +24,7 @@ public class ProductDao {
 
 	public Map<String, Object> loadProduct(int pageIndex,String keyWord)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_product_2 cp LEFT JOIN daily_config.tbl_product_1 pp ON cp.product_1_id=pp.id LEFT JOIN daily_config.tbl_operator op ON pp.operator_id=op.flag where 1=1";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 cp LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 pp ON cp.product_1_id=pp.id LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator op ON pp.operator_id=op.flag where 1=1";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -79,7 +79,7 @@ public class ProductDao {
 	 */
 	public Map<String, Object> loadLineProduct(int pageIndex,String keyWord)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_product_1 pp LEFT JOIN daily_config.tbl_operator op ON pp.operator_id=op.flag where 1=1";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 pp LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator op ON pp.operator_id=op.flag where 1=1";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -135,7 +135,7 @@ public class ProductDao {
 		String sql = "select cp.id as productid,product_1_id,cp.name as productname,"
 				+ "pp.id as productlineid,pp.operator_id,pp.name,"
 				+ "op.id as operid,op.flag,op.name_en,op.name_cn,op.bj_flag "
-				+ "from daily_config.tbl_product_2 cp LEFT JOIN daily_config.tbl_product_1 pp ON cp.product_1_id=pp.id LEFT JOIN daily_config.tbl_operator op ON pp.operator_id=op.flag "
+				+ "from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 cp LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 pp ON cp.product_1_id=pp.id LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator op ON pp.operator_id=op.flag "
 				+ "where cp.id = " + id +" ORDER BY cp.id";
 		return (ProductModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -195,7 +195,7 @@ public class ProductDao {
 	 */
 	public boolean addProduct(ProductModel model)
 	{
-		String sql="insert into daily_config.tbl_product_2(product_1_id,name) value('"+model.getChildLineId()+"','"+model.getChildProductName()+"')";
+		String sql="insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2(product_1_id,name) value('"+model.getChildLineId()+"','"+model.getChildProductName()+"')";
 		return new JdbcControl().execute(sql);
 	}
 	/**
@@ -205,7 +205,7 @@ public class ProductDao {
 	 */
 	public boolean updateProduct(ProductModel model)
 	{
-		String sql = "update daily_config.tbl_product_2 set product_1_id = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 set product_1_id = '"
 				+ model.getChildLineId() + "',name = '"
 				+ model.getChildProductName() + "' where id ="+model.getChildProductId();
 
@@ -218,7 +218,7 @@ public class ProductDao {
 	 */
 	public boolean addLineProduct(ProductModel model)
 	{
-		String sql="insert into daily_config.tbl_product_1 (operator_id,name) value('"+model.getOperFlag()+"','"+model.getProductLineName()+"')";
+		String sql="insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 (operator_id,name) value('"+model.getOperFlag()+"','"+model.getProductLineName()+"')";
 		return new JdbcControl().execute(sql);
 	}
 	/**
@@ -228,7 +228,7 @@ public class ProductDao {
 	 */
 	public boolean updateLineProduct(ProductModel model)
 	{
-		String sql = "update daily_config.tbl_product_1 set operator_id = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 set operator_id = '"
 				+ model.getOperFlag() + "',name = '"
 				+ model.getProductLineName() + "' where id ="+model.getProductLineId();
 
@@ -240,7 +240,7 @@ public class ProductDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ProductModel>loadProductList(){
-		String sql = "select * from daily_config.tbl_operator order by id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator order by id asc";
 		return (List<ProductModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -272,7 +272,7 @@ public class ProductDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ProductModel>loadProductLineList(){
-		String sql = "select * from daily_config.tbl_product_1 order by id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 order by id asc";
 		return (List<ProductModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -301,7 +301,7 @@ public class ProductDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ProductModel>loadProductLineListByFlag(int flag){
-		String sql = "select * from daily_config.tbl_product_1 where operator_id="+flag+" order by id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 where operator_id="+flag+" order by id asc";
 		return (List<ProductModel>)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			
@@ -328,7 +328,7 @@ public class ProductDao {
 	 * 删除产品
 	 */
 	public boolean deleteProduct(int productId){
-		String sql="delete from daily_config.tbl_product_2 where id="+productId;
+		String sql="delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 where id="+productId;
 		return new JdbcControl().execute(sql);
 	}
 	
@@ -339,11 +339,11 @@ public class ProductDao {
 		boolean flag=true;
 		//删除产品线下的产品
 		JdbcControl jdbcControl=new JdbcControl();
-		String delSql="delete from daily_config.tbl_product_2 where product_1_id="+lineId;
+		String delSql="delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 where product_1_id="+lineId;
 		flag=jdbcControl.execute(delSql);
 		//删除产品线
 		if(flag){
-			String sql="delete from daily_config.tbl_product_1 where id="+lineId;
+			String sql="delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 where id="+lineId;
 			flag=jdbcControl.execute(sql);
 		}
 		return flag;

@@ -41,7 +41,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
@@ -118,9 +118,14 @@
 									{
 										rowCount++;
 					%>
-										<label><input type="checkbox" name="menu2id" id="menuid_<%= menu2Model.getId() %>" value="<%= menu2Model.getId() %>"  /><%= menu2Model.getName() %></label>
+										<span style="display:inline-block;width: 150px;text-align: left;height: 30px;">
+											<label title="<%= menu2Model.getRemark() %>" >
+												<input type="checkbox" name="menu2id" id="menuid_<%= menu2Model.getId() %>" value="<%= menu2Model.getId() %>"  ></input>
+												<%= menu2Model.getName()%>
+											</label>
+										</span>
 					<%
-										if(rowCount%10==0)
+										if(rowCount%7==0)
 											out.print("</dd><dd class=\"dd00\"></dd><dd class=\"ddtxt03\"></dd><dd style=\"background: transparent;\" class=\"dd01_me\">&nbsp;&nbsp;</dd><dd class=\"ddtxt02\">");
 									}
 								}

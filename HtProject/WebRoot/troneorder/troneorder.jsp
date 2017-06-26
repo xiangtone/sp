@@ -60,13 +60,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script><link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 
 	var spList = new Array();
@@ -220,6 +220,7 @@
 					<td>SP业务名称</td>
 					<td>通道名称</td>
 					<td>价格</td>
+					<td>导量</td>
 					<td>指令</td>
 					<td>扣量设置</td>
 					<td>扣量比</td>
@@ -244,6 +245,7 @@
 					<td><%=model.getSpTroneName()%></td>
 					<td><%=model.getTroneName() %></td>
 					<td><%= model.getPrice() %></td>
+					<td><%= model.getIsUnholdData()==1 ? "是" : "否" %></td>
 					<td><%=model.getOrderNum() %></td>
 					<td><%=model.getIsHoldCustom()==0 ? "URL" : "当前" %></td>
 					<td><%=model.getHoldPercent() %></td>
@@ -262,7 +264,7 @@
 				
 			<tbody>
 				<tr>
-					<td colspan="13" class="tfooter" style="text-align: center;"><%= pageData %></td>
+					<td colspan="20" class="tfooter" style="text-align: center;"><%= pageData %></td>
 				</tr>
 			</tbody>
 		</table>

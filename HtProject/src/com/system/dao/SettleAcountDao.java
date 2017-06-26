@@ -23,10 +23,10 @@ public class SettleAcountDao
 		sql += " SELECT  f.id sp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` sp_name,d.jiesuanlv, ";
 		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
 		sql += " FROM daily_log.tbl_mr_summer a ";
-		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_trone c ON b.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp f ON d.sp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
 		
@@ -40,14 +40,14 @@ public class SettleAcountDao
 		sql += " GROUP BY f.id,d.id ";
 		sql += " ORDER BY sp_name,sp_trone_name ";
 		sql += " )a  ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		
 		
 		sql += " ) a ";
 		
-		sql += "WHERE a.sp_id NOT IN ( SELECT sp_id FROM daily_config.`tbl_sp_billing` WHERE js_type = " + jsType;
+		sql += "WHERE a.sp_id NOT IN ( SELECT sp_id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` WHERE js_type = " + jsType;
 		
 		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
 				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date)));";
@@ -84,10 +84,10 @@ public class SettleAcountDao
 		String sql = "select d.id,d.short_name,e.name_cn,c.name,sum(a.amount) amounts,c.jiesuanlv";
 		
 			sql += " from daily_log.tbl_mr_summer a";
-			sql += " left join daily_config.tbl_trone b on a.trone_id = b.id";
-			sql += " left join daily_config.tbl_sp_trone c on b.sp_trone_id = c.id";
-			sql += " left join daily_config.tbl_sp d on c.sp_id = d.id";
-			sql += " left join daily_config.tbl_operator e on c.operator = e.id";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone b on a.trone_id = b.id";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone c on b.sp_trone_id = c.id";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp d on c.sp_id = d.id";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator e on c.operator = e.id";
 			sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "'";
 			sql += " group by d.id,c.id";
 			sql += " order by d.short_name,c.name";
@@ -130,15 +130,15 @@ public class SettleAcountDao
 	{
 		String sql = " SELECT f.id,f.short_name,h.short_name sp_name, CONCAT(k.`name_cn`,'-',j.name) name_cn,d.name,sum(a.amount) amounts,g.rate jiesuanlv ";
 		sql += " FROM daily_log.`tbl_cp_mr_summer` a  ";
-		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id`";
-		sql += " Left join daily_config.tbl_trone c on b.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id`";
-		sql += " left join daily_config.tbl_cp f on b.cp_id = f.id ";
-		sql += " left join daily_config.tbl_cp_trone_rate g on f.id = g.cp_id and d.id = g.sp_trone_id ";
-		sql += " left join daily_config.tbl_sp h on d.sp_id = h.id ";		
-		sql += " left join daily_config.tbl_product_2 i on d.product_id = i.id ";
-		sql += " left join daily_config.tbl_product_1 j on i.product_1_id = j.id ";
-		sql += " left join daily_config.tbl_operator k on j.operator_id = k.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id`";
+		sql += " Left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c on b.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id`";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp f on b.cp_id = f.id ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate g on f.id = g.cp_id and d.id = g.sp_trone_id ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp h on d.sp_id = h.id ";		
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 i on d.product_id = i.id ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 j on i.product_1_id = j.id ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator k on j.operator_id = k.id ";
 		
 		sql += " where a.mr_date >= '" + startDate + "' and a.mr_date <= '" + endDate + "' ";
 		
@@ -193,10 +193,10 @@ public class SettleAcountDao
 		sql += " SELECT  f.id cp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` cp_name, ";
 		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
 		sql += " FROM daily_log.tbl_cp_mr_summer a ";
-		sql += " LEFT JOIN    daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN  daily_config.tbl_trone c ON b.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_cp f ON b.cp_id = f.id ";
+		sql += " LEFT JOIN    " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN  " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp f ON b.cp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
 		
@@ -208,15 +208,15 @@ public class SettleAcountDao
 		sql += " GROUP BY f.id,d.id ";
 		sql += " ORDER BY cp_name,sp_trone_name ";
 		sql += " )a  ";
-		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON a.cp_id = g.cp_id AND a.sp_trone_id = g.sp_trone_id ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate g ON a.cp_id = g.cp_id AND a.sp_trone_id = g.sp_trone_id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		sql += " WHERE g.`js_type` = " + jsType;
 		
 		sql += " ) a ";
 		
-		sql += "WHERE a.cp_id NOT IN ( SELECT cp_id FROM daily_config.`tbl_cp_billing` WHERE js_type = " + jsType;
+		sql += "WHERE a.cp_id NOT IN ( SELECT cp_id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_billing` WHERE js_type = " + jsType;
 		
 		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
 				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date)));";
@@ -258,10 +258,10 @@ public class SettleAcountDao
 		sql += " SELECT  f.id cp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` cp_name, ";
 		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
 		sql += " FROM daily_log.tbl_cp_mr_summer a ";
-		sql += " LEFT JOIN    daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN  daily_config.tbl_trone c ON b.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_cp f ON b.cp_id = f.id ";
+		sql += " LEFT JOIN    " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN  " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp f ON b.cp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
 		
@@ -273,10 +273,10 @@ public class SettleAcountDao
 		sql += " GROUP BY f.id,d.id ";
 		sql += " ORDER BY cp_name,sp_trone_name ";
 		sql += " )a  ";
-		sql += " LEFT JOIN daily_config.tbl_cp_trone_rate g ON a.cp_id = g.cp_id AND a.sp_trone_id = g.sp_trone_id ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate g ON a.cp_id = g.cp_id AND a.sp_trone_id = g.sp_trone_id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		sql += " WHERE g.`js_type` = " + jsType;
 		
 		sql += " ) a ";
@@ -318,10 +318,10 @@ public class SettleAcountDao
 		sql += " SELECT  f.id sp_id,d.jiesuanlv,d.js_type,d.id sp_trone_id,d.`product_id`,f.`short_name` sp_name, ";
 		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
 		sql += " FROM daily_log.tbl_mr_summer a ";
-		sql += " LEFT JOIN    daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN  daily_config.tbl_trone c ON b.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
+		sql += " LEFT JOIN    " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN  " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp f ON d.sp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
 		
@@ -333,9 +333,9 @@ public class SettleAcountDao
 		sql += " GROUP BY f.id,d.id ";
 		sql += " ORDER BY sp_name,sp_trone_name ";
 		sql += " )a  ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		sql += " WHERE a.`js_type` = " + jsType;
 		
 		sql += " ) a ";
@@ -375,13 +375,13 @@ public class SettleAcountDao
 		
 		sql += " FROM (SELECT * FROM daily_log.`tbl_mr_summer` WHERE mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "') a";
 		
-		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_trone e ON b.`trone_id` = e.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON e.`sp_trone_id` = c.`id`";
-		sql += " left join daily_config.tbl_sp g on c.sp_id = g.id";
-		sql += " left join daily_config.tbl_product_2 i on c.product_id = i.id ";
-		sql += " left join daily_config.tbl_product_1 j on i.product_1_id = j.id ";
-		sql += " left join daily_config.tbl_operator k on j.operator_id = k.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone e ON b.`trone_id` = e.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON e.`sp_trone_id` = c.`id`";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp g on c.sp_id = g.id";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 i on c.product_id = i.id ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 j on i.product_1_id = j.id ";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator k on j.operator_id = k.id ";
 		
 		sql += " where c.`sp_id` =  " + spId;
 		sql += " and c.js_type = " + dateType;
@@ -424,14 +424,14 @@ public class SettleAcountDao
 			
 			sql += " FROM (SELECT * FROM daily_log.`tbl_cp_mr_summer` WHERE mr_date >= '" + startDate + "' and mr_date <= '" + endDate + "') a";
 			
-			sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-			sql += " LEFT JOIN daily_config.tbl_trone e ON b.`trone_id` = e.`id`";
-			sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON e.`sp_trone_id` = c.`id`";
-			sql += " left join daily_config.tbl_cp g on b.cp_id = g.id";
-			sql += " left join daily_config.tbl_cp_trone_rate f on g.id = f.cp_id and c.id = f.sp_trone_id";
-			sql += " left join daily_config.tbl_product_2 i on c.product_id = i.id ";
-			sql += " left join daily_config.tbl_product_1 j on i.product_1_id = j.id ";
-			sql += " left join daily_config.tbl_operator k on j.operator_id = k.id ";
+			sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+			sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone e ON b.`trone_id` = e.`id`";
+			sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON e.`sp_trone_id` = c.`id`";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp g on b.cp_id = g.id";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate f on g.id = f.cp_id and c.id = f.sp_trone_id";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_2 i on c.product_id = i.id ";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_product_1 j on i.product_1_id = j.id ";
+			sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_operator k on j.operator_id = k.id ";
 			
 			sql += " where a.`cp_id` =  " + cpId;
 			sql += " and f.js_type = " + dateType;
@@ -485,10 +485,10 @@ public class SettleAcountDao
 		sql += " SELECT  f.id sp_id,d.jiesuanlv,d.js_type,d.id sp_trone_id,d.`product_id`,f.`short_name` sp_name, ";
 		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
 		sql += " FROM daily_log.tbl_mr_summer a ";
-		sql += " LEFT JOIN    daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN  daily_config.tbl_trone c ON b.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
+		sql += " LEFT JOIN    " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN  " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp f ON d.sp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
 		if(rightType>0){
@@ -502,9 +502,9 @@ public class SettleAcountDao
 		sql += " GROUP BY f.id,d.id ";
 		sql += " ORDER BY sp_name,sp_trone_name ";
 		sql += " )a  ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		sql += " WHERE a.`js_type` = " + jsType;
 		
 		sql += " ) a ";
@@ -536,7 +536,7 @@ public class SettleAcountDao
 		});
 	}
 	public String getRigthListByUser(int userId){
-		String sql="select right_list from daily_config.tbl_ds_user_right ur where ur.user_id="+userId+" and ur.type=0";
+		String sql="select right_list from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right ur where ur.user_id="+userId+" and ur.type=0";
 		return (String)new JdbcControl().query(sql, new QueryCallBack(){
 
 			@Override
@@ -569,10 +569,10 @@ public class SettleAcountDao
 		sql += " SELECT  f.id sp_id,d.id sp_trone_id,d.`product_id`,f.`short_name` sp_name,d.jiesuanlv, ";
 		sql += " d.`name` sp_trone_name,SUM(a.data_rows) data_rows,SUM(a.amount) amounts ";
 		sql += " FROM daily_log.tbl_mr_summer a ";
-		sql += " LEFT JOIN daily_config.tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_trone c ON b.trone_id = c.id ";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
-		sql += " LEFT JOIN daily_config.tbl_sp f ON d.sp_id = f.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order b ON a.`trone_order_id` = b.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone c ON b.trone_id = c.id ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` d ON c.`sp_trone_id` = d.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp f ON d.sp_id = f.id ";
 		sql += " WHERE a.mr_date >= '" + startDate + "' ";
 		sql += " AND a.mr_date <= '" + endDate + "' ";
 		if(rightType>0){
@@ -588,14 +588,14 @@ public class SettleAcountDao
 		sql += " GROUP BY f.id,d.id ";
 		sql += " ORDER BY sp_name,sp_trone_name ";
 		sql += " )a  ";
-		sql += " LEFT JOIN daily_config.`tbl_product_2` h ON a.product_id = h.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
-		sql += " LEFT JOIN daily_config.`tbl_operator` j ON i.`operator_id` = j.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_2` h ON a.product_id = h.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_product_1` i ON h.`product_1_id` = i.`id` ";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_operator` j ON i.`operator_id` = j.`id` ";
 		
 		
 		sql += " ) a ";
 		
-		sql += "WHERE a.sp_id NOT IN ( SELECT sp_id FROM daily_config.`tbl_sp_billing` WHERE js_type = " + jsType;
+		sql += "WHERE a.sp_id NOT IN ( SELECT sp_id FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_billing` WHERE js_type = " + jsType;
 		
 		sql += " AND (('" + startDate + "' >= start_date AND '" + startDate + "' <= end_date) OR('" + endDate + "' >= start_date AND '" 
 				+ endDate + "' <= end_date) OR('" + startDate + "' <= start_date AND '" + endDate + "' >= end_date)));";

@@ -12,6 +12,7 @@ public class SpTroneModel
 	private int jsTypes;
 	private float jieSuanLv;
 	private String provinces;
+	private String provinceList;
 	private int troneApiId;
 	private String troneApiName;
 	private int troneType;
@@ -36,6 +37,15 @@ public class SpTroneModel
 	//商务ID
 	private int commerceUserId;
 	
+<<<<<<< HEAD
+	//是否是导量数据，0为否，1为是
+	private int isUnHoldData;
+	
+	//当走API的时候，并且判断手机号的地区时，可以选择是否强制拒绝还是交由上游去处理
+	private int isForceHold;
+	
+=======
+>>>>>>> master
 	public int getTroneType()
 	{
 		return troneType;
@@ -244,6 +254,33 @@ public class SpTroneModel
 	public void setCommerceUserId(int commerceUserId) {
 		this.commerceUserId = commerceUserId;
 	}
+<<<<<<< HEAD
+	public int getIsUnHoldData()
+	{
+		return isUnHoldData;
+	}
+	public void setIsUnHoldData(int isUnHoldData)
+	{
+		this.isUnHoldData = isUnHoldData;
+	}
+	public int getIsForceHold()
+	{
+		return isForceHold;
+	}
+	public void setIsForceHold(int isForceHold)
+	{
+		this.isForceHold = isForceHold;
+	}
+	public String getProvinceList()
+	{
+		return provinceList;
+	}
+	public void setProvinceList(String provinceList)
+	{
+		this.provinceList = provinceList;
+	}
+=======
+>>>>>>> master
 	
 	
 }

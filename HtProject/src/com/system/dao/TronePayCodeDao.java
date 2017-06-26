@@ -14,7 +14,7 @@ public class TronePayCodeDao
 {
 	public boolean addTronePayCode(TronePayCodeModel model)
 	{
-		String sql = "insert into daily_config.tbl_trone_paycode(trone_id,paycode,appid,channelid) values(?,?,?,?)";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_paycode(trone_id,paycode,appid,channelid) values(?,?,?,?)";
 		
 		Map<Integer,Object> map = new HashMap<Integer,Object>();
 		
@@ -28,7 +28,7 @@ public class TronePayCodeDao
 	
 	public boolean updateTronePayCode(TronePayCodeModel model)
 	{
-		String sql = "update daily_config.tbl_trone_paycode set paycode = ?,appid = ?,channelid = ? where trone_id = ?";
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_paycode set paycode = ?,appid = ?,channelid = ? where trone_id = ?";
 		
 		Map<Integer,Object> map = new HashMap<Integer,Object>();
 		
@@ -42,7 +42,7 @@ public class TronePayCodeDao
 	
 	public TronePayCodeModel getTronePayCode(int tronePayCodeId)
 	{
-		String sql = "select * from daily_config.tbl_trone_paycode where trone_id = " + tronePayCodeId;
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_paycode where trone_id = " + tronePayCodeId;
 		return (TronePayCodeModel)new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override

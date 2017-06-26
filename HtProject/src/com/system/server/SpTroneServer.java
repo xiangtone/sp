@@ -3,8 +3,11 @@ package com.system.server;
 import java.util.List;
 import java.util.Map;
 
+import com.system.dao.ProvinceDao;
 import com.system.dao.SpTroneDao;
+import com.system.model.ProvinceModel;
 import com.system.model.SpTroneModel;
+import com.system.model.TroneOrderModel;
 import com.system.util.ConfigManager;
 import com.system.util.StringUtil;
 
@@ -17,7 +20,39 @@ public class SpTroneServer
 	
 	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord)
 	{
-		return new SpTroneDao().loadSpTroneList(pageIndex,keyWord);
+		int isUnHoldData = -1;
+		
+		if("导量".equalsIgnoreCase(keyWord))
+		{
+			isUnHoldData = 1;
+		}
+		else if("非导量".equalsIgnoreCase(keyWord))
+		{
+			isUnHoldData = 0;
+		}
+		
+		return new SpTroneDao().loadOriSpTroneList(pageIndex,keyWord,isUnHoldData);
+	}
+	
+	public Map<String, Object> loadSpTroneList(int userId,int pageIndex,String keyWord)
+	{
+		int isUnHoldData = -1;
+		
+		if("导量".equalsIgnoreCase(keyWord))
+		{
+			isUnHoldData = 1;
+		}
+		else if("非导量".equalsIgnoreCase(keyWord))
+		{
+			isUnHoldData = 0;
+		}
+		
+		return new SpTroneDao().loadOriSpTroneList(userId,pageIndex,keyWord,isUnHoldData);
+	}
+	
+	public Map<String, Object> loadSpTroneList2(int pageIndex,String keyWord,int isUnHoldData)
+	{
+		return new SpTroneDao().loadOriSpTroneList(pageIndex,keyWord,isUnHoldData);
 	}
 	
 	public void addSpTrone(SpTroneModel model)
@@ -81,4 +116,51 @@ public class SpTroneServer
 	{
 		return new SpTroneDao().loadSpTroneList(pageIndex,keyWord,userId);
 	}
+	
+	public Map<String, Object> loadSpTroneList(int pageIndex,String keyWord,String userRight)
+	{
+		Map<String, Object> map =  new SpTroneDao().loadSpTroneList(pageIndex,keyWord,userRight);
+		
+		List<ProvinceModel> proList = new ProvinceDao().loadProvinceList();
+		
+		List<SpTroneModel> list = (List<SpTroneModel>) map.get("list");
+		
+		for(SpTroneModel model : list)
+		{
+			String proStrList = "";
+			
+			String[] pros = model.getProvinces() .split(",");
+			
+			if(pros==null || pros.length<0)
+				continue;
+			
+			for(String proId : pros)
+			{
+				for(ProvinceModel province : proList)
+				{
+					if(proId.equals(province.getId() + ""))
+						proStrList += province.getName() + ",";
+				}
+			}
+			
+			if(proStrList.length()>0)
+				proStrList = proStrList.substring(0, proStrList.length()-1);
+			
+			model.setProvinceList(proStrList);
+		}
+		
+		return map;
+		
+	}
+	
+	public void updateSpTroneProvince(int id,String pros)
+	{
+		new SpTroneDao().updateSpTroneProvince(id, pros);
+	}
+	
+	public void updateSpTroneStatus(int id,int status)
+	{
+		new SpTroneDao().updateSpTroneStatus(id, status);
+	}
+	
 }	

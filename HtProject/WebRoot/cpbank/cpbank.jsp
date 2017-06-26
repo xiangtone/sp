@@ -41,7 +41,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
@@ -91,7 +91,8 @@ $(function(){
 			<thead>
 				<tr>
 					<td>序号</td>
-					<td>CP</td>
+					<td>CP简称</td>
+					<td>CP全称</td>
 					<td>结算类型</td>
 					<td>银行</td>
 					<td>收款人</td>
@@ -111,6 +112,7 @@ $(function(){
 					<tr <%= model.getStatus()==0 ? stopStyle : "" %>>
 					<td><%=(pageIndex-1)*Constant.PAGE_SIZE + rowNum++ %></td>
 					<td><%=model.getCpShortName()%></td>
+					<td><%=model.getCpFullName()%></td>
 					<td><%=model.getTypeName()%></td>
 					<td><%=model.getBankName()%></td>
 					<td><%=model.getUserName() %></td>

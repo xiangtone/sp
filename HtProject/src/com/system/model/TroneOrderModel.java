@@ -30,6 +30,25 @@ public class TroneOrderModel
 	
 	private String remark;
 	
+	private String troneNum;
+	public String getTroneNum()
+	{
+		return troneNum;
+	}
+	public void setTroneNum(String troneNum)
+	{
+		this.troneNum = troneNum;
+	}
+	public String getTroneOrder()
+	{
+		return troneOrder;
+	}
+	public void setTroneOrder(String troneOrder)
+	{
+		this.troneOrder = troneOrder;
+	}
+	private String troneOrder;
+	
 	public float getPrice()
 	{
 		return price;

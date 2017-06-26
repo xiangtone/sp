@@ -42,7 +42,6 @@
 	model.setContractEndDate(contractEndDate);
 	model.setCommerceUserId(commerceUserId);
 	
-	
 	if(id>0)
 	{
 		new CpServer().updateCp(model);

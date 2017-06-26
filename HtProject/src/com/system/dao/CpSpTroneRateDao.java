@@ -18,11 +18,11 @@ public class CpSpTroneRateDao
 {
 	public Map<String, Object> loadCpSpTroneRate(String keyWord,int pageIndex)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM daily_config.`tbl_cp_trone_rate` a ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` a ";
 		
-		sql += " LEFT JOIN daily_config.`tbl_cp` b ON a.`cp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON a.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp` d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` b ON a.`cp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON a.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON c.`sp_id` = d.`id`";
 		sql += " WHERE 1=1";
 		
 		if(!StringUtil.isNullOrEmpty(keyWord))
@@ -85,11 +85,11 @@ public class CpSpTroneRateDao
 	
 	public CpSpTroneRateModel loadCpSpTroneRateById(int id)
 	{
-		String sql = "select a.*,b.`short_name` cp_name,c.`name` sp_trone_name,d.`id` sp_id,d.`short_name` sp_name FROM daily_config.`tbl_cp_trone_rate` a ";
+		String sql = "select a.*,b.`short_name` cp_name,c.`name` sp_trone_name,d.`id` sp_id,d.`short_name` sp_name FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` a ";
 		
-		sql += " LEFT JOIN daily_config.`tbl_cp` b ON a.`cp_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON a.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp` d ON c.`sp_id` = d.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` b ON a.`cp_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON a.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp` d ON c.`sp_id` = d.`id`";
 		sql += " WHERE a.id = " + id;
 		
 		return (CpSpTroneRateModel)new JdbcControl().query(sql, new QueryCallBack()
@@ -122,7 +122,7 @@ public class CpSpTroneRateDao
 	
 	public void addCpSpTroneRate(CpSpTroneRateModel model)
 	{
-		String sql = "insert into daily_config.tbl_cp_trone_rate(cp_id,sp_trone_id,rate) values(?,?,?)";
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate(cp_id,sp_trone_id,rate) values(?,?,?)";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getCpId());
@@ -134,7 +134,7 @@ public class CpSpTroneRateDao
 	
 	public void updateCpSpTroneRate(CpSpTroneRateModel model)
 	{
-		String sql = "udpate daily_config.tbl_cp_trone_rate set cp_id = ?,sp_trone_id = ?,rate = ?, js_type = ? where id = ?";
+		String sql = "udpate " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate set cp_id = ?,sp_trone_id = ?,rate = ?, js_type = ? where id = ?";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getCpId());
@@ -148,7 +148,7 @@ public class CpSpTroneRateDao
 	
 	public void updateCpSpTroneLimit(CpSpTroneRateModel model)
 	{
-		String sql = "update daily_config.tbl_cp_trone_rate set day_limit = ? , month_limit = ? , rate = ?, province_hold_rate = ?, js_type = ? where id = ?";
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate set day_limit = ? , month_limit = ? , rate = ?, province_hold_rate = ?, js_type = ? where id = ?";
 		
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1, model.getDayLimit());
@@ -163,7 +163,7 @@ public class CpSpTroneRateDao
 	
 	public void updateCpSpTroneRate(int id,float rate)
 	{
-		String sql = "update daily_config.tbl_cp_trone_rate set rate = ? where id = ? ";
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate set rate = ? where id = ? ";
 		Map<Integer, Object> map = new HashMap<Integer, Object>();
 		map.put(1,rate);
 		map.put(2, id);
@@ -172,23 +172,23 @@ public class CpSpTroneRateDao
 	
 	public void delCpSpTroneRate(int id)
 	{
-		String sql = "delete from daily_config.tbl_cp_trone_rate where id = " + id;
+		String sql = "delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate where id = " + id;
 		new JdbcControl().execute(sql);
 	}
 	
 	public void syncUnAddCpSpTroneRate()
 	{
-		String sql = "INSERT INTO daily_config.`tbl_cp_trone_rate` (cp_id,sp_trone_id,rate)";
+		String sql = "INSERT INTO " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` (cp_id,sp_trone_id,rate)";
 		sql += " SELECT a.cp_id,a.sp_trone_id,0.00 FROM (";
 		sql += " SELECT d.id cp_id,c.id sp_trone_id";
-		sql += " FROM daily_config.`tbl_trone_order` a";
-		sql += " LEFT JOIN daily_config.`tbl_trone` b ON a.`trone_id` = b.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
-		sql += " LEFT JOIN daily_config.`tbl_cp` d ON a.`cp_id` = d.`id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone_order` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_trone` b ON a.`trone_id` = b.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_sp_trone` c ON b.`sp_trone_id` = c.`id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp` d ON a.`cp_id` = d.`id`";
 		sql += " WHERE d.id <> 34";
 		sql += " GROUP BY c.id,d.id";
 		sql += " ORDER BY a.id ASC ) a";
-		sql += " LEFT JOIN daily_config.`tbl_cp_trone_rate` b ON a.cp_id = b.`cp_id` AND a.sp_trone_id = b.`sp_trone_id`";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` b ON a.cp_id = b.`cp_id` AND a.sp_trone_id = b.`sp_trone_id`";
 		sql += " WHERE b.id IS NULL AND a.sp_trone_id IS NOT NULL AND a.cp_id IS NOT NULL;";
 		new JdbcControl().execute(sql);
 	}
@@ -197,12 +197,12 @@ public class CpSpTroneRateDao
 	{
 		String sql = "";
 		
-		sql += " UPDATE daily_config.tbl_trone_order,daily_config.`tbl_cp_trone_rate`,daily_config.tbl_trone,daily_config.tbl_sp_trone ";
-		sql += " SET daily_config.tbl_trone_order.`cp_jiesuanlv_id` = daily_config.tbl_cp_trone_rate.`id`";
-		sql += " WHERE daily_config.tbl_trone_order.`cp_id` = daily_config.tbl_cp_trone_rate.`cp_id` ";
-		sql += " AND daily_config.tbl_trone_order.trone_id = daily_config.tbl_trone.`id`";
-		sql += " AND daily_config.tbl_trone.`sp_trone_id` =  daily_config.tbl_sp_trone.`id`";
-		sql += " AND daily_config.tbl_sp_trone.id = daily_config.tbl_cp_trone_rate.`sp_trone_id`;";
+		sql += " UPDATE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order," + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate`," + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone," + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone ";
+		sql += " SET " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order.`cp_jiesuanlv_id` = " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate.`id`";
+		sql += " WHERE " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order.`cp_id` = " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate.`cp_id` ";
+		sql += " AND " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone_order.trone_id = " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone.`id`";
+		sql += " AND " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_trone.`sp_trone_id` =  " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone.`id`";
+		sql += " AND " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone.id = " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_trone_rate.`sp_trone_id`;";
 		
 		new JdbcControl().execute(sql);
 	}
@@ -212,8 +212,8 @@ public class CpSpTroneRateDao
 	{
 				
 		String sql = "SELECT b.`cp_id`,b.`sp_trone_id`,a.`start_date`,a.`end_date`,b.`js_type`,a.rate ";
-		sql += " FROM daily_config.`tbl_cp_trone_rate_list` a";
-		sql += " LEFT JOIN daily_config.`tbl_cp_trone_rate` b ON a.`cp_trone_rate_id` = b.`id`";
+		sql += " FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate_list` a";
+		sql += " LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_cp_trone_rate` b ON a.`cp_trone_rate_id` = b.`id`";
 		sql += " WHERE b.`cp_id` = " + cpId + " AND b.`js_type` = " + jsType;
 		sql += " AND a.`start_date` >= '" + startDate + "' AND a.`end_date` <= '" + endDate + "'";
 		

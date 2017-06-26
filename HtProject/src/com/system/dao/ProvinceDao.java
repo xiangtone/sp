@@ -15,7 +15,7 @@ public class ProvinceDao
 	@SuppressWarnings("unchecked")
 	public List<ProvinceModel> loadProvinceList()
 	{
-		String sql = "select * from daily_config.tbl_province order by name asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_province order by name asc";
 		return (List<ProvinceModel>) new JdbcControl().query(sql, new QueryCallBack()
 		{
 			@Override

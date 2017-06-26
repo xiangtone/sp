@@ -20,10 +20,10 @@ public class CpJieSuanLvDao
 		String params = " a.id,c.short_name cp_name,d.short_name sp_name,b.name sp_trone_name,a.jiesuanlv ";
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING ;
 		
-		sql += " from daily_config.tbl_cp_jiesuan a";
-		sql += " left join daily_config.tbl_sp_trone b on a.sp_trone_id = b.id";
-		sql += " left join daily_config.tbl_cp c on a.cp_id = c.id";
-		sql += " left join daily_config.tbl_sp d on b.sp_id = d.id where 1=1 ";
+		sql += " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_jiesuan a";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp_trone b on a.sp_trone_id = b.id";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp c on a.cp_id = c.id";
+		sql += " left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_sp d on b.sp_id = d.id where 1=1 ";
 		
 		String  orders = " order by c.short_name,d.short_name,b.name asc";
 		
@@ -76,7 +76,7 @@ public class CpJieSuanLvDao
 	
 	public void updateJieSuandLv(int id,float value)
 	{
-		String sql = "update daily_config.tbl_cp_jiesuan set jiesuanlv = '" + value + "' where id = " + id;
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp_jiesuan set jiesuanlv = '" + value + "' where id = " + id;
 		
 		new JdbcControl().execute(sql);
 	}

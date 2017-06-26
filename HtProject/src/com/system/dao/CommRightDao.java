@@ -17,7 +17,7 @@ import com.system.util.StringUtil;
 public class CommRightDao {
 	public Map<String, Object> loadCommRight(int pageIndex,String keyWord,int type)
 	{
-		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from daily_config.tbl_ds_user_right ur left join daily_config.tbl_user u on ur.user_id=u.id  where 1=1  ";
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING + " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right ur left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user u on ur.user_id=u.id  where 1=1  ";
 		
 		String limit = " limit "  + Constant.PAGE_SIZE*(pageIndex-1) + "," + Constant.PAGE_SIZE;
 		
@@ -72,7 +72,7 @@ public class CommRightDao {
 	}
 	public boolean addCommRight(CommRightModel model)
 	{
-		String sql = "insert into daily_config.tbl_ds_user_right(type,user_id,right_list,remark) "
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right(type,user_id,right_list,remark) "
 				+ "value(" + model.getType() + "," + model.getUserId()
 				+ ",'" + SqlUtil.sqlEncode(model.getRightList()) + "','" + SqlUtil.sqlEncode(model.getRemark())+"' )";
 		return new JdbcControl().execute(sql);
@@ -80,7 +80,7 @@ public class CommRightDao {
 
 	public boolean updateCommRight(CommRightModel model)
 	{
-		String sql = "update daily_config.tbl_ds_user_right set type = "
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right set type = "
 				+ model.getType() + ",user_id = "
 				+ model.getUserId() + ",right_list='"
 				+ SqlUtil.sqlEncode(model.getRightList()) + "',remark='" + SqlUtil.sqlEncode(model.getRemark())
@@ -88,7 +88,7 @@ public class CommRightDao {
 		return new JdbcControl().execute(sql);
 	}
 	public CommRightModel loadCommRightById(int id){
-		String sql="select ur.*,u.name,u.nick_name from daily_config.tbl_ds_user_right ur left join daily_config.tbl_user u on ur.user_id=u.id  where ur.id="+id;
+		String sql="select ur.*,u.name,u.nick_name from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right ur left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user u on ur.user_id=u.id  where ur.id="+id;
 		JdbcControl control = new JdbcControl();
 		return (CommRightModel) control.query(sql, new QueryCallBack() {
 			
@@ -113,12 +113,12 @@ public class CommRightDao {
 	}
 	
 	public boolean deleteCommRight(int id){
-		String sql="delete from daily_config.tbl_ds_user_right where id="+id;
+		String sql="delete from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right where id="+id;
 		return new JdbcControl().execute(sql);
 	}
 	
 	public String getRightListByUserId(int userId,int type){
-		String sql="select right_list from daily_config.tbl_ds_user_right ur where ur.user_id="+userId+" and type="+type;
+		String sql="select right_list from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right ur where ur.user_id="+userId+" and type="+type;
 		return (String)new JdbcControl().query(sql, new QueryCallBack() {
 			
 			@Override
@@ -128,7 +128,7 @@ public class CommRightDao {
 				{					
 					return StringUtil.getString(rs.getString("right_list"), "");
 				}
-				return null;
+				return "";
 			}
 		});
 		
@@ -145,7 +145,7 @@ public class CommRightDao {
 
 		final Map<String,Integer> map=new HashMap<String, Integer>();
 		map.put("flag", 0);
-		String sql ="select count(*) as sm from daily_config.tbl_ds_user_right where user_id="+userId+" and type="+type+" and id!="+id;
+		String sql ="select count(*) as sm from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_ds_user_right where user_id="+userId+" and type="+type+" and id!="+id;
 		JdbcControl control=new JdbcControl();
 		control.query(sql, new QueryCallBack()
 		{
@@ -167,7 +167,7 @@ public class CommRightDao {
 	
 	}
 	public String getRightListName(String rightListId){
-		String sql="select u.nick_name from daily_config.tbl_user u where id in ("+rightListId+")";
+		String sql="select u.nick_name from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user u where id in ("+rightListId+")";
 		return (String)new JdbcControl().query(sql, new QueryCallBack() {
 			
 			@Override

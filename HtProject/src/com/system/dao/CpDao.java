@@ -19,7 +19,12 @@ public class CpDao
 	@SuppressWarnings("unchecked")
 	public List<CpModel> loadCp()
 	{
+<<<<<<< HEAD
+		//增加状态字段过滤
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp where status=1 order by convert(short_name using gbk) asc";
+=======
 		String sql = "select * from daily_config.tbl_cp order by convert(short_name using gbk) asc";
+>>>>>>> master
 
 		return (List<CpModel>) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -63,7 +68,7 @@ public class CpDao
 	@SuppressWarnings("unchecked")
 	public List<CpModel> loadCpQiBa()
 	{
-		String sql = "select * from daily_config.tbl_cp order by id asc";
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp order by id asc";
 
 		return (List<CpModel>) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -108,7 +113,7 @@ public class CpDao
 	public Map<String, Object> loadCp(int pageIndex)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-				+ " from daily_config.tbl_cp order by convert(short_name using gbk) asc";
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp order by convert(short_name using gbk) asc";
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
@@ -176,7 +181,7 @@ public class CpDao
 	public Map<String, Object> loadCp(int pageIndex, String keyWord)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-				+ " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id left join daily_config.tbl_user c on a.commerce_user_id = c.id  where 1=1";
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1";
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
@@ -258,7 +263,7 @@ public class CpDao
 
 	public CpModel loadCpById(int id)
 	{
-		String sql = "select * from daily_config.tbl_cp a  left join daily_config.tbl_user b on a.commerce_user_id = b.id where a.id = "
+		String sql = "select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a  left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where a.id = "
 				+ id;
 		return (CpModel) new JdbcControl().query(sql, new QueryCallBack()
 		{
@@ -306,7 +311,7 @@ public class CpDao
 
 		StringBuffer sb = new StringBuffer();
 		sb.append(
-				"select * from daily_config.tbl_cp a  left join daily_config.tbl_user b on a.commerce_user_id = b.id where a.id in( ");
+				"select * from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a  left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.commerce_user_id = b.id where a.id in( ");
 
 		for (int id : ids)
 		{
@@ -362,7 +367,11 @@ public class CpDao
 
 	public boolean addCp(CpModel model)
 	{
+<<<<<<< HEAD
+		String sql = "insert into " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id,status) "
+=======
 		String sql = "insert into daily_config.tbl_cp(full_name,short_name,contract_person,qq,mail,phone,address,contract_start_date,contract_end_date,commerce_user_id) "
+>>>>>>> master
 				+ "value('" + model.getFullName() + "','" + model.getShortName()
 				+ "','" + model.getContactPerson() + "','" + model.getQq()
 				+ "','" + model.getMail() + "','" + model.getPhone() + "','"
@@ -374,7 +383,7 @@ public class CpDao
 
 	public boolean updateCp(CpModel model)
 	{
-		String sql = "update daily_config.tbl_cp set full_name = '"
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp set full_name = '"
 				+ model.getFullName() + "',short_name = '"
 				+ model.getShortName() + "',contract_person='"
 				+ model.getContactPerson() + "',qq='" + model.getQq()
@@ -388,7 +397,7 @@ public class CpDao
 
 	public boolean updateCpAccount(int cpId, int userId)
 	{
-		String sql = "update daily_config.tbl_cp set user_id = " + userId
+		String sql = "update " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp set user_id = " + userId
 				+ " where id = " + cpId;
 		return new JdbcControl().execute(sql);
 	}
@@ -443,7 +452,7 @@ public class CpDao
 	}
 	public Integer checkAdd(int userId,int commerceId){
 		Map<String, Object> map=new HashMap<String, Object>();
-		String sql="select count(*) FROM daily_config.`tbl_group_user` a LEFT JOIN daily_config.tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
+		String sql="select count(*) FROM " + com.system.constant.Constant.DB_DAILY_CONFIG + ".`tbl_group_user` a LEFT JOIN " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b ON a.`user_id` = b.`id` WHERE a.`group_id` ="+commerceId+" and b.id="+userId ;
 		JdbcControl control = new JdbcControl();
 		map.put("rows",control.query(sql, new QueryCallBack()
 		{
@@ -463,7 +472,7 @@ public class CpDao
 	public Map<String, Object> loadCp(int pageIndex, String keyWord,int userId)
 	{
 		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
-				+ " from daily_config.tbl_cp a left join daily_config.tbl_user b on a.user_id = b.id left join daily_config.tbl_user c on a.commerce_user_id = c.id  where 1=1";
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1";
 
 		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
 				+ Constant.PAGE_SIZE;
@@ -544,4 +553,185 @@ public class CpDao
 
 		return map;
 	}
+<<<<<<< HEAD
+	/**
+	 * 增加状态字段
+	 * @param pageIndex
+	 * @param status
+	 * @param keyWord
+	 * @return
+	 */
+	public Map<String, Object> loadCp(int pageIndex,int status,String keyWord)
+	{
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1";
+		if(status>=0){
+			sql+=" and a.status="+status;
+		}
+		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
+				+ Constant.PAGE_SIZE;
+
+		if (!StringUtil.isNullOrEmpty(keyWord))
+		{
+			sql += " AND (a.full_name LIKE '%"+keyWord+"%' or a.short_name like '%" 
+					+ keyWord + "%' or a.id = '"+ keyWord +"' or c.nick_name like '%" 
+					+ keyWord + "%' or b.nick_name like '%" + keyWord + "%' or a.id = '" 
+					+ keyWord + "') ";
+		}
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		sql += " order by convert(a.short_name using gbk) asc ";
+
+		JdbcControl control = new JdbcControl();
+		map.put("rows", control.query(
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"),
+				new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						if (rs.next())
+							return rs.getInt(1);
+
+						return 0;
+					}
+				}));
+
+		map.put("list",
+				control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING,
+						" a.*,b.name,b.nick_name,c.nick_name commerce_user_name ")
+				+ limit, new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						List<CpModel> list = new ArrayList<CpModel>();
+						while (rs.next())
+						{
+							CpModel model = new CpModel();
+
+							model.setId(rs.getInt("id"));
+
+							model.setShortName(StringUtil
+									.getString(rs.getString("short_name"), ""));
+							model.setFullName(StringUtil
+									.getString(rs.getString("full_name"), ""));
+							model.setContactPerson(StringUtil.getString(
+									rs.getString("contract_person"), ""));
+							model.setQq(StringUtil.getString(rs.getString("qq"),
+									""));
+							model.setPhone(StringUtil
+									.getString(rs.getString("phone"), ""));
+							model.setMail(StringUtil
+									.getString(rs.getString("mail"), ""));
+							model.setAddress(StringUtil
+									.getString(rs.getString("address"), ""));
+							model.setContractStartDate(StringUtil.getString(
+									rs.getString("contract_start_date"), ""));
+							model.setContractEndDate(StringUtil.getString(
+									rs.getString("contract_end_date"), ""));
+							model.setUserName(StringUtil
+									.getString(rs.getString("nick_name"), ""));
+							model.setCommerceUserName(StringUtil.getString(
+									rs.getString("commerce_user_name"), ""));
+							model.setCommerceUserId(rs.getInt("commerce_user_id"));
+							
+							model.setStatus(rs.getInt("status"));
+							list.add(model);
+						}
+						return list;
+					}
+				}));
+
+		return map;
+	}
+	
+	public Map<String, Object> loadCp(int userId,int pageIndex,int status,String keyWord)
+	{
+		String sql = "select " + Constant.CONSTANT_REPLACE_STRING
+				+ " from " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_cp a left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user b on a.user_id = b.id left join " + com.system.constant.Constant.DB_DAILY_CONFIG + ".tbl_user c on a.commerce_user_id = c.id  where 1=1 and a.commerce_user_id = " + userId;
+		if(status>=0){
+			sql+=" and a.status="+status;
+		}
+		String limit = " limit " + Constant.PAGE_SIZE * (pageIndex - 1) + ","
+				+ Constant.PAGE_SIZE;
+
+		if (!StringUtil.isNullOrEmpty(keyWord))
+		{
+			sql += " AND (a.full_name LIKE '%"+keyWord+"%' or a.short_name like '%" 
+					+ keyWord + "%' or a.id = '"+ keyWord +"' or c.nick_name like '%" 
+					+ keyWord + "%' or b.nick_name like '%" + keyWord + "%' or a.id = '" 
+					+ keyWord + "') ";
+		}
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		sql += " order by convert(a.short_name using gbk) asc ";
+
+		JdbcControl control = new JdbcControl();
+		map.put("rows", control.query(
+				sql.replace(Constant.CONSTANT_REPLACE_STRING, "count(*)"),
+				new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						if (rs.next())
+							return rs.getInt(1);
+
+						return 0;
+					}
+				}));
+
+		map.put("list",
+				control.query(sql.replace(Constant.CONSTANT_REPLACE_STRING,
+						" a.*,b.name,b.nick_name,c.nick_name commerce_user_name ")
+				+ limit, new QueryCallBack()
+				{
+					@Override
+					public Object onCallBack(ResultSet rs) throws SQLException
+					{
+						List<CpModel> list = new ArrayList<CpModel>();
+						while (rs.next())
+						{
+							CpModel model = new CpModel();
+
+							model.setId(rs.getInt("id"));
+
+							model.setShortName(StringUtil
+									.getString(rs.getString("short_name"), ""));
+							model.setFullName(StringUtil
+									.getString(rs.getString("full_name"), ""));
+							model.setContactPerson(StringUtil.getString(
+									rs.getString("contract_person"), ""));
+							model.setQq(StringUtil.getString(rs.getString("qq"),
+									""));
+							model.setPhone(StringUtil
+									.getString(rs.getString("phone"), ""));
+							model.setMail(StringUtil
+									.getString(rs.getString("mail"), ""));
+							model.setAddress(StringUtil
+									.getString(rs.getString("address"), ""));
+							model.setContractStartDate(StringUtil.getString(
+									rs.getString("contract_start_date"), ""));
+							model.setContractEndDate(StringUtil.getString(
+									rs.getString("contract_end_date"), ""));
+							model.setUserName(StringUtil
+									.getString(rs.getString("nick_name"), ""));
+							model.setCommerceUserName(StringUtil.getString(
+									rs.getString("commerce_user_name"), ""));
+							model.setCommerceUserId(rs.getInt("commerce_user_id"));
+							
+							model.setStatus(rs.getInt("status"));
+							list.add(model);
+						}
+						return list;
+					}
+				}));
+
+		return map;
+	}
+=======
+>>>>>>> master
 }

@@ -86,7 +86,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>翔通运营管理平台</title>
+<title>运营管理平台</title>
 <link href="../wel_data/right.css" rel="stylesheet" type="text/css">
 <link href="../wel_data/gray.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../sysjs/jquery-1.7.js"></script>
@@ -94,7 +94,7 @@
 <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="../sysjs/MapUtil.js"></script>
 <script type="text/javascript" src="../sysjs/pinyin.js"></script>
-<script type="text/javascript" src="../sysjs/AndyNamePicker.js"></script>
+<script type="text/javascript" src="../sysjs/AndyNamePickerV20.js"></script><link href="../css/namepicker.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 
 	var spList = new Array();
@@ -422,8 +422,8 @@
 							<option value="6">SP通道</option>
 							<option value="5">CP</option>
 							<option value="7">CP通道</option>
-							<option value="8">省份</option>
-							<option value="9">城市</option>
+							<!-- <option value="8">省份</option> -->
+							<!-- <option value="9">城市</option> -->
 							<!-- <option value="11">按小时</option> -->
 							<option value="12">SP商务</option>
 							<option value="13">CP商务</option>
